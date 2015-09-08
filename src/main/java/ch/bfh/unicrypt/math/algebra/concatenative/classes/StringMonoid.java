@@ -41,13 +41,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
-import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.StringToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.StringToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.Alphabet;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -101,7 +102,7 @@ public class StringMonoid
 	}
 
 	@Override
-	protected StringElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+	protected Sequence<StringElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -109,8 +110,7 @@ public class StringMonoid
 	protected final StringElement abstractGetRandomElement(int length, RandomByteSequence randomByteSequence) {
 		char[] chars = new char[length];
 		for (int i = 0; i < length; i++) {
-			chars[i] = this.getAlphabet().getCharacter(randomByteSequence.getRandomNumberGenerator()
-				   .nextInt(this.getAlphabet().getSize() - 1));
+			chars[i] = this.getAlphabet().getCharacter(randomByteSequence.getRandomIntegerSequence(this.getAlphabet().getSize() - 1).get());
 		}
 		return this.abstractGetElement(new String(chars));
 	}

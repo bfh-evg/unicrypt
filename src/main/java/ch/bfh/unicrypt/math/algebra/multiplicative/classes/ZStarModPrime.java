@@ -42,12 +42,12 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.helper.factorization.Prime;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,81 +74,34 @@ public class ZStarModPrime
 	}
 
 	@Override
-	public ZStarModElement getRandomGenerator() {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+	public Sequence<ZStarModElement> getIndependentGenerators() {
+		return this.getIndependentGenerators(DeterministicRandomByteSequence.getInstance());
 	}
 
 	@Override
-	public ZStarModElement getRandomGenerator(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+	public Sequence<ZStarModElement> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.defaultGetGenerators(randomByteSequence);
 	}
 
-	@Override
-	public ZStarModElement getIndependentGenerator(int index) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
-	}
+	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
+	protected Sequence<ZStarModElement> defaultGetGenerators(RandomByteSequence randomByteSequence) {
+		return this.abstractGetRandomElements(randomByteSequence).filter(new Predicate<ZStarModElement>() {
 
-	@Override
-	public ZStarModElement getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
-	}
+			@Override
+			public boolean test(ZStarModElement value) {
+				return isGenerator(value);
+			}
 
-	@Override
-	public Tuple getIndependentGenerators(int maxIndex) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
-	}
-
-	@Override
-	public Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
-	}
-
-	@Override
-	public Tuple getIndependentGenerators(int minIndex, int maxIndex) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
-	}
-
-	@Override
-	public Tuple getIndependentGenerators(int minIndex, int maxIndex,
-		   ReferenceRandomByteSequence referenceRandomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+		});
 	}
 
 	@Override
 	public boolean isGenerator(Element element) {
 		throw new UnsupportedOperationException("Not supported yet.");
 		// TODO: Implement method.
-	}
-
-	@Override
-	protected Sequence<ZStarModElement> defaultGetElements() {
-		return super.defaultGetElements();
-// same code as in AbstractCyclicGroup
-//		final ZStarModPrime group = this;
-//		return Sequence.getInstance(this.getDefaultGenerator(), new UnaryOperator<ZStarModElement>() {
-//
-//			@Override
-//			public ZStarModElement apply(ZStarModElement element) {
-//				return group.apply(group.getDefaultGenerator(), element);
-//			}
-//
-//		}).limit(new Predicate<ZStarModElement>() {
-//
-//			@Override
-//			public boolean test(ZStarModElement element) {
-//
-//				return group.getIdentityElement().equals(element);
-//			}
-//
-//		});
 	}
 
 	public static ZStarModPrime getInstance(final Prime modulus) {

@@ -43,12 +43,12 @@ package ch.bfh.unicrypt.crypto.schemes.padding.abstracts;
 
 import ch.bfh.unicrypt.crypto.schemes.padding.interfaces.ReversiblePaddingScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -57,6 +57,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 public abstract class AbstractReversibleByteArrayPaddingScheme
 	   extends AbstractByteArrayPaddingScheme
 	   implements ReversiblePaddingScheme {
+
 	private static final long serialVersionUID = 1L;
 
 	private Function unpaddingFunction;
@@ -79,8 +80,7 @@ public abstract class AbstractReversibleByteArrayPaddingScheme
 	}
 
 	protected Function abstractGetUnpaddingFunction() {
-		return new AbstractFunction<Function, ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid,
-			   ByteArrayElement>(this.paddingSpace, this.messageSpace) {
+		return new AbstractFunction<Function, ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(this.paddingSpace, this.messageSpace) {
 			@Override
 			protected ByteArrayElement abstractApply(ByteArrayElement element, RandomByteSequence randomByteSequence) {
 				ByteArray byteArray = element.getValue();

@@ -41,14 +41,17 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -169,13 +172,25 @@ public class ZStarMod
 	}
 
 	@Override
-	protected ZStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
-		BigInteger randomValue;
-		do {
-			randomValue = randomByteSequence.getRandomNumberGenerator()
-				   .nextBigInteger(MathUtil.ONE, this.getModulus().subtract(MathUtil.ONE));
-		} while (!this.contains(randomValue));
-		return this.abstractGetElement(randomValue);
+	protected Sequence<ZStarModElement> abstractGetRandomElements(final RandomByteSequence randomByteSequence) {
+		return randomByteSequence
+			   .getRandomBigIntegerSequence(MathUtil.ONE, this.getModulus().subtract(MathUtil.ONE))
+			   .filter(new Predicate<BigInteger>() {
+
+				   @Override
+				   public boolean test(BigInteger value) {
+					   return contains(value);
+				   }
+
+			   })
+			   .map(new Mapping<BigInteger, ZStarModElement>() {
+
+				   @Override
+				   public ZStarModElement apply(BigInteger value) {
+					   return abstractGetElement(value);
+				   }
+
+			   });
 	}
 
 	@Override
@@ -255,15 +270,15 @@ public class ZStarMod
 		return new ZStarMod(modulusFactorization);
 	}
 
+	public static ZStarMod getRandomInstance(int bitLength) {
+		return ZStarMod.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
+	}
+
 	public static ZStarMod getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
 		if (bitLength < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		return ZStarMod.getInstance(randomByteSequence.getRandomNumberGenerator().nextBigInteger(bitLength));
-	}
-
-	public static ZStarMod getRandomInstance(int bitLength) {
-		return ZStarMod.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
+		return ZStarMod.getInstance(randomByteSequence.getRandomBigIntegerSequence(bitLength).get());
 	}
 
 }

@@ -43,8 +43,8 @@ package ch.bfh.unicrypt.crypto.schemes.padding.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.padding.abstracts.AbstractReversibleByteArrayPaddingScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -52,6 +52,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class ISOPaddingScheme
 	   extends AbstractReversibleByteArrayPaddingScheme {
+
 	private static final long serialVersionUID = 1L;
 
 	private ISOPaddingScheme(ByteArrayMonoid byteArrayMonoid) {
@@ -65,7 +66,7 @@ public class ISOPaddingScheme
 
 	@Override
 	protected byte abstractGetFiller(int paddingLength, RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getNextByte();
+		return randomByteSequence.get();
 	}
 
 	@Override

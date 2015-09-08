@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.PreimageProofSystem;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
@@ -50,7 +51,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * The abstract implementation of the {@link PreimageProofSystem}. It is a full implementation of the proof system.
@@ -130,8 +130,7 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 	}
 
 	@Override
-	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput,
-		   final RandomByteSequence randomByteSequence) {
+	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput, final RandomByteSequence randomByteSequence) {
 		final Element randomElement = this.getResponseSpace().getRandomElement(randomByteSequence);
 		final Element commitment = this.getPreimageProofFunction().apply(randomElement);
 		final Element challenge = this.getChallengeGenerator().generate(publicInput, commitment);

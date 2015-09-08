@@ -41,20 +41,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This abstract class provides a basis implementation for additive objects of type {@link CyclicGroup}.
@@ -73,11 +67,9 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 	private static final long serialVersionUID = 1L;
 
 	private E defaultGenerator;
-	private final Map<ReferenceRandomByteSequence, ArrayList<E>> generatorLists;
 
 	protected AbstractCyclicGroup(Class<?> valueClass) {
 		super(valueClass);
-		this.generatorLists = new HashMap<>();
 	}
 
 	@Override
@@ -89,67 +81,16 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 	}
 
 	@Override
-	public final E getRandomGenerator() {
-		return this.defaultGetRandomGenerator(HybridRandomByteSequence.getInstance());
+	public final Sequence<E> getIndependentGenerators() {
+		return this.getIndependentGenerators(DeterministicRandomByteSequence.getInstance());
 	}
 
 	@Override
-	public final E getRandomGenerator(RandomByteSequence randomByteSequence) {
+	public final Sequence<E> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultGetRandomGenerator(randomByteSequence);
-	}
-
-	@Override
-	public final E getIndependentGenerator(int index) {
-		return this.getIndependentGenerator(index, ReferenceRandomByteSequence.getInstance());
-	}
-
-	@Override
-	public final E getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		return (E) this.getIndependentGenerators(index, referenceRandomByteSequence).getAt(index);
-	}
-
-	@Override
-	public final Tuple getIndependentGenerators(int maxIndex) {
-		return this.getIndependentGenerators(maxIndex, ReferenceRandomByteSequence.getInstance());
-	}
-
-	@Override
-	public final Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		return this.getIndependentGenerators(0, maxIndex, referenceRandomByteSequence);
-	}
-
-	@Override
-	public final Tuple getIndependentGenerators(int minIndex, int maxIndex) {
-		return this.getIndependentGenerators(minIndex, maxIndex, ReferenceRandomByteSequence.getInstance());
-	}
-
-	@Override
-	public final Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		if (minIndex < 0 || maxIndex < minIndex || referenceRandomByteSequence == null) {
-			throw new IndexOutOfBoundsException();
-		}
-		ArrayList<E> generatorList = this.generatorLists.get(referenceRandomByteSequence);
-		if (generatorList == null) {
-			generatorList = new ArrayList<>();
-			this.generatorLists.put(referenceRandomByteSequence, generatorList);
-		}
-		if (maxIndex >= generatorList.size()) {
-			referenceRandomByteSequence.reset();
-			for (int i = 0; i <= maxIndex; i++) {
-				E generator = this.defaultGetIndependentGenerator(referenceRandomByteSequence);
-				if (i >= generatorList.size()) {
-					generatorList.add(generator);
-				}
-			}
-		}
-		Element[] generators = new Element[maxIndex - minIndex + 1];
-		for (int i = minIndex; i <= maxIndex; i++) {
-			generators[i - minIndex] = generatorList.get(i);
-		}
-		return ProductSet.getInstance(this, generators.length).getElement(generators);
+		return this.defaultGetIndependentGenerators(randomByteSequence);
 	}
 
 	@Override
@@ -161,16 +102,15 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 	}
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-	protected E defaultGetRandomGenerator(RandomByteSequence randomByteSequence) {
-		E element;
-		do {
-			element = this.getRandomElement(randomByteSequence);
-		} while (!this.isGenerator(element));
-		return element;
-	}
+	protected Sequence<E> defaultGetIndependentGenerators(RandomByteSequence randomByteSequence) {
+		return this.abstractGetRandomElements(randomByteSequence).filter(new Predicate<E>() {
 
-	protected E defaultGetIndependentGenerator(ReferenceRandomByteSequence referenceRandomByteSequence) {
-		return this.defaultGetRandomGenerator(referenceRandomByteSequence);
+			@Override
+			public boolean test(E value) {
+				return isGenerator(value);
+			}
+
+		});
 	}
 
 	@Override

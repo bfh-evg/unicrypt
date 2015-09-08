@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
@@ -50,7 +51,6 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 public class ZModPrimeToGStarModSafePrime
@@ -91,8 +91,7 @@ public class ZModPrimeToGStarModSafePrime
 		}
 
 		@Override
-		protected GStarModElement abstractApply(final ZModElement element,
-			   final RandomByteSequence randomByteSequence) {
+		protected GStarModElement abstractApply(final ZModElement element, final RandomByteSequence randomByteSequence) {
 			final BigInteger value = element.getValue().add(MathUtil.ONE);
 			final GStarModSafePrime coDomain = this.getCoDomain();
 			if (coDomain.contains(value)) {
@@ -111,8 +110,7 @@ public class ZModPrimeToGStarModSafePrime
 		}
 
 		@Override
-		protected ZModElement abstractApply(final GStarModElement element,
-			   final RandomByteSequence randomByteSequence) {
+		protected ZModElement abstractApply(final GStarModElement element, final RandomByteSequence randomByteSequence) {
 			final BigInteger value = element.getValue();
 			final GStarModSafePrime domain = this.getDomain();
 			if (value.compareTo(domain.getOrder()) <= 0) {

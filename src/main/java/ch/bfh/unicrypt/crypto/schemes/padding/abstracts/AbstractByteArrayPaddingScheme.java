@@ -41,11 +41,11 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.padding.abstracts;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -53,6 +53,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public abstract class AbstractByteArrayPaddingScheme
 	   extends AbstractPaddingScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected AbstractByteArrayPaddingScheme(ByteArrayMonoid paddingSpace) {
@@ -61,8 +62,7 @@ public abstract class AbstractByteArrayPaddingScheme
 
 	@Override
 	protected Function abstractGetPaddingFunction() {
-		return new AbstractFunction<Function, ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid,
-			   ByteArrayElement>(this.messageSpace, this.paddingSpace) {
+		return new AbstractFunction<Function, ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(this.messageSpace, this.paddingSpace) {
 			@Override
 			protected ByteArrayElement abstractApply(ByteArrayElement element, RandomByteSequence randomByteSequence) {
 				int paddingLength = getPaddingLength(element);

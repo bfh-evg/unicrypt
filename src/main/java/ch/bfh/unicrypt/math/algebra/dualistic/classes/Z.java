@@ -45,10 +45,12 @@ import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigIntege
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -95,11 +97,17 @@ public class Z
 	}
 
 	@Override
-	protected ZElement defaultGetRandomGenerator(final RandomByteSequence randomByteSequence) {
-		if (randomByteSequence.getRandomNumberGenerator().nextBoolean()) {
-			return this.getDefaultGenerator();
-		}
-		return this.getDefaultGenerator().invert();
+	protected Sequence<ZElement> defaultGetGenerators(final RandomByteSequence randomByteSequence) {
+		return randomByteSequence.getRandomBitSequence().map(new Mapping<Boolean, ZElement>() {
+
+			@Override
+			public ZElement apply(Boolean value) {
+				if (value) {
+					return getDefaultGenerator();
+				}
+				return getDefaultGenerator().invert();
+			}
+		});
 	}
 
 	//
@@ -152,7 +160,7 @@ public class Z
 	}
 
 	@Override
-	protected ZElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+	protected Sequence<ZElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
 		throw new UnsupportedOperationException();
 	}
 

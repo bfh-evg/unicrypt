@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracl
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -56,8 +57,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
 
 /**
  *

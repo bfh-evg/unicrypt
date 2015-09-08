@@ -42,10 +42,10 @@
 package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.ProofSystem;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * The abstract implementation of the {@link ProofSystem}. Most method calls are routed directly to the abstract-method
@@ -68,8 +68,7 @@ public abstract class AbstractProofSystem<PRS extends Set, PRE extends Element, 
 	}
 
 	@Override
-	public final PE generate(final Element privateInput, final Element publicInput,
-		   final RandomByteSequence randomByteSequence) {
+	public final PE generate(final Element privateInput, final Element publicInput, final RandomByteSequence randomByteSequence) {
 		if (!this.getPrivateInputSpace().contains(privateInput) || !this.getPublicInputSpace().contains(publicInput)
 			   || randomByteSequence == null) {
 			throw new IllegalArgumentException();

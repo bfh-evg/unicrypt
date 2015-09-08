@@ -42,7 +42,10 @@
 package ch.bfh.unicrypt.helper.factorization;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -136,41 +139,55 @@ public class SafePrime
 	}
 
 	/**
-	 * Creates a new random safe prime of a given bit length using the library's default source of randomness.
+	 * Creates a new random safe prime of a given bit length using the library's default random byte sequence.
 	 * <p>
 	 * @param bitLength The bit length
 	 * @return The new safe prime
 	 */
 	public static SafePrime getRandomInstance(int bitLength) {
-		return SafePrime.getRandomInstance(bitLength, RandomNumberGenerator.getInstance());
+		return SafePrime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
 	/**
 	 * Creates a new random safe prime of a given bit length using a given source of randomness.
 	 * <p>
-	 * @param bitLength             The bit length
-	 * @param randomNumberGenerator The given random number generator
+	 * @param bitLength          The bit length
+	 * @param randomByteSequence The given random random byte sequence
 	 * @return The new safe prime
 	 */
-	public static SafePrime getRandomInstance(int bitLength, RandomNumberGenerator randomNumberGenerator) {
-		if (bitLength < 3 || randomNumberGenerator == null) {
+	public static SafePrime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
+		if (bitLength < 3 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
 		// Special case with safe primes p=5 or p=7 not satisfying p mod 12 = 11
 		if (bitLength == 3) {
-			if (randomNumberGenerator.nextBoolean()) {
+			if (randomByteSequence.getRandomBitSequence().get()) {
 				return new SafePrime(MathUtil.FIVE);
 			} else {
 				return new SafePrime(MathUtil.SEVEN);
 			}
 		}
-		BigInteger prime;
-		BigInteger safePrime;
-		do {
-			prime = randomNumberGenerator.nextBigInteger(bitLength - 1);
-			safePrime = prime.shiftLeft(1).add(MathUtil.ONE);
-		} while (!safePrime.mod(BigInteger.valueOf(12)).equals(BigInteger.valueOf(11)) || !MathUtil.isPrime(prime) || !MathUtil.isPrime(safePrime));
-		return new SafePrime(safePrime);
+		return new SafePrime(randomByteSequence.getRandomBigIntegerSequence(bitLength - 1).filter(new Predicate<BigInteger>() {
+
+			@Override
+			public boolean test(BigInteger value) {
+				return MathUtil.isPrime(value);
+			}
+
+		}).map(new Mapping<BigInteger, BigInteger>() {
+
+			@Override
+			public BigInteger apply(BigInteger value) {
+				return value.shiftLeft(1).add(MathUtil.ONE);
+			}
+
+		}).find(new Predicate<BigInteger>() {
+
+			@Override
+			public boolean test(BigInteger value) {
+				return value.mod(BigInteger.valueOf(12)).equals(BigInteger.valueOf(11)) && MathUtil.isPrime(value);
+			}
+		}));
 	}
 
 }

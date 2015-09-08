@@ -41,14 +41,14 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BitArrayToString;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 
 /**
  * This class is provides an implementation for immutable arrays of type {@code boolean}/{@code Boolean}. For maximal
@@ -218,7 +218,7 @@ public class BitArray
 			throw new IllegalArgumentException();
 		}
 		int byteLength = MathUtil.divideUp(length, Byte.SIZE);
-		return new BitArray(randomByteSequence.getNextByteArray(byteLength), length);
+		return new BitArray(randomByteSequence.group(byteLength).get(), length);
 	}
 
 	/**

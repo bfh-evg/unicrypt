@@ -43,8 +43,8 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.util.Collection;
 
 /**
@@ -112,7 +112,7 @@ public class DenseArray<V>
 	 * @param values The given sequence of values
 	 * @return The new dense array
 	 */
-	public static <V> DenseArray<V> getInstance(Sequence<V> values) {
+	public static <V> DenseArray<V> getInstance(Sequence<? extends V> values) {
 		if (values == null || values.isInfinite()) {
 			throw new IllegalArgumentException();
 		}

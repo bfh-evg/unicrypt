@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.util.Arrays;
 
 /**
@@ -59,6 +59,7 @@ import java.util.Arrays;
  */
 public class SelectionFunction
 	   extends AbstractFunction<SelectionFunction, ProductSet, Tuple, Set, Element> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final int[] indices;

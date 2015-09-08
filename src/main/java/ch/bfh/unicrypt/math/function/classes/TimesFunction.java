@@ -41,15 +41,16 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -66,6 +67,7 @@ import java.math.BigInteger;
  */
 public class TimesFunction
 	   extends AbstractFunction<TimesFunction, ProductSet, Pair, AdditiveSemiGroup, AdditiveElement> {
+
 	private static final long serialVersionUID = 1L;
 
 	private TimesFunction(final ProductSet domain, final AdditiveSemiGroup coDomain) {

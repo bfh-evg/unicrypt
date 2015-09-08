@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractValidityProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -58,8 +59,6 @@ import ch.bfh.unicrypt.math.function.classes.InvertFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 /**
  * This class implements the validity proof system for ElGamal encryptions: ZKP[(m,r) : y=enc(m,r) ∧ m ∈ M] where enc
@@ -139,14 +138,14 @@ public class ElGamalEncryptionValidityProofSystem
 	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
 		   final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts) {
 		return ElGamalEncryptionValidityProofSystem
-			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, PseudoRandomOracle.getInstance());
+			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
 		   final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverId) {
 		return ElGamalEncryptionValidityProofSystem
 			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, proverId,
-													   PseudoRandomOracle.getInstance());
+													   RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(

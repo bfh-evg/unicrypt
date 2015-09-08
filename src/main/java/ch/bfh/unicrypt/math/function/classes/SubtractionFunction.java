@@ -41,12 +41,14 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface represents the the concept of a function f:X^n->X, which applies the group operation sequentially to

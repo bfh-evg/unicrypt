@@ -50,11 +50,12 @@ import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.BigIntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -72,8 +73,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -266,7 +265,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 
 	@Override
 	public final E getRandomElement() {
-		return this.abstractGetRandomElement(HybridRandomByteSequence.getInstance());
+		return this.getRandomElement(HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
@@ -274,7 +273,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 		if (randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetRandomElement(randomByteSequence);
+		return this.getRandomElements(randomByteSequence).get();
 	}
 
 	@Override
@@ -283,44 +282,11 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	}
 
 	@Override
-	public final Sequence<E> getRandomElements(long n) {
-		if (n < 0) {
-			throw new IllegalArgumentException();
-		}
-		return this.getRandomElements().limit(n);
-	}
-
-	@Override
-	public final Sequence<E> getRandomElements(final RandomByteSequence randomByteSequence) {
+	public final Sequence<E> getRandomElements(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Sequence<E>() {
-
-			@Override
-			public SequenceIterator<E> iterator() {
-				return new SequenceIterator<E>() {
-
-					@Override
-					public boolean hasNext() {
-						return true;
-					}
-
-					@Override
-					public E abstractNext() {
-						return abstractGetRandomElement(randomByteSequence);
-					}
-				};
-			}
-		};
-	}
-
-	@Override
-	public final Sequence<E> getRandomElements(long n, final RandomByteSequence randomByteSequence) {
-		if (n < 0 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.getRandomElements(randomByteSequence).limit(n);
+		return this.abstractGetRandomElements(randomByteSequence);
 	}
 
 	@Override
@@ -598,7 +564,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 
 	protected abstract E abstractGetElement(V value);
 
-	protected abstract E abstractGetRandomElement(RandomByteSequence randomByteSequence);
+	protected abstract Sequence<E> abstractGetRandomElements(RandomByteSequence randomByteSequence);
 
 	protected abstract Converter<V, BigInteger> abstractGetBigIntegerConverter();
 

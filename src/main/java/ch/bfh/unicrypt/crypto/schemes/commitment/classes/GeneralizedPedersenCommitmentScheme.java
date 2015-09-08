@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.commitment.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -53,7 +54,6 @@ import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 
 public class GeneralizedPedersenCommitmentScheme
 	   extends AbstractRandomizedCommitmentScheme<ProductGroup, Tuple, CyclicGroup, Element, ZMod> {
@@ -104,18 +104,15 @@ public class GeneralizedPedersenCommitmentScheme
 
 	public static GeneralizedPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size) {
 		return GeneralizedPedersenCommitmentScheme
-			   .getInstance(cyclicGroup, size, ReferenceRandomByteSequence.getInstance());
+			   .getInstance(cyclicGroup, size, DeterministicRandomByteSequence.getInstance());
 	}
 
-	public static GeneralizedPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size,
-		   ReferenceRandomByteSequence referenceRandomByteSequence) {
-		if (cyclicGroup == null || size < 1 || referenceRandomByteSequence == null) {
+	public static GeneralizedPedersenCommitmentScheme getInstance(final CyclicGroup<?> cyclicGroup, final int size, DeterministicRandomByteSequence randomByteSequence) {
+		if (cyclicGroup == null || size < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		// TODO: is this thread safe???
-		referenceRandomByteSequence.reset();
-		Element randomizationGenerator = cyclicGroup.getIndependentGenerator(0, referenceRandomByteSequence);
-		Tuple messageGenerators = cyclicGroup.getIndependentGenerators(1, size, referenceRandomByteSequence);
+		Element randomizationGenerator = cyclicGroup.getIndependentGenerators(randomByteSequence).get(0);
+		Tuple messageGenerators = Tuple.getInstance(cyclicGroup.getIndependentGenerators(randomByteSequence).skip(1).limit(size));
 		return new GeneralizedPedersenCommitmentScheme(cyclicGroup, size, randomizationGenerator, messageGenerators);
 	}
 
@@ -138,4 +135,5 @@ public class GeneralizedPedersenCommitmentScheme
 		int size = messageGenerators.getArity();
 		return new GeneralizedPedersenCommitmentScheme(cycicGroup, size, randomizationGenerator, messageGenerators);
 	}
+
 }

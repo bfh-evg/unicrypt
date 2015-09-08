@@ -42,12 +42,13 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequenceIterator;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -153,62 +154,49 @@ public class ProductCyclicGroup
 	}
 
 	@Override
-	public final Tuple getRandomGenerator() {
-		return this.getRandomGenerator(HybridRandomByteSequence.getInstance());
+	public final Sequence<Tuple> getIndependentGenerators() {
+		return this.getIndependentGenerators(DeterministicRandomByteSequence.getInstance());
 	}
 
 	@Override
-	public final Tuple getRandomGenerator(RandomByteSequence randomByteSequence) {
-		Element[] randomGenerators = new Element[this.getArity()];
-		for (int i : this.getAllIndices()) {
-			randomGenerators[i] = this.getAt(i).getRandomGenerator(randomByteSequence);
+	public final Sequence<Tuple> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new IllegalArgumentException();
 		}
-		return this.abstractGetElement(DenseArray.getInstance(randomGenerators));
-	}
+		final RandomByteSequenceIterator iterator = randomByteSequence.iterator();
+		final int tupleLenght = this.getLength();
+		return new Sequence<Tuple>() {
 
-	@Override
-	public final Tuple getIndependentGenerator(int index) {
-		return this.getIndependentGenerator(index, (ReferenceRandomByteSequence) null);
-	}
+			@Override
+			public SequenceIterator<Tuple> iterator() {
+				return new SequenceIterator<Tuple>() {
 
-	@Override
-	public final Tuple getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		return (Tuple) this.getIndependentGenerators(index, referenceRandomByteSequence).getAt(index);
-	}
+					@Override
+					protected Tuple abstractNext() {
+						Element[] elements = new Element[tupleLenght];
+						for (int i = 0; i < tupleLenght; i++) {
+							// the following lines are necessary to use the existing random integer generation on the same iterator
+							DeterministicRandomByteSequence rbs = new DeterministicRandomByteSequence() {
 
-	@Override
-	public final Tuple getIndependentGenerators(int maxIndex) {
-		return this.getIndependentGenerators(maxIndex, (ReferenceRandomByteSequence) null);
-	}
+								@Override
+								public RandomByteSequenceIterator iterator() {
+									return iterator;
+								}
+							};
+							elements[i] = (Element) getAt(i).getIndependentGenerators(rbs).get();
+						}
+						return abstractGetElement(DenseArray.getInstance(elements));
+					}
 
-	@Override
-	public final Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		return this.getIndependentGenerators(0, maxIndex, referenceRandomByteSequence);
-	}
+					@Override
+					public boolean hasNext() {
+						return true;
+					}
 
-	@Override
-	public final Tuple getIndependentGenerators(int minIndex, int maxIndex) {
-		return this.getIndependentGenerators(minIndex, maxIndex, (ReferenceRandomByteSequence) null);
-	}
-
-	@Override
-	public final Tuple getIndependentGenerators(int minIndex, int maxIndex,
-		   ReferenceRandomByteSequence referenceRandomByteSequence) {
-		if (minIndex < 0 || maxIndex < minIndex) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (referenceRandomByteSequence == null) {
-			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
-		}
-		// optimization mit HashMap is possible (see AbstractCyclicGroup)
-		Tuple[] generators = new Tuple[maxIndex - minIndex + 1];
-		for (int i = 0; i <= maxIndex; i++) {
-			Tuple generator = this.getRandomGenerator(referenceRandomByteSequence);
-			if (i >= minIndex) {
-				generators[i - minIndex] = generator;
+				};
 			}
-		}
-		return ProductSet.getInstance(this, generators.length).getElement(generators);
+
+		};
 	}
 
 	@Override

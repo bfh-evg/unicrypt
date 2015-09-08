@@ -41,19 +41,19 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
-import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.Point;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -196,13 +196,7 @@ public interface EC<V, E extends DualisticElement<V>>
 	public Sequence<? extends ECElement<V, E>> getRandomElements();
 
 	@Override
-	public Sequence<? extends ECElement<V, E>> getRandomElements(long n);
-
-	@Override
 	public Sequence<? extends ECElement<V, E>> getRandomElements(RandomByteSequence randomByteSequence);
-
-	@Override
-	public Sequence<? extends ECElement<V, E>> getRandomElements(long n, RandomByteSequence randomByteSequence);
 
 	@Override
 	public ECElement<V, E> apply(Element element1, Element element2);
@@ -244,16 +238,9 @@ public interface EC<V, E extends DualisticElement<V>>
 	public ECElement<V, E> getDefaultGenerator();
 
 	@Override
-	public ECElement<V, E> getRandomGenerator();
+	public Sequence<? extends ECElement<V, E>> getIndependentGenerators();
 
 	@Override
-	public ECElement<V, E> getRandomGenerator(
-		   RandomByteSequence randomByteSequence);
-
-	@Override
-	public ECElement<V, E> getIndependentGenerator(int index);
-
-	@Override
-	public ECElement<V, E> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Sequence<? extends ECElement<V, E>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
 
 }

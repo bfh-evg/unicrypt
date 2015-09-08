@@ -41,14 +41,16 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -121,11 +123,15 @@ public class FiniteByteArraySet
 	}
 
 	@Override
-	protected FiniteByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		// this seems to be unnecessarly complicated, but is needed to generate shorter
-		// byte arrays with equal probability
-		return this.getElementFrom(randomByteSequence.getRandomNumberGenerator()
-			   .nextBigInteger(this.getOrder().subtract(MathUtil.ONE)));
+	protected Sequence<FiniteByteArrayElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE)).map(new Mapping<BigInteger, FiniteByteArrayElement>() {
+
+			@Override
+			public FiniteByteArrayElement apply(BigInteger value) {
+				return getElementFrom(value);
+			}
+
+		});
 	}
 
 	@Override
@@ -142,9 +148,6 @@ public class FiniteByteArraySet
 		return hash;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	public static FiniteByteArraySet getInstance(final int maxLength) {
 		return FiniteByteArraySet.getInstance(0, maxLength);
 	}

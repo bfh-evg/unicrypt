@@ -43,7 +43,8 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PolynomialMembershipProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -52,8 +53,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -127,7 +126,8 @@ public class PolynomialMembershipProofSystemTest {
 	@Test
 	public void testPolynomialMembershipProofSystem3() {
 
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
+//		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
+		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZModPrime Z_q = (ZModPrime) G_q.getZModOrder();
 

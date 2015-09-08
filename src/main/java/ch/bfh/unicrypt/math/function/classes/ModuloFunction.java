@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -79,8 +79,7 @@ public class ModuloFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected ZModElement abstractApply(final Element<BigInteger> element,
-		   final RandomByteSequence randomByteSequence) {
+	protected ZModElement abstractApply(final Element<BigInteger> element, final RandomByteSequence randomByteSequence) {
 		return this.getCoDomain().getElement(element.getValue().mod(this.getModulus()));
 	}
 

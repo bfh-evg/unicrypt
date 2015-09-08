@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.proofsystem.classes;
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -56,7 +57,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class covers the OR-composition of preimage proofs: ZKP[(x0,...xN) : y0=f0(x0) V...V yN=fN(xN)]. Neither the

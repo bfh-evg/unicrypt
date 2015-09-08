@@ -42,13 +42,13 @@
 package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a product function f:(X_1x...xX_n)->(Y_1x...xY_n). It consists of multiple
@@ -62,6 +62,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public final class SharedDomainFunction
 	   extends AbstractCompoundFunction<SharedDomainFunction, Set, Element, ProductSet, Tuple> {
+
 	private static final long serialVersionUID = 1L;
 
 	/**

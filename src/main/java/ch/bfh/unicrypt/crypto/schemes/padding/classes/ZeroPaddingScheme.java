@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.crypto.schemes.padding.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.padding.abstracts.AbstractByteArrayPaddingScheme;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *

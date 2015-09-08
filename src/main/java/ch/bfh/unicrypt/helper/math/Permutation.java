@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.helper.math;
 
 import ch.bfh.unicrypt.UniCrypt;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -139,37 +137,6 @@ public class Permutation
 			throw new IllegalArgumentException();
 		}
 		return new Permutation(permutationVector, rank);
-	}
-
-	/**
-	 * Creates a random permutation of a given size using the library's default source of randomness.
-	 * <p>
-	 * @param size The size of the permutation
-	 * @return The new permutation
-	 */
-	public static Permutation getRandomInstance(int size) {
-		return Permutation.getRandomInstance(size, HybridRandomByteSequence.getInstance());
-	}
-
-	/**
-	 * Creates a random permutation of a given size using a given source of randomness.
-	 * <p>
-	 * @param size               The size of the permutation
-	 * @param randomByteSequence The given source of randomness
-	 * @return The new permutation
-	 */
-	public static Permutation getRandomInstance(int size, RandomByteSequence randomByteSequence) {
-		if (size < 0 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
-		}
-		int[] permutationVector = new int[size];
-		int randomIndex;
-		for (int i = 0; i < size; i++) {
-			randomIndex = randomByteSequence.getRandomNumberGenerator().nextInt(i);
-			permutationVector[i] = permutationVector[randomIndex];
-			permutationVector[randomIndex] = i;
-		}
-		return new Permutation(permutationVector);
 	}
 
 	/**

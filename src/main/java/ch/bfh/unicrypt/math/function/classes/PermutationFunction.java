@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.helper.math.Permutation;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -50,7 +51,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface represents the concept of a function f:X^n x Z->X^n, where Z is a permutation group of size n. Calling
@@ -66,6 +66,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class PermutationFunction
 	   extends AbstractFunction<PermutationFunction, ProductSet, Pair, ProductSet, Tuple> {
+
 	private static final long serialVersionUID = 1L;
 
 	private PermutationFunction(final ProductSet domain, final ProductSet coDomain) {

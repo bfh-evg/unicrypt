@@ -41,10 +41,12 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface represents the the concept of a function f:X->X, which computes the inverse of the given input
@@ -58,8 +60,8 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @version 1.0
  */
 public class OneOverFunction
-	   extends AbstractFunction<OneOverFunction, MultiplicativeGroup, MultiplicativeElement, MultiplicativeGroup,
-	   MultiplicativeElement> {
+	   extends AbstractFunction<OneOverFunction, MultiplicativeGroup, MultiplicativeElement, MultiplicativeGroup, MultiplicativeElement> {
+
 	private static final long serialVersionUID = 1L;
 
 	private OneOverFunction(final MultiplicativeGroup domain, MultiplicativeGroup coDomain) {
@@ -70,8 +72,7 @@ public class OneOverFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected MultiplicativeElement abstractApply(final MultiplicativeElement element,
-		   final RandomByteSequence randomByteSequence) {
+	protected MultiplicativeElement abstractApply(final MultiplicativeElement element, final RandomByteSequence randomByteSequence) {
 		return element.oneOver();
 	}
 

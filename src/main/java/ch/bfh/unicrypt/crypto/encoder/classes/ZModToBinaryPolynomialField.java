@@ -44,13 +44,13 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BitArrayToBigInteger;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -107,8 +107,7 @@ public class ZModToBinaryPolynomialField
 		}
 
 		@Override
-		protected PolynomialElement abstractApply(final ZModElement element,
-			   final RandomByteSequence randomByteSequence) {
+		protected PolynomialElement abstractApply(final ZModElement element, final RandomByteSequence randomByteSequence) {
 			BitArray bitArray = bitToBigIntConverter.reconvert(element.getValue());
 			return this.getCoDomain().getElement(bitArray);
 		}
@@ -128,8 +127,7 @@ public class ZModToBinaryPolynomialField
 		}
 
 		@Override
-		protected ZModElement abstractApply(final PolynomialElement element,
-			   final RandomByteSequence randomByteSequence) {
+		protected ZModElement abstractApply(final PolynomialElement element, final RandomByteSequence randomByteSequence) {
 			BitArray bitArray = element.getValue().getCoefficients();
 			BigInteger bigInt = bitToBigIntConverter.convert(bitArray);
 			return this.getCoDomain().getElement(bigInt.mod(this.getCoDomain().getModulus()));

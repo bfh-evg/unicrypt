@@ -157,7 +157,7 @@ public abstract class Sequence<V>
 	 * @return The first value
 	 */
 	public final V get() {
-		return this.get(1);
+		return this.get(0);
 	}
 
 	/**
@@ -167,14 +167,14 @@ public abstract class Sequence<V>
 	 * @return The {@code n}-th value
 	 */
 	public final V get(long n) {
-		if (n < 1) {
+		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
 		for (V value : this) {
-			n--;
 			if (n == 0) {
 				return value;
 			}
+			n--;
 		}
 		return null;
 
@@ -187,7 +187,7 @@ public abstract class Sequence<V>
 	 * @return The first value satisfying the predicate
 	 */
 	public final V find(Predicate<? super V> predicate) {
-		return this.find(predicate, 1);
+		return this.find(predicate, 0);
 	}
 
 	/**

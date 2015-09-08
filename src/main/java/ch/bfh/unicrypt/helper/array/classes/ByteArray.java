@@ -41,16 +41,16 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.BinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.ByteArrayToString;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.util.Arrays;
 
 /**
@@ -265,7 +265,7 @@ public class ByteArray
 		if (length < 0 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		return randomByteSequence.getNextByteArray(length);
+		return randomByteSequence.group(length).get();
 	}
 
 	/**

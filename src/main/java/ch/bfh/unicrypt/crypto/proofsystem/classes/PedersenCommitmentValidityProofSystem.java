@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractValidityProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
@@ -57,8 +58,6 @@ import ch.bfh.unicrypt.math.function.classes.InvertFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 /**
  * This class implements the validity proof system for Pedersen commitments: ZKP[(m,r) : y=com(m,r) ∧ m ∈ M] where com
@@ -134,14 +133,14 @@ public class PedersenCommitmentValidityProofSystem
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages) {
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																							numberOfMessages, PseudoRandomOracle.getInstance());
+																							numberOfMessages, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
 				  final Element proverId) {
 		return PedersenCommitmentValidityProofSystem
-			   .createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, proverId, PseudoRandomOracle.getInstance());
+			   .createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, proverId, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -48,7 +49,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a function, which tests the given input elements for equality. For this to work,
@@ -61,6 +61,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class EqualityFunction
 	   extends AbstractFunction<EqualityFunction, ProductSet, Tuple, BooleanSet, BooleanElement> {
+
 	private static final long serialVersionUID = 1L;
 
 	private EqualityFunction(final ProductSet domain, final BooleanSet coDomain) {

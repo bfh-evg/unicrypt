@@ -45,7 +45,9 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracl
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.PermutationCommitmentProofSystem;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -54,8 +56,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 /**
  * This class is an abstract base implementation for shuffle proof systems according to Wikström (@see Wik09, TW10). It
@@ -254,7 +254,7 @@ public abstract class AbstractShuffleProofSystem
 	//
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveSigmaChallengeGenerator(final int kc, final Element proverId) {
-		return createNonInteractiveSigmaChallengeGenerator(kc, proverId, PseudoRandomOracle.getInstance());
+		return createNonInteractiveSigmaChallengeGenerator(kc, proverId, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
@@ -266,7 +266,7 @@ public abstract class AbstractShuffleProofSystem
 	}
 
 	public static RandomOracleSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace) {
-		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, (Element) null, PseudoRandomOracle.getInstance());
+		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, (Element) null, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
@@ -279,7 +279,7 @@ public abstract class AbstractShuffleProofSystem
 
 	public static RandomOracleChallengeGenerator
 		   createNonInteractiveEValuesGenerator(final int ke, final int size) {
-		return createNonInteractiveEValuesGenerator(ke, size, PseudoRandomOracle.getInstance());
+		return createNonInteractiveEValuesGenerator(ke, size, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator
@@ -291,7 +291,7 @@ public abstract class AbstractShuffleProofSystem
 	}
 
 	public static RandomOracleChallengeGenerator createNonInteractiveEValuesGenerator(final ZMod challengeSpace, final int size) {
-		return createNonInteractiveEValuesGenerator(challengeSpace, size, PseudoRandomOracle.getInstance());
+		return createNonInteractiveEValuesGenerator(challengeSpace, size, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator createNonInteractiveEValuesGenerator(final ZMod challengeSpace, final int size, final RandomOracle randomOracle) {

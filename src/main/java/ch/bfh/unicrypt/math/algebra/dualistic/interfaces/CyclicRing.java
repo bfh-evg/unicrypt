@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveCyclicGroup;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * TODO This interface represents the mathematical concept of a cyclic ring. A cyclic ring is a ring and an additive
@@ -63,16 +63,9 @@ public interface CyclicRing<V>
 	public DualisticElement<V> getDefaultGenerator();
 
 	@Override
-	public DualisticElement<V> getRandomGenerator();
+	public Sequence<? extends DualisticElement<V>> getIndependentGenerators();
 
 	@Override
-	public DualisticElement<V> getRandomGenerator(RandomByteSequence randomByteSequence);
-
-	@Override
-	public DualisticElement<V> getIndependentGenerator(int index);
-
-	@Override
-	public DualisticElement<V> getIndependentGenerator(int index,
-		   ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Sequence<? extends DualisticElement<V>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
 
 }

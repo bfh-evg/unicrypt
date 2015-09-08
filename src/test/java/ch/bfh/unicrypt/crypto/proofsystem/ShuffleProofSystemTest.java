@@ -49,6 +49,10 @@ import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentSc
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.math.Permutation;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -60,11 +64,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
-import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -83,13 +82,14 @@ public class ShuffleProofSystemTest {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.getInstance();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
+		final RandomOracle ro = RandomOracle.getInstance();
+		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
+//		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
+		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
 
 		final int size = 5;
 		final Element encryptionPK = G_q.getElement(4);
-		final Element g = G_q.getIndependentGenerator(0, rrs);
+		final Element g = G_q.getIndependentGenerators(rrs).get(0);
 
 		// Permutation
 		Permutation permutation = Permutation.getInstance(new int[]{3, 2, 1, 4, 0});
@@ -130,15 +130,14 @@ public class ShuffleProofSystemTest {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 10;
 		final Element encryptionPK = G_q.getElement(4);
-		final Element g = G_q.getIndependentGenerator(0, rrs);
+		final Element g = G_q.getIndependentGenerators(rrs).get(0);
 
 		// Permutation
-		Permutation permutation = Permutation.getRandomInstance(size);
-		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
+		PermutationElement pi = PermutationGroup.getInstance(size).getRandomElement();
 		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
 
 		Tuple sV = pcs.getRandomizationSpace().getRandomElement();
@@ -172,13 +171,14 @@ public class ShuffleProofSystemTest {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.getInstance();
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		final RandomOracle ro = RandomOracle.getInstance();
+//		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
+		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 5;
 		final Element encryptionPK = G_q.getElement(4);
-		final Element g = G_q.getIndependentGenerator(0, rrs);
+		final Element g = G_q.getIndependentGenerators(rrs).get(0);
 
 		// Permutation
 		Permutation permutation = Permutation.getInstance(new int[]{3, 2, 1, 4, 0});
@@ -237,16 +237,15 @@ public class ShuffleProofSystemTest {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.getInstance();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		final RandomOracle ro = RandomOracle.getInstance();
+		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 100;
 		final Element encryptionPK = G_q.getElement(4);
-		final Element g = G_q.getIndependentGenerator(0, rrs);
+		final Element g = G_q.getIndependentGenerators(rrs).get(0);
 
 		// Permutation
-		Permutation permutation = Permutation.getRandomInstance(size);
-		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
+		PermutationElement pi = PermutationGroup.getInstance(size).getRandomElement();
 
 		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
 

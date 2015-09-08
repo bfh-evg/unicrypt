@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem.interfaces;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface represents the concept of a proof system. In general, a proof system allows the generation and the

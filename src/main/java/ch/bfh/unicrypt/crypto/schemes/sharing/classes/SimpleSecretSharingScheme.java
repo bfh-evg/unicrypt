@@ -42,10 +42,10 @@
 package ch.bfh.unicrypt.crypto.schemes.sharing.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.sharing.abstracts.AbstractSecretSharingScheme;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -53,6 +53,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class SimpleSecretSharingScheme
 	   extends AbstractSecretSharingScheme<Group, Element, Group, Element> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final Group group;

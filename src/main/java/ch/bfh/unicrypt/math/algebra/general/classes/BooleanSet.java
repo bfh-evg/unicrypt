@@ -44,17 +44,19 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BooleanToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
  * This interface represents the group that consists of two elements only, for example TRUE and FALSE. This group is
  * isomorphic to the additive group of integers modulo 2. It is therefore possible to consider and implement it as a
- * specialization of {@link ZPlusMod}.
+ * specialization of {@link ZMod}.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -107,8 +109,15 @@ public class BooleanSet
 	}
 
 	@Override
-	protected BooleanElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.getElement(randomByteSequence.getRandomNumberGenerator().nextBoolean());
+	protected Sequence<BooleanElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		return randomByteSequence.getRandomBitSequence().map(new Mapping<Boolean, BooleanElement>() {
+
+			@Override
+			public BooleanElement apply(Boolean value) {
+				return abstractGetElement(value);
+			}
+
+		});
 	}
 
 	@Override

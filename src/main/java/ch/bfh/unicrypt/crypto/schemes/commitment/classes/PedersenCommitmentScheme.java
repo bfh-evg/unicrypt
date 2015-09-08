@@ -42,9 +42,10 @@
 package ch.bfh.unicrypt.crypto.schemes.commitment.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
@@ -52,7 +53,6 @@ import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 
 public class PedersenCommitmentScheme
 	   extends AbstractRandomizedCommitmentScheme<ZMod, ZModElement, CyclicGroup, Element, ZMod> {
@@ -90,18 +90,15 @@ public class PedersenCommitmentScheme
 	}
 
 	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup) {
-		return PedersenCommitmentScheme.getInstance(cyclicGroup, ReferenceRandomByteSequence.getInstance());
+		return PedersenCommitmentScheme.getInstance(cyclicGroup, DeterministicRandomByteSequence.getInstance());
 	}
 
-	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup,
-		   ReferenceRandomByteSequence referenceRandomByteSequence) {
-		if (cyclicGroup == null || referenceRandomByteSequence == null) {
+	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, DeterministicRandomByteSequence randomByteSequence) {
+		if (cyclicGroup == null || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		// TODO: is this thread safe???
-		referenceRandomByteSequence.reset();
-		Tuple generators = cyclicGroup.getIndependentGenerators(2, referenceRandomByteSequence);
-		return new PedersenCommitmentScheme(cyclicGroup, generators.getAt(0), generators.getAt(1));
+		Sequence<Element> generators = cyclicGroup.getIndependentGenerators(randomByteSequence);
+		return new PedersenCommitmentScheme(cyclicGroup, generators.get(0), generators.get(1));
 	}
 
 	public static PedersenCommitmentScheme getInstance(Element generator1, Element generator2) {
@@ -111,4 +108,5 @@ public class PedersenCommitmentScheme
 		}
 		return new PedersenCommitmentScheme((CyclicGroup) generator1.getSet(), generator1, generator2);
 	}
+
 }

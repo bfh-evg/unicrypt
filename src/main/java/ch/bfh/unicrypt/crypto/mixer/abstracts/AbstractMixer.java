@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.crypto.mixer.abstracts;
 
 import ch.bfh.unicrypt.crypto.mixer.interfaces.Mixer;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -50,8 +52,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -109,8 +109,8 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 
 	@Override
 	public final Tuple shuffle(final Tuple elements, RandomByteSequence randomByteSequence) {
-		PermutationElement permutation =
-			   PermutationGroup.getInstance(this.getSize()).getRandomElement(randomByteSequence);
+		PermutationElement permutation
+			   = PermutationGroup.getInstance(this.getSize()).getRandomElement(randomByteSequence);
 		Tuple randomizations = this.generateRandomizations(randomByteSequence);
 		return this.shuffle(elements, permutation, randomizations);
 	}
@@ -159,4 +159,5 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 	private ProductSet getShufflesSpace() {
 		return ProductSet.getInstance(this.getShuffleSpace(), this.getSize());
 	}
+
 }

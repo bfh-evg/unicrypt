@@ -41,13 +41,13 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a constant function with no input. When the function is called, it returns
@@ -59,6 +59,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class ConstantFunction
 	   extends AbstractFunction<ConstantFunction, SingletonGroup, SingletonElement, Set, Element> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final Element element;

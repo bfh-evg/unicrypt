@@ -44,8 +44,10 @@ package ch.bfh.unicrypt.helper.factorization;
 import ch.bfh.unicrypt.helper.map.HashMap2D;
 import ch.bfh.unicrypt.helper.map.Map2D;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
-import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
 import java.math.BigInteger;
 
 /**
@@ -204,31 +206,33 @@ public class Prime
 	}
 
 	/**
-	 * Creates a new random prime number of a given bit length using the library's default source of randomness.
+	 * Creates a new random prime number of a given bit length using the library's default random byte sequence.
 	 * <p>
 	 * @param bitLength The bit length
 	 * @return The new prime
 	 */
 	public static Prime getRandomInstance(int bitLength) {
-		return Prime.getRandomInstance(bitLength, RandomNumberGenerator.getInstance());
+		return Prime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
 	/**
-	 * Creates a new random prime number of a given bit length using a given source of randomness.
+	 * Creates a new random prime number of a given bit length using a given random byte sequence.
 	 * <p>
-	 * @param bitLength             The bit length
-	 * @param randomNumberGenerator The given source of randomness
+	 * @param bitLength          The bit length
+	 * @param randomByteSequence The given source of randomness
 	 * @return The new prime
 	 */
-	public static Prime getRandomInstance(int bitLength, RandomNumberGenerator randomNumberGenerator) {
-		if (bitLength < 2 || randomNumberGenerator == null) {
+	public static Prime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
+		if (bitLength < 2 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		BigInteger candidate;
-		do {
-			candidate = randomNumberGenerator.nextBigInteger(bitLength);
-		} while (!MathUtil.isPrime(candidate));
-		return Prime.getInstance(candidate);
+		return new Prime(randomByteSequence.getRandomBigIntegerSequence(bitLength).find(new Predicate<BigInteger>() {
+
+			@Override
+			public boolean test(BigInteger value) {
+				return MathUtil.isPrime(value);
+			}
+		}));
 	}
 
 }

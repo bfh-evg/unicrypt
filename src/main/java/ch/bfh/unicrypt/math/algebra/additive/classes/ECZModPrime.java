@@ -43,11 +43,14 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Point;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -102,9 +105,9 @@ public class ECZModPrime
 		ZModElement y1 = xValue.power(3).add(this.getA().multiply(xValue)).add(this.getB());
 		ZModElement y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y1.getValue(),
 																			   this.getFiniteField().getModulus()));
-		ECZModElement e1=this.getElement(xValue, y);
-		ECZModElement e2=e1.invert();
-		ECZModElement[] e={e1,e2};
+		ECZModElement e1 = this.getElement(xValue, y);
+		ECZModElement e2 = e1.invert();
+		ECZModElement[] e = {e1, e2};
 		return e;
 	}
 
@@ -152,27 +155,41 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECZModElement getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
-		BigInteger p = this.getFiniteField().getModulus();
-		ZModElement x = this.getFiniteField().getRandomElement(randomByteSequence);
-		ZModElement y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
-		boolean neg = x.getValue().mod(new BigInteger("2")).equals(MathUtil.ONE);
+	protected Sequence<ECZModElement> abstractGetRandomElementsWithoutGenerator(RandomByteSequence randomByteSequence) {
+		// an additional random bit is needed to decide between the two possible y-values for a given x-value
+		// for this, the upper bound of the random bigInteger is multiplied by 2
+		final BigInteger p = this.getFiniteField().getModulus();
+		return randomByteSequence
+			   .getRandomBigIntegerSequence(this.getFiniteField().getOrder().subtract(MathUtil.ONE).multiply(MathUtil.TWO))
+			   .filter(new Predicate<BigInteger>() {
 
-		while (!MathUtil.hasSqrtModPrime(y.getValue(), p)) {
-			x = this.getFiniteField().getRandomElement(randomByteSequence);
-			y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
-		}
-		//if neg is true return solution 2(p-sqrt) of sqrtModPrime else solution 1
-		if (neg) {
-			y = this.getFiniteField().getElement(p.subtract(MathUtil.sqrtModPrime(y.getValue(), p)));
-		} else {
-			y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y.getValue(), p));
-		}
-		return this.abstractGetElement(Point.getInstance(x, y));
+				   @Override
+				   public boolean test(BigInteger xTimesTwo) {
+					   BigInteger x = xTimesTwo.divide(MathUtil.TWO);
+					   BigInteger y = x.pow(3).add(getA().getValue().multiply(x)).add(getB().getValue());
+					   return MathUtil.hasSqrtModPrime(y, p);
+				   }
+
+			   })
+			   .map(new Mapping<BigInteger, ECZModElement>() {
+
+				   @Override
+				   public ECZModElement apply(BigInteger xTimesTwo) {
+					   BigInteger x = xTimesTwo.divide(MathUtil.TWO);
+					   BigInteger y = MathUtil.sqrtModPrime(x.pow(3).add(getA().getValue().multiply(x)).add(getB().getValue()), p);
+					   // if last bit is true return (x, (p-y)), otherwise (x,y)
+					   if (xTimesTwo.mod(MathUtil.TWO).equals(MathUtil.ONE)) {
+						   y = p.subtract(y);
+					   }
+					   return abstractGetElement(Point.getInstance(getFiniteField().getElement(x), getFiniteField().getElement(y)));
+				   }
+
+			   });
+
 	}
 
 	/**
-	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 18
+	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptography Ver. 1.0 page 18
 	 * <p>
 	 * @return True if curve parameters are valid
 	 * @throws Exception
@@ -204,6 +221,7 @@ public class ECZModPrime
 
 	/**
 	 * Private method implements selfApply to check if a ECZmodElement is a valid generator
+	 * <p>
 	 * @param element
 	 * @param posAmount
 	 * @return
@@ -279,9 +297,5 @@ public class ECZModPrime
 
 		return ECZModPrime.getInstance(field, a, b, gx, gy, order, h);
 	}
-
-
-
-
 
 }

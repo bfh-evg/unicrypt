@@ -42,12 +42,12 @@
 package ch.bfh.unicrypt.crypto.keygenerator.interfaces;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -58,11 +58,11 @@ public interface KeyPairGenerator
 
 	public Element generatePrivateKey();
 
-	public Element generatePrivateKey(RandomByteSequence randomByteSequence);
-
 	public Element generatePrivateKey(String password);
 
 	public Element generatePrivateKey(String password, ByteArray salt);
+
+	public Element generatePrivateKey(RandomByteSequence randomByteSequence);
 
 	public Element generatePublicKey(Element privateKey);
 
@@ -70,11 +70,11 @@ public interface KeyPairGenerator
 
 	public Pair generateKeyPair();
 
-	public Pair generateKeyPair(RandomByteSequence randomByteSequence);
-
 	public Pair generateKeyPair(String password);
 
 	public Pair generateKeyPair(String password, ByteArray salt);
+
+	public Pair generateKeyPair(RandomByteSequence randomByteSequence);
 
 	public ProductSet getKeyPairSpace();
 

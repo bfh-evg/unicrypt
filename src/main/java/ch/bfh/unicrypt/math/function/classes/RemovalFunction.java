@@ -41,11 +41,11 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a restricted identity function, which selects a particular element from an
@@ -57,6 +57,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class RemovalFunction
 	   extends AbstractFunction<RemovalFunction, ProductSet, Tuple, ProductSet, Tuple> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final int index;

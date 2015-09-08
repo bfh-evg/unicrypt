@@ -41,12 +41,14 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface represents the the concept of a function f:X^n->X, which applies the group operation sequentially to
@@ -63,6 +65,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class DivisionFunction
 	   extends AbstractFunction<DivisionFunction, ProductGroup, Pair, MultiplicativeGroup, MultiplicativeElement> {
+
 	private static final long serialVersionUID = 1L;
 
 	private DivisionFunction(final ProductGroup domain, final MultiplicativeGroup coDomain) {

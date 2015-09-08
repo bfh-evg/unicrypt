@@ -45,8 +45,11 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.Challeng
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PermutationCommitmentProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.math.Permutation;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
@@ -54,11 +57,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import java.lang.reflect.Field;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
@@ -74,8 +72,9 @@ public class PermutationCommitmentProofSystemTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+//		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
+		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 5;
 
@@ -103,14 +102,13 @@ public class PermutationCommitmentProofSystemTest {
 	public void testPermutationCommitemntProofGenerator2() {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
-		final RandomOracle ro = PseudoRandomOracle.getInstance();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		final RandomOracle ro = RandomOracle.getInstance();
+		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 20;
 
 		// Permutation
-		Permutation permutation = Permutation.getRandomInstance(size);
-		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
+		PermutationElement pi = PermutationGroup.getInstance(size).getRandomElement();
 
 		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
 
@@ -133,8 +131,9 @@ public class PermutationCommitmentProofSystemTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+//		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
+		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 5;
 
@@ -169,8 +168,9 @@ public class PermutationCommitmentProofSystemTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+//		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
+		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 5;
 

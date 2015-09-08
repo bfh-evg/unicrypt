@@ -43,12 +43,12 @@ package ch.bfh.unicrypt.crypto.schemes.padding.abstracts;
 
 import ch.bfh.unicrypt.crypto.schemes.padding.interfaces.PaddingScheme;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *

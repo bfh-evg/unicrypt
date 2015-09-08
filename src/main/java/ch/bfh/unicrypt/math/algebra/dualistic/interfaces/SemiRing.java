@@ -46,13 +46,14 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -98,13 +99,7 @@ public interface SemiRing<V>
 	public Sequence<? extends DualisticElement<V>> getRandomElements();
 
 	@Override
-	public Sequence<? extends DualisticElement<V>> getRandomElements(long n);
-
-	@Override
 	public Sequence<? extends DualisticElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
-
-	@Override
-	public Sequence<? extends DualisticElement<V>> getRandomElements(long n, RandomByteSequence randomByteSequence);
 
 	@Override
 	public DualisticElement<V> apply(Element element1, Element element2);

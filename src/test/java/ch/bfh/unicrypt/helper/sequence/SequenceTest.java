@@ -87,11 +87,11 @@ public class SequenceTest {
 		Assert.assertEquals(4, seq.count(pred));
 
 		Assert.assertEquals(11, (int) seq.find(pred));
-		Assert.assertEquals(13, (int) seq.find(pred, 3));
+		Assert.assertEquals(14, (int) seq.find(pred, 3));
 		Assert.assertEquals(null, seq.find(pred, 5));
 
 		Assert.assertEquals(1, (int) seq.get());
-		Assert.assertEquals(3, (int) seq.get(3));
+		Assert.assertEquals(4, (int) seq.get(3));
 		Assert.assertEquals(null, seq.find(pred, 25));
 
 		assertFalse(seq.matchAll(pred));

@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface represents an additively written {@link CyclicGroup}. No functionality is added, only the return types
@@ -61,16 +61,9 @@ public interface AdditiveCyclicGroup<V>
 	public AdditiveElement<V> getDefaultGenerator();
 
 	@Override
-	public AdditiveElement<V> getRandomGenerator();
+	public Sequence<? extends AdditiveElement<V>> getIndependentGenerators();
 
 	@Override
-	public AdditiveElement<V> getRandomGenerator(RandomByteSequence randomByteSequence);
-
-	@Override
-	public AdditiveElement<V> getIndependentGenerator(int index);
-
-	@Override
-	public AdditiveElement<V> getIndependentGenerator(int index,
-		   ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Sequence<? extends AdditiveElement<V>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
 
 }

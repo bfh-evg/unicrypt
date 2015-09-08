@@ -48,6 +48,8 @@ import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenComm
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
@@ -64,8 +66,6 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * The implementation of the re-encryption shuffle proof according to Wikström (@see Wik09 Protocol2:
@@ -278,11 +278,11 @@ public class ReEncryptionShuffleProofSystem
 	//
 	public static ReEncryptionShuffleProofSystem getInstance(int size,
 		   ElGamalEncryptionScheme elgamal, Element encryptionPK) {
-		return getInstance(size, elgamal, encryptionPK, ReferenceRandomByteSequence.getInstance());
+		return getInstance(size, elgamal, encryptionPK, DeterministicRandomByteSequence.getInstance());
 	}
 
 	public static ReEncryptionShuffleProofSystem getInstance(int size,
-		   ElGamalEncryptionScheme elgamal, Element encryptionPK, ReferenceRandomByteSequence rrbs) {
+		   ElGamalEncryptionScheme elgamal, Element encryptionPK, DeterministicRandomByteSequence rrbs) {
 		if (elgamal == null) {
 			throw new IllegalArgumentException();
 		}
@@ -295,7 +295,7 @@ public class ReEncryptionShuffleProofSystem
 
 	public static ReEncryptionShuffleProofSystem
 		   getInstance(int size, ElGamalEncryptionScheme elgamal,
-				  Element encryptionPK, Element proverId, int ke, int kc, int kr, ReferenceRandomByteSequence rrbs) {
+				  Element encryptionPK, Element proverId, int ke, int kc, int kr, DeterministicRandomByteSequence rrbs) {
 		return getInstance(
 			   createNonInteractiveSigmaChallengeGenerator(kc, proverId),
 			   createNonInteractiveEValuesGenerator(ke, size),
@@ -321,17 +321,17 @@ public class ReEncryptionShuffleProofSystem
 		   ChallengeGenerator eValuesGenerator, int size, ElGamalEncryptionScheme elgamal,
 		   Element encryptionPK) {
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, size, elgamal,
-						   encryptionPK, DEFAULT_KR, ReferenceRandomByteSequence.getInstance());
+						   encryptionPK, DEFAULT_KR, DeterministicRandomByteSequence.getInstance());
 	}
 
 	public static ReEncryptionShuffleProofSystem getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, int size, ElGamalEncryptionScheme elgamal,
-		   Element encryptionPK, int kr, ReferenceRandomByteSequence referenceRandomByteSequence) {
+		   Element encryptionPK, int kr, DeterministicRandomByteSequence randomByteSequence) {
 
-		if (elgamal == null || size < 1 || referenceRandomByteSequence == null) {
+		if (elgamal == null || size < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		Tuple independentGenerators = elgamal.getCyclicGroup().getIndependentGenerators(size, referenceRandomByteSequence);
+		Tuple independentGenerators = Tuple.getInstance(elgamal.getCyclicGroup().getIndependentGenerators(randomByteSequence).limit(size));
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, independentGenerators,
 						   elgamal, encryptionPK, kr);
 	}

@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.helper.math.Polynomial;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
@@ -50,8 +52,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -108,8 +108,7 @@ public class PolynomialField
 	}
 
 	@Override
-	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero,
-		   RandomByteSequence randomByteSequence) {
+	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero, RandomByteSequence randomByteSequence) {
 		if (degree >= this.getDegree()) {
 			throw new IllegalArgumentException();
 		}

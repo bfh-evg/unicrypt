@@ -47,6 +47,8 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.Challeng
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
@@ -62,8 +64,6 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -275,14 +275,13 @@ public class IdentityShuffleProofSystem
 	// getInstance...
 	//
 	public static IdentityShuffleProofSystem getInstance(int size, CyclicGroup identityGroup) {
-		return getInstance(
-			   createNonInteractiveSigmaChallengeGenerator(identityGroup.getZModOrder()),
-			   createNonInteractiveEValuesGenerator(identityGroup.getZModOrder(), size),
-			   size, identityGroup, DEFAULT_KR, ReferenceRandomByteSequence.getInstance());
+		return getInstance(createNonInteractiveSigmaChallengeGenerator(identityGroup.getZModOrder()),
+						   createNonInteractiveEValuesGenerator(identityGroup.getZModOrder(), size),
+						   size, identityGroup, DEFAULT_KR, DeterministicRandomByteSequence.getInstance());
 	}
 
 	public static IdentityShuffleProofSystem getInstance(int size, CyclicGroup identityGroup,
-		   Element proverId, int ke, int kc, int kr, ReferenceRandomByteSequence rrbs) {
+		   Element proverId, int ke, int kc, int kr, DeterministicRandomByteSequence rrbs) {
 		return getInstance(
 			   createNonInteractiveSigmaChallengeGenerator(kc, proverId),
 			   createNonInteractiveEValuesGenerator(ke, size),
@@ -304,17 +303,17 @@ public class IdentityShuffleProofSystem
 	public static IdentityShuffleProofSystem getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, int size, CyclicGroup identityGroup) {
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, size, identityGroup, DEFAULT_KR,
-						   ReferenceRandomByteSequence.getInstance());
+						   DeterministicRandomByteSequence.getInstance());
 	}
 
 	public static IdentityShuffleProofSystem getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, int size, CyclicGroup identityGroup, int kr,
-		   ReferenceRandomByteSequence referenceRandomByteSequence) {
+		   DeterministicRandomByteSequence randomByteSequence) {
 
-		if (identityGroup == null || size < 1 || referenceRandomByteSequence == null) {
+		if (identityGroup == null || size < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		Tuple independentGenerators = identityGroup.getIndependentGenerators(size, referenceRandomByteSequence);
+		Tuple independentGenerators = Tuple.getInstance(identityGroup.getIndependentGenerators(randomByteSequence).limit(size));
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, independentGenerators, identityGroup, kr);
 	}
 

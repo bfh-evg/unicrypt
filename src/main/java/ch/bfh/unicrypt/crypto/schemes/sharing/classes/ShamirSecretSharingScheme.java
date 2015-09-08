@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.sharing.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.sharing.abstracts.AbstractThresholdSecretSharingScheme;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -51,7 +52,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -60,6 +60,7 @@ import java.math.BigInteger;
  */
 public class ShamirSecretSharingScheme
 	   extends AbstractThresholdSecretSharingScheme<ZModPrime, ZModElement, ProductGroup, Pair> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final ZModPrime zModPrime;

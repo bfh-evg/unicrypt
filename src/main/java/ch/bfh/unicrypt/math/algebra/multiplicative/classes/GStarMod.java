@@ -41,14 +41,16 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
 import ch.bfh.unicrypt.helper.factorization.SpecialFactorization;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -177,17 +179,14 @@ public class GStarMod
 	}
 
 	@Override
-	protected GStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
-		ZStarModElement randomElement = this.getZStarMod().getRandomElement(randomByteSequence);
-		return this.getElement(randomElement.power(this.getCoFactor()).convertToBigInteger());
-// VERSION WITH OPTIMIZED EFFICIENCY BUT LACK OF INDEPENDENCE
-//    if (this.getOrder().compareTo(this.getCoFactor()) > 0) { // choose between the faster method
-//      // Method 1
-//      ZStarModElement randomElement = this.getZStarMod().getRandomElement(random);
-//      return this.getElement(randomElement.power(this.getCoFactor()));
-//    }
-//    // Method 2
-//    return this.getDefaultGenerator().power(this.getZModOrder().getRandomElement(random));
+	protected Sequence<GStarModElement> abstractGetRandomElements(final RandomByteSequence randomByteSequence) {
+		return this.getZStarMod().abstractGetRandomElements(randomByteSequence).map(new Mapping<ZStarModElement, GStarModElement>() {
+
+			@Override
+			public GStarModElement apply(ZStarModElement element) {
+				return abstractGetElement(element.power(getCoFactor()).getValue());
+			}
+		});
 	}
 
 	@Override

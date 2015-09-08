@@ -45,6 +45,8 @@ import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SigmaProofSystem;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -62,9 +64,6 @@ import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 //
 // @see [cs03] Camenisch, J. & Shoup, V., 2003. Practical verifiable encryption and decryption of discrete logarithms.
@@ -249,14 +248,14 @@ public class InequalityOfPreimagesProofSystem
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction) {
 		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
-																					   PseudoRandomOracle.getInstance());
+																					   RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
 				  final Element proverId) {
 		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
-																					   proverId, PseudoRandomOracle.getInstance());
+																					   proverId, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator

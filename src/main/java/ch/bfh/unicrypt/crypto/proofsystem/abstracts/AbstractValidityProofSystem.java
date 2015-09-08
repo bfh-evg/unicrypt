@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.OrProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SetMembershipProofSystem;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -59,7 +60,6 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class is an abstract base implementation for validity proof systems. A validity proof system is used to proof
@@ -158,8 +158,7 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 
 	@Override
 	protected Triple abstractGenerate(Pair privateInput, PUE publicInput, RandomByteSequence randomByteSequence) {
-		return this.getOrProofGenerator().generate(privateInput, this.createProofImages(publicInput),
-												   randomByteSequence);
+		return this.getOrProofGenerator().generate(privateInput, this.createProofImages(publicInput), randomByteSequence);
 	}
 
 	@Override

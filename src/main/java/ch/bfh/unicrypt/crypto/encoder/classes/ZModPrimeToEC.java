@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
@@ -57,7 +58,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 public class ZModPrimeToEC
@@ -110,8 +110,7 @@ public class ZModPrimeToEC
 		}
 
 		@Override
-		protected ECElement abstractApply(ZModElement element,
-			   RandomByteSequence randomByteSequence) {
+		protected ECElement abstractApply(ZModElement element, RandomByteSequence randomByteSequence) {
 
 			boolean firstOption = true;
 
@@ -231,8 +230,7 @@ public class ZModPrimeToEC
 		}
 
 		@Override
-		protected ZModElement abstractApply(ECElement element,
-			   RandomByteSequence randomByteSequence) {
+		protected ZModElement abstractApply(ECElement element, RandomByteSequence randomByteSequence) {
 			ZModPrime zModPrime = this.getCoDomain();
 			EC ec = this.getDomain();
 			int msgSpace = zModPrime.getOrder().toString(2).length();

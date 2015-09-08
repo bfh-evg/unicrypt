@@ -48,6 +48,9 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.Challeng
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -65,10 +68,6 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 //
 // @see [TW10] Protocol 1: Permutation Matrix
@@ -378,13 +377,12 @@ public class PermutationCommitmentProofSystem
 	// getInstance...
 	//
 	public static PermutationCommitmentProofSystem getInstance(CyclicGroup cyclicGroup, int size) {
-		return getInstance(
-			   createNonInteractiveSigmaChallengeGenerator(cyclicGroup.getZModOrder()),
-			   createNonInteractiveEValuesGenerator(cyclicGroup.getZModOrder(), size),
-			   cyclicGroup, size, DEFAULT_KR, ReferenceRandomByteSequence.getInstance());
+		return getInstance(createNonInteractiveSigmaChallengeGenerator(cyclicGroup.getZModOrder()),
+						   createNonInteractiveEValuesGenerator(cyclicGroup.getZModOrder(), size),
+						   cyclicGroup, size, DEFAULT_KR, DeterministicRandomByteSequence.getInstance());
 	}
 
-	public static PermutationCommitmentProofSystem getInstance(CyclicGroup cyclicGroup, int size, ReferenceRandomByteSequence rrbs) {
+	public static PermutationCommitmentProofSystem getInstance(CyclicGroup cyclicGroup, int size, DeterministicRandomByteSequence rrbs) {
 		return getInstance(
 			   createNonInteractiveSigmaChallengeGenerator(cyclicGroup.getZModOrder()),
 			   createNonInteractiveEValuesGenerator(cyclicGroup.getZModOrder(), size),
@@ -392,7 +390,7 @@ public class PermutationCommitmentProofSystem
 	}
 
 	public static PermutationCommitmentProofSystem getInstance(CyclicGroup cyclicGroup, int size,
-		   Element proverId, int ke, int kc, int kr, ReferenceRandomByteSequence rrbs) {
+		   Element proverId, int ke, int kc, int kr, DeterministicRandomByteSequence rrbs) {
 		return getInstance(
 			   createNonInteractiveSigmaChallengeGenerator(kc, proverId),
 			   createNonInteractiveEValuesGenerator(ke, size),
@@ -402,17 +400,17 @@ public class PermutationCommitmentProofSystem
 	public static PermutationCommitmentProofSystem getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size) {
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, DEFAULT_KR,
-						   ReferenceRandomByteSequence.getInstance());
+						   DeterministicRandomByteSequence.getInstance());
 	}
 
 	public static PermutationCommitmentProofSystem getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, int kr,
-		   ReferenceRandomByteSequence referenceRandomByteSequence) {
+		   DeterministicRandomByteSequence randomByteSequence) {
 
-		if (cyclicGroup == null || size < 1 || referenceRandomByteSequence == null) {
+		if (cyclicGroup == null || size < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		Tuple generators = cyclicGroup.getIndependentGenerators(size, referenceRandomByteSequence);
+		Tuple generators = Tuple.getInstance(cyclicGroup.getIndependentGenerators(randomByteSequence).limit(size));
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, generators, kr);
 	}
 
@@ -478,13 +476,13 @@ public class PermutationCommitmentProofSystem
 
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace) {
-		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, (Element) null, PseudoRandomOracle.getInstance());
+		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, (Element) null, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveSigmaChallengeGenerator(final int kc, final Element proverId) {
 		return createNonInteractiveSigmaChallengeGenerator(kc, proverId,
-														   PseudoRandomOracle.getInstance());
+														   RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
@@ -507,7 +505,7 @@ public class PermutationCommitmentProofSystem
 
 	public static RandomOracleChallengeGenerator
 		   createNonInteractiveEValuesGenerator(final int ke, final int size) {
-		return createNonInteractiveEValuesGenerator(ke, size, PseudoRandomOracle.getInstance());
+		return createNonInteractiveEValuesGenerator(ke, size, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator
@@ -521,7 +519,7 @@ public class PermutationCommitmentProofSystem
 
 	public static RandomOracleChallengeGenerator
 		   createNonInteractiveEValuesGenerator(final ZMod challengeSpace, final int size) {
-		return createNonInteractiveEValuesGenerator(challengeSpace, size, PseudoRandomOracle.getInstance());
+		return createNonInteractiveEValuesGenerator(challengeSpace, size, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator

@@ -41,9 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
  * This interface represents the concept a cyclic group. Every element of a cyclic group can be written as a power of
@@ -69,73 +68,9 @@ public interface CyclicGroup<V>
 	 */
 	public Element<V> getDefaultGenerator();
 
-	/**
-	 * TODO Returns a randomly selected generator of this cyclic group using the default random generator.
-	 * <p>
-	 * @return The randomly selected generator
-	 */
-	public Element<V> getRandomGenerator();
+	public Sequence<? extends Element<V>> getIndependentGenerators();
 
-	/**
-	 * TODO Returns a randomly selected generator of this cyclic group using a given random generator.
-	 * <p>
-	 * @param randomByteSequence
-	 * @return The randomly selected generator
-	 */
-	public Element<V> getRandomGenerator(RandomByteSequence randomByteSequence);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @param index
-	 * @return
-	 */
-	public Element<V> getIndependentGenerator(int index);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @param index
-	 * @param referenceRandomByteSequence
-	 * @return
-	 */
-	public Element<V> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @param maxIndex
-	 * @return
-	 */
-	public Tuple getIndependentGenerators(int maxIndex);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @param maxIndex
-	 * @param referenceRandomByteSequence
-	 * @return
-	 */
-	public Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @param minIndex
-	 * @param maxIndex
-	 * @return
-	 */
-	public Tuple getIndependentGenerators(int minIndex, int maxIndex);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @param minIndex
-	 * @param maxIndex
-	 * @param referenceRandomByteSequence
-	 * @return
-	 */
-	public Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Sequence<? extends Element<V>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
 
 	/**
 	 * TODO Checks if a given element is a generator of this cyclic group.

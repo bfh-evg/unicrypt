@@ -42,13 +42,13 @@
 package ch.bfh.unicrypt.math.algebra.general;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.deterministic.CTR_DRBG;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
-import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -205,17 +205,17 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetRandomElement2() {
-		RandomByteSequence random = CounterModeRandomByteSequence.getInstance();
-//		System.out.println("getRandomElement");
-		int counter = 0;
-		while (BooleanSet.getInstance().getRandomElement(random).getValue() && counter++ < 100);
-		if (counter >= 100) {
-			Assert.fail();
+		DeterministicRandomByteSequence random = CTR_DRBG.getFactory().getInstance().getRandomByteSequence();
+		boolean result = true;
+		for (BooleanElement element : BooleanSet.getInstance().getRandomElements(random).limit(100)) {
+			result = result && element.getValue();
 		}
-		while (!(BooleanSet.getInstance().getRandomElement(random).getValue()) && counter++ < 100);
-		if (counter >= 100) {
-			Assert.fail();
+		Assert.assertFalse(result);
+		result = false;
+		for (BooleanElement element : BooleanSet.getInstance().getRandomElements(random).limit(100)) {
+			result = result || element.getValue();
 		}
+		Assert.assertTrue(result);
 
 	}
 

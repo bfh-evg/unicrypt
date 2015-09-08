@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface provides the renaming of some group operations for the case of a multiplicatively written
@@ -61,16 +61,9 @@ public interface MultiplicativeCyclicGroup<V>
 	public MultiplicativeElement<V> getDefaultGenerator();
 
 	@Override
-	public MultiplicativeElement<V> getRandomGenerator();
+	public Sequence<? extends MultiplicativeElement<V>> getIndependentGenerators();
 
 	@Override
-	public MultiplicativeElement<V> getRandomGenerator(RandomByteSequence randomByteSequence);
-
-	@Override
-	public MultiplicativeElement<V> getIndependentGenerator(int index);
-
-	@Override
-	public MultiplicativeElement<V> getIndependentGenerator(int index,
-		   ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Sequence<? extends MultiplicativeElement<V>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
 
 }

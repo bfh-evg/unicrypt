@@ -44,10 +44,11 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -132,7 +133,7 @@ public class N
 	}
 
 	@Override
-	protected NElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+	protected Sequence<NElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -45,9 +45,10 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -109,7 +110,7 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected ByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+	protected Sequence<ByteArrayElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -41,14 +41,10 @@
  */
 package ch.bfh.unicrypt.crypto.keygenerator.interfaces;
 
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
-
 /**
  *
  * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public interface KeyGenerator {
-
-	public StringToByteArray getStringToByteArray();
 
 }

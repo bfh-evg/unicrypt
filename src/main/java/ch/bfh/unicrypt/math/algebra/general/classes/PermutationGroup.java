@@ -41,13 +41,16 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.math.Permutation;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.PermutationToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.math.Permutation;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomByteSequenceIterator;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,16 +107,49 @@ public class PermutationGroup
 		return "" + this.getSize();
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
-	protected PermutationElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
-		return this.abstractGetElement(Permutation.getRandomInstance(this.getSize(), randomByteSequence));
+	protected Sequence<PermutationElement> abstractGetRandomElements(final RandomByteSequence randomByteSequence) {
+		final RandomByteSequenceIterator iterator = randomByteSequence.iterator();
+		return new Sequence<PermutationElement>() {
+
+			@Override
+			public SequenceIterator<PermutationElement> iterator() {
+				return new SequenceIterator<PermutationElement>() {
+
+					@Override
+					protected PermutationElement abstractNext() {
+						// Durstenfeld's version of the Fisher–Yates shuffle algorithm
+						int[] permutationVector = new int[size];
+						int randomIndex;
+						for (int i = 0; i < size; i++) {
+							// the following lines are necessary to use the existing random integer generation on the same iterator
+							randomIndex = new RandomByteSequence() {
+
+								@Override
+								public RandomByteSequenceIterator iterator() {
+									return iterator;
+								}
+
+							}.getRandomIntegerSequence(i).get();
+							permutationVector[i] = permutationVector[randomIndex];
+							permutationVector[randomIndex] = i;
+						}
+						return abstractGetElement(Permutation.getInstance(permutationVector));
+					}
+
+					@Override
+					public boolean hasNext() {
+						return true;
+					}
+
+				};
+			}
+
+		};
 	}
 
 	@Override
+
 	protected boolean abstractContains(Permutation value) {
 		return value.getSize() == this.getSize();
 	}
@@ -177,10 +213,10 @@ public class PermutationGroup
 		if (size < 0) {
 			throw new IllegalArgumentException();
 		}
-		PermutationGroup instance = PermutationGroup.instances.get(Integer.valueOf(size));
+		PermutationGroup instance = PermutationGroup.instances.get(size);
 		if (instance == null) {
 			instance = new PermutationGroup(size);
-			PermutationGroup.instances.put(Integer.valueOf(size), instance);
+			PermutationGroup.instances.put(size, instance);
 		}
 		return instance;
 	}

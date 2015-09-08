@@ -42,31 +42,30 @@
 package ch.bfh.unicrypt.crypto.schemes.commitment;
 
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
-import ch.bfh.unicrypt.helper.math.Permutation;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.math.Permutation;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class PermutationCommitmentTest {
 
 	final static int P = 23;
-	final private CyclicGroup G_q;
+	final private GStarModSafePrime G_q;
 	final private ZMod Z_q;
-	final private ReferenceRandomByteSequence rrs;
+	final private DeterministicRandomByteSequence rrs;
 
 	public PermutationCommitmentTest() {
 		this.G_q = GStarModSafePrime.getInstance(this.P);
 		this.Z_q = G_q.getZModOrder();
-		rrs = PseudoRandomOracle.getInstance().query(ByteArray.getInstance("X".getBytes()));
+		rrs = RandomOracle.getInstance().query(ByteArray.getInstance("X".getBytes()));
 		// System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4
 		// System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16  3
 		// System.out.println("g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4  9
@@ -84,8 +83,8 @@ public class PermutationCommitmentTest {
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
-		Element verification = this.G_q.getIndependentGenerator(0, rrs).selfApply(2).apply(
-			   this.G_q.getIndependentGenerator(1, rrs));
+		Element verification = this.G_q.getIndependentGenerators(rrs).get(0).selfApply(2).apply(
+			   this.G_q.getIndependentGenerators(rrs).get(1));
 		assertTrue(commitment.getAt(0).isEquivalent(verification));   // 4^2 * 3 = 2
 	}
 
@@ -101,12 +100,12 @@ public class PermutationCommitmentTest {
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
-		Element verification1 = this.G_q.getIndependentGenerator(0, rrs).selfApply(1).apply(
-			   this.G_q.getIndependentGenerator(2, rrs));
-		Element verification2 = this.G_q.getIndependentGenerator(0, rrs).selfApply(2).apply(
-			   this.G_q.getIndependentGenerator(3, rrs));
-		Element verification3 = this.G_q.getIndependentGenerator(0, rrs).selfApply(3).apply(
-			   this.G_q.getIndependentGenerator(1, rrs));
+		Element verification1 = this.G_q.getIndependentGenerators(rrs).get(0).selfApply(1).apply(
+			   this.G_q.getIndependentGenerators(rrs).get(2));
+		Element verification2 = this.G_q.getIndependentGenerators(rrs).get(0).selfApply(2).apply(
+			   this.G_q.getIndependentGenerators(rrs).get(3));
+		Element verification3 = this.G_q.getIndependentGenerators(rrs).get(0).selfApply(3).apply(
+			   this.G_q.getIndependentGenerators(rrs).get(1));
 
 		assertTrue(commitment.getAt(0).isEquivalent(verification1));    // 4^1 * 9 =  13
 		assertTrue(commitment.getAt(1).isEquivalent(verification2));    // 4^2 * 8 =  13

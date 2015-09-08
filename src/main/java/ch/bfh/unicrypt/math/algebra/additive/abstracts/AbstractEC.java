@@ -41,20 +41,21 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.math.Point;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -223,12 +224,18 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 	}
 
 	@Override
-	protected EE abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+	protected Sequence<EE> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
 		if (this.getDefaultGenerator() != null) {
-			ZMod r = ZMod.getInstance(this.getFiniteField().getOrder());
-			return this.selfApply(this.getDefaultGenerator(), r.getRandomElement().convertToBigInteger());
+			return randomByteSequence.getRandomBigIntegerSequence(this.getFiniteField().getOrder().subtract(MathUtil.ONE)).map(new Mapping<BigInteger, EE>() {
+
+				@Override
+				public EE apply(BigInteger value) {
+					return selfApply(getDefaultGenerator(), value);
+				}
+
+			});
 		} else {
-			return this.getRandomElementWithoutGenerator(randomByteSequence);
+			return this.abstractGetRandomElementsWithoutGenerator(randomByteSequence);
 		}
 	}
 
@@ -295,7 +302,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 	 * @param randomByteSequence The given random byte sequence
 	 * @return The random element
 	 */
-	protected abstract EE getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence);
+	protected abstract Sequence<EE> abstractGetRandomElementsWithoutGenerator(RandomByteSequence randomByteSequence);
 
 	@Override
 	protected String defaultToStringContent() {

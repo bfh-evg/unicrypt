@@ -42,11 +42,12 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.LinkedHashSet;
 
@@ -121,16 +122,22 @@ public class Subset
 	}
 
 	@Override
-	protected Element abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		int randomIndex = randomByteSequence.getRandomNumberGenerator().nextInt(this.elementSet.size() - 1);
-		int i = 0;
-		for (Element element : this.getElements()) {
-			if (i == randomIndex) {
-				return element;
+	protected Sequence<Element<Object>> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		return randomByteSequence.getRandomIntegerSequence(this.elementSet.size() - 1).map(new Mapping<Integer, Element<Object>>() {
+
+			@Override
+			public Element<Object> apply(Integer index) {
+				int i = 0;
+				for (Element<Object> element : getElements()) {
+					if (i == index) {
+						return element;
+					}
+					i++;
+				}
+				throw new UnknownError();
 			}
-			i++;
-		}
-		throw new UnknownError();
+
+		});
 	}
 
 	@Override

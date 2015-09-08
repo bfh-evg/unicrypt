@@ -44,13 +44,14 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.math.Polynomial;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -58,8 +59,7 @@ import java.math.BigInteger;
  * @author Christian Lutz
  */
 public class ECPolynomialField
-	   extends AbstractEC<PolynomialField, Polynomial<? extends DualisticElement<BigInteger>>,
-	   PolynomialElement, ECPolynomialElement> {
+	   extends AbstractEC<PolynomialField, Polynomial<? extends DualisticElement<BigInteger>>, PolynomialElement, ECPolynomialElement> {
 
 	/**
 	 *
@@ -78,8 +78,9 @@ public class ECPolynomialField
 	}
 
 	/**
-	 * <p>Checks if an element x is a valid x-value of an element of the elliptic curve.
-	 * True only if trace(x+a+b/x^2)=0.<br>
+	 * <p>
+	 * Checks if an element x is a valid x-value of an element of the elliptic curve. True only if
+	 * trace(x+a+b/x^2)=0.<br>
 	 * Source: Quadratic Equations in Finite Fields of Characteristic 2 Klaus Pommerening</p>
 	 */
 	@Override
@@ -103,14 +104,13 @@ public class ECPolynomialField
 	}
 
 	/**
-	 * Return the two possible y-coordinates for a given valid x-coordinate
-	 * The procedure is described in "Mapping an Arbitrary Message to an
-	 * Elliptic Curve when Defined over GF (2 n )" p.172
+	 * Return the two possible y-coordinates for a given valid x-coordinate The procedure is described in "Mapping an
+	 * Arbitrary Message to an Elliptic Curve when Defined over GF (2 n )" p.172
 	 * <p>
 	 * @param x x-coordinate of point
 	 * @return
 	 */
-	public ECPolynomialElement[] getY(PolynomialElement x){
+	public ECPolynomialElement[] getY(PolynomialElement x) {
 		PolynomialElement t = x.add(this.getA()).add(this.getB().divide(x.square()));
 		PolynomialElement l = this.getFiniteField().solveQuadradicEquation(t);
 
@@ -163,9 +163,8 @@ public class ECPolynomialField
 	}
 
 	@Override
-	protected ECPolynomialElement getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
-		// TODO Auto-generated method stub
-		return null;
+	protected Sequence<ECPolynomialElement> abstractGetRandomElementsWithoutGenerator(RandomByteSequence randomByteSequence) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	/**
@@ -288,27 +287,25 @@ public class ECPolynomialField
 	}
 
 	/**
-	 * <p>Returns the trace of an polynomial of characteristic 2
-	 * Source;: Quadratic Equations in Finite Fields of
-	 * Characteristic 2 Klaus Pommerening
-	 * May 2000 – english version February 2012, Page 2</p>
+	 * <p>
+	 * Returns the trace of an polynomial of characteristic 2 Source;: Quadratic Equations in Finite Fields of
+	 * Characteristic 2 Klaus Pommerening May 2000 – english version February 2012, Page 2</p>
 	 * <p>
 	 * @param x
 	 * @param ec
-	 * @return
-	 * </p>
+	 * @return </p>
 	 */
 	public static DualisticElement<BigInteger> traceGF2m(PolynomialElement x, ECPolynomialField ec) {
 		int deg = ec.getFiniteField().getDegree();
-		PolynomialElement trace=x;
-		PolynomialElement tmp=x;
+		PolynomialElement trace = x;
+		PolynomialElement tmp = x;
 
 		for (int i = 1; i < deg; i++) {
-			tmp=tmp.square();
-			trace=trace.add(tmp);
+			tmp = tmp.square();
+			trace = trace.add(tmp);
 		}
 
-		DualisticElement<BigInteger> trace_Dualistic=trace.getValue().getCoefficient(0);
+		DualisticElement<BigInteger> trace_Dualistic = trace.getValue().getCoefficient(0);
 		return trace_Dualistic;
 	}
 

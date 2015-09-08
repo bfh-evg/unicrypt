@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 import ch.bfh.unicrypt.crypto.keygenerator.classes.ByteArrayKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
@@ -52,7 +53,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -64,8 +64,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AESEncryptionScheme
-	   extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement,
-	   FixedByteArraySet, FiniteByteArrayElement, ByteArrayKeyGenerator> {
+	   extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, ByteArrayKeyGenerator> {
+
 	private static final long serialVersionUID = 1L;
 
 	public enum KeyLength {
@@ -159,7 +159,7 @@ public class AESEncryptionScheme
 			try {
 				if (mode == Mode.CBC) {
 					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec,
-													 new IvParameterSpec(initializationVector.getBytes()));
+								new IvParameterSpec(initializationVector.getBytes()));
 				} else {
 					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
 				}
@@ -194,7 +194,7 @@ public class AESEncryptionScheme
 			try {
 				if (mode == Mode.CBC) {
 					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec,
-													 new IvParameterSpec(initializationVector.getBytes()));
+								new IvParameterSpec(initializationVector.getBytes()));
 				} else {
 					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
 				}
@@ -236,7 +236,7 @@ public class AESEncryptionScheme
 
 	public static AESEncryptionScheme getInstance() {
 		return AESEncryptionScheme.getInstance(AESEncryptionScheme.DEFAULT_KEY_LENGTH, AESEncryptionScheme.DEFAULT_MODE,
-																					   AESEncryptionScheme.DEFAULT_IV);
+											   AESEncryptionScheme.DEFAULT_IV);
 	}
 
 	public static AESEncryptionScheme getInstance(KeyLength keyLength, Mode mode, ByteArray initializationVector) {

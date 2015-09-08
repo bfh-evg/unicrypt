@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.math;
 
-import ch.bfh.unicrypt.helper.math.Permutation;
 import java.math.BigInteger;
 import org.junit.Assert;
 import org.junit.Test;
@@ -125,21 +124,6 @@ public class PermutationTest {
 			}
 		}
 
-	}
-
-	@Test
-	public void testGetRandomInstance_int() {
-		for (int s = 0; s <= 5; s++) {
-			Permutation p = Permutation.getRandomInstance(s);
-			Assert.assertEquals(Permutation.getInstance(s), p.compose(p.invert()));
-			for (int i = 0; i < s; i++) {
-				int j = i;
-				for (int k = 0; k < 120; k++) {
-					j = p.permute(j);
-				}
-				Assert.assertEquals(i, j);
-			}
-		}
 	}
 
 }

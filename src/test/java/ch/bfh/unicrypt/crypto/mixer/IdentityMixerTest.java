@@ -42,7 +42,8 @@
 package ch.bfh.unicrypt.crypto.mixer;
 
 import ch.bfh.unicrypt.crypto.mixer.classes.IdentityMixer;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.helper.math.Permutation;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -50,7 +51,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.helper.math.Permutation;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -69,10 +69,10 @@ public class IdentityMixerTest {
 		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
 
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
-		Tuple shuffledMessges = mixer.shuffle(messages, ReferenceRandomByteSequence.getInstance());
+		Tuple shuffledMessages = mixer.shuffle(messages, DeterministicRandomByteSequence.getInstance());
 
 		// Verify shuffle function
-		ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
 		PermutationGroup.getInstance(size).getRandomElement(rrs);
 		Element r = G_q.getZModOrder().getRandomElement(rrs);
 		Element[] shuffledMessages2 = new Element[size];
@@ -81,7 +81,7 @@ public class IdentityMixerTest {
 			shuffledMessages2[i] = messages.getAt(i).selfApply(r);
 
 			for (int j = 0; j < size; j++) {
-				if (shuffledMessages2[i].isEquivalent(shuffledMessges.getAt(j))) {
+				if (shuffledMessages2[i].isEquivalent(shuffledMessages.getAt(j))) {
 					contains = true;
 				}
 			}
@@ -89,7 +89,7 @@ public class IdentityMixerTest {
 		}
 
 		// Verifiy permutation
-		assertTrue(!shuffledMessges.isEquivalent(Tuple.getInstance(shuffledMessages2)));
+		assertTrue(!shuffledMessages.isEquivalent(Tuple.getInstance(shuffledMessages2)));
 	}
 
 	@Test

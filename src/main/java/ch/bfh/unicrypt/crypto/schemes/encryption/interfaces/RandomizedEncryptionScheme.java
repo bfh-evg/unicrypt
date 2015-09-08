@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.interfaces;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 

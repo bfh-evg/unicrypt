@@ -41,9 +41,10 @@
  */
 package ch.bfh.unicrypt.helper.factorization;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrimePair;
-import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
 import java.math.BigInteger;
 
 /**
@@ -132,21 +133,21 @@ public class PrimePair
 	 * @return The new prime pair
 	 */
 	public static PrimePair getRandomInstance(int bitLength) {
-		return PrimePair.getRandomInstance(bitLength, RandomNumberGenerator.getInstance());
+		return PrimePair.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
 	/**
 	 * Creates a new random prime pair, each prime of a given bit length, using a given source of randomness.
 	 * <p>
-	 * @param bitLength             The bit length
-	 * @param randomNumberGenerator The given source of randomness
+	 * @param bitLength          The bit length
+	 * @param randomByteSequence The given source of randomness
 	 * @return The new prime pair
 	 */
-	public static PrimePair getRandomInstance(int bitLength, RandomNumberGenerator randomNumberGenerator) {
-		Prime prime1 = Prime.getRandomInstance(bitLength, randomNumberGenerator);
+	public static PrimePair getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
+		Prime prime1 = Prime.getRandomInstance(bitLength, randomByteSequence);
 		Prime prime2;
 		do {
-			prime2 = Prime.getRandomInstance(bitLength, randomNumberGenerator);
+			prime2 = Prime.getRandomInstance(bitLength, randomByteSequence);
 		} while (prime1.equals(prime2));
 		return new PrimePair(prime1.getValue(), prime2.getValue());
 	}

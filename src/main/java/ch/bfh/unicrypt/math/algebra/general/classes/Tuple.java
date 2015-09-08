@@ -49,8 +49,8 @@ import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -328,6 +328,10 @@ public class Tuple
 			productSet = ProductSet.getInstance(sets);
 		}
 		return Tuple.getInstance(productSet, elements);
+	}
+
+	public static Tuple getInstance(Sequence<? extends Element> elements) {
+		return Tuple.getInstance(DenseArray.getInstance(elements));
 	}
 
 	public static Tuple getInstance(Element... elements) {

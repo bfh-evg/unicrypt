@@ -41,13 +41,13 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a function, which is derived from another function with a product (or power)
@@ -62,6 +62,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class PartiallyAppliedFunction
 	   extends AbstractFunction<PartiallyAppliedFunction, ProductSet, Tuple, Set, Element> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final Function parentFunction;
@@ -106,8 +107,7 @@ public class PartiallyAppliedFunction
 	}
 
 	/**
-	 * Returns the index of the parameter that has been fixed to derive {@code this} function from the parent
-	 * function.
+	 * Returns the index of the parameter that has been fixed to derive {@code this} function from the parent function.
 	 * <p>
 	 * @return The index of the input element
 	 */
@@ -165,7 +165,7 @@ public class PartiallyAppliedFunction
 			throw new IllegalArgumentException();
 		}
 		return new PartiallyAppliedFunction(domain.removeAt(index), parentFunction.getCoDomain(), parentFunction,
-			   element, index);
+											element, index);
 	}
 
 }

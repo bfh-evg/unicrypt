@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
@@ -52,7 +53,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 public class ZModPrimeToECPolynomialField
@@ -108,8 +108,7 @@ public class ZModPrimeToECPolynomialField
 		}
 
 		@Override
-		protected ECPolynomialElement abstractApply(ZModElement element,
-			   RandomByteSequence randomByteSequence) {
+		protected ECPolynomialElement abstractApply(ZModElement element, RandomByteSequence randomByteSequence) {
 			boolean firstOption = true;
 
 			ZModPrime zModPrime = this.getDomain();
@@ -232,8 +231,7 @@ public class ZModPrimeToECPolynomialField
 		}
 
 		@Override
-		protected ZModElement abstractApply(ECPolynomialElement element,
-			   RandomByteSequence randomByteSequence) {
+		protected ZModElement abstractApply(ECPolynomialElement element, RandomByteSequence randomByteSequence) {
 
 			ZModPrime zModPrime = this.getCoDomain();
 			ECPolynomialField ec = this.getDomain();

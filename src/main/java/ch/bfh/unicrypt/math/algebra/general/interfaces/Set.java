@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -55,7 +56,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -294,11 +294,7 @@ public interface Set<V> {
 
 	public Sequence<? extends Element<V>> getRandomElements();
 
-	public Sequence<? extends Element<V>> getRandomElements(long n);
-
 	public Sequence<? extends Element<V>> getRandomElements(RandomByteSequence randomByteSequence);
-
-	public Sequence<? extends Element<V>> getRandomElements(long n, RandomByteSequence randomByteSequence);
 
 	/**
 	 * Checks if two sets are mathematically equivalent. In most cases, this is equivalent to testing two sets for

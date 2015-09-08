@@ -46,11 +46,10 @@ import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 public class RandomOracleChallengeGenerator<CS extends Set, CE extends Element>
 	   extends AbstractNonInteractiveChallengeGenerator<CS, CE> {
@@ -78,8 +77,8 @@ public class RandomOracleChallengeGenerator<CS extends Set, CE extends Element>
 	@Override
 	protected CE abstractAbstractGenerate(Element<?> input) {
 		ByteArray byteArray = input.convertTo(this.convertMethod, this.aggregator);
-		ReferenceRandomByteSequence randomByteSequence = this.randomOracle.query(byteArray);
-		return (CE) this.getChallengeSpace().getRandomElement(randomByteSequence);
+		DeterministicRandomByteSequence randomByteSequence = this.randomOracle.query(byteArray);
+		return (CE) this.getChallengeSpace().getRandomElements(randomByteSequence).get();
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace) {
@@ -87,7 +86,7 @@ public class RandomOracleChallengeGenerator<CS extends Set, CE extends Element>
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId) {
-		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, PseudoRandomOracle.getInstance());
+		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, RandomOracle randomOracle) {
@@ -103,7 +102,7 @@ public class RandomOracleChallengeGenerator<CS extends Set, CE extends Element>
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId, ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
-		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, PseudoRandomOracle.getInstance(), convertMethod, aggregator);
+		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, RandomOracle.getInstance(), convertMethod, aggregator);
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {

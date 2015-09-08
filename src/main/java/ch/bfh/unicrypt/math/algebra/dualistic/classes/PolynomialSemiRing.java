@@ -41,11 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.math.Polynomial;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -54,8 +56,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -179,8 +179,7 @@ public class PolynomialSemiRing
 		return this.getRandomMonicElement(degree, a0NotZero, HybridRandomByteSequence.getInstance());
 	}
 
-	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero,
-		   RandomByteSequence randomByteSequence) {
+	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero, RandomByteSequence randomByteSequence) {
 		if (degree < 0 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
@@ -285,7 +284,7 @@ public class PolynomialSemiRing
 	}
 
 	@Override
-	protected PolynomialElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+	protected Sequence<PolynomialElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
 		throw new UnsupportedOperationException("Not possible for infinite order.");
 	}
 

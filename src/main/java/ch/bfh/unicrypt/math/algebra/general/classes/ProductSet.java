@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
 import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
 import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
@@ -52,9 +51,14 @@ import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractConverter;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomByteSequenceIterator;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.MultiSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
@@ -63,7 +67,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.Iterator;
 
@@ -188,12 +191,41 @@ public class ProductSet
 	}
 
 	@Override
-	protected Tuple abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		final Element[] randomElements = new Element[this.getLength()];
-		for (int i : this.getAllIndices()) {
-			randomElements[i] = this.getAt(i).getRandomElement(randomByteSequence);
-		}
-		return this.abstractGetElement(DenseArray.getInstance(randomElements));
+	protected Sequence<Tuple> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		final int tupleLenght = this.getLength();
+		final RandomByteSequenceIterator iterator = randomByteSequence.iterator();
+		return new Sequence<Tuple>() {
+
+			@Override
+			public SequenceIterator<Tuple> iterator() {
+				return new SequenceIterator<Tuple>() {
+
+					@Override
+					protected Tuple abstractNext() {
+						Element[] elements = new Element[tupleLenght];
+						for (int i = 0; i < tupleLenght; i++) {
+							// the following lines are necessary to use the existing random integer generation on the same iterator
+							HybridRandomByteSequence rbs = new HybridRandomByteSequence() {
+
+								@Override
+								public RandomByteSequenceIterator iterator() {
+									return iterator;
+								}
+							};
+							elements[i] = getAt(i).getRandomElement(rbs);
+						}
+						return abstractGetElement(DenseArray.getInstance(elements));
+					}
+
+					@Override
+					public boolean hasNext() {
+						return true;
+					}
+
+				};
+			}
+
+		};
 	}
 
 	@Override
