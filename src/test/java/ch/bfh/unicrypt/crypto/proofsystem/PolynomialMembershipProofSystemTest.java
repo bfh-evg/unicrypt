@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PolynomialMembershipProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
-import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -126,8 +126,8 @@ public class PolynomialMembershipProofSystemTest {
 	@Test
 	public void testPolynomialMembershipProofSystem3() {
 
-//		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
-		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
+		final RandomByteSequence deterministicRandomByteSequence = DeterministicRandomByteSequence.getInstance();
+
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZModPrime Z_q = (ZModPrime) G_q.getZModOrder();
 
@@ -139,13 +139,13 @@ public class PolynomialMembershipProofSystemTest {
 		Element[] nonMem = new Element[]{Z_q.getElement(BigInteger.valueOf(21)), Z_q.getElement(BigInteger.valueOf(43)), Z_q.getElement(BigInteger.valueOf(18))};
 
 		for (Element u : nonMem) {
-			Element r0 = Z_q.getRandomElement(randomGenerator);
+			Element r0 = Z_q.getRandomElement(deterministicRandomByteSequence);
 			Element cu = pedersenCS.commit(u, r0);
 
 			Tuple secretInput = Tuple.getInstance(u, r0);
 			Element publicInput = cu;
 
-			Tuple proof = pmps.generate(secretInput, publicInput, randomGenerator);
+			Tuple proof = pmps.generate(secretInput, publicInput, deterministicRandomByteSequence);
 			boolean verify = pmps.verify(proof, publicInput);
 
 			assertTrue(!verify);
