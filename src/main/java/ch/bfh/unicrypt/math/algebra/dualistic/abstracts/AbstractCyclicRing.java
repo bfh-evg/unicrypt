@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
@@ -87,7 +88,30 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 		if (randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultGetGenerators(randomByteSequence);
+		return this.defaultGetRandomGenerators(randomByteSequence);
+	}
+
+	@Override
+	public final E getRandomGenerator() {
+		return this.getRandomGenerators().get();
+	}
+
+	@Override
+	public final E getRandomGenerator(RandomByteSequence randomByteSequence) {
+		return this.getRandomGenerators(randomByteSequence).get();
+	}
+
+	@Override
+	public final Sequence<E> getRandomGenerators() {
+		return this.getRandomGenerators(HybridRandomByteSequence.getInstance());
+	}
+
+	@Override
+	public final Sequence<E> getRandomGenerators(RandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
 
 	@Override
@@ -99,7 +123,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 	}
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-	protected Sequence<E> defaultGetGenerators(RandomByteSequence randomByteSequence) {
+	protected Sequence<E> defaultGetRandomGenerators(RandomByteSequence randomByteSequence) {
 		return this.abstractGetRandomElements(randomByteSequence).filter(new Predicate<E>() {
 
 			@Override

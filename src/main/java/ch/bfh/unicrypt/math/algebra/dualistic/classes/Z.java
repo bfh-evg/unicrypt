@@ -97,7 +97,7 @@ public class Z
 	}
 
 	@Override
-	protected Sequence<ZElement> defaultGetGenerators(final RandomByteSequence randomByteSequence) {
+	protected Sequence<ZElement> defaultGetRandomGenerators(final RandomByteSequence randomByteSequence) {
 		return randomByteSequence.getRandomBitSequence().map(new Mapping<Boolean, ZElement>() {
 
 			@Override

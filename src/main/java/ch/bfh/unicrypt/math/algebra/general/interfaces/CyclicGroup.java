@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 
@@ -71,6 +72,14 @@ public interface CyclicGroup<V>
 	public Sequence<? extends Element<V>> getIndependentGenerators();
 
 	public Sequence<? extends Element<V>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
+
+	public Element<V> getRandomGenerator();
+
+	public Element<V> getRandomGenerator(RandomByteSequence randomByteSequence);
+
+	public Sequence<? extends Element<V>> getRandomGenerators();
+
+	public Sequence<? extends Element<V>> getRandomGenerators(RandomByteSequence randomByteSequence);
 
 	/**
 	 * TODO Checks if a given element is a generator of this cyclic group.

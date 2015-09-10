@@ -42,8 +42,10 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.RandomByteSequenceIterator;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -163,6 +165,33 @@ public class ProductCyclicGroup
 		if (randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
+		return this.defaultGetRandomGenerators(randomByteSequence);
+	}
+
+	@Override
+	public final Tuple getRandomGenerator() {
+		return this.getRandomGenerators().get();
+	}
+
+	@Override
+	public final Tuple getRandomGenerator(RandomByteSequence randomByteSequence) {
+		return this.getRandomGenerators(randomByteSequence).get();
+	}
+
+	@Override
+	public final Sequence<Tuple> getRandomGenerators() {
+		return this.getRandomGenerators(HybridRandomByteSequence.getInstance());
+	}
+
+	@Override
+	public final Sequence<Tuple> getRandomGenerators(RandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.defaultGetRandomGenerators(randomByteSequence);
+	}
+
+	protected Sequence<Tuple> defaultGetRandomGenerators(RandomByteSequence randomByteSequence) {
 		final RandomByteSequenceIterator iterator = randomByteSequence.iterator();
 		final int tupleLenght = this.getLength();
 		return new Sequence<Tuple>() {

@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -74,20 +75,43 @@ public class ZStarModPrime
 	}
 
 	@Override
-	public Sequence<ZStarModElement> getIndependentGenerators() {
+	public final Sequence<ZStarModElement> getIndependentGenerators() {
 		return this.getIndependentGenerators(DeterministicRandomByteSequence.getInstance());
 	}
 
 	@Override
-	public Sequence<ZStarModElement> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence) {
+	public final Sequence<ZStarModElement> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultGetGenerators(randomByteSequence);
+		return this.defaultGetRandomGenerators(randomByteSequence);
+	}
+
+	@Override
+	public final ZStarModElement getRandomGenerator() {
+		return this.getRandomGenerators().get();
+	}
+
+	@Override
+	public final ZStarModElement getRandomGenerator(RandomByteSequence randomByteSequence) {
+		return this.getRandomGenerators(randomByteSequence).get();
+	}
+
+	@Override
+	public final Sequence<ZStarModElement> getRandomGenerators() {
+		return this.getRandomGenerators(HybridRandomByteSequence.getInstance());
+	}
+
+	@Override
+	public final Sequence<ZStarModElement> getRandomGenerators(RandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-	protected Sequence<ZStarModElement> defaultGetGenerators(RandomByteSequence randomByteSequence) {
+	protected Sequence<ZStarModElement> defaultGetRandomGenerators(RandomByteSequence randomByteSequence) {
 		return this.abstractGetRandomElements(randomByteSequence).filter(new Predicate<ZStarModElement>() {
 
 			@Override
