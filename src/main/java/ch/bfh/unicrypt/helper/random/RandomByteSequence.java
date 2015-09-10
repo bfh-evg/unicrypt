@@ -69,12 +69,14 @@ public abstract class RandomByteSequence
 		if (groupLength < 0) {
 			throw new IllegalArgumentException();
 		}
-		final RandomByteSequenceIterator iterator = this.iterator();
+		final RandomByteSequence source = this;
 		return new RandomByteArraySequence() {
 
 			@Override
 			public RandomByteArraySequenceIterator iterator() {
 				return new RandomByteArraySequenceIterator() {
+
+					final RandomByteSequenceIterator iterator = source.iterator();
 
 					@Override
 					protected ByteArray abstractNext() {

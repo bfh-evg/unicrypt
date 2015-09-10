@@ -74,7 +74,7 @@ public class PermutationCommitmentProofSystemTest {
 		final ZMod Z_q = G_q.getZModOrder();
 //		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
 		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
-		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rbs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 5;
 
@@ -82,7 +82,7 @@ public class PermutationCommitmentProofSystemTest {
 		Permutation permutation = Permutation.getInstance(new int[]{3, 1, 4, 0, 2});  //{3, 2, 1, 4, 0} {3, 1, 4, 0, 2}
 		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
 
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rbs);
 
 		Tuple sV = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(7)); //pcs.getRandomizationSpace().getRandomElement(random);
 		Tuple cPiV = pcs.commit(pi, sV);
@@ -103,14 +103,14 @@ public class PermutationCommitmentProofSystemTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final RandomOracle ro = RandomOracle.getInstance();
-		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rbs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 20;
 
 		// Permutation
 		PermutationElement pi = PermutationGroup.getInstance(size).getRandomElement();
 
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rbs);
 
 		Tuple sV = pcs.getRandomizationSpace().getRandomElement();
 		Tuple cPiV = pcs.commit(pi, sV);
@@ -118,7 +118,7 @@ public class PermutationCommitmentProofSystemTest {
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofSystem.createNonInteractiveSigmaChallengeGenerator(60, null);
 		ChallengeGenerator ecg = PermutationCommitmentProofSystem.createNonInteractiveEValuesGenerator(60, size, ro);
-		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(scg, ecg, G_q, size, 20, rrs);
+		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(scg, ecg, G_q, size, 20, rbs);
 
 		// Proof and verify
 		Tuple proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
@@ -133,7 +133,7 @@ public class PermutationCommitmentProofSystemTest {
 		final ZMod Z_q = G_q.getZModOrder();
 //		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
 		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
-		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rbs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 5;
 
@@ -141,13 +141,13 @@ public class PermutationCommitmentProofSystemTest {
 		Permutation permutation = Permutation.getInstance(new int[]{3, 2, 4, 0, 1});
 		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
 
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rbs);
 
 		Tuple sV = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(7));
 		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Permutation commitment proof generator
-		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(G_q, size, null, 60, 60, 20, rrs);
+		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(G_q, size, null, 60, 60, 20, rbs);
 
 		// Proof and verify
 		// Invalid: Wrong sV
@@ -170,7 +170,7 @@ public class PermutationCommitmentProofSystemTest {
 		final ZMod Z_q = G_q.getZModOrder();
 //		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
 		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
-		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rbs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 5;
 
@@ -187,7 +187,7 @@ public class PermutationCommitmentProofSystemTest {
 		assertTrue(permutation.permute(2) == 2);
 
 		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rbs);
 		Tuple sV = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(7));
 		Tuple cPiV = pcs.commit(pi, sV);
 

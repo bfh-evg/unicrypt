@@ -309,11 +309,10 @@ public class IdentityShuffleProofSystem
 	public static IdentityShuffleProofSystem getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, int size, CyclicGroup identityGroup, int kr,
 		   DeterministicRandomByteSequence randomByteSequence) {
-
 		if (identityGroup == null || size < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		Tuple independentGenerators = Tuple.getInstance(identityGroup.getIndependentGenerators(randomByteSequence).limit(size));
+		Tuple independentGenerators = Tuple.getInstance(identityGroup.getIndependentGenerators(randomByteSequence).limit(size + 1));
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, independentGenerators, identityGroup, kr);
 	}
 
@@ -337,9 +336,10 @@ public class IdentityShuffleProofSystem
 			   || ((ProductSet) cs).getArity() != size
 			   || ((ProductSet) cs).getFirst().getOrder().compareTo(cyclicGroup.getOrder()) > 0
 			   || !((ProductSet) cs).isUniform()) {
+			System.out.println(((ProductSet) cs).getArity());
+			System.out.println(size);
 			throw new IllegalArgumentException();
 		}
-
 		return new IdentityShuffleProofSystem(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, kr,
 											  independentGenerators, identityGroup);
 	}

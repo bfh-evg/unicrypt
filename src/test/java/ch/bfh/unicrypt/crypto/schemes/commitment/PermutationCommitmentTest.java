@@ -63,9 +63,9 @@ public class PermutationCommitmentTest {
 	final private DeterministicRandomByteSequence rrs;
 
 	public PermutationCommitmentTest() {
-		this.G_q = GStarModSafePrime.getInstance(this.P);
+		this.G_q = GStarModSafePrime.getInstance(PermutationCommitmentTest.P);
 		this.Z_q = G_q.getZModOrder();
-		rrs = RandomOracle.getInstance().query(ByteArray.getInstance("X".getBytes()));
+		this.rrs = RandomOracle.getInstance().query(ByteArray.getInstance("X".getBytes()));
 		// System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4
 		// System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16  3
 		// System.out.println("g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4  9
@@ -83,8 +83,8 @@ public class PermutationCommitmentTest {
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
-		Element verification = this.G_q.getIndependentGenerators(rrs).get(0).selfApply(2).apply(
-			   this.G_q.getIndependentGenerators(rrs).get(1));
+		Element verification = this.G_q.getIndependentGenerators(this.rrs).get(0).selfApply(2).apply(
+			   this.G_q.getIndependentGenerators(this.rrs).get(1));
 		assertTrue(commitment.getAt(0).isEquivalent(verification));   // 4^2 * 3 = 2
 	}
 

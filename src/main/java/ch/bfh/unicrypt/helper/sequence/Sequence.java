@@ -177,7 +177,19 @@ public abstract class Sequence<V>
 			n--;
 		}
 		return null;
+	}
 
+	/**
+	 * Creates a new dense array from a given finite sequence of values. Null values are eliminated and the total length
+	 * is restricted to {@link Integer.MAX_VALUE}.
+	 * <p>
+	 * @return The new dense array
+	 */
+	public DenseArray<V> getAll() {
+		if (this.isInfinite()) {
+			throw new UnsupportedOperationException();
+		}
+		return DenseArray.<V>getInstance(this);
 	}
 
 	/**
@@ -442,7 +454,7 @@ public abstract class Sequence<V>
 	 * @param predicate The given predicate
 	 * @return The truncated sequence
 	 */
-	public Sequence<V> limit(final Predicate<V> predicate) {
+	public final Sequence<V> limit(final Predicate<V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
 		}
@@ -479,7 +491,7 @@ public abstract class Sequence<V>
 	 * <p>
 	 * @return The new sequence with 1 skipped value
 	 */
-	public Sequence<V> skip() {
+	public final Sequence<V> skip() {
 		return this.skip(1);
 	}
 
@@ -489,7 +501,7 @@ public abstract class Sequence<V>
 	 * @param n The number of values to skip
 	 * @return The new sequence with {@code n} skipped values
 	 */
-	public Sequence<V> skip(final int n) {
+	public final Sequence<V> skip(final int n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -565,7 +577,7 @@ public abstract class Sequence<V>
 	 * @return The concatenation of the two sequences
 	 * @see MultiSequence#flatten()
 	 */
-	public Sequence<V> conc(final Sequence<V> other) {
+	public final Sequence<V> conc(final Sequence<V> other) {
 		return MultiSequence.getInstance(this, other).flatten();
 	}
 
@@ -578,7 +590,7 @@ public abstract class Sequence<V>
 	 * @return The combination of the two sequences
 	 * @see MultiSequence#combine()
 	 */
-	public Sequence<DenseArray<V>> combine(final Sequence<V> other) {
+	public final Sequence<DenseArray<V>> combine(final Sequence<V> other) {
 		return MultiSequence.getInstance(this, other).combine();
 	}
 
@@ -590,7 +602,7 @@ public abstract class Sequence<V>
 	 * @return The join of the two sequences
 	 * @see MultiSequence#join()
 	 */
-	public Sequence<DenseArray<V>> join(final Sequence<V> other) {
+	public final Sequence<DenseArray<V>> join(final Sequence<V> other) {
 		return MultiSequence.getInstance(this, other).join();
 	}
 
@@ -748,6 +760,20 @@ public abstract class Sequence<V>
 			}
 		}
 		return !it1.hasNext() && !it2.hasNext();
+	}
+
+	@Override
+	protected String defaultToStringContent() {
+		if (this.isInfinite()) {
+			return "INFINITE";
+		}
+		String str = "";
+		String delimiter = "";
+		for (V value : this) {
+			str = str + delimiter + value;
+			delimiter = ", ";
+		}
+		return "[" + str + "]";
 	}
 
 }

@@ -77,7 +77,7 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 		Element r = Z_q.getElement(2);
 		Element c = gpcs.commit(messages, r);   // c = g1^m1 * g2^m2 * g0^r = 3^1 * 9^3 * 4^2 = 3 * 16 * 16 = 9
 		Element verification = G_q.getIndependentGenerators(rrs).get(1).selfApply(Z_q.getElement(1)).apply(
-			   G_q.getIndependentGenerators(rrs).get().selfApply(Z_q.getElement(3))).apply(
+			   G_q.getIndependentGenerators(rrs).get(2).selfApply(Z_q.getElement(3))).apply(
 					  G_q.getIndependentGenerators(rrs).get(0).selfApply(Z_q.getElement(2)));
 		assertTrue(c.isEquivalent(verification));
 

@@ -80,29 +80,29 @@ public abstract class RandomByteArraySequence
 	}
 
 	protected RandomByteSequenceIterator byteIterator() {
-		final RandomByteArraySequenceIterator iterator = this.iterator();
 		return new RandomByteSequenceIterator() {
 
+			private final RandomByteArraySequenceIterator iterator = iterator();
 			private int currentIndex = 0;
-			private ByteArray currentByteArray = iterator.abstractNext();
+			private ByteArray currentByteArray = this.iterator.abstractNext();
 
 			@Override
 			protected Byte abstractNext() {
 				if (this.currentIndex == this.currentByteArray.getLength()) {
 					this.currentIndex = 0;
-					this.currentByteArray = iterator.abstractNext();
+					this.currentByteArray = this.iterator.abstractNext();
 				}
 				return this.currentByteArray.getAt(this.currentIndex++);
 			}
 
 			@Override
 			protected void updateBefore() {
-				iterator.updateBefore();
+				this.iterator.updateBefore();
 			}
 
 			@Override
 			protected void updateAfter() {
-				iterator.updateAfter();
+				this.iterator.updateAfter();
 			}
 		};
 	}

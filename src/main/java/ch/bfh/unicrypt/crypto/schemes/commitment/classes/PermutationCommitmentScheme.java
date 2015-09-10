@@ -104,8 +104,7 @@ public class PermutationCommitmentScheme
 		return PermutationCommitmentScheme.getInstance(cyclicGroup, size, DeterministicRandomByteSequence.getInstance());
 	}
 
-	public static PermutationCommitmentScheme getInstance(final CyclicGroup<?> cyclicGroup, final int size,
-		   DeterministicRandomByteSequence randomByteSequence) {
+	public static PermutationCommitmentScheme getInstance(final CyclicGroup<?> cyclicGroup, final int size, DeterministicRandomByteSequence randomByteSequence) {
 		if (cyclicGroup == null || size < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}

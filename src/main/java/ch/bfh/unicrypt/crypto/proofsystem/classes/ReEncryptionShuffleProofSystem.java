@@ -331,7 +331,7 @@ public class ReEncryptionShuffleProofSystem
 		if (elgamal == null || size < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		Tuple independentGenerators = Tuple.getInstance(elgamal.getCyclicGroup().getIndependentGenerators(randomByteSequence).limit(size));
+		Tuple independentGenerators = Tuple.getInstance(elgamal.getCyclicGroup().getIndependentGenerators(randomByteSequence).limit(size + 1));
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, independentGenerators,
 						   elgamal, encryptionPK, kr);
 	}

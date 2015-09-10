@@ -410,7 +410,7 @@ public class PermutationCommitmentProofSystem
 		if (cyclicGroup == null || size < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		Tuple generators = Tuple.getInstance(cyclicGroup.getIndependentGenerators(randomByteSequence).limit(size));
+		Tuple generators = Tuple.getInstance(cyclicGroup.getIndependentGenerators(randomByteSequence).limit(size + 1));
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, generators, kr);
 	}
 

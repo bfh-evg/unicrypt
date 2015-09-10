@@ -81,19 +81,19 @@ public class IdentityShuffleProofSystemTest {
 		final GStarMod G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = RandomOracle.getInstance();
-		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rbs = DeterministicRandomByteSequence.getInstance();
 //		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
 		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
 
 		final int size = 5;
 		final Element alpha = Z_q.getElement(4);
-		final Element gK_1 = G_q.getIndependentGenerators(rrs).get(0);
+		final Element gK_1 = G_q.getIndependentGenerators(rbs).get(0);
 		final Element gK = gK_1.selfApply(alpha);
 
 		// Permutation
 		Permutation permutation = Permutation.getInstance(new int[]{3, 2, 1, 4, 0});
 		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rbs);
 
 		Tuple sV = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(6));
 		Tuple cPiV = pcs.commit(pi, sV);
@@ -106,7 +106,7 @@ public class IdentityShuffleProofSystemTest {
 		// Identity Shuffle Proof Generator
 		SigmaChallengeGenerator scg = IdentityShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(4, null);
 		ChallengeGenerator ecg = IdentityShuffleProofSystem.createNonInteractiveEValuesGenerator(4, size, ro);
-		IdentityShuffleProofSystem spg = IdentityShuffleProofSystem.getInstance(scg, ecg, size, G_q, 2, rrs);
+		IdentityShuffleProofSystem spg = IdentityShuffleProofSystem.getInstance(scg, ecg, size, G_q, 2, rbs);
 
 		// Proof and verify
 		Tuple privateInput = Tuple.getInstance(pi, sV, alpha);
@@ -122,18 +122,18 @@ public class IdentityShuffleProofSystemTest {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rbs = DeterministicRandomByteSequence.getInstance();
 //		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
 		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
 
 		final int size = 10;
 		final Element alpha = Z_q.getElement(4);
-		final Element gK_1 = G_q.getIndependentGenerators(rrs).get(0);
+		final Element gK_1 = G_q.getIndependentGenerators(rbs).get(0);
 		final Element gK = gK_1.selfApply(alpha);
 
 		// Permutation
 		PermutationElement pi = PermutationGroup.getInstance(size).getRandomElement();
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rbs);
 
 		Tuple sV = pcs.getRandomizationSpace().getRandomElement();
 		Tuple cPiV = pcs.commit(pi, sV);
@@ -144,7 +144,7 @@ public class IdentityShuffleProofSystemTest {
 		Tuple uPrimeV = PermutationFunction.getInstance(G_q, size).apply(uV.selfApply(alpha), pi);
 
 		// Identity Shuffle Proof Generator
-		IdentityShuffleProofSystem spg = IdentityShuffleProofSystem.getInstance(size, G_q, proverId, 60, 60, 20, rrs);
+		IdentityShuffleProofSystem spg = IdentityShuffleProofSystem.getInstance(size, G_q, proverId, 60, 60, 20, rbs);
 
 		// Proof and verify
 		Tuple privateInput = Tuple.getInstance(pi, sV, alpha);
@@ -160,18 +160,18 @@ public class IdentityShuffleProofSystemTest {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final DeterministicRandomByteSequence rrs = DeterministicRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rbs = DeterministicRandomByteSequence.getInstance();
 //		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
 		final RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
 
 		final int size = 10;
 		final Element alpha = Z_q.getElement(4);
-		final Element gK_1 = G_q.getIndependentGenerators(rrs).get(0);
+		final Element gK_1 = G_q.getIndependentGenerators(rbs).get(0);
 		final Element gK = gK_1.selfApply(alpha);
 
 		// Permutation
 		PermutationElement pi = PermutationGroup.getInstance(size).getRandomElement();
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rbs);
 
 		Tuple sV = pcs.getRandomizationSpace().getRandomElement();
 		Tuple cPiV = pcs.commit(pi, sV);
@@ -182,7 +182,7 @@ public class IdentityShuffleProofSystemTest {
 		Tuple uPrimeV = PermutationFunction.getInstance(G_q, size).apply(uV.selfApply(alpha), pi);
 
 		// Identity Shuffle Proof Generator
-		IdentityShuffleProofSystem spg = IdentityShuffleProofSystem.getInstance(size, G_q, proverId, 60, 60, 20, rrs);
+		IdentityShuffleProofSystem spg = IdentityShuffleProofSystem.getInstance(size, G_q, proverId, 60, 60, 20, rbs);
 
 		// Proof and verify
 		// -> invalid alpha
