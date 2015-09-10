@@ -39,50 +39,67 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.hashing.abstracts;
+package ch.bfh.unicrypt.crypto.schemes.hashing;
 
-import ch.bfh.unicrypt.crypto.schemes.hashing.interfaces.HashingScheme;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
+import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class AbstractHashingScheme<MS extends Set, ME extends Element, HS extends Set, HE extends Element>
-	   extends AbstractScheme<MS>
-	   implements HashingScheme {
+public class HashingScheme<MS extends Set>
+	   extends AbstractScheme<MS> {
 
-	protected final HS hashSpace;
+	private final ConvertMethod convertMethod;
+	private final HashMethod hashMethod;
+	protected FixedByteArraySet hashSpace;
 	protected Function hashFunction;
 	protected Function checkFunction;
 
-	protected AbstractHashingScheme(MS messageSpace, HS hashSpace) {
+	protected HashingScheme(MS messageSpace, ConvertMethod convertMethod, HashMethod hashMethod) {
 		super(messageSpace);
-		this.hashSpace = hashSpace;
+		this.convertMethod = convertMethod;
+		this.hashMethod = hashMethod;
 	}
 
-	@Override
-	public final HS getHashSpace() {
+	public final ConvertMethod getConvertMethod() {
+		return this.convertMethod;
+	}
+
+	public final HashMethod getHashMethod() {
+		return this.hashMethod;
+	}
+
+	public final FixedByteArraySet getHashSpace() {
+		if (this.hashSpace == null) {
+			this.hashSpace = FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getByteLength());
+		}
 		return this.hashSpace;
 	}
 
-	@Override
 	public final Function getHashFunction() {
 		if (this.hashFunction == null) {
-			this.hashFunction = this.abstractGetHashFunction();
+			this.hashFunction = HashFunction.getInstance(this.messageSpace, this.convertMethod, this.hashMethod);
 		}
 		return this.hashFunction;
 	}
 
-	@Override
 	public final Function getCheckFunction() {
 		if (this.checkFunction == null) {
-			ProductSet checkDomain = ProductSet.getInstance(this.getMessageSpace(), this.getHashSpace());
+			ProductSet checkDomain = ProductSet.getInstance(this.messageSpace, this.getHashSpace());
 			this.checkFunction = CompositeFunction.getInstance(
 				   SharedDomainFunction.getInstance(
 						  CompositeFunction.getInstance(
@@ -94,16 +111,39 @@ public abstract class AbstractHashingScheme<MS extends Set, ME extends Element, 
 		return this.checkFunction;
 	}
 
-	@Override
-	public final HE hash(Element message) {
-		return (HE) this.getHashFunction().apply(message);
+	public final FiniteByteArrayElement hash(Element message) {
+		return (FiniteByteArrayElement) this.getHashFunction().apply(message);
 	}
 
-	@Override
-	public final BooleanElement check(Element message, Element hashValue) {
+	public final FiniteByteArrayElement hash(Element message, ByteArrayElement salt) {
+		return this.hash(Pair.getInstance(message, salt));
+	}
+
+	public final BooleanElement check(Element message, FiniteByteArrayElement hashValue) {
 		return (BooleanElement) this.getCheckFunction().apply(message, hashValue);
 	}
 
-	protected abstract Function abstractGetHashFunction();
+	public final BooleanElement check(Element message, ByteArrayElement salt, FiniteByteArrayElement hashValue) {
+		return this.check(Pair.getInstance(message, salt), hashValue);
+	}
+
+	public static HashingScheme<ByteArrayMonoid> getInstance() {
+		return HashingScheme.getInstance(ByteArrayMonoid.getInstance());
+	}
+
+	public static <MS extends Set> HashingScheme<MS> getInstance(MS messageSpace) {
+		return HashingScheme.getInstance(messageSpace, ConvertMethod.getInstance(), HashMethod.getInstance());
+	}
+
+	public static HashingScheme<ByteArrayMonoid> getInstance(ConvertMethod convertMethod, HashMethod hashMethod) {
+		return HashingScheme.getInstance(ByteArrayMonoid.getInstance(), convertMethod, hashMethod);
+	}
+
+	public static <MS extends Set> HashingScheme<MS> getInstance(MS messageSpace, ConvertMethod convertMethod, HashMethod hashMethod) {
+		if (messageSpace == null || convertMethod == null || hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		return new HashingScheme(messageSpace, convertMethod, hashMethod);
+	}
 
 }
