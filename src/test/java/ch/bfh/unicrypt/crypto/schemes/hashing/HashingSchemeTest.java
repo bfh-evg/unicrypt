@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,35 +39,69 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.crypto.schemes.hashing;
 
-import ch.bfh.unicrypt.helper.math.Permutation;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import org.junit.Test;
 
 /**
  *
- * @author R. Haenni
+ * @author rolfhaenni
  */
-public class PermutationElement
-	   extends AbstractElement<PermutationGroup, PermutationElement, Permutation>
-	   implements Element<Permutation> {
+public class HashingSchemeTest {
 
-	private static final long serialVersionUID = 1L;
-
-	protected PermutationElement(final PermutationGroup group, final Permutation permutation) {
-		super(group, permutation);
+	public HashingSchemeTest() {
 	}
 
-	public int getSize() {
-		return this.value.getSize();
+	@Test
+	public void testGetConvertMethod() {
 	}
 
-	public static PermutationElement getInstance(Permutation permutation) {
-		if (permutation == null) {
-			throw new IllegalArgumentException();
-		}
-		return PermutationGroup.getInstance(permutation.getSize()).getElement(permutation);
+	@Test
+	public void testGetHashMethod() {
+	}
+
+	@Test
+	public void testGetHashSpace() {
+	}
+
+	@Test
+	public void testGetHashFunction() {
+	}
+
+	@Test
+	public void testGetCheckFunction() {
+	}
+
+	@Test
+	public void testHash_Element() {
+	}
+
+	@Test
+	public void testHash_Element_ByteArrayElement() {
+	}
+
+	@Test
+	public void testCheck_Element_FiniteByteArrayElement() {
+	}
+
+	@Test
+	public void testCheck_3args() {
+	}
+
+	@Test
+	public void testGetInstance_0args() {
+	}
+
+	@Test
+	public void testGetInstance_GenericType() {
+	}
+
+	@Test
+	public void testGetInstance_ConvertMethod_HashMethod() {
+	}
+
+	@Test
+	public void testGetInstance_3args() {
 	}
 
 }

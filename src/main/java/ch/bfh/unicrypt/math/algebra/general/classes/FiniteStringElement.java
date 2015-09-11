@@ -60,6 +60,13 @@ public class FiniteStringElement
 		super(set, string);
 	}
 
+	public static FiniteStringElement getInstance(String string) {
+		if (string == null) {
+			throw new IllegalArgumentException();
+		}
+		return FixedStringSet.getInstance(string.length()).getElement(string);
+	}
+
 	public int getLength() {
 		return this.value.length();
 	}

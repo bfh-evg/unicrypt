@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 
 /**
  *
@@ -60,8 +61,19 @@ public class ByteArrayElement
 	}
 
 	@Override
-	public int getLength() {
+	public final int getLength() {
 		return this.value.getLength();
+	}
+
+	public FiniteByteArrayElement getFiniteByteArrayElement() {
+		return FiniteByteArrayElement.getInstance(this.value);
+	}
+
+	public static ByteArrayElement getInstance(ByteArray byteArray) {
+		if (byteArray == null) {
+			throw new IllegalArgumentException();
+		}
+		return ByteArrayMonoid.getInstance().getElement(byteArray);
 	}
 
 }

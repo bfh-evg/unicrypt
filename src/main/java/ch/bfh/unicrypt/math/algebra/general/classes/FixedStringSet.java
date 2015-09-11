@@ -62,6 +62,10 @@ public class FixedStringSet
 		return this.getMinLength();
 	}
 
+	public static FixedStringSet getInstance(final int length) {
+		return FixedStringSet.getInstance(Alphabet.getInstance(), length);
+	}
+
 	public static FixedStringSet getInstance(final Alphabet alphabet, final int length) {
 		if (alphabet == null || length < 0) {
 			throw new IllegalArgumentException();
@@ -69,7 +73,11 @@ public class FixedStringSet
 		return new FixedStringSet(alphabet, length);
 	}
 
-	public static FiniteStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder) {
+	public static FixedStringSet getInstance(final BigInteger minOrder) {
+		return FixedStringSet.getInstance(Alphabet.getInstance(), minOrder);
+	}
+
+	public static FixedStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder) {
 		if (alphabet == null || minOrder == null || minOrder.signum() < 0) {
 			throw new IllegalArgumentException();
 		}

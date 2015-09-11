@@ -58,6 +58,13 @@ public class StringElement
 		super(monoid, string);
 	}
 
+	public static StringElement getInstance(String string) {
+		if (string == null) {
+			throw new IllegalArgumentException();
+		}
+		return StringMonoid.getInstance().getElement(string);
+	}
+
 	@Override
 	public int getLength() {
 		return this.value.length();

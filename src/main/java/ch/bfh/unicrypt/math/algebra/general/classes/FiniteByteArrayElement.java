@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
@@ -66,7 +65,14 @@ public class FiniteByteArrayElement
 	}
 
 	public ByteArrayElement getByteArrayElement() {
-		return ByteArrayMonoid.getInstance().getElement(this.value);
+		return ByteArrayElement.getInstance(this.value);
+	}
+
+	public static FiniteByteArrayElement getInstance(ByteArray byteArray) {
+		if (byteArray == null) {
+			throw new IllegalArgumentException();
+		}
+		return FixedByteArraySet.getInstance(byteArray.getLength()).getElement(byteArray);
 	}
 
 }

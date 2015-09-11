@@ -52,10 +52,29 @@ import java.math.BigInteger;
 public class ZElement
 	   extends AbstractDualisticElement<Z, ZElement, BigInteger>
 	   implements DualisticElement<BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected ZElement(final Z z, final BigInteger value) {
 		super(z, value);
+	}
+
+	public NElement getNElement() {
+		if (this.value.signum() < 0) {
+			throw new UnsupportedOperationException();
+		}
+		return NElement.getInstance(this.value);
+	}
+
+	public static ZElement getInstance(long value) {
+		return ZElement.getInstance(BigInteger.valueOf(value));
+	}
+
+	public static ZElement getInstance(BigInteger value) {
+		if (value == null) {
+			throw new IllegalArgumentException();
+		}
+		return Z.getInstance().getElement(value);
 	}
 
 }

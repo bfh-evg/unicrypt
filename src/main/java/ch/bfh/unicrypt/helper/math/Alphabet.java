@@ -92,6 +92,15 @@ public class Alphabet
 	}
 
 	/**
+	 * Returns the default alphabet consisting of all unicode characters
+	 * <p>
+	 * @return The default alphabet
+	 */
+	public static Alphabet getInstance() {
+		return Alphabet.UNICODE_BMP;
+	}
+
+	/**
 	 * Creates a new alphabet containing all characters of a given string.
 	 * <p>
 	 * @param characters The given string

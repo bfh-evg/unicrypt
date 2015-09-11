@@ -52,10 +52,26 @@ import java.math.BigInteger;
 public class NElement
 	   extends AbstractDualisticElement<N, NElement, BigInteger>
 	   implements DualisticElement<BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected NElement(final N n, final BigInteger value) {
 		super(n, value);
+	}
+
+	public ZElement getZElement() {
+		return ZElement.getInstance(this.value);
+	}
+
+	public static NElement getInstance(long value) {
+		return NElement.getInstance(BigInteger.valueOf(value));
+	}
+
+	public static NElement getInstance(BigInteger value) {
+		if (value == null || value.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
+		return N.getInstance().getElement(value);
 	}
 
 }

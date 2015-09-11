@@ -44,12 +44,10 @@ package ch.bfh.unicrypt.crypto.schemes.hashing;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
-import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -115,16 +113,8 @@ public class HashingScheme<MS extends Set>
 		return (FiniteByteArrayElement) this.getHashFunction().apply(message);
 	}
 
-	public final FiniteByteArrayElement hash(Element message, ByteArrayElement salt) {
-		return this.hash(Pair.getInstance(message, salt));
-	}
-
 	public final BooleanElement check(Element message, FiniteByteArrayElement hashValue) {
 		return (BooleanElement) this.getCheckFunction().apply(message, hashValue);
-	}
-
-	public final BooleanElement check(Element message, ByteArrayElement salt, FiniteByteArrayElement hashValue) {
-		return this.check(Pair.getInstance(message, salt), hashValue);
 	}
 
 	public static HashingScheme<ByteArrayMonoid> getInstance() {

@@ -156,8 +156,16 @@ public class FiniteStringSet
 	//
 	// STATIC FACTORY METHODS
 	//
+	public static FiniteStringSet getInstance(final int maxLength) {
+		return FiniteStringSet.getInstance(Alphabet.getInstance(), maxLength);
+	}
+
 	public static FiniteStringSet getInstance(final Alphabet alphabet, final int maxLength) {
 		return FiniteStringSet.getInstance(alphabet, 0, maxLength);
+	}
+
+	public static FiniteStringSet getInstance(final int minLength, final int maxLength) {
+		return FiniteStringSet.getInstance(Alphabet.getInstance(), minLength, maxLength);
 	}
 
 	public static FiniteStringSet getInstance(final Alphabet alphabet, final int minLength, final int maxLength) {
@@ -170,8 +178,16 @@ public class FiniteStringSet
 		return new FiniteStringSet(alphabet, minLength, maxLength);
 	}
 
+	public static FiniteStringSet getInstance(final BigInteger minOrder) {
+		return FiniteStringSet.getInstance(Alphabet.getInstance(), minOrder);
+	}
+
 	public static FiniteStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder) {
 		return FiniteStringSet.getInstance(alphabet, minOrder, 0);
+	}
+
+	public static FiniteStringSet getInstance(final BigInteger minOrder, int minLength) {
+		return FiniteStringSet.getInstance(Alphabet.getInstance(), minOrder, minLength);
 	}
 
 	public static FiniteStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder, int minLength) {

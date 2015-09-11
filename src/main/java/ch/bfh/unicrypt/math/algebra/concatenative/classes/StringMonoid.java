@@ -130,9 +130,10 @@ public class StringMonoid
 		return 1;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
+	public static StringMonoid getInstance() {
+		return StringMonoid.getInstance(Alphabet.getInstance());
+	}
+
 	public static StringMonoid getInstance(Alphabet alphabet) {
 		return StringMonoid.getInstance(alphabet, 1);
 	}
