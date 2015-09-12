@@ -42,59 +42,56 @@
 package ch.bfh.unicrypt.crypto.schemes.hashing;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
-import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductMonoid;
+import org.junit.Assert;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
  */
-public class PasswordHashingScheme
-	   extends HashingScheme<ProductMonoid> {
+public class PasswordHashingSchemeTest {
 
-	protected PasswordHashingScheme(StringMonoid passwordSpace, Converter<String, ByteArray> converter, HashMethod<ByteArray> hashMethod) {
-		super(ProductMonoid.getInstance(passwordSpace, ByteArrayMonoid.getInstance()),
-			  ConvertMethod.getInstance(converter, ByteArrayToByteArray.getInstance()),
-			  hashMethod);
-	}
+	@Test
+	public void testPasswordHashingScheme() {
 
-	public final FiniteByteArrayElement hash(StringElement password, ByteArrayElement salt) {
-		return this.hash(Pair.getInstance(password, salt));
-	}
+		PasswordHashingScheme phs1 = PasswordHashingScheme.getInstance(StringMonoid.getInstance());
+		PasswordHashingScheme phs2 = PasswordHashingScheme.getInstance(StringMonoid.getInstance(), HashMethod.getInstance(HashAlgorithm.SHA1));
 
-	public final BooleanElement check(StringElement password, ByteArrayElement salt, FiniteByteArrayElement hashValue) {
-		return this.check(Pair.getInstance(password, salt), hashValue);
-	}
+		StringElement se1 = StringElement.getInstance("");
+		StringElement se2 = StringElement.getInstance("test");
 
-	public static PasswordHashingScheme getInstance(StringMonoid passwordSpace) {
-		return PasswordHashingScheme.getInstance(passwordSpace, StringToByteArray.getInstance());
-	}
+		ByteArrayElement be1 = ByteArrayElement.getInstance(ByteArray.getInstance());
+		ByteArrayElement be2 = ByteArrayElement.getInstance(ByteArray.getInstance(0));
+		ByteArrayElement be3 = ByteArrayElement.getInstance(ByteArray.getInstance(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
 
-	public static PasswordHashingScheme getInstance(StringMonoid passwordSpace, Converter<String, ByteArray> converter) {
-		return PasswordHashingScheme.getInstance(passwordSpace, converter, HashMethod.getInstance());
+		for (PasswordHashingScheme phs : new PasswordHashingScheme[]{phs1, phs2}) {
+			for (StringElement se : new StringElement[]{se1, se2}) {
+				for (ByteArrayElement be : new ByteArrayElement[]{be1, be2, be3}) {
+					FiniteByteArrayElement hash = phs.hash(se, be);
+					assertTrue(phs.check(se, be, hash).getValue());
+					for (PasswordHashingScheme phs0 : new PasswordHashingScheme[]{phs1, phs2}) {
+						for (StringElement se0 : new StringElement[]{se1, se2}) {
+							for (ByteArrayElement be0 : new ByteArrayElement[]{be1, be2, be3}) {
+								FiniteByteArrayElement hash0 = phs0.hash(se0, be0);
+								if (phs != phs0 || se != se0 || be != be0) {
+									Assert.assertNotEquals(hash, hash0);
+								}
+							}
+						}
+					}
+				}
 
-	}
+			}
 
-	public static PasswordHashingScheme getInstance(StringMonoid passwordSpace, HashMethod<ByteArray> hashMethod) {
-		return PasswordHashingScheme.getInstance(passwordSpace, StringToByteArray.getInstance(), hashMethod);
-	}
-
-	public static PasswordHashingScheme getInstance(StringMonoid passwordSpace, Converter<String, ByteArray> converter, HashMethod<ByteArray> hashMethod) {
-		if (passwordSpace == null || converter == null || hashMethod == null) {
-			throw new IllegalArgumentException();
 		}
-		return new PasswordHashingScheme(passwordSpace, converter, hashMethod);
+
 	}
 
 }

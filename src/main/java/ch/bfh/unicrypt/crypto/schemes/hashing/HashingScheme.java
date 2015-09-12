@@ -125,11 +125,11 @@ public class HashingScheme<MS extends Set>
 		return HashingScheme.getInstance(messageSpace, ConvertMethod.getInstance(), HashMethod.getInstance());
 	}
 
-	public static HashingScheme<ByteArrayMonoid> getInstance(ConvertMethod convertMethod, HashMethod hashMethod) {
+	public static HashingScheme<ByteArrayMonoid> getInstance(ConvertMethod<ByteArrayMonoid> convertMethod, HashMethod<ByteArrayMonoid> hashMethod) {
 		return HashingScheme.getInstance(ByteArrayMonoid.getInstance(), convertMethod, hashMethod);
 	}
 
-	public static <MS extends Set> HashingScheme<MS> getInstance(MS messageSpace, ConvertMethod convertMethod, HashMethod hashMethod) {
+	public static <MS extends Set, W> HashingScheme<MS> getInstance(MS messageSpace, ConvertMethod<W> convertMethod, HashMethod<W> hashMethod) {
 		if (messageSpace == null || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
