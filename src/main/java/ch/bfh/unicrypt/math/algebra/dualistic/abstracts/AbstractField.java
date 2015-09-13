@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
@@ -87,7 +89,7 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 			throw new IllegalArgumentException();
 		}
 		if (((E) element).isZero()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this, element);
 		}
 		return this.abstractOneOver((E) element);
 	}

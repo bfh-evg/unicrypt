@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.crypto.encoder.interfaces;
 
-import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
@@ -49,14 +48,14 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
  * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public interface ProbabilisticEncoder
-			 extends Encoder {
+	   extends Encoder {
 
 	/**
 	 *
 	 * @param element
 	 * @return
-	 * @throws ProbabilisticEncodingException
 	 */
 	@Override
-	public Element encode(Element element) throws ProbabilisticEncodingException;
+	public Element encode(Element element);
+
 }

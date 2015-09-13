@@ -41,11 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
+import ch.bfh.unicrypt.exception.UniCryptException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import java.math.BigInteger;
@@ -63,6 +65,10 @@ public class PolynomialFieldTest {
 
 	private static final BigInteger zero = MathUtil.ZERO;
 	private static final BigInteger one = MathUtil.ONE;
+	private static final BigInteger two = MathUtil.TWO;
+	private static final BigInteger three = MathUtil.THREE;
+	private static final BigInteger four = MathUtil.FOUR;
+	private static final BigInteger five = MathUtil.FIVE;
 
 	private static final ZModPrime zmod2 = ZModPrime.getInstance(2);
 	private static final ZModPrime zmod3 = ZModPrime.getInstance(3);
@@ -70,7 +76,9 @@ public class PolynomialFieldTest {
 	private static final ZModPrime zmod7 = ZModPrime.getInstance(7);
 
 	private static final PolynomialRing ring2 = PolynomialRing.getInstance(zmod2);
-	private static final PolynomialElement irrPoly = ring2.getElement(one, one, zero, zero, one);
+	private static final ZModElement ZERO = zmod2.getZeroElement();
+	private static final ZModElement ONE = zmod2.getOneElement();
+	private static final PolynomialElement irrPoly = ring2.getElement(ONE, ONE, ZERO, ZERO, ONE);
 	private static final PolynomialField field2_4 = PolynomialField.getInstance(zmod2, irrPoly);
 
 	private static final PolynomialField field5_3 = PolynomialField.getInstance(zmod5, 3);
@@ -79,108 +87,124 @@ public class PolynomialFieldTest {
 
 	@Test
 	public void testGetElement() {
-		PolynomialElement p;
-
-		// 1 + x^2 + x^5 + x^6 => 1 + x + x^2 + x^3
 		try {
-			p = field2_4.getElement(one, zero, one, zero, zero, one, one);
+			PolynomialElement p;
+
+//			// 1 + x^2 + x^5 + x^6 => 1 + x + x^2 + x^3
+//			p = field2_4.getElementFrom(one, zero, one, zero, zero, one, one);
+//
+			// 1 + 4x^2 + x^3
+			p = field7_4.getElementFrom(one, zero, four, one);
+			assertTrue(4 > p.getValue().getDegree());
+			assertEquals(zmod7.getOneElement(), p.getValue().getCoefficient(0));
+			assertEquals(zmod7.getZeroElement(), p.getValue().getCoefficient(1));
+			assertEquals(zmod7.getElement(4), p.getValue().getCoefficient(2));
+			assertEquals(zmod7.getOneElement(), p.getValue().getCoefficient(3));
+			assertEquals(zmod7.getZeroElement(), p.getValue().getCoefficient(4));
+
+			HashMap map = new HashMap();
+			map.put(4, zmod3.getElement(14 % 3));
+			map.put(9, zmod3.getElement(13 % 3));
+			//map.put(12, zmod3.getElementFrom(19 % 3));
+			p = field3_10.getElement(Polynomial.<DualisticElement<BigInteger>>getInstance(map, zmod3.getZeroElement(), zmod3.getOneElement()));
+			assertTrue(10 > p.getValue().getDegree());
+		} catch (UniCryptException ex) {
 			fail();
-		} catch (IllegalArgumentException e) {
 		}
-
-		// 1 + 4x^2 + x^3
-		p = field7_4.getElement(one, zero, BigInteger.valueOf(4), one);
-		assertTrue(4 > p.getValue().getDegree());
-		assertEquals(zmod7.getOneElement(), p.getValue().getCoefficient(0));
-		assertEquals(zmod7.getZeroElement(), p.getValue().getCoefficient(1));
-		assertEquals(zmod7.getElement(4), p.getValue().getCoefficient(2));
-		assertEquals(zmod7.getOneElement(), p.getValue().getCoefficient(3));
-		assertEquals(zmod7.getZeroElement(), p.getValue().getCoefficient(4));
-
-		HashMap map = new HashMap();
-		map.put(4, zmod3.getElement(14 % 3));
-		map.put(9, zmod3.getElement(13 % 3));
-		//map.put(12, zmod3.getElement(19 % 3));
-		p = field3_10.getElement(Polynomial.<DualisticElement<BigInteger>>getInstance(map, zmod3.getZeroElement(), zmod3.getOneElement()));
-		assertTrue(10 > p.getValue().getDegree());
 	}
 
 	@Test
 	public void testMultiply() {
-		// p1 = 1 + x^2 + x^3
-		PolynomialElement p1 = field2_4.getElement(one, zero, one, one);
-		// p2 = 1 + x^3
-		PolynomialElement p2 = field2_4.getElement(one, zero, zero, one);
-		// p1 * p2 = 1 + x^2 + x^5 + x^6 => 1 + x + x^2 + x^3
-		PolynomialElement p3 = p1.multiply(p2);
-		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(0));
-		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(1));
-		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(2));
-		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(3));
-		assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(4));
+		try {
+			// p1 = 1 + x^2 + x^3
+			PolynomialElement p1 = field2_4.getElementFrom(one, zero, one, one);
+			// p2 = 1 + x^3
+			PolynomialElement p2 = field2_4.getElementFrom(one, zero, zero, one);
+			// p1 * p2 = 1 + x^2 + x^5 + x^6 => 1 + x + x^2 + x^3
+			PolynomialElement p3 = p1.multiply(p2);
+			assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(0));
+			assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(1));
+			assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(2));
+			assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(3));
+			assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(4));
 
-		// p1 = 1 + x + x^3
-		p1 = field2_4.getElement(one, one, zero, one);
-		// p2 = 1 + x^2
-		p2 = field2_4.getElement(one, zero, one);
-		// p1 * p2 = 1 + x^2 + x^5 => 1
-		p3 = p1.multiply(p2);
-		assertTrue(p3.isEquivalent(field2_4.getOneElement()));
-		assertTrue(p3.getSet().isField());
+			// p1 = 1 + x + x^3
+			p1 = field2_4.getElementFrom(one, one, zero, one);
+			// p2 = 1 + x^2
+			p2 = field2_4.getElementFrom(one, zero, one);
+			// p1 * p2 = 1 + x^2 + x^5 => 1
+			p3 = p1.multiply(p2);
+			assertTrue(p3.isEquivalent(field2_4.getOneElement()));
+			assertTrue(p3.getSet().isField());
+		} catch (UniCryptException ex) {
+			fail();
+		}
 	}
 
 	@Test
 	public void testOneOver() {
-		// p1 = 1 + x + x^3
-		PolynomialElement p1 = field2_4.getElement(one, one, zero, one);
-		PolynomialElement p2 = p1.oneOver();
+		try {
+			// p1 = 1 + x + x^3
+			PolynomialElement p1 = field2_4.getElementFrom(one, one, zero, one);
+			PolynomialElement p2 = p1.oneOver();
 
-		assertEquals(zmod2.getOneElement(), p2.getValue().getCoefficient(0));
-		assertEquals(zmod2.getZeroElement(), p2.getValue().getCoefficient(1));
-		assertEquals(zmod2.getOneElement(), p2.getValue().getCoefficient(2));
-		assertEquals(zmod2.getZeroElement(), p2.getValue().getCoefficient(3));
-		assertTrue(p2.getSet().isField());
+			assertEquals(zmod2.getOneElement(), p2.getValue().getCoefficient(0));
+			assertEquals(zmod2.getZeroElement(), p2.getValue().getCoefficient(1));
+			assertEquals(zmod2.getOneElement(), p2.getValue().getCoefficient(2));
+			assertEquals(zmod2.getZeroElement(), p2.getValue().getCoefficient(3));
+			assertTrue(p2.getSet().isField());
 
-		PolynomialElement p3 = p1.multiply(p2);
-		assertTrue(p3.isEquivalent(field2_4.getOneElement()));
+			PolynomialElement p3 = p1.multiply(p2);
+			assertTrue(p3.isEquivalent(field2_4.getOneElement()));
 
-		p1 = field5_3.getElement(one, zero, BigInteger.valueOf(2));
-		p2 = p1.oneOver();
-		p3 = p1.multiply(p2);
-		assertTrue(p3.isEquivalent(field5_3.getOneElement()));
+			p1 = field5_3.getElementFrom(one, zero, two);
+			p2 = p1.oneOver();
+			p3 = p1.multiply(p2);
+			assertTrue(p3.isEquivalent(field5_3.getOneElement()));
 
-		p1 = field7_4.getElement(one, BigInteger.valueOf(4), BigInteger.valueOf(5), BigInteger.valueOf(3));
-		p2 = p1.oneOver();
-		p3 = p1.multiply(p2);
-		assertTrue(p3.isEquivalent(field7_4.getOneElement()));
+			p1 = field7_4.getElementFrom(one, four, five, three);
+			p2 = p1.oneOver();
+			p3 = p1.multiply(p2);
+			assertTrue(p3.isEquivalent(field7_4.getOneElement()));
+		} catch (UniCryptException ex) {
+			fail();
+		}
 	}
 
 	@Test
 	public void testDivide() {
-		// p1 = 1 + x^2 + x^3
-		PolynomialElement p1 = field2_4.getElement(one, zero, one, one);
-		// p2 = 1 + x + x^2 + x^3
-		PolynomialElement p2 = field2_4.getElement(one, one, one, one);
-		// p2 / p1 = 1 + x^3
-		PolynomialElement p3 = p2.divide(p1);
-		assertEquals(field2_4.getElement(one, zero, zero, one), p3);
-		assertTrue(p3.getSet().isField());
+		try {
+			// p1 = 1 + x^2 + x^3
+			PolynomialElement p1 = field2_4.getElementFrom(one, zero, one, one);
+			// p2 = 1 + x + x^2 + x^3
+			PolynomialElement p2 = field2_4.getElementFrom(one, one, one, one);
+			// p2 / p1 = 1 + x^3
+			PolynomialElement p3 = p2.divide(p1);
+			assertEquals(field2_4.getElementFrom(one, zero, zero, one), p3);
+			assertTrue(p3.getSet().isField());
+		} catch (UniCryptException ex) {
+			fail();
+		}
 	}
 
 	@Test
 	public void testAdd() {
-		// p1 = 1 + x + x^3
-		PolynomialElement p1 = field2_4.getElement(one, one, zero, one);
-		// p2 = 1 + x^3
-		PolynomialElement p2 = field2_4.getElement(one, zero, zero, one);
-		// p1 + p2 = x
-		PolynomialElement p3 = p1.add(p2);
-		assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(0));
-		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(1));
-		assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(2));
-		assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(3));
-		assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(4));
-		assertTrue(p3.getSet().isField());
+		try {
+			// p1 = 1 + x + x^3
+			PolynomialElement p1 = field2_4.getElementFrom(one, one, zero, one);
+			// p2 = 1 + x^3
+			PolynomialElement p2 = field2_4.getElementFrom(one, zero, zero, one);
+			// p1 + p2 = x
+			PolynomialElement p3 = p1.add(p2);
+			assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(0));
+			assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(1));
+			assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(2));
+			assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(3));
+			assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(4));
+			assertTrue(p3.getSet().isField());
+		} catch (UniCryptException ex) {
+			fail();
+		}
 	}
 
 }

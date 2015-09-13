@@ -42,13 +42,14 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * This abstract class provides more powerful iterators with additional methods for retrieving multiple values, skipping
@@ -128,7 +129,7 @@ public abstract class SequenceIterator<V>
 	@Override
 	public final V next() {
 		if (!this.hasNext()) {
-			throw new NoSuchElementException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_METHOD_CALL, this);
 		}
 		this.updateBefore();
 		V result = this.abstractNext();

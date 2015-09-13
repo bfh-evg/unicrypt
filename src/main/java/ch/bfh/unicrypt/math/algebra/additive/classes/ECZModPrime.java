@@ -192,9 +192,8 @@ public class ECZModPrime
 	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptography Ver. 1.0 page 18
 	 * <p>
 	 * @return True if curve parameters are valid
-	 * @throws Exception
 	 */
-	public boolean isValid() throws Exception {
+	public boolean isValid() {
 		boolean c11, c21, c22, c23, c24, c3, c4, c5, c61, c62;
 
 		ZModElement i4 = getFiniteField().getElement(4);
@@ -209,10 +208,10 @@ public class ECZModPrime
 		c3 = !getA().power(3).multiply(i4).add(i27.multiply(getB().square())).isZero();
 		c4 = 0 >= getCoFactor().compareTo(new BigInteger("4"));
 		c5 = this.selfApply(this.getDefaultGenerator(), getOrder()).isEquivalent(this.getZeroElement());
-		c61 = true; //TODO
-		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100")) < 0; i = i.add(MathUtil.ONE)) {
+		c61 = true;
+		for (BigInteger i = MathUtil.ONE; i.compareTo(new BigInteger("100")) < 0; i = i.add(MathUtil.ONE)) {
 			if (p.modPow(i, getOrder()).equals(MathUtil.ONE)) {
-				throw new Exception("Curve parameter not valid");
+				c61 = false;
 			}
 		}
 		c62 = !getOrder().equals(this.getFiniteField().getModulus());
@@ -255,7 +254,7 @@ public class ECZModPrime
 		if (newInstance.isValid()) {
 			return newInstance;
 		} else {
-			throw new IllegalArgumentException("Curve parameter are not valid!");
+			throw new IllegalArgumentException();
 		}
 	}
 
@@ -278,7 +277,7 @@ public class ECZModPrime
 		if (newInstance.isValid()) {
 			return newInstance;
 		} else {
-			throw new IllegalArgumentException("Curve parameter are not valid!");
+			throw new IllegalArgumentException();
 		}
 	}
 

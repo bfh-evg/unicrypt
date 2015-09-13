@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -78,8 +80,8 @@ public class ZModPrime
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		if (element.isEquivalent(this.getZeroElement())) {
-			throw new UnsupportedOperationException();
+		if (((ZModElement) element).isZero()) {
+			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this);
 		}
 		return this.abstractGetElement(((ZModElement) element).getValue().modInverse(this.modulus));
 	}

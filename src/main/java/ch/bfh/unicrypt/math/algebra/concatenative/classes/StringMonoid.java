@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.StringToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.StringToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
@@ -103,7 +105,7 @@ public class StringMonoid
 
 	@Override
 	protected Sequence<StringElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override

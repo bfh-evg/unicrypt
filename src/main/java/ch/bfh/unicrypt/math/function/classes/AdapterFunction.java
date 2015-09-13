@@ -99,9 +99,7 @@ public class AdapterFunction
 	 * <p>
 	 * @param productSet The product group that defines the domain of the function
 	 * @param indices    The given sequence of indices
-	 * @throws IllegalArgumentException  of {@code group} is null
-	 * @throws IllegalArgumentException  if {@code indices} is null or if its length exceeds the hierarchy's depth
-	 * @throws IndexOutOfBoundsException if {@code indices} contains an out-of-bounds index
+	 * @return The new function
 	 */
 	public static AdapterFunction getInstance(final ProductSet productSet, final int... indices) {
 		if (productSet == null || indices == null) {

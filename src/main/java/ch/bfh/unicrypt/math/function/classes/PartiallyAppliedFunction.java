@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -69,17 +71,6 @@ public class PartiallyAppliedFunction
 	private final Element parameter;
 	private final int index;
 
-	/**
-	 * This is the default constructor of this class. It derives from a given function a new function, in which one
-	 * input element is fixed to a given element and thus expects one input element less.
-	 * <p>
-	 * @param parentFunction The given function
-	 * @param parameter      The given parameter to fix
-	 * @param index          The index of the parameter to fix
-	 * @throws IllegalArgumentException  if the {@code function} is null or not a ProductGroup
-	 * @throws IndexOutOfBoundsException if the {@code index} is negative or > the arity of the function's domain
-	 * @throws IllegalArgumentException  if the {@code element} is not an element of the corresponding group
-	 */
 	private PartiallyAppliedFunction(final ProductSet domain, final Set coDomain, final Function parentFunction,
 		   final Element parameter, final int index) {
 		super(domain, coDomain);
@@ -151,21 +142,19 @@ public class PartiallyAppliedFunction
 	 * @param element        The given parameter to fix
 	 * @param index          The index of the parameter to fix
 	 * @return
-	 * @throws IllegalArgumentException  if the {@code function} is null or not a ProductGroup
-	 * @throws IndexOutOfBoundsException if the {@code index} is negative or > the arity of the function's domain
-	 * @throws IllegalArgumentException  if the {@code element} is not an element of the corresponding group
 	 */
-	public static PartiallyAppliedFunction getInstance(final Function parentFunction, final Element element,
-		   final int index) {
+	public static PartiallyAppliedFunction getInstance(final Function parentFunction, final Element element, final int index) {
 		if (parentFunction == null || !parentFunction.getDomain().isProduct()) {
 			throw new IllegalArgumentException();
 		}
 		ProductSet domain = (ProductSet) parentFunction.getDomain();
+		if (index < 0 || index >= domain.getArity()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, domain, index);
+		}
 		if (!domain.getAt(index).contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		return new PartiallyAppliedFunction(domain.removeAt(index), parentFunction.getCoDomain(), parentFunction,
-											element, index);
+		return new PartiallyAppliedFunction(domain.removeAt(index), parentFunction.getCoDomain(), parentFunction, element, index);
 	}
 
 }

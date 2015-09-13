@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
@@ -161,7 +163,7 @@ public class Z
 
 	@Override
 	protected Sequence<ZElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override

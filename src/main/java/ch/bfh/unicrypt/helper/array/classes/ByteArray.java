@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.BinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
@@ -338,7 +340,7 @@ public class ByteArray
 	 */
 	public byte getByteAt(int index) {
 		if (index < 0 || index >= this.length) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 		}
 		return this.abstractGetByteAt(index);
 	}

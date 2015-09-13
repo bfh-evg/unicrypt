@@ -41,6 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptException;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.StringToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.StringToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
@@ -126,7 +129,11 @@ public class FiniteStringSet
 
 			@Override
 			public FiniteStringElement apply(BigInteger value) {
-				return getElementFrom(value);
+				try {
+					return getElementFrom(value);
+				} catch (UniCryptException exception) {
+					throw new UniCryptRuntimeException(ErrorCode.IMPOSSIBLE_STATE, exception, this, value);
+				}
 			}
 
 		});

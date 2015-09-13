@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.math.Polynomial;
@@ -164,44 +166,42 @@ public class ECPolynomialField
 
 	@Override
 	protected Sequence<ECPolynomialElement> abstractGetRandomElementsWithoutGenerator(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UniCryptRuntimeException(ErrorCode.NOT_YET_IMPLEMENTED, this);
 	}
 
 	/**
 	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 21
 	 * <p>
 	 * @return True if curve parameters are valid
-	 * @throws Exception
 	 */
-	public boolean isValid() throws Exception {
-		boolean c2, c3, c4, c5, c6, c7, c8;
+	public boolean isValid() {
+		boolean c1, c2, c3, c4, c5, c6, c7, c8;
 		int m = this.getFiniteField().getDegree();
-		final BigInteger TWO = new BigInteger("2");
 
-		c2 = this.getFiniteField().isIrreduciblePolynomial(this.getFiniteField().getIrreduciblePolynomial());
+		c1 = this.getFiniteField().isIrreduciblePolynomial(this.getFiniteField().getIrreduciblePolynomial());
 
-		c3 = this.getFiniteField().contains(getA());
-		c3 = c3 && this.getFiniteField().contains(getB());
-		c3 = c3 && this.getFiniteField().contains(this.getDefaultGenerator().getX());
-		c3 = c3 && this.getFiniteField().contains(this.getDefaultGenerator().getY());
+		c2 = this.getFiniteField().contains(getA());
+		c2 = c2 && this.getFiniteField().contains(getB());
+		c2 = c2 && this.getFiniteField().contains(this.getDefaultGenerator().getX());
+		c2 = c2 && this.getFiniteField().contains(this.getDefaultGenerator().getY());
 
-		c4 = !this.getB().equals(this.getFiniteField().getZeroElement());
+		c3 = !this.getB().equals(this.getFiniteField().getZeroElement());
 
-		c5 = this.contains(this.getDefaultGenerator());
+		c4 = this.contains(this.getDefaultGenerator());
 
-		c6 = MathUtil.isPrime(getOrder());
+		c5 = MathUtil.isPrime(getOrder());
 
-		c7 = this.selfApply(this.getDefaultGenerator(), getOrder()).isEquivalent(this.getZeroElement());
+		c6 = this.selfApply(this.getDefaultGenerator(), getOrder()).isEquivalent(this.getZeroElement());
 
-		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100")) < 0; i = i.add(MathUtil.ONE)) {
-			if (TWO.modPow(i, getOrder()).equals(MathUtil.ONE)) {
-				throw new Exception("Curve parameter not valid");
+		c7 = true;
+		for (BigInteger i = MathUtil.ONE; i.compareTo(new BigInteger("100")) < 0; i = i.add(MathUtil.ONE)) {
+			if (MathUtil.TWO.modPow(i, getOrder()).equals(MathUtil.ONE)) {
+				c7 = false;
 			}
 		}
+		c8 = !getOrder().multiply(getCoFactor()).equals(MathUtil.TWO.pow(m));
 
-		c8 = !getOrder().multiply(getCoFactor()).equals(TWO.pow(m));
-
-		return c2 && c3 && c4 && c5 && c6 && c7 && c8;
+		return c1 && c2 && c3 && c4 && c5 && c6 && c7 && c8;
 	}
 
 	/**
@@ -234,16 +234,15 @@ public class ECPolynomialField
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
-	 * @throws Exception
 	 */
 	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b,
-		   BigInteger givenOrder, BigInteger coFactor) throws Exception {
+		   BigInteger givenOrder, BigInteger coFactor) {
 		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, givenOrder, coFactor);
 
 		if (newInstance.isValid()) {
 			return newInstance;
 		} else {
-			throw new Exception("Curve parameters not valid!");
+			throw new IllegalArgumentException();
 		}
 	}
 
@@ -258,20 +257,19 @@ public class ECPolynomialField
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
-	 * @throws Exception
 	 */
 	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b,
-		   PolynomialElement gx, PolynomialElement gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+		   PolynomialElement gx, PolynomialElement gy, BigInteger givenOrder, BigInteger coFactor) {
 		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
 
 		if (newInstance.isValid()) {
 			return newInstance;
 		} else {
-			throw new Exception("Curve parameters not valid!");
+			throw new IllegalArgumentException();
 		}
 	}
 
-	public static ECPolynomialField getInstance(final StandardECPolynomialFieldParams params) throws Exception {
+	public static ECPolynomialField getInstance(final StandardECPolynomialFieldParams params) {
 		PolynomialField field;
 		PolynomialElement a, b, gx, gy;
 		BigInteger order, h;

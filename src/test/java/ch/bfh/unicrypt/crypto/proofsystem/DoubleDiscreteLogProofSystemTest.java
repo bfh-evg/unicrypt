@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.classes.DoubleDiscreteLogProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
-import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
@@ -155,7 +155,7 @@ public class DoubleDiscreteLogProofSystemTest {
 	@Test
 	public void testDoubleDiscreteLogProofSystem3() {
 
-		final RandomByteSequence randomByteSequence = HybridRandomByteSequence.getInstance();
+		final RandomByteSequence randomByteSequence = DeterministicRandomByteSequence.getInstance();
 
 		final CyclicGroup G_p = GStarModPrime.getInstance(O1, P1);
 		final ZModPrime Z_p = (ZModPrime) G_p.getZModOrder();

@@ -42,10 +42,12 @@
 package ch.bfh.unicrypt.helper.array.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.IntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 
@@ -196,7 +198,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	@Override
 	public final V getAt(int index) {
 		if (index < 0 || index >= this.length) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 		}
 		return this.abstractGetAt(index);
 	}
@@ -302,7 +304,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	@Override
 	public final A insertAt(int index, V value) {
 		if (index < 0 || index > this.length) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 		}
 		if (value == null) {
 			throw new IllegalArgumentException();
@@ -323,7 +325,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	@Override
 	public final A replaceAt(int index, V value) {
 		if (index < 0 || index >= this.length) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 		}
 		if (value == null) {
 			throw new IllegalArgumentException();

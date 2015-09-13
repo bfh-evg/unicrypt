@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -76,7 +78,7 @@ public class RSAKeyGenerator
 				this.zStarMod = ((ZModPrimePair) this.zMod).getZStarModOrder().getZStarModOrder();
 			} else {
 				// keys can only be generated if p and q are known
-				throw new UnsupportedOperationException();
+				throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 			}
 		}
 		return this.zStarMod;

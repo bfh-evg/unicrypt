@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
+import ch.bfh.unicrypt.exception.UniCryptException;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
@@ -166,25 +167,28 @@ public interface EC<V, E extends DualisticElement<V>>
 	public ECElement<V, E> timesTwo(Element element);
 
 	@Override
-	public <W> ECElement<V, E> getElementFrom(W value, Converter<Point<E>, W> converter);
+	public <W> ECElement<V, E> getElementFrom(W value, Converter<Point<E>, W> converter) throws UniCryptException;
 
 	@Override
-	public <W> ECElement<V, E> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
+	public <W> ECElement<V, E> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
 
 	@Override
-	public <W> ECElement<V, E> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+	public <W, X> ECElement<V, E> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
 
 	@Override
-	public ECElement<V, E> getElementFrom(long integer);
+	public <W> ECElement<V, E> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
 
 	@Override
-	public ECElement<V, E> getElementFrom(BigInteger bigInteger);
+	public ECElement<V, E> getElementFrom(long integer) throws UniCryptException;
 
 	@Override
-	public ECElement<V, E> getElementFrom(ByteArray byteArray);
+	public ECElement<V, E> getElementFrom(BigInteger bigInteger) throws UniCryptException;
 
 	@Override
-	public ECElement<V, E> getElementFrom(String string);
+	public ECElement<V, E> getElementFrom(ByteArray byteArray) throws UniCryptException;
+
+	@Override
+	public ECElement<V, E> getElementFrom(String string) throws UniCryptException;
 
 	@Override
 	public ECElement<V, E> getRandomElement();

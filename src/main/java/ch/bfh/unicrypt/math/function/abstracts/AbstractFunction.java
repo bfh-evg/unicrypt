@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.math.function.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -113,7 +115,7 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 		if (this.getDomain().isProduct()) {
 			return this.apply(((ProductSet) this.getDomain()).getElement(elements), randomByteSequence);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, elements);
 	}
 
 	@Override

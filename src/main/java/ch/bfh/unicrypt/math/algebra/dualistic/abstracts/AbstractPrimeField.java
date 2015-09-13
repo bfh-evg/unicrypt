@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -91,8 +93,8 @@ public abstract class AbstractPrimeField<E extends DualisticElement<V>, M extend
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		if (element.isEquivalent(this.getZeroElement())) {
-			throw new UnsupportedOperationException();
+		if (((E) element).isZero()) {
+			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this, element);
 		}
 		return this.abstractOneOver((E) element);
 	}

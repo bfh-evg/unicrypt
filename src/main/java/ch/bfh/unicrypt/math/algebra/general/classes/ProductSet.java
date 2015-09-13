@@ -41,9 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
-import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
-import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
+import ch.bfh.unicrypt.exception.UniCryptException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
@@ -95,7 +93,7 @@ public class ProductSet
 		return this.getElement(DenseArray.getInstance(elements));
 	}
 
-	public final Tuple getElementFrom(final int... values) {
+	public final Tuple getElementFrom(final int... values) throws UniCryptException {
 		if (values == null) {
 			throw new IllegalArgumentException();
 		}
@@ -106,16 +104,35 @@ public class ProductSet
 		return this.getElementFrom(bigIntegers);
 	}
 
-	public final Tuple getElementFrom(BigInteger... values) {
+	public final Tuple getElementFrom(BigInteger... values) throws UniCryptException {
 		if (values == null || values.length != this.getLength()) {
 			throw new IllegalArgumentException();
 		}
 		Element[] elements = new Element[this.getLength()];
 		for (int i : this.getAllIndices()) {
 			elements[i] = this.getAt(i).getElementFrom(values[i]);
-			if (elements[i] == null) {
-				return null; // no such element
-			}
+		}
+		return this.abstractGetElement(DenseArray.getInstance(elements));
+	}
+
+	public final Tuple getElementFrom(ByteArray... values) throws UniCryptException {
+		if (values == null || values.length != this.getLength()) {
+			throw new IllegalArgumentException();
+		}
+		Element[] elements = new Element[this.getLength()];
+		for (int i : this.getAllIndices()) {
+			elements[i] = this.getAt(i).getElementFrom(values[i]);
+		}
+		return this.abstractGetElement(DenseArray.getInstance(elements));
+	}
+
+	public final Tuple getElementFrom(String... values) throws UniCryptException {
+		if (values == null || values.length != this.getLength()) {
+			throw new IllegalArgumentException();
+		}
+		Element[] elements = new Element[this.getLength()];
+		for (int i : this.getAllIndices()) {
+			elements[i] = this.getAt(i).getElementFrom(values[i]);
 		}
 		return this.abstractGetElement(DenseArray.getInstance(elements));
 	}
@@ -180,12 +197,16 @@ public class ProductSet
 
 			@Override
 			protected BigInteger abstractConvert(DenseArray<Element> elements) {
-				return Tuple.getInstance(elements).defaultConvertToBigInteger();
+				return Tuple.getInstance(elements).convertToBigInteger();
 			}
 
 			@Override
 			protected DenseArray<Element> abstractReconvert(BigInteger value) {
-				return getElementFrom(value).getValue();
+				try {
+					return getElementFrom(value).getValue();
+				} catch (UniCryptException exception) {
+					throw new IllegalArgumentException();
+				}
 			}
 		};
 	}
@@ -253,7 +274,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected <W> Tuple defaultGetElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) {
+	protected <W> Tuple defaultGetElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException {
 		if (tree.isLeaf()) {
 			throw new IllegalArgumentException();
 		}
@@ -268,21 +289,6 @@ public class ProductSet
 			i++;
 		}
 		return this.getElement(DenseArray.getInstance(elements));
-	}
-
-	@Override
-	protected Tuple defaultGetElementFrom(BigInteger value) {
-		return this.getElementFrom(value, ConvertMethod.getInstance(BigInteger.class), BigIntegerAggregator.getInstance());
-	}
-
-	@Override
-	protected Tuple defaultGetElementFrom(ByteArray value) {
-		return this.getElementFrom(value, ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
-	}
-
-	@Override
-	protected Tuple defaultGetElementFrom(String value) {
-		return this.getElementFrom(value, ConvertMethod.getInstance(String.class), StringAggregator.getInstance());
 	}
 
 	@Override

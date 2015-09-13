@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.helper.math;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -186,7 +188,7 @@ public class Alphabet
 	 */
 	public char getCharacter(int index) {
 		if (index < 0 || index >= this.getSize()) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 		}
 		if (this.characters == null) {
 			return (char) (this.minChar + index);
@@ -263,10 +265,6 @@ public class Alphabet
 				return getCharacter(this.currentIndex++);
 			}
 
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
 		};
 	}
 

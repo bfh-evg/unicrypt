@@ -43,6 +43,8 @@ package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.ByteArrayKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
@@ -109,10 +111,8 @@ public class AESEncryptionScheme
 		this.initializationVector = initializationVector;
 		try {
 			this.cipher = Cipher.getInstance(ALGORITHM_NAME + "/" + mode + "/NoPadding");
-		} catch (NoSuchAlgorithmException ex) {
-			throw new RuntimeException();
-		} catch (NoSuchPaddingException ex) {
-			throw new RuntimeException();
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException exception) {
+			throw new UniCryptRuntimeException(ErrorCode.JAVA_AES_FAILURE, exception);
 		}
 	}
 
@@ -164,14 +164,8 @@ public class AESEncryptionScheme
 					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
 				}
 				encryptedBytes = cipher.doFinal(message.getValue().getBytes());
-			} catch (InvalidKeyException ex) {
-				throw new RuntimeException();
-			} catch (IllegalBlockSizeException ex) {
-				throw new RuntimeException();
-			} catch (BadPaddingException ex) {
-				throw new RuntimeException();
-			} catch (InvalidAlgorithmParameterException ex) {
-				throw new RuntimeException();
+			} catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException exception) {
+				throw new UniCryptRuntimeException(ErrorCode.JAVA_AES_FAILURE, exception);
 			}
 			return this.getCoDomain().getElement(encryptedBytes);
 		}
@@ -199,14 +193,8 @@ public class AESEncryptionScheme
 					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
 				}
 				message = cipher.doFinal(encryption.getValue().getBytes());
-			} catch (InvalidKeyException e) {
-				throw new RuntimeException();
-			} catch (IllegalBlockSizeException e) {
-				throw new RuntimeException();
-			} catch (BadPaddingException e) {
-				throw new RuntimeException();
-			} catch (InvalidAlgorithmParameterException ex) {
-				throw new RuntimeException();
+			} catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException exception) {
+				throw new UniCryptRuntimeException(ErrorCode.JAVA_AES_FAILURE, exception);
 			}
 			return this.getCoDomain().getElement(message);
 		}

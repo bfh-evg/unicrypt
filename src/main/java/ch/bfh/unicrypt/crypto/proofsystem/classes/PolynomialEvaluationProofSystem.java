@@ -45,9 +45,9 @@ import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -292,7 +292,7 @@ public class PolynomialEvaluationProofSystem
 		for (int i = 0; i < this.d; i++) {
 			v = v && cxVs[i + 1].apply(cV.getAt(i).selfApply(fBarV.getAt(i).invert())
 				   .apply(cfuV.getAt(i))).isEquivalent(
-						  this.pedersenCS.commit(zModPrime.getZeroElement(), xiBarV.getAt(i)));
+						  this.pedersenCS.commit(this.zModPrime.getZeroElement(), xiBarV.getAt(i)));
 		}
 
 		Element left = publicInput.getSecond().selfApply(challenge.power(this.d + 1));
@@ -314,8 +314,9 @@ public class PolynomialEvaluationProofSystem
 	private PolynomialElement xPoly;
 
 	private Tuple computeDeltas(Tuple uV, Tuple fV) {
+		PolynomialSemiRing polynomialSemiRing = this.polynomial.getSet();
 		PolynomialElement[] result = new PolynomialElement[1];
-		xPoly = polynomial.getSet().getElement(MathUtil.ZERO, MathUtil.ONE);
+		this.xPoly = polynomialSemiRing.getElement(polynomialSemiRing.getSemiRing().getZeroElement(), polynomialSemiRing.getSemiRing().getOneElement());
 		Node1 root = new Node1(this.d + 1, 0, this.polynomial.getSet().getOneElement(), uV, fV, result);
 
 		Element[] dVs = new Element[this.d + 1];

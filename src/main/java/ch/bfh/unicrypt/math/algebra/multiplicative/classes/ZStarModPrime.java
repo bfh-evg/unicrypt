@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
@@ -70,8 +72,7 @@ public class ZStarModPrime
 
 	@Override
 	public ZStarModElement getDefaultGenerator() {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+		throw new UniCryptRuntimeException(ErrorCode.NOT_YET_IMPLEMENTED, this);
 	}
 
 	@Override
@@ -124,8 +125,7 @@ public class ZStarModPrime
 
 	@Override
 	public boolean isGenerator(Element element) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+		throw new UniCryptRuntimeException(ErrorCode.NOT_YET_IMPLEMENTED, this);
 	}
 
 	public static ZStarModPrime getInstance(final Prime modulus) {

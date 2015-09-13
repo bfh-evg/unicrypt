@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,36 +39,41 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.concatenative;
-
-import ch.bfh.unicrypt.exception.UniCryptException;
-import ch.bfh.unicrypt.helper.math.Alphabet;
-import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import java.math.BigInteger;
-import org.junit.Assert;
-import static org.junit.Assert.fail;
-import org.junit.Test;
+package ch.bfh.unicrypt.exception;
 
 /**
  *
- * @author R. Haenni <rolf.haenni@bfh.ch>
+ * @author rolfhaenni
  */
-public class StringMonoidTest {
+public class UniCryptRuntimeException
+	   extends RuntimeException {
 
-	@Test
-	public void testGetValue() {
-		StringMonoid sm = StringMonoid.getInstance(Alphabet.BINARY, 4);
-		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(300)) <= 0; i = i.add(MathUtil.ONE)) {
-			StringElement element;
-			try {
-				element = sm.getElementFrom(i);
-				Assert.assertEquals(element.convertToBigInteger(), i);
-			} catch (UniCryptException ex) {
-				fail();
-			}
+	private final ErrorCode errorCode;
+	private final Object[] failedObjects;
+
+	public UniCryptRuntimeException(ErrorCode errorCode, Object... failedObjects) {
+		super();
+		this.errorCode = errorCode;
+		this.failedObjects = failedObjects;
+	}
+
+	public UniCryptRuntimeException(ErrorCode errorCode, Throwable cause, Object... failedObjects) {
+		super(cause);
+		this.errorCode = errorCode;
+		this.failedObjects = failedObjects;
+	}
+
+	public ErrorCode getErrorCode() {
+		return this.errorCode;
+	}
+
+	@Override
+	public String toString() {
+		String result = "UniCryptRuntimeException[" + errorCode;
+		for (Object object : failedObjects) {
+			result = result + ", " + object.toString();
 		}
+		return result + ']';
 	}
 
 }

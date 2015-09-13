@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.UniCryptException;
 import ch.bfh.unicrypt.helper.converter.classes.TrivialConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
@@ -79,8 +80,10 @@ public class ConvertFunction
 	@Override
 	protected Element abstractApply(Element element, RandomByteSequence randomByteSequence) {
 		Object value = element.convertTo(this.domainConverter);
-		Element result = this.getCoDomain().getElementFrom(value, this.coDomainConverter);
-		if (result == null) {
+		Element result;
+		try {
+			result = this.getCoDomain().getElementFrom(value, this.coDomainConverter);
+		} catch (UniCryptException exception) {
 			throw new IllegalArgumentException();
 		}
 		return result;

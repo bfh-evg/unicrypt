@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
@@ -99,7 +101,7 @@ public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends 
 			Field field = ((Field) this.getSet());
 			return (E) field.divide(this, element);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, element);
 	}
 
 	@Override
@@ -108,7 +110,7 @@ public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends 
 			Field field = ((Field) this.getSet());
 			return (E) field.oneOver(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.hashing;
 
+import ch.bfh.unicrypt.exception.UniCryptException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
@@ -56,6 +57,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -115,7 +117,13 @@ public class HashingSchemeTest {
 
 		HashingScheme<ProductGroup> hs = HashingScheme.getInstance(ProductGroup.getInstance(ZMod.getInstance(25), 3));
 
-		Tuple e1 = hs.getMessageSpace().getElementFrom(MathUtil.ZERO, MathUtil.ONE, MathUtil.TWO);
+		Tuple e1;
+		try {
+			e1 = hs.getMessageSpace().getElementFrom(MathUtil.ZERO, MathUtil.ONE, MathUtil.TWO);
+		} catch (UniCryptException ex) {
+			fail();
+			return;
+		}
 		Tuple e2 = hs.getMessageSpace().getIdentityElement();
 		Tuple e3 = hs.getMessageSpace().getRandomElement(DeterministicRandomByteSequence.getInstance());
 

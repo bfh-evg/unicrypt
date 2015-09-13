@@ -46,6 +46,8 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracl
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SetMembershipProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
@@ -182,11 +184,10 @@ public class PolynomialMembershipProofSystem
 
 	@Override
 	public Subset getMembers() {
-
 		// In case, the proof system has been created directly by the representing polynomial
 		// -> May comupte the roots from the polynomial...?
 		if (this.members == null) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		return this.members;
 	}

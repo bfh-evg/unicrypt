@@ -41,6 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.params.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptException;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
@@ -164,11 +167,10 @@ public enum SECECCParamsF2m
 				  "03FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE661CE18FF55987308059B186823851EC7DD9CA1161DE93D5174D66E8382E9BB2FE84E47",
 				  "2");
 
-	private String polynom, a, b, gx, gy, order, h;
+	private final String polynomial, a, b, gx, gy, order, h;
 
-	private SECECCParamsF2m(String polynom, String a, String b, String gx,
-		   String gy, String order, String h) {
-		this.polynom = polynom;
+	private SECECCParamsF2m(String polynomial, String a, String b, String gx, String gy, String order, String h) {
+		this.polynomial = polynomial;
 		this.a = a;
 		this.b = b;
 		this.gx = gx;
@@ -177,32 +179,35 @@ public enum SECECCParamsF2m
 		this.h = h;
 	}
 
-	private PolynomialElement getPolynomeFromString(String p) {
+	private PolynomialElement getPolynomialFromString(String p) {
 		BigInteger bitString = new BigInteger(p, 16);
 
 		// Read bits and create a BigInteger ArrayList
 		ArrayList<BigInteger> arrayBigInteger = new ArrayList<>();
 		for (Character s : bitString.toString(2).toCharArray()) {
 			arrayBigInteger.add(0, new BigInteger(s.toString()));
-
 		}
 
 		// Convert ArrayList BigInteger array and get element
 		BigInteger[] coeffs = {};
 		coeffs = arrayBigInteger.toArray(coeffs);
-		PolynomialElement irreduciblePolynom = PolynomialRing.getInstance(ZModTwo.getInstance()).getElement(coeffs);
+		PolynomialElement irreduciblePolynom;
+		try {
+			irreduciblePolynom = PolynomialRing.getInstance(ZModTwo.getInstance()).getElementFrom(coeffs);
+		} catch (UniCryptException exception) {
+			throw new UniCryptRuntimeException(ErrorCode.IMPOSSIBLE_STATE, exception, (Object[]) coeffs);
+		}
 		return irreduciblePolynom;
 
 	}
 
-	public PolynomialElement getIrreduciblePolynome() {
-		return getPolynomeFromString(polynom);
+	public PolynomialElement getIrreduciblePolynomial() {
+		return getPolynomialFromString(this.polynomial);
 	}
 
 	@Override
 	public PolynomialField getFiniteField() {
-		PolynomialElement irreduciblePolynomialElement = this
-			   .getPolynomeFromString(this.polynom);
+		PolynomialElement irreduciblePolynomialElement = this.getPolynomialFromString(this.polynomial);
 		return PolynomialField.getInstance(ZModTwo.getInstance(), irreduciblePolynomialElement);
 	}
 
@@ -213,32 +218,32 @@ public enum SECECCParamsF2m
 
 	@Override
 	public PolynomialElement getA() {
-		return getFiniteField().getElement(getPolynomeFromString(a).getValue());
+		return getFiniteField().getElement(getPolynomialFromString(this.a).getValue());
 	}
 
 	@Override
 	public PolynomialElement getB() {
-		return getFiniteField().getElement(getPolynomeFromString(b).getValue());
+		return getFiniteField().getElement(getPolynomialFromString(this.b).getValue());
 	}
 
 	@Override
 	public PolynomialElement getGx() {
-		return getFiniteField().getElement(getPolynomeFromString(gx).getValue());
+		return getFiniteField().getElement(getPolynomialFromString(this.gx).getValue());
 	}
 
 	@Override
 	public PolynomialElement getGy() {
-		return getFiniteField().getElement(getPolynomeFromString(gy).getValue());
+		return getFiniteField().getElement(getPolynomialFromString(this.gy).getValue());
 	}
 
 	@Override
 	public BigInteger getOrder() {
-		return new BigInteger(order, 16);
+		return new BigInteger(this.order, 16);
 	}
 
 	@Override
 	public BigInteger getH() {
-		return new BigInteger(h, 16);
+		return new BigInteger(this.h, 16);
 	}
 
 	public static SECECCParamsF2m getFromString(String s) {
@@ -247,8 +252,7 @@ public enum SECECCParamsF2m
 				return parameter;
 			}
 		}
-
-		throw new IllegalArgumentException("No Enum with name: " + s);
+		throw new IllegalArgumentException();
 	}
 
 }

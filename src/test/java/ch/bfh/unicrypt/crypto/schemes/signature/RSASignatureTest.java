@@ -61,14 +61,13 @@ public class RSASignatureTest {
 
 	@Test
 	public void SignatureTest1() {
-//		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(1023, 65537));
 		BigInteger p = BigInteger.probablePrime(512, new SecureRandom());
 		BigInteger q = BigInteger.probablePrime(512, new SecureRandom());
-		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(p, q));
+		RSASignatureScheme<ZMod> rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(p, q));
 		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
 		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
 
-		Element message = rsa.getMessageSpace().getElementFrom(5);
+		Element message = rsa.getMessageSpace().getElement(5);
 		Element signature = rsa.sign(prKey, message);
 
 		BigInteger n = p.multiply(q);
@@ -83,7 +82,7 @@ public class RSASignatureTest {
 		BigInteger p = BigInteger.probablePrime(512, new SecureRandom());
 		BigInteger q = BigInteger.probablePrime(512, new SecureRandom());
 
-		RSASignatureScheme rsa = RSASignatureScheme.getInstance(StringMonoid.getInstance(Alphabet.ALPHANUMERIC), ZModPrimePair.getInstance(p, q));
+		RSASignatureScheme<StringMonoid> rsa = RSASignatureScheme.getInstance(StringMonoid.getInstance(Alphabet.ALPHANUMERIC), ZModPrimePair.getInstance(p, q));
 		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
 		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
 

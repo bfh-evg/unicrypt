@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.helper.math;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.array.classes.SparseArray;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
@@ -228,7 +230,7 @@ public class Polynomial<C>
 	 */
 	public C getCoefficient(int index) {
 		if (index < 0) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 		}
 		if (this.isBinary()) {
 			if (index < this.binaryCoefficients.getLength() && this.binaryCoefficients.getAt(index)) {
@@ -251,7 +253,7 @@ public class Polynomial<C>
 		if (this.isBinary()) {
 			return this.binaryCoefficients;
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	/**

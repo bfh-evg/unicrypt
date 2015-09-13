@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
@@ -203,7 +205,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.apply(this, element);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	/**
@@ -215,7 +217,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 			Group group = ((Group) this.set);
 			return (E) group.applyInverse(this, element);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	/**
@@ -227,7 +229,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this, amount);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	/**
@@ -239,7 +241,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this, amount);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	/**
@@ -251,7 +253,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this, amount);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	/**
@@ -263,7 +265,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	/**
@@ -275,7 +277,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 			Group group = ((Group) this.set);
 			return (E) group.invert(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	/**
@@ -287,7 +289,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 			Monoid monoid = ((Monoid) this.set);
 			return monoid.isIdentityElement(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	/**
@@ -299,7 +301,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 			CyclicGroup cyclicGroup = ((CyclicGroup) this.set);
 			return cyclicGroup.isGenerator(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override

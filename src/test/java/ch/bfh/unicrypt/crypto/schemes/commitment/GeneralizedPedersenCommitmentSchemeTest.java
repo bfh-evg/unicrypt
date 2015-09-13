@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.commitment;
 
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
@@ -116,7 +117,7 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 		assertEquals(c, cc);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = UniCryptRuntimeException.class)
 	public void testGeneralizedPedersenCommitment_Exception() {
 		// Commitment size does not match with number of messages
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 3);

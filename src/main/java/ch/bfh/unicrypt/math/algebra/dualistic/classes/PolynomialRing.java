@@ -41,7 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
@@ -119,7 +120,7 @@ public class PolynomialRing
 	 */
 	public PolynomialElement euclidean(PolynomialElement g, PolynomialElement h) {
 		if (!this.getSemiRing().isField()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		if (!this.contains(g) || !this.contains(h)) {
 			throw new IllegalArgumentException();
@@ -154,7 +155,7 @@ public class PolynomialRing
 	 */
 	public Triple extendedEuclidean(PolynomialElement g, PolynomialElement h) {
 		if (!this.getSemiRing().isField()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		if (!this.contains(g) || !this.contains(h)) {
 			throw new IllegalArgumentException();
@@ -213,7 +214,7 @@ public class PolynomialRing
 	 */
 	public Pair longDivision(PolynomialElement g, PolynomialElement h) {
 		if (!this.getSemiRing().isField()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		if (!this.contains(g) || !this.contains(h) || h.isEquivalent(this.getZeroElement())) {
 			throw new IllegalArgumentException();
@@ -250,15 +251,15 @@ public class PolynomialRing
 	 * @return true if f(x) is irreducible over Z_p
 	 */
 	public boolean isIrreduciblePolynomial(PolynomialElement f) {
-		if (!this.getSemiRing().isField() || f != null && !f.getValue().isMonic()) {
-			throw new UnsupportedOperationException();
-		}
-		if (!this.contains(f)) {
+		if (f == null || !this.contains(f)) {
 			throw new IllegalArgumentException();
+		}
+		if (!this.getSemiRing().isField() || !f.getValue().isMonic()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		final PolynomialRing ring
 			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
-		PolynomialElement x = ring.getElement(MathUtil.ZERO, MathUtil.ONE);
+		PolynomialElement x = ring.getElement(ring.getSemiRing().getZeroElement(), ring.getSemiRing().getOneElement());
 		PolynomialElement u = x;
 		PolynomialElement d;
 		int m = f.getValue().getDegree();
@@ -285,7 +286,7 @@ public class PolynomialRing
 	 */
 	public PolynomialElement findIrreduciblePolynomial(int degree, RandomByteSequence randomByteSequence) {
 		if (!this.getSemiRing().isField()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		if (degree < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();

@@ -41,10 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
+import ch.bfh.unicrypt.exception.UniCryptException;
 import ch.bfh.unicrypt.math.algebra.general.classes.EnumeratedSet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -82,7 +84,11 @@ public class DiscreteSetTest {
 
 	@Test
 	public void testGetBigInteger() {
-		assertEquals("John", ds.getElementFrom(ds.getElement("John").convertToBigInteger()).getValue());
+		try {
+			assertEquals("John", ds.getElementFrom(ds.getElement("John").convertToBigInteger()).getValue());
+		} catch (UniCryptException ex) {
+			fail();
+		}
 	}
 
 }

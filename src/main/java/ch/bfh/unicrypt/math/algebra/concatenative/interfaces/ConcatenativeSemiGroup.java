@@ -41,13 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 
+import ch.bfh.unicrypt.exception.UniCryptException;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
-import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -178,25 +178,28 @@ public interface ConcatenativeSemiGroup<V>
 	public boolean isEmptyElement(Element element);
 
 	@Override
-	public <W> ConcatenativeElement<V> getElementFrom(W value, Converter<V, W> converter);
+	public <W> ConcatenativeElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;
 
 	@Override
-	public <W> ConcatenativeElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
+	public <W> ConcatenativeElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
 
 	@Override
-	public <W> ConcatenativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+	public <W, X> ConcatenativeElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(long integer);
+	public <W> ConcatenativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(BigInteger bigInteger);
+	public ConcatenativeElement<V> getElementFrom(long integer) throws UniCryptException;
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(ByteArray byteArray);
+	public ConcatenativeElement<V> getElementFrom(BigInteger bigInteger) throws UniCryptException;
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(String string);
+	public ConcatenativeElement<V> getElementFrom(ByteArray byteArray) throws UniCryptException;
+
+	@Override
+	public ConcatenativeElement<V> getElementFrom(String string) throws UniCryptException;
 
 	@Override
 	public ConcatenativeElement<V> getRandomElement();

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -87,7 +89,7 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
 			MultiplicativeGroup group = ((MultiplicativeGroup) this.getSet());
 			return (E) group.divide(this, element);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	/**
@@ -128,7 +130,7 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
 			MultiplicativeGroup group = ((MultiplicativeGroup) this.getSet());
 			return (E) group.invert(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override
@@ -137,7 +139,7 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
 			MultiplicativeMonoid monoid = ((MultiplicativeMonoid) this.getSet());
 			return monoid.isOneElement(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 }

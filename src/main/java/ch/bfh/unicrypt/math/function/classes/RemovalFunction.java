@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -94,13 +96,14 @@ public class RemovalFunction
 	 * <p>
 	 * @param productSet The product group that defines the domain of the function
 	 * @param index      The given sequence of indices
-	 * @throws IllegalArgumentException  of {@code group} is null
-	 * @throws IllegalArgumentException  if {@code indices} is null or if its length exceeds the hierarchy's depth
-	 * @throws IndexOutOfBoundsException if {@code indices} contains an out-of-bounds index
+	 * @return
 	 */
 	public static RemovalFunction getInstance(final ProductSet productSet, final int index) {
 		if (productSet == null) {
 			throw new IllegalArgumentException();
+		}
+		if (index < 0 || index >= productSet.getArity()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, productSet, index);
 		}
 		return new RemovalFunction(productSet, productSet.removeAt(index), index);
 	}

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
@@ -114,7 +116,7 @@ public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGr
 			ConcatenativeMonoid monoid = ((ConcatenativeMonoid) this.getSet());
 			return monoid.isEmptyElement(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 }

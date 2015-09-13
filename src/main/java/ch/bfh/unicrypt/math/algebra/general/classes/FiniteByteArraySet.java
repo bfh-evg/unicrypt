@@ -41,6 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptException;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
@@ -128,7 +131,11 @@ public class FiniteByteArraySet
 
 			@Override
 			public FiniteByteArrayElement apply(BigInteger value) {
-				return getElementFrom(value);
+				try {
+					return getElementFrom(value);
+				} catch (UniCryptException exception) {
+					throw new UniCryptRuntimeException(ErrorCode.IMPOSSIBLE_STATE, exception, this, value);
+				}
 			}
 
 		});

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
+import ch.bfh.unicrypt.exception.UniCryptException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.deterministic.CTR_DRBG;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
@@ -54,6 +55,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -101,11 +103,20 @@ public class BooleanSetTest {
 	public void testGetElementFromBigInteger() {
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
-		BooleanElement result = instance.getElementFrom(MathUtil.ZERO);
-		assertEquals(false, result.getValue());
+		BooleanElement result;
+		try {
+			result = instance.getElementFrom(MathUtil.ZERO);
+			assertEquals(false, result.getValue());
+		} catch (UniCryptException ex) {
+			fail();
+		}
 
-		result = instance.getElementFrom(MathUtil.ONE);
-		assertEquals(true, result.getValue());
+		try {
+			result = instance.getElementFrom(MathUtil.ONE);
+			assertEquals(true, result.getValue());
+		} catch (UniCryptException ex) {
+			fail();
+		}
 
 	}
 
@@ -122,31 +133,23 @@ public class BooleanSetTest {
 	@Test
 	public void testGetElementInt() {
 
-		{
+		try {
 			BooleanSet instance = BooleanSet.getInstance();
 			BooleanElement expResult = instance.getElement(true);
 			BooleanElement result = instance.getElementFrom(1);
 			assertEquals(expResult, result);
+		} catch (Exception e) {
+			fail();
 		}
-		{
+		try {
 			BooleanSet instance = BooleanSet.getInstance();
 			BooleanElement expResult = instance.getElement(false);
 			BooleanElement result = instance.getElementFrom(0);
 			assertEquals(expResult, result);
+		} catch (Exception e) {
+			fail();
 		}
 
-		{
-			BooleanSet instance = BooleanSet.getInstance();
-			// BooleanElement result = instance.getElementFrom(2);
-			// assertNull(result);
-
-		}
-		{
-			BooleanSet instance = BooleanSet.getInstance();
-			// BooleanElement result = instance.getElementFrom(-1);
-			// assertNull(result);
-
-		}
 	}
 
 	/**

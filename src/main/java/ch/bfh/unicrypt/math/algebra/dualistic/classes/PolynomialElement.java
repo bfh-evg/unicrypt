@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -109,14 +111,14 @@ public class PolynomialElement
 
 	public boolean isIrreducible() {
 		if (!this.getSet().isRing()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		return ((PolynomialRing) this.getSet()).isIrreduciblePolynomial(this);
 	}
 
 	public PolynomialElement reduce(DualisticElement<BigInteger> value) {
 		if (!this.getSet().getSemiRing().isField()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		if (value == null || !this.getSet().getSemiRing().contains(value)) {
 			throw new IllegalArgumentException();

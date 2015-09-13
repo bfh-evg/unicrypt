@@ -42,8 +42,9 @@
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
-import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
@@ -133,7 +134,7 @@ public class ZModPrimeToECPolynomialField
 			}
 
 			BigInteger e = element.getValue();
-			e = e.shiftLeft(shift + 2);
+			e = e.shiftLeft(this.shift + 2);
 			e = e.add(c);
 
 			ZModElement zModElement = this.getDomain().getElement(e);
@@ -145,7 +146,7 @@ public class ZModPrimeToECPolynomialField
 
 			int count = 0;
 			while (!ec.contains(x)) {
-				if (count >= (1 << shift)) {
+				if (count >= (1 << this.shift)) {
 					firstOption = false;
 				}
 
@@ -184,15 +185,15 @@ public class ZModPrimeToECPolynomialField
 				}
 
 				e = zModElement.getValue();
-				e = e.shiftLeft(shift + 2);
+				e = e.shiftLeft(this.shift + 2);
 				e = e.add(c);
 
 				x = enc.encode(zModElement);
 
 				count = 0;
 				while (!ec.contains(x)) {
-					if (count >= (1 << shift)) {
-						throw new ProbabilisticEncodingException(e + " can not be encoded");
+					if (count >= (1 << this.shift)) {
+						throw new UniCryptRuntimeException(ErrorCode.PROBABILISTIC_ENCODING_FAILURE, element, e);
 					}
 
 					zModElement = zModElement.add(stepp);
@@ -255,7 +256,7 @@ public class ZModPrimeToECPolynomialField
 				this.shift = msgSpace / 3;
 			}
 
-			x1 = x1.shiftRight(shift + 2);
+			x1 = x1.shiftRight(this.shift + 2);
 
 			if (y.isEquivalent(getBiggerY(y, y1))) {
 				return zModPrime.getElement(x1);

@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
@@ -140,7 +142,7 @@ public abstract class Sequence<V>
 			throw new IllegalArgumentException();
 		}
 		if (this.isInfinite()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		long counter = 0;
 		for (V value : this) {
@@ -187,7 +189,7 @@ public abstract class Sequence<V>
 	 */
 	public DenseArray<V> getAll() {
 		if (this.isInfinite()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		return DenseArray.<V>getInstance(this);
 	}
@@ -229,7 +231,7 @@ public abstract class Sequence<V>
 			throw new IllegalArgumentException();
 		}
 		if (this.isInfinite()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		for (V value : this) {
 			if (!predicate.test(value)) {
@@ -251,7 +253,7 @@ public abstract class Sequence<V>
 			throw new IllegalArgumentException();
 		}
 		if (this.isInfinite()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		for (V value : this) {
 			if (predicate.test(value)) {
@@ -273,7 +275,7 @@ public abstract class Sequence<V>
 			throw new IllegalArgumentException();
 		}
 		if (this.isEmpty() || this.isInfinite()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		Iterator<V> iterator = this.iterator();
 		V result = iterator.next();
@@ -297,7 +299,7 @@ public abstract class Sequence<V>
 			throw new IllegalArgumentException();
 		}
 		if (this.isInfinite()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		Iterator<V> iterator = this.iterator();
 		V result = identity;

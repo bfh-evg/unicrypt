@@ -102,7 +102,7 @@ public abstract class AbstractReversibleByteArrayPaddingScheme
 			}
 			return byteArray.getLength() - i;
 		}
-		throw new UnsupportedOperationException();
+		throw new IllegalArgumentException();
 	}
 
 }

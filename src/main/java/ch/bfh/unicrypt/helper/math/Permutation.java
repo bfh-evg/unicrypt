@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.helper.math;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -173,11 +175,10 @@ public class Permutation
 	 * <p>
 	 * @param value The given input value
 	 * @return The permuted value
-	 * @throws IndexOutOfBoundsException if {@code value} is negative or greater than {@code getSize()-1}
 	 */
 	public int permute(int value) {
 		if (value < 0 || value >= this.getSize()) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, value);
 		}
 		return this.permutationVector[value];
 	}
@@ -242,10 +243,6 @@ public class Permutation
 				return permutationVector[this.currentIndex++];
 			}
 
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
 		};
 	}
 

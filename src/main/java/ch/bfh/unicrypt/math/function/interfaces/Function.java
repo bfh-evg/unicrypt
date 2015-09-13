@@ -147,9 +147,6 @@ public interface Function {
 	 * @param element The given input value
 	 * @param index   The index of the corresponding group in the product (or power group) domain
 	 * @return The resulting partially applied function
-	 * @throws IllegalArgumentException  if {@code element} is null or not an element of the corresponding sub-domain
-	 *                                   group
-	 * @throws IndexOutOfBoundsException if {@code index} is an invalid index
 	 */
 	public PartiallyAppliedFunction partiallyApply(Element element, int index);
 

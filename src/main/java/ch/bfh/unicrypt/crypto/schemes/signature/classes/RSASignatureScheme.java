@@ -131,15 +131,15 @@ public class RSASignatureScheme<MS extends Set>
 											 convertFunction, moduloFunction);
 	}
 
-	public static RSASignatureScheme getInstance(ZMod zMod) {
+	public static RSASignatureScheme<ZMod> getInstance(ZMod zMod) {
 		return RSASignatureScheme.getInstance(zMod, zMod);
 	}
 
-	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZMod zMod) {
+	public static <MS extends Set> RSASignatureScheme<MS> getInstance(MS messageSpace, ZMod zMod) {
 		return RSASignatureScheme.getInstance(messageSpace, zMod, ConvertMethod.getInstance(), HashMethod.getInstance());
 	}
 
-	public static <MS extends Set, V> RSASignatureScheme
+	public static <MS extends Set, V> RSASignatureScheme<MS>
 		   getInstance(MS messageSpace, ZMod zMod, ConvertMethod<V> convertMethod, HashMethod<V> hashMethod) {
 		if (messageSpace == null || zMod == null || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
@@ -147,21 +147,21 @@ public class RSASignatureScheme<MS extends Set>
 		return new RSASignatureScheme(messageSpace, zMod, convertMethod, hashMethod);
 	}
 
-	public static RSASignatureScheme getInstance(ZModElement key) {
+	public static RSASignatureScheme<ZMod> getInstance(ZModElement key) {
 		if (key == null) {
 			throw new IllegalArgumentException();
 		}
 		return RSASignatureScheme.getInstance(key.getSet());
 	}
 
-	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZModElement key) {
+	public static <MS extends Set> RSASignatureScheme<MS> getInstance(MS messageSpace, ZModElement key) {
 		if (key == null) {
 			throw new IllegalArgumentException();
 		}
 		return RSASignatureScheme.getInstance(messageSpace, key.getSet());
 	}
 
-	public static <MS extends Set, V> RSASignatureScheme
+	public static <MS extends Set, V> RSASignatureScheme<MS>
 		   getInstance(MS messageSpace, ZModElement key, ConvertMethod<V> convertMethod, HashMethod<V> hashMethod) {
 		if (messageSpace == null || key == null || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();

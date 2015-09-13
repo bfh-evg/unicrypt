@@ -41,6 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptException;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
@@ -99,16 +102,9 @@ public class PolynomialSemiRing
 	}
 
 	public PolynomialElement getElement(BitArray coefficients) {
-		//TODO: Change back to protected -> ZModToBinaryEncoder is then not working anymore.
+		//TODO: Change back to protected -> ZModToBinaryPolynomialField is then not working anymore.
 		return this.getElement(Polynomial.<DualisticElement<BigInteger>>getInstance(coefficients,
 																					this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
-	}
-
-	public PolynomialElement getElement(BigInteger... values) {
-		if (values == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.getElement(ProductSet.getInstance(this.getSemiRing(), values.length).getElementFrom(values));
 	}
 
 	public PolynomialElement getElement(DualisticElement... elements) {
@@ -130,6 +126,21 @@ public class PolynomialSemiRing
 		}
 		return this.getElement(Polynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(),
 													  this.getSemiRing().getOneElement()));
+	}
+
+	public PolynomialElement getElementFrom(int... values) throws UniCryptException {
+		BigInteger[] bigIntegers = new BigInteger[values.length];
+		for (int i = 0; i < values.length; i++) {
+			bigIntegers[i] = BigInteger.valueOf(values[i]);
+		}
+		return this.getElementFrom(bigIntegers);
+	}
+
+	public PolynomialElement getElementFrom(BigInteger... values) throws UniCryptException {
+		if (values == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.getElement(ProductSet.getInstance(this.getSemiRing(), values.length).getElementFrom(values));
 	}
 
 	public PolynomialElement getElementByRoots(Tuple roots) {
@@ -271,7 +282,12 @@ public class PolynomialSemiRing
 				DualisticElement[] elements = new DualisticElement[bigIntegers.length];
 				int i = 0;
 				for (BigInteger bigInteger : bigIntegers) {
-					DualisticElement<BigInteger> element = getSemiRing().getElementFrom(bigInteger);
+					DualisticElement<BigInteger> element;
+					try {
+						element = getSemiRing().getElementFrom(bigInteger);
+					} catch (UniCryptException exception) {
+						throw new IllegalArgumentException();
+					}
 					elements[i] = element;
 					i++;
 				}
@@ -285,7 +301,7 @@ public class PolynomialSemiRing
 
 	@Override
 	protected Sequence<PolynomialElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException("Not possible for infinite order.");
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override

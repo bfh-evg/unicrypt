@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
@@ -80,7 +82,7 @@ public class AbstractECElement<V, DE extends DualisticElement<V>, EE extends ECE
 	@Override
 	public DE getX() {
 		if (this.infinity) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		return this.value.getX();
 	}
@@ -89,7 +91,7 @@ public class AbstractECElement<V, DE extends DualisticElement<V>, EE extends ECE
 	@Override
 	public DE getY() {
 		if (this.infinity) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		return this.value.getY();
 	}

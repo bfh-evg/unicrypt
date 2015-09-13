@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,33 +39,29 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.encoder.exceptions;
+package ch.bfh.unicrypt.exception;
 
 /**
  *
- * @author R. Haenni <rolf.haenni@bfh.ch>
+ * @author rolfhaenni
  */
-public class ProbabilisticEncodingException
-	extends RuntimeException {
+public class UniCryptException
+	   extends Exception {
 
-    public ProbabilisticEncodingException() {
-    }
+	private final ErrorCode errorCode;
 
-    public ProbabilisticEncodingException(String message) {
-	super(message);
-    }
+	public UniCryptException(ErrorCode errorCode) {
+		super();
+		this.errorCode = errorCode;
+	}
 
-    public ProbabilisticEncodingException(String message, Throwable cause) {
-	super(message, cause);
-    }
+	public UniCryptException(ErrorCode errorCode, Throwable cause) {
+		super(cause);
+		this.errorCode = errorCode;
+	}
 
-    public ProbabilisticEncodingException(Throwable cause) {
-	super(cause);
-    }
+	public ErrorCode getErrorCode() {
+		return this.errorCode;
+	}
 
-// Only exists >=1.7
-//	public ProbabilisticEncodingException(String message, Throwable cause, boolean enableSuppression,
-//	    boolean writableStackTrace) {
-//		super(message, cause, enableSuppression, writableStackTrace);
-//	}
 }

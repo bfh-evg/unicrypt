@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
@@ -123,7 +125,7 @@ public class PolynomialField
 	@Override
 	public MultiplicativeGroup<Polynomial<? extends DualisticElement<BigInteger>>> getMultiplicativeGroup() {
 		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact 2.229/2.230)
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UniCryptRuntimeException(ErrorCode.NOT_YET_IMPLEMENTED, this);
 	}
 
 	@Override
@@ -161,13 +163,11 @@ public class PolynomialField
 	 */
 	@Override
 	public PolynomialElement oneOver(Element element) {
-
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-
-		if (element.isEquivalent(this.getZeroElement())) {
-			throw new UnsupportedOperationException();
+		if (((PolynomialElement) element).isZero()) {
+			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this, element);
 		}
 
 		Triple euclid = this.extendedEuclidean((PolynomialElement) element, this.irreduciblePolynomial);

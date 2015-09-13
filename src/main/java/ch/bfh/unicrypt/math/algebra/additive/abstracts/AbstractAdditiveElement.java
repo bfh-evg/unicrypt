@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
@@ -83,7 +85,7 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E 
 			AdditiveGroup group = ((AdditiveGroup) this.getSet());
 			return (E) group.subtract(this, element);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, element);
 	}
 
 	@Override
@@ -112,7 +114,7 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E 
 			AdditiveGroup group = ((AdditiveGroup) this.getSet());
 			return (E) group.invert(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override
@@ -121,7 +123,7 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E 
 			AdditiveMonoid monoid = ((AdditiveMonoid) this.getSet());
 			return monoid.isZeroElement(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 }

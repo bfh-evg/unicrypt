@@ -41,13 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
+import ch.bfh.unicrypt.exception.UniCryptException;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
-import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
@@ -69,25 +69,28 @@ public interface SemiRing<V>
 	   extends AdditiveMonoid<V>, MultiplicativeMonoid<V> {
 
 	@Override
-	public <W> DualisticElement<V> getElementFrom(W value, Converter<V, W> converter);
+	public <W> DualisticElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;
 
 	@Override
-	public <W> DualisticElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
+	public <W> DualisticElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
 
 	@Override
-	public <W> DualisticElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+	public <W, X> DualisticElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
 
 	@Override
-	public DualisticElement<V> getElementFrom(long integer);
+	public <W> DualisticElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
 
 	@Override
-	public DualisticElement<V> getElementFrom(BigInteger bigInteger);
+	public DualisticElement<V> getElementFrom(long integer) throws UniCryptException;
 
 	@Override
-	public DualisticElement<V> getElementFrom(ByteArray byteArray);
+	public DualisticElement<V> getElementFrom(BigInteger bigInteger) throws UniCryptException;
 
 	@Override
-	public DualisticElement<V> getElementFrom(String string);
+	public DualisticElement<V> getElementFrom(ByteArray byteArray) throws UniCryptException;
+
+	@Override
+	public DualisticElement<V> getElementFrom(String string) throws UniCryptException;
 
 	@Override
 	public DualisticElement<V> getRandomElement();

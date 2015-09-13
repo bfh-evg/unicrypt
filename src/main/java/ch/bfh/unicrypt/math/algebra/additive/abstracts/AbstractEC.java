@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
+import ch.bfh.unicrypt.exception.UniCryptException;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
@@ -195,12 +196,13 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 					return getZeroElement().getValue();
 				}
 				BigInteger[] result = MathUtil.unpair(value.subtract(MathUtil.ONE));
-				DualisticElement<V> xValue = getFiniteField().getElementFrom(result[0]);
-				DualisticElement<V> yValue = getFiniteField().getElementFrom(result[1]);
-				if (xValue == null || yValue == null) {
-					return null; // no such element
+				try {
+					DualisticElement<V> xValue = getFiniteField().getElementFrom(result[0]);
+					DualisticElement<V> yValue = getFiniteField().getElementFrom(result[1]);
+					return Point.getInstance((D) xValue, (D) yValue);
+				} catch (UniCryptException ex) {
+					throw new IllegalArgumentException();
 				}
-				return Point.getInstance((D) xValue, (D) yValue);
 			}
 		};
 	}
