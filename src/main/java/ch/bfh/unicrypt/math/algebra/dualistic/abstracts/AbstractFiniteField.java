@@ -74,7 +74,6 @@ public abstract class AbstractFiniteField<E extends DualisticElement<V>, M exten
 		return this.characteristic;
 	}
 
-	// The following protected abstract method must be implemented in every direct sub-class.
 	protected abstract BigInteger abstractGetCharacteristic();
 
 }

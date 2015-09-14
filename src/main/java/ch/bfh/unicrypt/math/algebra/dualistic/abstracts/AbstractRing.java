@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -66,7 +68,7 @@ public abstract class AbstractRing<E extends DualisticElement<V>, V>
 	@Override
 	public final E invert(final Element element) {
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		return this.abstractInvert((E) element);
 	}
@@ -103,9 +105,6 @@ public abstract class AbstractRing<E extends DualisticElement<V>, V>
 		return result;
 	}
 
-	//
-	// The following protected abstract method must be implemented in every direct sub-class.
-	//
 	protected abstract E abstractInvert(E element);
 
 }

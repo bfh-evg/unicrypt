@@ -139,7 +139,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	@Override
 	public final <W> W convertTo(Converter<V, W> converter) {
 		if (converter == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, converter);
 		}
 		return converter.convert(this.value);
 	}
@@ -147,7 +147,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	@Override
 	public final <W> W convertTo(ConvertMethod<W> convertMethod, Aggregator<W> aggregator) {
 		if (convertMethod == null || aggregator == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, convertMethod, aggregator);
 		}
 		return this.defaultConvertTo(convertMethod).aggregate(aggregator);
 	}
@@ -155,7 +155,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	@Override
 	public <W, X> X convertTo(ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) {
 		if (convertMethod == null || aggregator == null || finalConverter == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, convertMethod, aggregator, finalConverter);
 		}
 		return finalConverter.convert(this.convertTo(convertMethod, aggregator));
 	}
@@ -163,7 +163,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	@Override
 	public final <W> Tree<W> convertTo(final ConvertMethod<W> convertMethod) {
 		if (convertMethod == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, convertMethod);
 		}
 		return this.defaultConvertTo(convertMethod);
 	}
@@ -191,14 +191,11 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	@Override
 	public <W> ByteArray getHashValue(ConvertMethod<W> convertMethod, HashMethod<W> hashMethod) {
 		if (convertMethod == null || hashMethod == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, convertMethod, hashMethod);
 		}
 		return hashMethod.getHashValue(this.convertTo(convertMethod));
 	}
 
-	/**
-	 * @see Group#apply(Element, Element)
-	 */
 	@Override
 	public final E apply(final Element element) {
 		if (this.set.isSemiGroup()) {
@@ -208,9 +205,6 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#applyInverse(Element, Element)
-	 */
 	@Override
 	public final E applyInverse(final Element element) {
 		if (this.set.isGroup()) {
@@ -220,9 +214,6 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#selfApply(Element, BigInteger)
-	 */
 	@Override
 	public final E selfApply(final BigInteger amount) {
 		if (this.set.isSemiGroup()) {
@@ -232,9 +223,6 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#selfApply(Element, Element)
-	 */
 	@Override
 	public final E selfApply(final Element<BigInteger> amount) {
 		if (this.set.isSemiGroup()) {
@@ -244,9 +232,6 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#selfApply(Element, long)
-	 */
 	@Override
 	public final E selfApply(final long amount) {
 		if (this.set.isSemiGroup()) {
@@ -256,9 +241,6 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#selfApply(Element)
-	 */
 	@Override
 	public final E selfApply() {
 		if (this.set.isSemiGroup()) {
@@ -268,9 +250,6 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#invert(Element)
-	 */
 	@Override
 	public final E invert() {
 		if (this.set.isGroup()) {
@@ -280,9 +259,6 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#isIdentityElement(Element)
-	 */
 	@Override
 	public final boolean isIdentity() {
 		if (this.set.isMonoid()) {
@@ -292,9 +268,6 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see CyclicGroup#isGenerator(Element)
-	 */
 	@Override
 	public final boolean isGenerator() {
 		if (this.set.isCyclic()) {
@@ -307,7 +280,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	@Override
 	public final boolean isEquivalent(final Element other) {
 		if (other == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, other);
 		}
 		if (this == other) {
 			return true;

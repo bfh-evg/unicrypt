@@ -83,9 +83,8 @@ public class ECZModPrime
 			BigInteger y1 = MathUtil.sqrtModPrime(right.getValue(), p);
 			ZModElement y = this.getFiniteField().getElement(y1);
 			return this.abstractContains(x, y);
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	@Override
@@ -101,7 +100,7 @@ public class ECZModPrime
 	}
 
 	@Override
-	public ECZModElement[] getY(ZModElement xValue) {
+	protected ECZModElement[] abstractGetY(ZModElement xValue) {
 		ZModElement y1 = xValue.power(3).add(this.getA().multiply(xValue)).add(this.getB());
 		ZModElement y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y1.getValue(),
 																			   this.getFiniteField().getModulus()));

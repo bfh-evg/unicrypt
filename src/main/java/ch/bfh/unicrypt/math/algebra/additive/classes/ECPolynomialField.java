@@ -79,17 +79,11 @@ public class ECPolynomialField
 		super(finiteField, a, b, givenOrder, coFactor);
 	}
 
-	/**
-	 * <p>
-	 * Checks if an element x is a valid x-value of an element of the elliptic curve. True only if
-	 * trace(x+a+b/x^2)=0.<br>
-	 * Source: Quadratic Equations in Finite Fields of Characteristic 2 Klaus Pommerening</p>
-	 */
 	@Override
 	protected boolean abstractContains(PolynomialElement x) {
+		// True only if trace(x+a+b/x^2)=0 (Klaus Pommerening: "Quadratic Equations in Finite Fields of Characteristic 2")
 		DualisticElement<BigInteger> trace = traceGF2m(x.add(this.getA()).add(this.getB().divide(x.square())), this);
-		boolean e2 = trace.isEquivalent(ZModTwo.ZERO);
-		return e2;
+		return trace.isEquivalent(ZModTwo.ZERO);
 	}
 
 	@Override
@@ -105,14 +99,9 @@ public class ECPolynomialField
 		return new ECPolynomialElement(this, value);
 	}
 
-	/**
-	 * Return the two possible y-coordinates for a given valid x-coordinate The procedure is described in "Mapping an
-	 * Arbitrary Message to an Elliptic Curve when Defined over GF (2 n )" p.172
-	 * <p>
-	 * @param x x-coordinate of point
-	 * @return
-	 */
-	public ECPolynomialElement[] getY(PolynomialElement x) {
+	@Override
+	protected ECPolynomialElement[] abstractGetY(PolynomialElement x) {
+		// described in "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)" p.172
 		PolynomialElement t = x.add(this.getA()).add(this.getB().divide(x.square()));
 		PolynomialElement l = this.getFiniteField().solveQuadradicEquation(t);
 

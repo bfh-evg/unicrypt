@@ -114,8 +114,18 @@ public interface ECElement<V, DE extends DualisticElement<V>>
 	@Override
 	public ECElement<V, DE> invert();
 
+	/**
+	 * Additional convenience getter method to handle to point of infinity
+	 * <p>
+	 * @return
+	 */
 	public DE getY();
 
+	/**
+	 * Additional convenience getter method to handle to point of infinity
+	 * <p>
+	 * @return
+	 */
 	public DE getX();
 
 }

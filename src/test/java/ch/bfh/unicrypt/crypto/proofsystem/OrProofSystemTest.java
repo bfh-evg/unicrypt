@@ -92,10 +92,10 @@ public class OrProofSystemTest {
 		// y3 = f3(x) = 4^x   =>   x=3, y=64
 		// y4 = f4(x) = g4^x
 		// y5 = f5(x1, x2) = g^x1 * h^x2
-		Function f1 = GeneratorFunction.getInstance(this.G_q.getRandomElement());
-		Function f2 = GeneratorFunction.getInstance(this.G_q2.getRandomElement());
+		Function f1 = GeneratorFunction.getInstance(this.G_q.getRandomGenerator());
+		Function f2 = GeneratorFunction.getInstance(this.G_q2.getRandomGenerator());
 		Function f3 = GeneratorFunction.getInstance(this.G_q.getElement(4));
-		Function f4 = GeneratorFunction.getInstance(this.G_q.getRandomElement());
+		Function f4 = GeneratorFunction.getInstance(this.G_q.getRandomGenerator());
 		Function f5 = this.getPedersonCommitmentFunction();
 
 		Function[] functions = new Function[]{f1, f2, f3, f4, f5};

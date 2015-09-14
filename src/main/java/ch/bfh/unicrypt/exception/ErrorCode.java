@@ -48,22 +48,21 @@ package ch.bfh.unicrypt.exception;
 public enum ErrorCode {
 
 	// error codes for checked exceptions
-// error codes for checked exceptions
-// error codes for checked exceptions
-// error codes for checked exceptions
-// error codes for checked exceptions
-// error codes for checked exceptions
-// error codes for checked exceptions
-// error codes for checked exceptions
 	ELEMENT_CONVERSION_FAILURE,
 	// error codes for runtime exceptions
 	DIVISION_BY_ZERO,
 	ELEMENT_CONSTRUCTION_FAILURE,
 	IMPOSSIBLE_STATE,
+	INCOMPATIBLE_ARGUMENTS,
+	INVALID_AMOUNT,
+	INVALID_ELEMENT,
 	INVALID_INDEX,
+	INVALID_LENGTH,
 	INVALID_METHOD_CALL,
 	JAVA_AES_FAILURE,
 	NOT_YET_IMPLEMENTED,
+	NULL_POINTER,
+	OBJECT_NOT_FOUND,
 	PROBABILISTIC_ENCODING_FAILURE,
 	UNSUPPORTED_OPERATION
 

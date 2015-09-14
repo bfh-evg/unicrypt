@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Operator;
@@ -85,10 +87,6 @@ public abstract class AbstractMonoid<E extends Element<V>, V>
 		return element.isEquivalent(this.getIdentityElement());
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
 	protected BigInteger defaultGetOrderLowerBound() {
 		return MathUtil.ONE;
@@ -109,7 +107,7 @@ public abstract class AbstractMonoid<E extends Element<V>, V>
 	@Override
 	protected E defaultSelfApply(E element, BigInteger amount) {
 		if (amount.signum() < 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, amount);
 		}
 		if (amount.signum() == 0) {
 			return this.getIdentityElement();
@@ -125,9 +123,6 @@ public abstract class AbstractMonoid<E extends Element<V>, V>
 		return super.defaultMultiSelfApply(elements, amounts);
 	}
 
-	//
-	// The following protected abstract method must be implemented in every direct sub-class.
-	//
 	protected abstract E abstractGetIdentityElement();
 
 }

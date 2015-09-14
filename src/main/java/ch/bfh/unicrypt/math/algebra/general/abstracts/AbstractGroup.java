@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
@@ -69,7 +71,7 @@ public abstract class AbstractGroup<E extends Element<V>, V>
 	@Override
 	public final E invert(final Element element) {
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		return this.abstractInvert((E) element);
 	}
@@ -96,9 +98,6 @@ public abstract class AbstractGroup<E extends Element<V>, V>
 		return result;
 	}
 
-	//
-	// The following protected abstract method must be implemented in every direct sub-class.
-	//
 	protected abstract E abstractInvert(E element);
 
 }

@@ -60,10 +60,8 @@ public class AbstractECElement<V, DE extends DualisticElement<V>, EE extends ECE
 	   extends AbstractAdditiveElement<EC<V, DE>, EE, Point<DE>>
 	   implements ECElement<V, DE> {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
+
 	private final boolean infinity;
 
 	// the main constructor
@@ -78,7 +76,6 @@ public class AbstractECElement<V, DE extends DualisticElement<V>, EE extends ECE
 		this.infinity = true;
 	}
 
-	// additional convenience getter method to handle to point of infinity
 	@Override
 	public DE getX() {
 		if (this.infinity) {
@@ -87,7 +84,6 @@ public class AbstractECElement<V, DE extends DualisticElement<V>, EE extends ECE
 		return this.value.getX();
 	}
 
-	// additional convenience getter method to handle to point of infinity
 	@Override
 	public DE getY() {
 		if (this.infinity) {

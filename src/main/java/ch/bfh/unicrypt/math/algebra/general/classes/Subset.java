@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
@@ -134,7 +136,7 @@ public class Subset
 					}
 					i++;
 				}
-				throw new UnknownError();
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 			}
 
 		});

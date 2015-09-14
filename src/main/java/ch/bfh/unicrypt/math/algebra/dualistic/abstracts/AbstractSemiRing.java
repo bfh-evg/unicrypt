@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
@@ -74,7 +76,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	@Override
 	public E multiply(Element element1, Element element2) {
 		if (!this.contains(element1) || !this.contains(element2)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element1, element2);
 		}
 		return this.abstractMultiply((E) element1, (E) element2);
 	}
@@ -82,7 +84,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	@Override
 	public E multiply(Element... elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
 		}
 		return this.defaultMultiply(Sequence.getInstance(elements));
 	}
@@ -90,7 +92,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	@Override
 	public E multiply(ImmutableArray<Element> elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
 		}
 		return this.defaultMultiply(Sequence.getInstance(elements));
 	}
@@ -98,15 +100,18 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	@Override
 	public E multiply(Sequence<Element> elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
 		}
 		return this.defaultMultiply(elements);
 	}
 
 	@Override
 	public E power(Element element, BigInteger amount) {
-		if (!this.contains(element) || (amount == null)) {
-			throw new IllegalArgumentException();
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, amount);
 		}
 		return this.defaultPower((E) element, amount);
 	}
@@ -114,7 +119,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	@Override
 	public E power(Element element, Element<BigInteger> amount) {
 		if (amount == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
 		}
 		return this.power(element, amount.getValue());
 	}
@@ -131,8 +136,11 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 
 	@Override
 	public E productOfPowers(Element[] elements, BigInteger[] amounts) {
-		if ((elements == null) || (amounts == null) || (elements.length != amounts.length)) {
-			throw new IllegalArgumentException();
+		if (elements == null || amounts == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements, amounts);
+		}
+		if (elements.length != amounts.length) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, this, elements, amounts);
 		}
 		return this.defaultProductOfPowers(elements, amounts);
 	}
@@ -161,9 +169,10 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 		}, this.getOneElement());
 	}
 
+	// this method is overridden in AbstractField
 	protected E defaultPower(E element, BigInteger amount) {
 		if (amount.signum() < 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, amount);
 		}
 		if (amount.signum() == 0) {
 			return this.getOneElement();
@@ -198,10 +207,6 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 		return MathUtil.TWO;
 	}
 
-	//
-	// The following protected abstract method must be implemented in every
-	// direct sub-class.
-	//
 	protected abstract E abstractMultiply(E element1, E element2);
 
 	protected abstract E abstractGetOne();

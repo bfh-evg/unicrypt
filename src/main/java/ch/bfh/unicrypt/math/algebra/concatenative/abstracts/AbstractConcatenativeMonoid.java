@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
@@ -83,13 +85,14 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 
 	@Override
 	public final E getRandomElement(int length, RandomByteSequence randomByteSequence) {
-		if (length < 0 || length % this.getBlockLength() != 0 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
+		if (randomByteSequence == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, randomByteSequence);
+		}
+		if (length < 0 || length % this.getBlockLength() != 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, length);
 		}
 		return this.abstractGetRandomElement(length, randomByteSequence);
 	}
-
-	protected abstract E abstractGetRandomElement(int length, RandomByteSequence randomByteSequence);
 
 	@Override
 	public final E concatenate(final Element element1, final Element element2) {
@@ -145,5 +148,7 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 	public boolean isEmptyElement(Element element) {
 		return this.isIdentityElement(element);
 	}
+
+	protected abstract E abstractGetRandomElement(int length, RandomByteSequence randomByteSequence);
 
 }

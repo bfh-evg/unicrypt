@@ -64,4 +64,9 @@ public class UniCryptException
 		return this.errorCode;
 	}
 
+	@Override
+	public String toString() {
+		return "UniCryptException[" + errorCode + ']';
+	}
+
 }

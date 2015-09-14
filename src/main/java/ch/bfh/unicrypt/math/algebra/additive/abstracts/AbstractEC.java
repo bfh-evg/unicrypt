@@ -41,7 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
 import ch.bfh.unicrypt.exception.UniCryptException;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
@@ -71,10 +73,8 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 	   extends AbstractAdditiveCyclicGroup<EE, Point<D>>
 	   implements EC<V, D> {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
+
 	private final F finiteField;
 	private final D a, b;
 	private final EE givenGenerator;
@@ -132,36 +132,42 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 	}
 
 	@Override
-	public final boolean contains(D xValue) {
-		if (xValue == null || !this.getFiniteField().contains(xValue)) {
-			throw new IllegalArgumentException();
+	public EE[] getY(D xValue) {
+		if (!this.contains(xValue)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, xValue);
 		}
-		return this.abstractContains((D) xValue);
+		return this.abstractGetY(xValue);
 	}
 
-	protected abstract boolean abstractContains(D xValue);
+	@Override
+	public final boolean contains(D xValue) {
+		if (xValue == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, xValue);
+		}
+		if (!this.getFiniteField().contains(xValue)) {
+			return false;
+		}
+		return this.abstractContains(xValue);
+	}
 
 	@Override
 	public final boolean contains(D xValue, D yValue) {
-		if (xValue == null || yValue == null || !this.getFiniteField().contains(xValue)
-			   || !this.getFiniteField().contains(yValue)) {
-			throw new IllegalArgumentException();
+		if (xValue == null || yValue == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, xValue, yValue);
+		}
+		if (!this.getFiniteField().contains(xValue) || !this.getFiniteField().contains(yValue)) {
+			return false;
 		}
 		return this.abstractContains((D) xValue, (D) yValue);
 	}
 
-	protected abstract boolean abstractContains(D xValue, D yValue);
-
 	@Override
 	public final EE getElement(D xValue, D yValue) {
 		if (!this.contains(xValue, yValue)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, xValue, yValue);
 		}
 		return this.abstractGetElement(Point.getInstance((D) xValue, (D) yValue));
 	}
-
-	@Override
-	public abstract EE[] getY(D xValue);
 
 	@Override
 	protected BigInteger abstractGetOrder() {
@@ -176,11 +182,6 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 	@Override
 	protected Converter<Point<D>, BigInteger> abstractGetBigIntegerConverter() {
 		return new AbstractBigIntegerConverter<Point<D>>(null) { // class parameter not needed
-
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected BigInteger abstractConvert(Point<D> point) {
@@ -201,7 +202,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 					DualisticElement<V> yValue = getFiniteField().getElementFrom(result[1]);
 					return Point.getInstance((D) xValue, (D) yValue);
 				} catch (UniCryptException ex) {
-					throw new IllegalArgumentException();
+					throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONVERSION_FAILURE, this, value, result);
 				}
 			}
 		};
@@ -298,17 +299,18 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 		return true;
 	}
 
-	/**
-	 * Returns random element with coFactorout knowing a generator of tcoFactore group.
-	 * <p>
-	 * @param randomByteSequence The given random byte sequence
-	 * @return The random element
-	 */
-	protected abstract Sequence<EE> abstractGetRandomElementsWithoutGenerator(RandomByteSequence randomByteSequence);
-
 	@Override
 	protected String defaultToStringContent() {
 		return this.getA().getValue() + "," + this.getB().getValue();
 	}
+
+	protected abstract EE[] abstractGetY(D xValue);
+
+	protected abstract boolean abstractContains(D xValue);
+
+	protected abstract boolean abstractContains(D xValue, D yValue);
+
+	// Returns random element with coFactorout knowing a generator of tcoFactore group.
+	protected abstract Sequence<EE> abstractGetRandomElementsWithoutGenerator(RandomByteSequence randomByteSequence);
 
 }

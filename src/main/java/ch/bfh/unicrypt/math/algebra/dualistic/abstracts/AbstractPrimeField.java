@@ -91,7 +91,7 @@ public abstract class AbstractPrimeField<E extends DualisticElement<V>, M extend
 	@Override
 	public E oneOver(Element element) {
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		if (((E) element).isZero()) {
 			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this, element);
@@ -99,7 +99,6 @@ public abstract class AbstractPrimeField<E extends DualisticElement<V>, M extend
 		return this.abstractOneOver((E) element);
 	}
 
-	// The following protected abstract methods must be implemented in every direct sub-class.
 	protected abstract E abstractOneOver(E element);
 
 	protected abstract M abstractGetMultiplicativeGroup();

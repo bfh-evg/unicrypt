@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
@@ -86,7 +88,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 	@Override
 	public final Sequence<E> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, randomByteSequence);
 		}
 		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
@@ -109,7 +111,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 	@Override
 	public final Sequence<E> getRandomGenerators(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, randomByteSequence);
 		}
 		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
@@ -117,7 +119,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 	@Override
 	public final boolean isGenerator(Element element) {
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		return this.abstractIsGenerator((E) element);
 	}

@@ -253,7 +253,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final boolean contains(V value) {
 		if (value == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value);
 		}
 		return this.abstractContains(value);
 	}
@@ -261,7 +261,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final boolean contains(Element<?> element) {
 		if (element == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, element);
 		}
 		if (!this.valueClass.isInstance(element.getValue())) {
 			return false;
@@ -277,7 +277,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final E getRandomElement(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, randomByteSequence);
 		}
 		return this.getRandomElements(randomByteSequence).get();
 	}
@@ -290,7 +290,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final Sequence<E> getRandomElements(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, randomByteSequence);
 		}
 		return this.abstractGetRandomElements(randomByteSequence);
 	}
@@ -298,7 +298,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final <W> E getElementFrom(W value, Converter<V, W> converter) throws UniCryptException {
 		if (value == null || converter == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value, converter);
 		}
 		try {
 			V convertedValue = converter.reconvert(value);
@@ -311,7 +311,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final <W> E getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException {
 		if (value == null || convertMethod == null || aggregator == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value, convertMethod, aggregator);
 		}
 		try {
 			Tree<W> tree = aggregator.disaggregate(value);
@@ -324,7 +324,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public <W, X> E getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException {
 		if (value == null || convertMethod == null || aggregator == null || finalConverter == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value, convertMethod, aggregator, finalConverter);
 		}
 		try {
 			Tree<W> tree = aggregator.disaggregate(finalConverter.reconvert(value));
@@ -338,7 +338,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final <W> E getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException {
 		if (tree == null || convertMethod == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, tree, convertMethod);
 		}
 		return this.defaultGetElementFrom(tree, convertMethod);
 	}
@@ -351,7 +351,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final E getElementFrom(BigInteger value) throws UniCryptException {
 		if (value == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value);
 		}
 		if (this.isProduct()) {
 			return this.getElementFrom(value, ConvertMethod.getInstance(BigInteger.class), BigIntegerAggregator.getInstance());
@@ -364,7 +364,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final E getElementFrom(ByteArray value) throws UniCryptException {
 		if (value == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value);
 		}
 		if (this.isProduct()) {
 			return this.getElementFrom(value, ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
@@ -377,7 +377,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final E getElementFrom(String value) throws UniCryptException {
 		if (value == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value);
 		}
 		if (this.isProduct()) {
 			return this.getElementFrom(value, ConvertMethod.getInstance(String.class), StringAggregator.getInstance());
@@ -389,7 +389,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final boolean isEquivalent(final Set<?> other) {
 		if (other == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, other);
 		}
 		if (this == other) {
 			return true;
@@ -413,7 +413,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final Sequence<E> getElements(final long n) {
 		if (n < 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, n);
 		}
 		return this.getElements().limit(n);
 	}
@@ -454,7 +454,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 			} else if (outputClass == ByteArray.class) {
 				converter = (Converter<V, W>) this.getByteArrayConverter();
 			} else {
-				throw new IllegalArgumentException();
+				throw new UniCryptRuntimeException(ErrorCode.OBJECT_NOT_FOUND, this, convertMethod);
 			}
 		}
 		return converter;
@@ -507,7 +507,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	// this method is overridden in ProductSet
 	protected <W> E defaultGetElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException {
 		if (!tree.isLeaf()) {
-			throw new IllegalArgumentException();
+			throw new UniCryptException(ErrorCode.ELEMENT_CONVERSION_FAILURE);
 		}
 		W value = ((Leaf<W>) tree).getValue();
 		Converter<V, W> converter = this.getConverter(convertMethod);

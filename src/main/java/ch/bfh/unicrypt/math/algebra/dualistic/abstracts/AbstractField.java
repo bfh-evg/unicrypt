@@ -86,7 +86,7 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 	@Override
 	public final E oneOver(Element element) {
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		if (((E) element).isZero()) {
 			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this, element);

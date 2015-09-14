@@ -49,7 +49,6 @@ import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGr
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
 
 /**
@@ -70,41 +69,26 @@ public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGr
 		super(semiGroup, value);
 	}
 
-	/**
-	 * @see Group#apply(Element, Element)
-	 */
 	@Override
 	public final E concatenate(final Element element) {
 		return (E) this.getSet().concatenate(this, element);
 	}
 
-	/**
-	 * @see Group#T(Element, BigInteger)
-	 */
 	@Override
 	public final E selfConcatenate(final BigInteger amount) {
 		return (E) this.getSet().selfConcatenate(this, amount);
 	}
 
-	/**
-	 * @see Group#selfApply(Element, Element)
-	 */
 	@Override
 	public final E selfConcatenate(final Element<BigInteger> amount) {
 		return (E) this.getSet().selfConcatenate(this, amount);
 	}
 
-	/**
-	 * @see Group#selfApply(Element, long)
-	 */
 	@Override
 	public final E selfConcatenate(final long amount) {
 		return (E) this.getSet().selfConcatenate(this, amount);
 	}
 
-	/**
-	 * @see Group#selfApply(Element)
-	 */
 	@Override
 	public final E selfConcatenate() {
 		return (E) this.getSet().selfConcatenate(this);
