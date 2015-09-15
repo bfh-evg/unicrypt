@@ -72,15 +72,11 @@ public final class SharedDomainFunction
 	 * @param domain
 	 * @param coDomain
 	 * @param functions
-	 * @throws IllegalArgumentException if {@code functions} is null or contains null
 	 */
 	protected SharedDomainFunction(final Set domain, ProductSet coDomain, DenseArray<Function> functions) {
 		super(domain, coDomain, functions);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Tuple abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
 		final Element[] elements = new Element[this.getArity()];
@@ -100,9 +96,6 @@ public final class SharedDomainFunction
 		return SharedDomainFunction.class;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	public static SharedDomainFunction getInstance(DenseArray<Function> functions) {
 		if (functions == null || functions.getLength() == 0) {
 			throw new IllegalArgumentException();

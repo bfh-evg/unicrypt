@@ -49,9 +49,6 @@ import java.math.BigInteger;
 public class ECZModElement
 	   extends AbstractECElement<BigInteger, ZModElement, ECZModElement> {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 4590767773320124829L;
 
 	protected ECZModElement(ECZModPrime ecGroup) {

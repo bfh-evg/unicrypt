@@ -74,9 +74,6 @@ public class TimesFunction
 		super(domain, coDomain);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected AdditiveElement abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
 		AdditiveElement element1 = (AdditiveElement) element.getFirst();
@@ -84,16 +81,12 @@ public class TimesFunction
 		return element1.times(element2.getValue());
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is a special constructor, where the group of the second parameter is selected automatically from the given
 	 * group.
 	 * <p/>
 	 * @param additiveSemiGroup The underlying group
 	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup) {
 		if (additiveSemiGroup == null) {
@@ -113,8 +106,6 @@ public class TimesFunction
 	 * @param additiveSemiGroup The underlying group
 	 * @param amountSet
 	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
-	 * @throws IllegalArgumentException if {@code amountGroup} is negative
 	 */
 	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup,
 		   final Set<BigInteger> amountSet) {

@@ -161,7 +161,7 @@ public class FiniteByteArraySet
 
 	public static FiniteByteArraySet getInstance(final int minLength, final int maxLength) {
 		if (minLength < 0 || maxLength < minLength) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, minLength, maxLength);
 		}
 		if (minLength == maxLength) {
 			return FixedByteArraySet.getInstance(minLength);
@@ -174,8 +174,11 @@ public class FiniteByteArraySet
 	}
 
 	public static FiniteByteArraySet getInstance(final BigInteger minOrder, int minLength) {
-		if (minOrder == null || minOrder.signum() < 0 || minLength < 0) {
-			throw new IllegalArgumentException();
+		if (minOrder == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, minOrder);
+		}
+		if (minOrder.signum() < 0 || minLength < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, minOrder, minLength);
 		}
 		int maxLength = minLength;
 		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);

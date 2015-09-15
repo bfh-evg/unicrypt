@@ -63,9 +63,6 @@ import java.math.BigInteger;
 public class ECPolynomialField
 	   extends AbstractEC<PolynomialField, Polynomial<? extends DualisticElement<BigInteger>>, PolynomialElement, ECPolynomialElement> {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public ECPolynomialField(PolynomialField finiteField, PolynomialElement a,
@@ -211,9 +208,6 @@ public class ECPolynomialField
 		return result;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * Returns an elliptic curve over F2m y²+yx=x³+ax²+b if parameters are valid.
 	 * <p>
@@ -224,14 +218,13 @@ public class ECPolynomialField
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
 	 */
-	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b,
-		   BigInteger givenOrder, BigInteger coFactor) {
+	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, BigInteger givenOrder, BigInteger coFactor) {
 		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, givenOrder, coFactor);
 
 		if (newInstance.isValid()) {
 			return newInstance;
 		} else {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, givenOrder, coFactor);
 		}
 	}
 
@@ -254,7 +247,7 @@ public class ECPolynomialField
 		if (newInstance.isValid()) {
 			return newInstance;
 		} else {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, gx, gy, givenOrder, coFactor);
 		}
 	}
 

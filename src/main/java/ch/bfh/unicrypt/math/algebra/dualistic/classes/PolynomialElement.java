@@ -60,16 +60,17 @@ public class PolynomialElement
 
 	private static final long serialVersionUID = 1L;
 
-	protected PolynomialElement(final PolynomialSemiRing semiRing,
-		   Polynomial<? extends DualisticElement<BigInteger>> polynomial) {
+	protected PolynomialElement(final PolynomialSemiRing semiRing, Polynomial<? extends DualisticElement<BigInteger>> polynomial) {
 		super(semiRing, polynomial);
 	}
 
 	public DualisticElement<BigInteger> evaluate(DualisticElement element) {
-		if (element == null || !this.getSet().getSemiRing().contains(element)) {
-			throw new IllegalArgumentException();
+		if (element == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, element);
 		}
-
+		if (!this.getSet().getSemiRing().contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, element);
+		}
 		if (this.getSet().isBinary()) {
 			SemiRing semiRing = this.getSet().getSemiRing();
 			if (semiRing.getZeroElement().isEquivalent(element)) {
@@ -79,8 +80,7 @@ public class PolynomialElement
 					   ? semiRing.getZeroElement() : semiRing.getOneElement();
 			}
 		}
-
-		// TBD! (n*x^2 < q*x^3    with x = log(modulus), n = order of poly and q = number of non-zero terms in poly)
+		// TBD! (n*x^2 < q*x^3 with x = log(modulus), n = order of poly and q = number of non-zero terms in poly)
 		int n = this.value.getDegree();
 		int q = this.value.countCoefficients();
 		if (n > 0 && ((double) q / n) < 0.01) {
@@ -103,8 +103,11 @@ public class PolynomialElement
 	}
 
 	public Pair getPoint(DualisticElement element) {
-		if (element == null || !this.getSet().getSemiRing().contains(element)) {
-			throw new IllegalArgumentException();
+		if (element == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, element);
+		}
+		if (!this.getSet().getSemiRing().contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, element);
 		}
 		return Pair.getInstance(element, this.evaluate(element));
 	}
@@ -116,18 +119,21 @@ public class PolynomialElement
 		return ((PolynomialRing) this.getSet()).isIrreduciblePolynomial(this);
 	}
 
-	public PolynomialElement reduce(DualisticElement<BigInteger> value) {
+	public PolynomialElement reduce(DualisticElement<BigInteger> element) {
 		if (!this.getSet().getSemiRing().isField()) {
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
-		if (value == null || !this.getSet().getSemiRing().contains(value)) {
-			throw new IllegalArgumentException();
+		if (element == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, element);
+		}
+		if (!this.getSet().getSemiRing().contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, element);
 		}
 		HashMap map = new HashMap();
 		for (int i = 0; i <= this.value.getDegree(); i++) {
 			DualisticElement<BigInteger> c = this.value.getCoefficient(i);
 			if (!c.isZero()) {
-				map.put(i, c.divide(value));
+				map.put(i, c.divide(element));
 			}
 		}
 		return this.getSet().getElementUnchecked(map);

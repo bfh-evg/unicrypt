@@ -60,9 +60,15 @@ public class ZModPrime
 	   implements PrimeField<BigInteger> {
 
 	private static final long serialVersionUID = 1L;
+	private static final Map<BigInteger, ZModPrime> instances = new HashMap<>();
 
 	protected ZModPrime(Prime prime) {
 		super(prime.getValue());
+	}
+
+	@Override
+	public BigInteger getCharacteristic() {
+		return this.getOrder();
 	}
 
 	@Override
@@ -78,7 +84,7 @@ public class ZModPrime
 	@Override
 	public ZModElement oneOver(Element element) {
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		if (((ZModElement) element).isZero()) {
 			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this);
@@ -96,23 +102,6 @@ public class ZModPrime
 		return ZStarModPrime.getInstance(this.getOrder());
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static final Map<BigInteger, ZModPrime> instances = new HashMap<>();
-
-	public static ZModPrime getInstance(final Prime modulus) {
-		if (modulus == null) {
-			throw new IllegalArgumentException();
-		}
-		ZModPrime instance = ZModPrime.instances.get(modulus.getValue());
-		if (instance == null) {
-			instance = new ZModPrime(modulus);
-			ZModPrime.instances.put(modulus.getValue(), instance);
-		}
-		return instance;
-	}
-
 	public static ZModPrime getInstance(final long modulus) {
 		return ZModPrime.getInstance(BigInteger.valueOf(modulus));
 	}
@@ -125,9 +114,16 @@ public class ZModPrime
 		return ZModPrime.getInstance(Prime.getFirstInstance(bitLength));
 	}
 
-	@Override
-	public BigInteger getCharacteristic() {
-		return this.getOrder();
+	public static ZModPrime getInstance(final Prime modulus) {
+		if (modulus == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+		}
+		ZModPrime instance = ZModPrime.instances.get(modulus.getValue());
+		if (instance == null) {
+			instance = new ZModPrime(modulus);
+			ZModPrime.instances.put(modulus.getValue(), instance);
+		}
+		return instance;
 	}
 
 }

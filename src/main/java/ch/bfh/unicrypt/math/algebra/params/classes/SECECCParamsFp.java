@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.params.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
@@ -173,8 +175,7 @@ public enum SECECCParamsFp
 				return parameter;
 			}
 		}
-
-		throw new IllegalArgumentException("No Enum with name: " + s);
+		throw new UniCryptRuntimeException(ErrorCode.OBJECT_NOT_FOUND, s);
 	}
 
 }

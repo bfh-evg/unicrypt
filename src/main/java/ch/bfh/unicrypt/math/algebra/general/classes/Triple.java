@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
@@ -67,7 +69,7 @@ public class Triple
 
 	public static Triple getInstance(Element first, Element second, Element third) {
 		if (first == null || second == null || third == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, first, second, third);
 		}
 		DenseArray<Element> elements = DenseArray.getInstance(first, second, third);
 		return new Triple(ProductSet.getInstance(first.getSet(), second.getSet(), third.getSet()), elements);

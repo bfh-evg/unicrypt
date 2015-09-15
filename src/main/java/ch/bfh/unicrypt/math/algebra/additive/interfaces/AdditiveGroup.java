@@ -62,7 +62,6 @@ public interface AdditiveGroup<V>
 	 * @param element1 the same as in {@link Group#applyInverse(Element, Element)}
 	 * @param element2 the same as in {@link Group#applyInverse(Element, Element)}
 	 * @return the same as in {@link Group#applyInverse(Element, Element)}
-	 * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the group
 	 */
 	public AdditiveElement<V> subtract(Element element1, Element element2);
 

@@ -83,7 +83,7 @@ public class OneOverFunction
 	 * This is the default constructor for this class. It creates an invert function for a given group.
 	 * <p/>
 	 * @param multiplicativeGroup The given Group
-	 * @throws IllegalArgumentException if the group is null
+	 * @return
 	 */
 	public static OneOverFunction getInstance(final MultiplicativeGroup multiplicativeGroup) {
 		return new OneOverFunction(multiplicativeGroup, multiplicativeGroup);

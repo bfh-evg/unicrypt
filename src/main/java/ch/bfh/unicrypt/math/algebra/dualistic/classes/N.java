@@ -68,8 +68,9 @@ public class N
 	   extends AbstractSemiRing<NElement, BigInteger> {
 
 	private static final long serialVersionUID = 1L;
+	private static N instance;
 
-	public N() {
+	protected N() {
 		super(BigInteger.class);
 	}
 
@@ -81,19 +82,11 @@ public class N
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
 	protected NElement defaultSelfApply(NElement element, BigInteger amount) {
 		return this.abstractGetElement(element.getValue().multiply(amount));
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected NElement abstractApply(NElement element1, NElement element2) {
 		return this.abstractGetElement(element1.getValue().add(element2.getValue()));
@@ -148,11 +141,6 @@ public class N
 	protected int abstractHashCode() {
 		return 1;
 	}
-
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static N instance;
 
 	/**
 	 * Returns the singleton object of this class.

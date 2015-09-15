@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
@@ -83,7 +85,7 @@ public class FixedByteArraySet
 
 	public static FixedByteArraySet getInstance(final int length) {
 		if (length < 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, length);
 		}
 		FixedByteArraySet instance = FixedByteArraySet.instances.get(Integer.valueOf(length));
 		if (instance == null) {
@@ -94,8 +96,11 @@ public class FixedByteArraySet
 	}
 
 	public static FixedByteArraySet getInstance(final BigInteger minOrder) {
-		if (minOrder == null || minOrder.signum() < 0) {
-			throw new IllegalArgumentException();
+		if (minOrder == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, minOrder);
+		}
+		if (minOrder.signum() < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, minOrder);
 		}
 		int length = 0;
 		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);

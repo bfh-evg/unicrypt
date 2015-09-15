@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
@@ -156,10 +158,6 @@ public class GStarMod
 		return this.getModulus().toString() + "," + this.getOrder().toString();
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected boolean abstractContains(final BigInteger value) {
 		return value.signum() > 0
@@ -255,9 +253,6 @@ public class GStarMod
 		return hash;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the general static factory method for this class.
 	 * <p>
@@ -265,13 +260,11 @@ public class GStarMod
 	 * @param moduloFactorization
 	 * @param orderFactorization
 	 * @return
-	 * @throws IllegalArgumentException if {@code moduloFactorization} or {@code orderFactorization} is null
-	 * @throws IllegalArgumentException if the value of {@code orderFactorization} does not divide phi(n)
 	 */
 	public static GStarMod getInstance(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
 		GStarMod group = new GStarMod(moduloFactorization, orderFactorization);
 		if (!group.getOrder().mod(orderFactorization.getValue()).equals(MathUtil.ZERO)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, moduloFactorization, orderFactorization);
 		}
 		return group;
 	}

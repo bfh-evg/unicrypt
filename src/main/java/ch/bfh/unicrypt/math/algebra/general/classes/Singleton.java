@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
@@ -59,7 +61,7 @@ public class Singleton
 
 	public static Singleton getInstance(Element first) {
 		if (first == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, first);
 		}
 		DenseArray<Element> elements = DenseArray.getInstance(first);
 		return new Singleton(ProductSet.getInstance(first.getSet()), elements);

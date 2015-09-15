@@ -83,7 +83,7 @@ public class ZStarModPrime
 	@Override
 	public final Sequence<ZStarModElement> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
 		}
 		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
@@ -106,7 +106,7 @@ public class ZStarModPrime
 	@Override
 	public final Sequence<ZStarModElement> getRandomGenerators(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
 		}
 		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
@@ -130,7 +130,7 @@ public class ZStarModPrime
 
 	public static ZStarModPrime getInstance(final Prime modulus) {
 		if (modulus == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
 		}
 		ZStarModPrime instance = ZStarModPrime.instances.get(modulus.getValue());
 		if (instance == null) {

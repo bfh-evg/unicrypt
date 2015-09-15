@@ -252,7 +252,7 @@ public enum SECECCParamsF2m
 				return parameter;
 			}
 		}
-		throw new IllegalArgumentException();
+		throw new UniCryptRuntimeException(ErrorCode.OBJECT_NOT_FOUND, s);
 	}
 
 }

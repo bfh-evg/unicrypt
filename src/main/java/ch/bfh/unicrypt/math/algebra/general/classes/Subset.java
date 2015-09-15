@@ -108,7 +108,7 @@ public class Subset
 				return element;
 			}
 		}
-		throw new IllegalArgumentException();
+		throw new UniCryptRuntimeException(ErrorCode.OBJECT_NOT_FOUND, this, value);
 	}
 
 	@Override
@@ -158,13 +158,16 @@ public class Subset
 
 	public static Subset getInstance(Set superSet, Element... elements) {
 		if (superSet == null || elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, superSet, elements);
 		}
 		// A LinkedHashSet retains the order
 		LinkedHashSet<Element<Object>> hashSet = new LinkedHashSet<>();
 		for (Element element : elements) {
-			if (element == null || !superSet.contains(element)) {
-				throw new IllegalArgumentException();
+			if (element == null) {
+				throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, element);
+			}
+			if (!superSet.contains(element)) {
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, superSet, element);
 			}
 			hashSet.add(element);
 		}

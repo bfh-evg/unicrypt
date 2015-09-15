@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
 import ch.bfh.unicrypt.exception.UniCryptException;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
@@ -98,7 +99,7 @@ public class PolynomialSemiRingTest {
 		try {
 			PolynomialElement p = ring7.getElement(Tuple.getInstance(Z.getInstance().getElement(2), ZMod.getInstance(7).getElement(3)));
 			fail();
-		} catch (IllegalArgumentException e) {
+		} catch (UniCryptRuntimeException e) {
 		}
 
 		PolynomialElement p = ring0.getElement(Tuple.getInstance(z.getElement(0), z.getElement(1), z.getElement(2), z.getElement(3)));

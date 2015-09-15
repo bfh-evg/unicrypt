@@ -41,7 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
 import ch.bfh.unicrypt.exception.UniCryptException;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
@@ -95,7 +97,7 @@ public class ProductSet
 
 	public final Tuple getElementFrom(final int... values) throws UniCryptException {
 		if (values == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, values);
 		}
 		BigInteger[] bigIntegers = new BigInteger[values.length];
 		for (int i = 0; i < values.length; i++) {
@@ -105,8 +107,11 @@ public class ProductSet
 	}
 
 	public final Tuple getElementFrom(BigInteger... values) throws UniCryptException {
-		if (values == null || values.length != this.getLength()) {
-			throw new IllegalArgumentException();
+		if (values == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, values);
+		}
+		if (values.length != this.getLength()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, values);
 		}
 		Element[] elements = new Element[this.getLength()];
 		for (int i : this.getAllIndices()) {
@@ -116,8 +121,11 @@ public class ProductSet
 	}
 
 	public final Tuple getElementFrom(ByteArray... values) throws UniCryptException {
-		if (values == null || values.length != this.getLength()) {
-			throw new IllegalArgumentException();
+		if (values == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, values);
+		}
+		if (values.length != this.getLength()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, values);
 		}
 		Element[] elements = new Element[this.getLength()];
 		for (int i : this.getAllIndices()) {
@@ -127,8 +135,11 @@ public class ProductSet
 	}
 
 	public final Tuple getElementFrom(String... values) throws UniCryptException {
-		if (values == null || values.length != this.getLength()) {
-			throw new IllegalArgumentException();
+		if (values == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, values);
+		}
+		if (values.length != this.getLength()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, values);
 		}
 		Element[] elements = new Element[this.getLength()];
 		for (int i : this.getAllIndices()) {
@@ -205,7 +216,7 @@ public class ProductSet
 				try {
 					return getElementFrom(value).getValue();
 				} catch (UniCryptException exception) {
-					throw new IllegalArgumentException();
+					throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONVERSION_FAILURE, exception, value);
 				}
 			}
 		};
@@ -276,11 +287,11 @@ public class ProductSet
 	@Override
 	protected <W> Tuple defaultGetElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException {
 		if (tree.isLeaf()) {
-			throw new IllegalArgumentException();
+			throw new UniCryptException(ErrorCode.ELEMENT_CONVERSION_FAILURE);
 		}
 		Node<W> node = (Node<W>) tree;
 		if (this.getLength() != node.getSize()) {
-			throw new IllegalArgumentException();
+			throw new UniCryptException(ErrorCode.ELEMENT_CONVERSION_FAILURE);
 		}
 		Element[] elements = new Element[this.getLength()];
 		int i = 0;
@@ -377,14 +388,14 @@ public class ProductSet
 	@Override
 	public Set getAt(int... indices) {
 		if (indices == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, indices);
 		}
 		Set set = this;
 		for (final int index : indices) {
 			if (set.isProduct()) {
 				set = ((ProductSet) set).getAt(index);
 			} else {
-				throw new IllegalArgumentException();
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, indices, index);
 			}
 		}
 		return set;
@@ -576,7 +587,7 @@ public class ProductSet
 
 	public static ProductSet getInstance(DenseArray<Set> sets) {
 		if (sets == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, sets);
 		}
 		boolean isSemiGroup = true;
 		boolean isMonoid = true;

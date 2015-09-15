@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.factorization.PrimePair;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrimePair;
@@ -55,7 +57,9 @@ import java.util.Map;
 public class ZModPrimePair
 	   extends ZMod {
 
-	private PrimePair primePair;
+	private static final Map<BigInteger, ZModPrimePair> instances = new HashMap<>();
+
+	private final PrimePair primePair;
 
 	protected ZModPrimePair(PrimePair primePair) {
 		super(primePair.getValue());
@@ -64,14 +68,6 @@ public class ZModPrimePair
 
 	public PrimePair getPrimePair() {
 		return this.primePair;
-	}
-
-	public BigInteger getFirstPrime() {
-		return this.getPrimePair().getSmallerPrimeFactor();
-	}
-
-	public BigInteger getSecondPrime() {
-		return this.getPrimePair().getLargerPrimeFactor();
 	}
 
 	@Override
@@ -84,20 +80,6 @@ public class ZModPrimePair
 		return ZStarModPrimePair.getInstance(this.getPrimePair());
 	}
 
-	private static final Map<BigInteger, ZModPrimePair> instances = new HashMap<>();
-
-	public static ZModPrimePair getInstance(final PrimePair primePair) {
-		if (primePair == null) {
-			throw new IllegalArgumentException();
-		}
-		ZModPrimePair instance = ZModPrimePair.instances.get(primePair.getValue());
-		if (instance == null) {
-			instance = new ZModPrimePair(primePair);
-			ZModPrimePair.instances.put(primePair.getValue(), instance);
-		}
-		return instance;
-	}
-
 	public static ZModPrimePair getInstance(final long prime1, final long prime2) {
 		return ZModPrimePair.getInstance(BigInteger.valueOf(prime1), BigInteger.valueOf(prime2));
 	}
@@ -108,6 +90,18 @@ public class ZModPrimePair
 
 	public static ZModPrimePair getInstance(Prime prime1, Prime prime2) {
 		return new ZModPrimePair(PrimePair.getInstance(prime1, prime2));
+	}
+
+	public static ZModPrimePair getInstance(final PrimePair primePair) {
+		if (primePair == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primePair);
+		}
+		ZModPrimePair instance = ZModPrimePair.instances.get(primePair.getValue());
+		if (instance == null) {
+			instance = new ZModPrimePair(primePair);
+			ZModPrimePair.instances.put(primePair.getValue(), instance);
+		}
+		return instance;
 	}
 
 }

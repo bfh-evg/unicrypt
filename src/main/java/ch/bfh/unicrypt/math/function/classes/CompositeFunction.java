@@ -92,9 +92,6 @@ public final class CompositeFunction
 	 * <p>
 	 * @param functions The given array of functions
 	 * @return The resulting composite function
-	 * @throws IllegalArgumentException if {@code functions} is null, contains null, or is empty
-	 * @throws IllegalArgumentException if the domain of a function is different from the co-domain of the previous
-	 *                                  function
 	 */
 	public static CompositeFunction getInstance(final DenseArray<Function> functions) {
 		if (functions == null || functions.getLength() == 0) {

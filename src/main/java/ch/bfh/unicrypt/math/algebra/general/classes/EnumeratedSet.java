@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
@@ -132,16 +134,22 @@ public class EnumeratedSet<V>
 	}
 
 	public static <V> EnumeratedSet<V> getInstance(V... values) {
-		if (values == null || values.length == 0) {
-			throw new IllegalArgumentException();
+		if (values == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, values);
+		}
+		if (values.length == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, values);
 		}
 		// both maps are needed for efficiency reasons
 		Map<Integer, V> valueMap = new HashMap<>();
 		Map<V, Integer> indexMap = new HashMap<>();
 		int index = 0;
 		for (V value : values) {
-			if (value == null || valueMap.containsValue(value)) {
-				throw new IllegalArgumentException();
+			if (value == null) {
+				throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, values);
+			}
+			if (valueMap.containsValue(value)) {
+				throw new UniCryptRuntimeException(ErrorCode.DUPLICATE_VALUE, values, value);
 			}
 			valueMap.put(index, value);
 			indexMap.put(value, index);

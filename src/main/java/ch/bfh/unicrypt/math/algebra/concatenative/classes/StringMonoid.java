@@ -141,8 +141,11 @@ public class StringMonoid
 	}
 
 	public static StringMonoid getInstance(Alphabet alphabet, int blockLength) {
-		if (alphabet == null || blockLength < 1) {
-			throw new IllegalArgumentException();
+		if (alphabet == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, alphabet);
+		}
+		if (blockLength < 1) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, blockLength);
 		}
 		return new StringMonoid(alphabet, blockLength);
 	}

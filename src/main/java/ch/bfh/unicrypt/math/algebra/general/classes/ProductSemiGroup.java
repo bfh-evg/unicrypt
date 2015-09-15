@@ -41,11 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Operator;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -159,7 +161,7 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(Element element1, Element element2) {
 		if (!this.contains(element1) || !this.contains(element2)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element1, element2);
 		}
 		return this.abstractApply((Tuple) element1, (Tuple) element2);
 	}
@@ -167,7 +169,7 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(final Element... elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
 		}
 		return this.defaultApply(Sequence.getInstance(elements));
 	}
@@ -175,7 +177,7 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(final ImmutableArray<Element> elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
 		}
 		return this.defaultApply(Sequence.getInstance(elements));
 	}
@@ -183,15 +185,18 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(Sequence<Element> elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
 		}
 		return this.defaultApply(elements);
 	}
 
 	@Override
 	public final Tuple selfApply(Element element, BigInteger amount) {
-		if (!this.contains(element) || amount == null) {
-			throw new IllegalArgumentException();
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		Tuple tuple = (Tuple) element;
 		final Element[] results = new Element[this.getArity()];
@@ -204,7 +209,7 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple selfApply(Element element, Element<BigInteger> amount) {
 		if (amount == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
 		}
 		return this.selfApply(element, amount.getValue());
 	}
@@ -221,8 +226,11 @@ public class ProductSemiGroup
 
 	@Override
 	public final Tuple multiSelfApply(final Element[] elements, final BigInteger[] amounts) {
-		if ((elements == null) || (amounts == null) || (elements.length != amounts.length)) {
-			throw new IllegalArgumentException();
+		if (elements == null || amounts == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements, amounts);
+		}
+		if (elements.length != amounts.length) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, elements, amounts);
 		}
 		return this.defaultMultiSelfApply(elements, amounts);
 	}
@@ -249,7 +257,7 @@ public class ProductSemiGroup
 
 	protected Tuple defaultMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {
 		if (elements.length == 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, elements, amounts);
 		}
 		Element[] results = new Element[elements.length];
 		for (int i = 0; i < elements.length; i++) {

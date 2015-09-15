@@ -80,8 +80,6 @@ public class IdentityFunction
 	 * <p/>
 	 * @param set The given set
 	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
-	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static IdentityFunction getInstance(final Set set) {
 		if (set == null) {

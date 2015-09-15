@@ -88,8 +88,6 @@ public class AdditionFunction
 	 * @param additiveSemiGroup The group on which this function operates
 	 * @param arity             The number of input elements
 	 * @return The resulting function
-	 * @throws IllegalArgumentException if {@code group} is null
-	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static AdditionFunction getInstance(final AdditiveSemiGroup additiveSemiGroup, final int arity) {
 		if (additiveSemiGroup == null || arity < 0) {

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
@@ -67,8 +69,11 @@ public class FixedStringSet
 	}
 
 	public static FixedStringSet getInstance(final Alphabet alphabet, final int length) {
-		if (alphabet == null || length < 0) {
-			throw new IllegalArgumentException();
+		if (alphabet == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, alphabet);
+		}
+		if (length < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, length);
 		}
 		return new FixedStringSet(alphabet, length);
 	}
@@ -78,8 +83,11 @@ public class FixedStringSet
 	}
 
 	public static FixedStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder) {
-		if (alphabet == null || minOrder == null || minOrder.signum() < 0) {
-			throw new IllegalArgumentException();
+		if (alphabet == null || minOrder == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, alphabet, minOrder);
+		}
+		if (minOrder.signum() < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, minOrder);
 		}
 		int length = 0;
 		BigInteger size = BigInteger.valueOf(alphabet.getSize());

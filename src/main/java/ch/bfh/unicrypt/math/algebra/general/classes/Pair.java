@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
@@ -63,7 +65,7 @@ public class Pair
 
 	public static Pair getInstance(Element first, Element second) {
 		if (first == null || second == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, first, second);
 		}
 		DenseArray<Element> elements = DenseArray.getInstance(first, second);
 		return new Pair(ProductSet.getInstance(first.getSet(), second.getSet()), elements);

@@ -54,12 +54,8 @@ import java.math.BigInteger;
  * <p>
  */
 public class ECPolynomialElement
-	   extends AbstractECElement<Polynomial<? extends DualisticElement<BigInteger>>,
-	   PolynomialElement, ECPolynomialElement> {
+	   extends AbstractECElement<Polynomial<? extends DualisticElement<BigInteger>>, PolynomialElement, ECPolynomialElement> {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
 
 	protected ECPolynomialElement(ECPolynomialField ecGroup, Point<PolynomialElement> value) {

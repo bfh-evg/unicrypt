@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Permutation;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -65,7 +67,7 @@ public class PermutationElement
 
 	public static PermutationElement getInstance(Permutation permutation) {
 		if (permutation == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, permutation);
 		}
 		return PermutationGroup.getInstance(permutation.getSize()).getElement(permutation);
 	}

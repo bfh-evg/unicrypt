@@ -51,9 +51,12 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 public class ZModTwo
 	   extends ZModPrime {
 
+	private static final long serialVersionUID = 1L;
+
 	public static final ZModElement ZERO = ZModTwo.getInstance().getElement(0);
 	public static final ZModElement ONE = ZModTwo.getInstance().getElement(1);
-	private static final long serialVersionUID = 1L;
+
+	private static ZModTwo instance;
 
 	protected ZModTwo() {
 		super(Prime.getInstance(2));
@@ -70,10 +73,6 @@ public class ZModTwo
 	public ZModElement not(Element element) {
 		return this.negate(element);
 	}
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static ZModTwo instance;
 
 	/**
 	 * This factory method returns the singleton object of this class.

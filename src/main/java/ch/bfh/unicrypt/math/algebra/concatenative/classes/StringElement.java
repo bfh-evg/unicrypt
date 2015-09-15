@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 
@@ -60,7 +62,7 @@ public class StringElement
 
 	public static StringElement getInstance(String string) {
 		if (string == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, string);
 		}
 		return StringMonoid.getInstance().getElement(string);
 	}

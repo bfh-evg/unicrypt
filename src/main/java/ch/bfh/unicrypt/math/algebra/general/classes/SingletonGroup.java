@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
@@ -159,14 +161,11 @@ public class SingletonGroup
 		return hash;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	private static final Map<BigInteger, SingletonGroup> instances = new HashMap<>();
 
 	public static SingletonGroup getInstance(final BigInteger value) {
 		if (value == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, value);
 		}
 		SingletonGroup instance = SingletonGroup.instances.get(value);
 		if (instance == null) {

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -154,7 +156,7 @@ public class ProductGroup
 	@Override
 	public final Tuple invert(Element element) {
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		Tuple tuple = (Tuple) element;
 		final Element[] invertedElements = new Element[this.getArity()];

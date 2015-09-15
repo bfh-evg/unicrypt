@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import java.math.BigInteger;
@@ -68,8 +70,11 @@ public class NElement
 	}
 
 	public static NElement getInstance(BigInteger value) {
-		if (value == null || value.signum() < 0) {
-			throw new IllegalArgumentException();
+		if (value == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, value);
+		}
+		if (value.signum() < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, value);
 		}
 		return N.getInstance().getElement(value);
 	}

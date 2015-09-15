@@ -51,7 +51,6 @@ import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 
@@ -71,6 +70,7 @@ public class Z
 	   extends AbstractCyclicRing<ZElement, BigInteger> {
 
 	private static final long serialVersionUID = 1L;
+	private static Z instance;
 
 	private Z() {
 		super(BigInteger.class);
@@ -84,10 +84,6 @@ public class Z
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
 	protected ZElement defaultSelfApply(ZElement element, BigInteger amount) {
 		return this.abstractGetElement(element.getValue().multiply(amount));
@@ -112,10 +108,6 @@ public class Z
 		});
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected ZElement abstractApply(ZElement element1, ZElement element2) {
 		return this.abstractGetElement(element1.getValue().add(element2.getValue()));
@@ -143,7 +135,7 @@ public class Z
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return Group.INFINITE;
+		return Set.INFINITE;
 	}
 
 	@Override
@@ -185,11 +177,6 @@ public class Z
 	protected int abstractHashCode() {
 		return 1;
 	}
-
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static Z instance;
 
 	/**
 	 * Returns the unique instance of this class for an infinite distribution.

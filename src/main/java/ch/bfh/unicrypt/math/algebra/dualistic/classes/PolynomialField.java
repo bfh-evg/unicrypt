@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.exception.ErrorCode;
 import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Polynomial;
-import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
@@ -102,17 +101,19 @@ public class PolynomialField
 	}
 
 	@Override
-	public PolynomialElement getRandomElement(int degree, RandomByteSequence randomByteSequence) {
+	// TODO Generalize to getRandomElements by replacing HybridRandomByteSequence by RandomByteSequence
+	public PolynomialElement getRandomElement(int degree, HybridRandomByteSequence randomByteSequence) {
 		if (degree >= this.getDegree()) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, degree);
 		}
 		return super.getRandomElement(degree, randomByteSequence);
 	}
 
 	@Override
-	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero, RandomByteSequence randomByteSequence) {
+	// TODO Generalize to getRandomElements by replacing HybridRandomByteSequence by RandomByteSequence
+	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero, HybridRandomByteSequence randomByteSequence) {
 		if (degree >= this.getDegree()) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, degree);
 		}
 		return super.getRandomMonicElement(degree, a0NotZero, randomByteSequence);
 	}
@@ -164,7 +165,7 @@ public class PolynomialField
 	@Override
 	public PolynomialElement oneOver(Element element) {
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		if (((PolynomialElement) element).isZero()) {
 			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this, element);
@@ -202,7 +203,6 @@ public class PolynomialField
 	public PolynomialElement solveQuadradicEquation(PolynomialElement b) {
 		PolynomialElement y = this.getZeroElement();
 		PolynomialElement z = this.getZeroElement();
-
 		while (y.isEquivalent(this.getZeroElement())) {
 
 			PolynomialElement r = this.getRandomElement(this.getDegree() - 1);
@@ -211,19 +211,16 @@ public class PolynomialField
 			int m = this.getDegree();
 
 			for (int i = 1; i < m; i++) {
-
 				PolynomialElement w2 = w.square();
 				z = z.square().add(w2.multiply(r));
 				w = w2.add(b);
 			}
 
 			y = z.square().add(z);
-			if (!w.isEquivalent(this.getZeroElement())) {
-				throw new IllegalArgumentException("No solution for quadratic equation was found");
+			if (!this.isZeroElement(w)) {
+				throw new UniCryptRuntimeException(ErrorCode.NO_SOLUTION, this, b, w);
 			}
-
 		}
-
 		return z;
 	}
 
@@ -264,9 +261,12 @@ public class PolynomialField
 		return getInstance(primeField, degree, HybridRandomByteSequence.getInstance());
 	}
 
-	public static <V> PolynomialField getInstance(PrimeField primeField, int degree, RandomByteSequence randomByteSequence) {
-		if (primeField == null || degree < 1) {
-			throw new IllegalArgumentException();
+	public static <V> PolynomialField getInstance(PrimeField primeField, int degree, HybridRandomByteSequence randomByteSequence) {
+		if (primeField == null || randomByteSequence == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primeField, randomByteSequence);
+		}
+		if (degree < 1) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_DEGREE, degree);
 		}
 		PolynomialRing ring = PolynomialRing.getInstance(primeField);
 		PolynomialElement irreduciblePolynomial = ring.findIrreduciblePolynomial(degree, randomByteSequence);
@@ -274,12 +274,11 @@ public class PolynomialField
 	}
 
 	public static PolynomialField getInstance(PrimeField primeField, PolynomialElement irreduciblePolynomial) {
-		if (primeField == null
-			   || irreduciblePolynomial == null
-			   || !irreduciblePolynomial.getSet().getSemiRing()
-			   .isEquivalent(primeField)
-			   || !irreduciblePolynomial.isIrreducible()) {
-			throw new IllegalArgumentException();
+		if (primeField == null || irreduciblePolynomial == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primeField, irreduciblePolynomial);
+		}
+		if (!irreduciblePolynomial.getSet().getSemiRing().isEquivalent(primeField) || !irreduciblePolynomial.isIrreducible()) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, primeField, irreduciblePolynomial);
 		}
 		return new PolynomialField(primeField, irreduciblePolynomial);
 	}

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.RandomByteSequenceIterator;
@@ -163,7 +165,7 @@ public class ProductCyclicGroup
 	@Override
 	public final Sequence<Tuple> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
 		}
 		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
@@ -186,7 +188,7 @@ public class ProductCyclicGroup
 	@Override
 	public final Sequence<Tuple> getRandomGenerators(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
 		}
 		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
@@ -231,7 +233,7 @@ public class ProductCyclicGroup
 	@Override
 	public final boolean isGenerator(Element element) {
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		Tuple tuple = (Tuple) element;
 		for (int i : this.getAllIndices()) {

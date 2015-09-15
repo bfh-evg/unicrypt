@@ -83,9 +83,6 @@ public class PermutationFunction
 		return (PermutationGroup) this.getDomain().getAt(1);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Tuple abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
 		final Tuple elements = (Tuple) element.getFirst();
@@ -97,9 +94,6 @@ public class PermutationFunction
 		return this.getCoDomain().getElement(result);
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the general constructor of this class, which construct a permutation function from a given group and for
 	 * the specified arity.
@@ -108,8 +102,6 @@ public class PermutationFunction
 	 * @param set   The given group
 	 * @param arity The arity of the tuple elements to permute
 	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
-	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static PermutationFunction getInstance(final Set set, final int arity) {
 		if (set == null || arity < 0) {
@@ -125,7 +117,6 @@ public class PermutationFunction
 	 * <p/>
 	 * @param productSet The given power group
 	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static PermutationFunction getInstance(final ProductSet productSet) {
 		if (productSet == null || !productSet.isUniform()) {

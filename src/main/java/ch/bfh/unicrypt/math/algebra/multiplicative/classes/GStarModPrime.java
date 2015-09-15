@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.map.HashMap2D;
 import ch.bfh.unicrypt.helper.map.Map2D;
@@ -82,10 +84,10 @@ public class GStarModPrime
 
 	public static GStarModPrime getInstance(Prime modulus, Prime orderFactor) {
 		if (modulus == null || orderFactor == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus, orderFactor);
 		}
 		if (!modulus.getValue().subtract(MathUtil.ONE).mod(orderFactor.getValue()).equals(MathUtil.ZERO)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, orderFactor);
 		}
 		GStarModPrime instance = GStarModPrime.instances.get(modulus, orderFactor);
 		if (instance == null) {

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
@@ -74,30 +76,14 @@ public class ZStarMod
 	private final BigInteger modulus;
 	private final Factorization modulusFactorization;
 
-	/**
-	 * This is a private constructor of this class. It is called by the static factory methods.
-	 * <p>
-	 * @param modulus The given modulus
-	 */
 	protected ZStarMod(final BigInteger modulus) {
 		this(modulus, Factorization.getInstance());
 	}
 
-	/**
-	 * This is a private constructor of this class. It is called by the static factory methods.
-	 * <p>
-	 * @param modulusFactorization The given factorization
-	 */
 	protected ZStarMod(final Factorization modulusFactorization) {
 		this(modulusFactorization.getValue(), modulusFactorization);
 	}
 
-	/**
-	 * This is a private constructor of this class. It is called by the static factory methods.
-	 * <p>
-	 * @param modulus              The given modulus
-	 * @param modulusFactorization The given factorization
-	 */
 	protected ZStarMod(final BigInteger modulus, final Factorization modulusFactorization) {
 		super(BigInteger.class);
 		this.modulus = modulus;
@@ -131,10 +117,6 @@ public class ZStarMod
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
 	protected ZStarModElement defaultSelfApplyAlgorithm(final ZStarModElement element, final BigInteger posAmount) {
 		return this.abstractGetElement(element.getValue().modPow(posAmount, this.modulus));
@@ -150,10 +132,6 @@ public class ZStarMod
 		return this.getModulus().toString();
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected boolean abstractContains(final BigInteger value) {
 		return value.signum() > 0
@@ -229,9 +207,6 @@ public class ZStarMod
 		return hash;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	public static ZStarMod getInstance(final long modulus) {
 		return ZStarMod.getInstance(BigInteger.valueOf(modulus));
 	}
@@ -242,11 +217,13 @@ public class ZStarMod
 	 * <p>
 	 * @param modulus The modulus
 	 * @return
-	 * @throws IllegalArgumentException if {@code modulus} is null or smaller than 2
 	 */
 	public static ZStarMod getInstance(final BigInteger modulus) {
-		if (modulus == null || modulus.compareTo(MathUtil.ONE) <= 0) {
-			throw new IllegalArgumentException();
+		if (modulus == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+		}
+		if (modulus.compareTo(MathUtil.ONE) <= 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, modulus);
 		}
 		if (MathUtil.isPrime(modulus)) {
 			return new ZStarMod(modulus, Factorization.getInstance(new BigInteger[]{modulus}));
@@ -260,12 +237,13 @@ public class ZStarMod
 	 * <p>
 	 * @param modulusFactorization The given prime factorization
 	 * @return
-	 * @throws IllegalArgumentException if {@code primeFactorization} is null
-	 * @throws IllegalArgumentException if {@code primeFactorization.getValue()} is 1
 	 */
 	public static ZStarMod getInstance(final Factorization modulusFactorization) {
-		if (modulusFactorization == null || modulusFactorization.getValue().compareTo(MathUtil.ONE) <= 0) {
-			throw new IllegalArgumentException();
+		if (modulusFactorization == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulusFactorization);
+		}
+		if (modulusFactorization.getValue().compareTo(MathUtil.ONE) <= 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, modulusFactorization);
 		}
 		return new ZStarMod(modulusFactorization);
 	}
@@ -275,8 +253,11 @@ public class ZStarMod
 	}
 
 	public static ZStarMod getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		if (bitLength < 1 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
+		if (randomByteSequence == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
+		}
+		if (bitLength < 1) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_BITLENGTH, bitLength);
 		}
 		return ZStarMod.getInstance(randomByteSequence.getRandomBigIntegerSequence(bitLength).get());
 	}

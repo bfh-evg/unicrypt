@@ -65,24 +65,17 @@ public class RandomFunction
 		super(SingletonGroup.getInstance(), coDomain);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Element abstractApply(final SingletonElement element, final RandomByteSequence randomByteSequence) {
 		return this.getCoDomain().getRandomElement(randomByteSequence);
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the general constructor of this class. It creates a function that generates random elements from a given
 	 * group.
 	 * <p/>
 	 * @param set The given group
 	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static RandomFunction getInstance(final Set set) {
 		if (set == null) {

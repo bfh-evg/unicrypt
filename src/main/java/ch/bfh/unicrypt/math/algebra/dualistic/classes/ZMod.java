@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
@@ -70,6 +72,7 @@ public class ZMod
 	   extends AbstractCyclicRing<ZModElement, BigInteger> {
 
 	private static final long serialVersionUID = 1L;
+	private static final Map<BigInteger, ZMod> instances = new HashMap<>();
 
 	protected final BigInteger modulus;
 
@@ -101,10 +104,6 @@ public class ZMod
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
 	protected ZModElement defaultSelfApplyAlgorithm(ZModElement element, BigInteger posAmount) {
 		return this.abstractGetElement(element.getValue().multiply(posAmount).mod(this.modulus));
@@ -120,10 +119,6 @@ public class ZMod
 		return this.modulus.toString();
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected ZModElement abstractApply(ZModElement element1, ZModElement element2) {
 		return this.abstractGetElement(element1.getValue().add(element2.getValue()).mod(this.modulus));
@@ -209,11 +204,6 @@ public class ZMod
 		return hash;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static final Map<BigInteger, ZMod> instances = new HashMap<>();
-
 	public static ZMod getInstance(final long modulus) {
 		return ZMod.getInstance(BigInteger.valueOf(modulus));
 	}
@@ -224,11 +214,13 @@ public class ZMod
 	 * <p>
 	 * @param modulus The modulus
 	 * @return The instance of this class for the given modulus
-	 * @throws IllegalArgumentException if {@code modulus} is null, zero, or negative
 	 */
 	public static ZMod getInstance(final BigInteger modulus) {
-		if (modulus == null || modulus.compareTo(MathUtil.TWO) < 0) {
-			throw new IllegalArgumentException();
+		if (modulus == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+		}
+		if (modulus.compareTo(MathUtil.TWO) < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.SET_CONSTRUCTION_FAILURE, modulus);
 		}
 		ZMod instance = ZMod.instances.get(modulus);
 		if (instance == null) {
@@ -239,29 +231,30 @@ public class ZMod
 	}
 
 	/**
-	 * Returns the unique instance of this class for a given bit lenght and a given {@link RandomByteSequence}.
+	 * Returns the unique instance of this class for a given bit length.
 	 * <p>
-	 * @param bitLength          The given bit lenght
-	 * @param randomByteSequence The given RandomByteSequence
+	 * @param bitLength The given bit length
 	 * @return The instance of this class for a random modulus
-	 * @throws IllegalArgumentException if {@code bitLenght} is smaller than 2 or {@code randomByteSequence} is null
-	 */
-	public static ZMod getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		if (bitLength < 2 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
-		}
-		return ZMod.getInstance(randomByteSequence.getRandomBigIntegerSequence(bitLength).get());
-	}
-
-	/**
-	 * Returns the unique instance of this class for a given bit lenght.
-	 * <p>
-	 * @param bitLength The given bit lenght
-	 * @return The instance of this class for a random modulus
-	 * @throws IllegalArgumentException if {@code bitLenght} is smaller than 2
 	 */
 	public static ZMod getRandomInstance(int bitLength) {
 		return ZMod.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
+	}
+
+	/**
+	 * Returns the unique instance of this class for a given bit length and a given {@link RandomByteSequence}.
+	 * <p>
+	 * @param bitLength          The given bit length
+	 * @param randomByteSequence The given RandomByteSequence
+	 * @return The instance of this class for a random modulus
+	 */
+	public static ZMod getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
+		}
+		if (bitLength < 2) {
+			throw new UniCryptRuntimeException(ErrorCode.SET_CONSTRUCTION_FAILURE, bitLength);
+		}
+		return ZMod.getInstance(randomByteSequence.getRandomBigIntegerSequence(bitLength).get());
 	}
 
 }

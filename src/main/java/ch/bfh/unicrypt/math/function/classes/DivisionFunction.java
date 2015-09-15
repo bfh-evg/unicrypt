@@ -83,8 +83,6 @@ public class DivisionFunction
 	 * <p/>
 	 * @param multiplicativeGroup
 	 * @return The resulting function
-	 * @throws IllegalArgumentException if {@code group} is null
-	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static DivisionFunction getInstance(final MultiplicativeGroup multiplicativeGroup) {
 		if (multiplicativeGroup == null) {

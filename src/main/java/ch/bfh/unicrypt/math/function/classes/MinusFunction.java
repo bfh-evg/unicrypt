@@ -84,7 +84,6 @@ public class MinusFunction
 	 * <p/>
 	 * @param additiveGroup The given Group
 	 * @return
-	 * @throws IllegalArgumentException if the group is null
 	 */
 	public static MinusFunction getInstance(final AdditiveGroup additiveGroup) {
 		return new MinusFunction(additiveGroup, additiveGroup);

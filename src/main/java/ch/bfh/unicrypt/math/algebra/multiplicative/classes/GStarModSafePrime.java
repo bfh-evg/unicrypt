@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.factorization.SafePrime;
 import ch.bfh.unicrypt.helper.math.MathUtil;
@@ -58,8 +60,8 @@ public class GStarModSafePrime
 	private final static Map<BigInteger, GStarModSafePrime> instances = new HashMap<>();
 	private static final long serialVersionUID = 1L;
 
-	protected GStarModSafePrime(SafePrime modulo) {
-		super(modulo, Prime.getInstance(modulo.getValue().subtract(MathUtil.ONE).divide(MathUtil.TWO)));
+	protected GStarModSafePrime(SafePrime modulus) {
+		super(modulus, Prime.getInstance(modulus.getValue().subtract(MathUtil.ONE).divide(MathUtil.TWO)));
 	}
 
 	@Override
@@ -67,14 +69,14 @@ public class GStarModSafePrime
 		return this.getModulus().toString();
 	}
 
-	public static GStarModSafePrime getInstance(final SafePrime modulo) {
-		if (modulo == null) {
-			throw new IllegalArgumentException();
+	public static GStarModSafePrime getInstance(final SafePrime modulus) {
+		if (modulus == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
 		}
-		GStarModSafePrime instance = GStarModSafePrime.instances.get(modulo.getValue());
+		GStarModSafePrime instance = GStarModSafePrime.instances.get(modulus.getValue());
 		if (instance == null) {
-			instance = new GStarModSafePrime(modulo);
-			GStarModSafePrime.instances.put(modulo.getValue(), instance);
+			instance = new GStarModSafePrime(modulus);
+			GStarModSafePrime.instances.put(modulus.getValue(), instance);
 		}
 		return instance;
 	}

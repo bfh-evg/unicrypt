@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
 import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
 import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
@@ -144,14 +146,14 @@ public class Tuple
 	@Override
 	public Element getAt(int... indices) {
 		if (indices == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, indices);
 		}
 		Element element = this;
 		for (final int index : indices) {
 			if (element.isTuple()) {
 				element = ((Tuple) element).getAt(index);
 			} else {
-				throw new IllegalArgumentException();
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, indices, index);
 			}
 		}
 		return element;
@@ -311,11 +313,10 @@ public class Tuple
 	 * <p/>
 	 * @param elements The array of input elements
 	 * @return The corresponding tuple element
-	 * @throws IllegalArgumentException if {@code elements} is null or contains null
 	 */
 	public static Tuple getInstance(DenseArray<Element> elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, elements);
 		}
 		ProductSet productSet;
 		if (elements.isUniform() && !elements.isEmpty()) {

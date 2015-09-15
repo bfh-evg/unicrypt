@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
@@ -71,7 +73,7 @@ public class ByteArrayElement
 
 	public static ByteArrayElement getInstance(ByteArray byteArray) {
 		if (byteArray == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, byteArray);
 		}
 		return ByteArrayMonoid.getInstance().getElement(byteArray);
 	}

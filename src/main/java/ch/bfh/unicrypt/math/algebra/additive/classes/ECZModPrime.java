@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
@@ -60,9 +62,6 @@ import java.math.BigInteger;
 public class ECZModPrime
 	   extends AbstractEC<ZModPrime, BigInteger, ZModElement, ECZModElement> {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -5442792676496187516L;
 
 	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy,
@@ -244,16 +243,13 @@ public class ECZModPrime
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
-	 * @throws Exception
 	 */
-	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, BigInteger givenOrder,
-		   BigInteger coFactor) throws Exception {
-
+	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, BigInteger givenOrder, BigInteger coFactor) {
 		ECZModPrime newInstance = new ECZModPrime(f, a, b, givenOrder, coFactor);
 		if (newInstance.isValid()) {
 			return newInstance;
 		} else {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, givenOrder, coFactor);
 		}
 	}
 
@@ -268,19 +264,17 @@ public class ECZModPrime
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
-	 * @throws Exception
 	 */
-	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy,
-		   BigInteger givenOrder, BigInteger coFactor) throws Exception {
+	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger givenOrder, BigInteger coFactor) {
 		ECZModPrime newInstance = new ECZModPrime(f, a, b, gx, gy, givenOrder, coFactor);
 		if (newInstance.isValid()) {
 			return newInstance;
 		} else {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, gx, gy, givenOrder, coFactor);
 		}
 	}
 
-	public static ECZModPrime getInstance(final StandardECZModParams params) throws Exception {
+	public static ECZModPrime getInstance(final StandardECZModParams params) {
 		ZModPrime field;
 		ZModElement a, b, gx, gy;
 		BigInteger order, h;

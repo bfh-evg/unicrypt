@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.factorization.PrimePair;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -62,7 +64,7 @@ public class ZStarModPrimePair
 
 	public static ZStarModPrimePair getInstance(final PrimePair primePair) {
 		if (primePair == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primePair);
 		}
 		ZStarModPrimePair instance = ZStarModPrimePair.instances.get(primePair.getValue());
 		if (instance == null) {

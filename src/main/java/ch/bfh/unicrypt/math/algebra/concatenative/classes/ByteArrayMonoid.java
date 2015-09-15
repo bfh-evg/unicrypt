@@ -63,6 +63,7 @@ public class ByteArrayMonoid
 	   extends AbstractConcatenativeMonoid<ByteArrayElement, ByteArray> {
 
 	private static final long serialVersionUID = 1L;
+	private static final Map<Integer, ByteArrayMonoid> instances = new HashMap<>();
 
 	private ByteArrayMonoid(int blockLength) {
 		super(ByteArray.class, blockLength);
@@ -82,10 +83,6 @@ public class ByteArrayMonoid
 		return ByteArrayToByteArray.getInstance();
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected BigInteger abstractGetOrder() {
 		return Set.INFINITE;
@@ -136,11 +133,6 @@ public class ByteArrayMonoid
 		return 1;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static final Map<Integer, ByteArrayMonoid> instances = new HashMap<>();
-
 	public static ByteArrayMonoid getInstance() {
 		return ByteArrayMonoid.getInstance(1);
 	}
@@ -153,7 +145,7 @@ public class ByteArrayMonoid
 	 */
 	public static ByteArrayMonoid getInstance(int blockLength) {
 		if (blockLength < 1) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, blockLength);
 		}
 		ByteArrayMonoid instance = ByteArrayMonoid.instances.get(Integer.valueOf(blockLength));
 		if (instance == null) {

@@ -117,7 +117,6 @@ public class HashFunction
 	 * @param convertMethod
 	 * @param hashMethod    The name of the hash algorithm
 	 * @return
-	 * @throws IllegalArgumentException if {@code algorithmName} is null or an unknown hash algorithm name
 	 */
 	public static <V> HashFunction getInstance(Set domain, ConvertMethod<V> convertMethod, final HashMethod<V> hashMethod) {
 		if (domain == null || convertMethod == null || hashMethod == null) {

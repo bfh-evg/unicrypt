@@ -72,15 +72,11 @@ public final class ProductFunction
 	 * @param domain
 	 * @param coDomain
 	 * @param functions
-	 * @throws IllegalArgumentException if {@code functions} is null or contains null
 	 */
 	protected ProductFunction(final ProductSet domain, ProductSet coDomain, DenseArray<Function> functions) {
 		super(domain, coDomain, functions);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Tuple abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
 		final Element[] elements = new Element[this.getArity()];
@@ -100,9 +96,6 @@ public final class ProductFunction
 		return ProductFunction.class;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	public static ProductFunction getInstance(DenseArray<Function> functions) {
 		if (functions == null || functions.getLength() == 0) {
 			throw new IllegalArgumentException();

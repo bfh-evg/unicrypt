@@ -177,7 +177,10 @@ public class FiniteStringSet
 
 	public static FiniteStringSet getInstance(final Alphabet alphabet, final int minLength, final int maxLength) {
 		if (alphabet == null || minLength < 0 || maxLength < minLength) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, alphabet);
+		}
+		if (minLength < 0 || maxLength < minLength) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, minLength, maxLength);
 		}
 		if (minLength == maxLength) {
 			return FixedStringSet.getInstance(alphabet, minLength);
@@ -198,8 +201,11 @@ public class FiniteStringSet
 	}
 
 	public static FiniteStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder, int minLength) {
-		if (alphabet == null || minOrder == null || minOrder.signum() < 0 || minLength < 0) {
-			throw new IllegalArgumentException();
+		if (alphabet == null || minOrder == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, alphabet, minOrder);
+		}
+		if (minOrder.signum() < 0 || minLength < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, minOrder, minLength);
 		}
 		int maxLength = minLength;
 		BigInteger size = BigInteger.valueOf(alphabet.getSize());

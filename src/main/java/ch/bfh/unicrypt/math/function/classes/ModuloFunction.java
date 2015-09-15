@@ -92,7 +92,6 @@ public class ModuloFunction
 	 * @param domain  The given Group
 	 * @param modulus
 	 * @return
-	 * @throws IllegalArgumentException if the group is null
 	 */
 	public static ModuloFunction getInstance(final Set<BigInteger> domain, BigInteger modulus) {
 		return ModuloFunction.getInstance(domain, ZMod.getInstance(modulus));

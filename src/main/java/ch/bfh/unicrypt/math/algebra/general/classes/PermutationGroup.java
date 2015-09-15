@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.PermutationToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
@@ -77,12 +79,6 @@ public class PermutationGroup
 
 	private final int size;
 
-	/**
-	 * Returns a new instance of this class for a given {@code size >= 0}.
-	 * <p>
-	 * @param size The size
-	 * @throws IllegalArgumentException if {@code size} is negative
-	 */
 	private PermutationGroup(final int size) {
 		super(Permutation.class);
 		this.size = size;
@@ -98,10 +94,6 @@ public class PermutationGroup
 		return this.size;
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
 	protected String defaultToStringContent() {
 		return "" + this.getSize();
@@ -207,11 +199,10 @@ public class PermutationGroup
 	 * <p>
 	 * @param size The size of the permutation
 	 * @return
-	 * @throws IllegalArgumentException if {@code modulus} is null, zero, or negative
 	 */
 	public static PermutationGroup getInstance(final int size) {
 		if (size < 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE);
 		}
 		PermutationGroup instance = PermutationGroup.instances.get(size);
 		if (instance == null) {

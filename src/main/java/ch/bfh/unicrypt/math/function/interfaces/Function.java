@@ -75,7 +75,6 @@ public interface Function {
 	 * <p>
 	 * @param element The given input element
 	 * @return The resulting output element
-	 * @throws IllegalArgumentException if {@code element} is null or not contained in the domain
 	 */
 	public Element apply(Element element);
 
@@ -89,7 +88,6 @@ public interface Function {
 	 * @param element            The given input element
 	 * @param randomByteSequence
 	 * @return The resulting output element
-	 * @throws IllegalArgumentException if {@code element} is null or not contained in the domain
 	 */
 	public Element apply(Element element, RandomByteSequence randomByteSequence);
 
@@ -100,10 +98,6 @@ public interface Function {
 	 * <p>
 	 * @param elements The given input elements
 	 * @return The resulting output element
-	 * @throws IllegalArgumentException if {@code elements} is or contains null
-	 * @throws IllegalArgumentException if the elements in {@code elements} are not contained in the corresponding
-	 *                                  sub-domains
-	 * @throws IllegalArgumentException if the the length of {@code elements} is different from {@code getArityIn()}
 	 */
 	public Element apply(Element... elements);
 
@@ -117,10 +111,6 @@ public interface Function {
 	 * @param elements           The given input elements
 	 * @param randomByteSequence Either {@code null} or a given random generator
 	 * @return The resulting output element
-	 * @throws IllegalArgumentException if {@code elements} is or contains null
-	 * @throws IllegalArgumentException if the elements in {@code elements} are not contained in the corresponding
-	 *                                  sub-domains
-	 * @throws IllegalArgumentException if the the length of {@code elements} is different from {@code getArityIn()}
 	 */
 	public Element apply(Element[] elements, RandomByteSequence randomByteSequence);
 

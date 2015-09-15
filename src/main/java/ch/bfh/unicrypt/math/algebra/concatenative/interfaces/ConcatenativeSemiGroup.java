@@ -145,7 +145,6 @@ public interface ConcatenativeSemiGroup<V>
 	 * <p>
 	 * @param element A given group element
 	 * @return The result of applying the group operation to the input element
-	 * @throws IllegalArgumentException if {@code element} is null or does not belong to the group
 	 */
 	public ConcatenativeElement<V> selfConcatenate(Element element);
 
@@ -157,8 +156,6 @@ public interface ConcatenativeSemiGroup<V>
 	 * @param elements A given array of elements
 	 * @param amounts  Corresponding amounts
 	 * @return The result of this operation
-	 * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the group
-	 * @throws IllegalArgumentException if {@code elements} and {@code amounts} have different lengths
 	 */
 	public ConcatenativeElement<V> multiSelfConcatenate(Element[] elements, BigInteger[] amounts);
 

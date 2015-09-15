@@ -79,11 +79,8 @@ public class ApplyInverseFunction
 	 * This is the general factory method of this class. The first parameter is the group on which it operates, and the
 	 * second parameter is the number of input elements.
 	 * <p/>
-	 * @param semiGroup The group on which this function operates
-	 * @param arity     The number of input elements
+	 * @param group
 	 * @return The resulting function
-	 * @throws IllegalArgumentException if {@code group} is null
-	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static ApplyInverseFunction getInstance(final Group group) {
 		if (group == null) {

@@ -82,7 +82,6 @@ public class InvertFunction
 	 * <p/>
 	 * @param group The given Group
 	 * @return
-	 * @throws IllegalArgumentException if the group is null
 	 */
 	public static InvertFunction getInstance(final Group group) {
 		return new InvertFunction(group, group);
