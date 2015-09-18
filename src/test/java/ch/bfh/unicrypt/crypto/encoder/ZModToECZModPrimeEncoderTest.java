@@ -13,7 +13,7 @@ import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.classes.SEC2_ECZModParameters;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.SEC2_ECZModParameters;
 
 public class ZModToECZModPrimeEncoderTest {
 

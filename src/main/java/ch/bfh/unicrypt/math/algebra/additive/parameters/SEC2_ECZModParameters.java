@@ -39,13 +39,13 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.parameters.classes;
+package ch.bfh.unicrypt.math.algebra.additive.parameters;
 
 import ch.bfh.unicrypt.exception.ErrorCode;
 import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.interfaces.ECZModParameters;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.ECZModParameters;
 import java.math.BigInteger;
 
 /**

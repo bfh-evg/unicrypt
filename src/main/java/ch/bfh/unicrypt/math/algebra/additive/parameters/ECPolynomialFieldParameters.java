@@ -39,16 +39,16 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.parameters.interfaces;
+package ch.bfh.unicrypt.math.algebra.additive.parameters;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 
 /**
  *
  * @author R. Haenni <rolf.haenni@bfh.ch>
  */
-public interface ECZModParameters
-	   extends ECParameters<ZModPrime, ZModElement> {
+public interface ECPolynomialFieldParameters
+	   extends ECParameters<PolynomialField, PolynomialElement> {
 
 }

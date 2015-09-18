@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.interfaces.ECZModParameters;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.ECZModParameters;
 import java.math.BigInteger;
 
 /**

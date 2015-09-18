@@ -11,7 +11,7 @@ import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.classes.SEC2_ECPolynomialField;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.SEC2_ECPolynomialField;
 
 public class ECPolynomialFieldTest {
 

@@ -53,7 +53,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.interfaces.ECPolynomialFieldParameters;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.ECPolynomialFieldParameters;
 import java.math.BigInteger;
 
 /**

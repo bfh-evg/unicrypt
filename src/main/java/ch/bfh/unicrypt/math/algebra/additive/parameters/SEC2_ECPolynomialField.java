@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.parameters.classes;
+package ch.bfh.unicrypt.math.algebra.additive.parameters;
 
 import ch.bfh.unicrypt.exception.ErrorCode;
 import ch.bfh.unicrypt.exception.UniCryptException;
@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.interfaces.ECPolynomialFieldParameters;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.ECPolynomialFieldParameters;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
