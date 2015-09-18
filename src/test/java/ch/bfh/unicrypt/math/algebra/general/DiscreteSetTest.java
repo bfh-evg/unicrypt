@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.exception.UniCryptException;
+import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.math.algebra.general.classes.EnumeratedSet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

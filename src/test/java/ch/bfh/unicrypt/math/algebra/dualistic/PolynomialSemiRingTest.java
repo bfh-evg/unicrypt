@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
-import ch.bfh.unicrypt.exception.UniCryptException;
-import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
+import ch.bfh.unicrypt.UniCryptException;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;

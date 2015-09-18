@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
-import ch.bfh.unicrypt.exception.ErrorCode;
-import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;

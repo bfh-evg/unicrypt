@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.parameters;
 
-import ch.bfh.unicrypt.exception.ErrorCode;
-import ch.bfh.unicrypt.exception.UniCryptException;
-import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptException;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;

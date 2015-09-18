@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.helper.math;
 
 import ch.bfh.unicrypt.UniCrypt;
-import ch.bfh.unicrypt.exception.ErrorCode;
-import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;

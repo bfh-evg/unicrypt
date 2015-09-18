@@ -41,11 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.parameters;
 
-import ch.bfh.unicrypt.exception.ErrorCode;
-import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.ECZModParameters;
 import java.math.BigInteger;
 
 /**
@@ -152,13 +152,14 @@ public enum SEC2_ECZModParameters
 		this.h = h;
 	}
 
-	private BigInteger getPrime() {
-		return new BigInteger(p, 16);
+	@Override
+	public ZModPrime getFiniteField() {
+		return ZModPrime.getInstance(this.getP());
 	}
 
 	@Override
-	public ZModPrime getFiniteField() {
-		return ZModPrime.getInstance(getPrime());
+	public Prime getP() {
+		return Prime.getInstance(new BigInteger(p, 16));
 	}
 
 	@Override

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.parameters;
 
+import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 
@@ -50,5 +51,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
  */
 public interface ECZModParameters
 	   extends ECParameters<ZModPrime, ZModElement> {
+
+	public abstract Prime getP();
 
 }

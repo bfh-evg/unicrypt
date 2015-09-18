@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.UniCrypt;
-import ch.bfh.unicrypt.exception.ErrorCode;
-import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;

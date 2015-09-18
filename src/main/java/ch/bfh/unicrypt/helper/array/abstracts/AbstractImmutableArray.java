@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.helper.array.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
-import ch.bfh.unicrypt.exception.ErrorCode;
-import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.IntegerSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;

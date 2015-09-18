@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.exception.UniCryptException;
+import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.deterministic.CTR_DRBG;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;

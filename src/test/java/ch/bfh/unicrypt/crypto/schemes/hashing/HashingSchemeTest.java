@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.hashing;
 
-import ch.bfh.unicrypt.exception.UniCryptException;
+import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;

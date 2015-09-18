@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.exception.UniCryptException;
+import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
@@ -338,7 +338,7 @@ public interface Set<V> {
 	 * @param value
 	 * @param converter
 	 * @return
-	 * @throws ch.bfh.unicrypt.exception.UniCryptException if no such element exists
+	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 */
 	public <W> Element<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;
 
@@ -349,7 +349,7 @@ public interface Set<V> {
 	 * @param convertMethod
 	 * @param aggregator
 	 * @return
-	 * @throws ch.bfh.unicrypt.exception.UniCryptException if no such element exists
+	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 */
 	public <W> Element<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
 
@@ -361,7 +361,7 @@ public interface Set<V> {
 	 * @param convertMethod
 	 * @param aggregator
 	 * @param finalConverter
-	 * @throws ch.bfh.unicrypt.exception.UniCryptException if no such element exists
+	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 * @return
 	 */
 	public <W, X> Element<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
@@ -372,7 +372,7 @@ public interface Set<V> {
 	 * @param tree
 	 * @param convertMethod
 	 * @return
-	 * @throws ch.bfh.unicrypt.exception.UniCryptException if no such element exists
+	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 */
 	public <W> Element<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
 
@@ -382,7 +382,7 @@ public interface Set<V> {
 	 * <p>
 	 * @param value The given {@code long} value
 	 * @return The corresponding element
-	 * @throws ch.bfh.unicrypt.exception.UniCryptException if no such element exists
+	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 */
 	public Element<V> getElementFrom(long value) throws UniCryptException;
 
@@ -392,7 +392,7 @@ public interface Set<V> {
 	 * <p>
 	 * @param value The given {@code BigInteger} value
 	 * @return The corresponding element
-	 * @throws ch.bfh.unicrypt.exception.UniCryptException if no such element exists
+	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 */
 	public Element<V> getElementFrom(BigInteger value) throws UniCryptException;
 
@@ -402,7 +402,7 @@ public interface Set<V> {
 	 * <p>
 	 * @param value The given {@code ByteArray} value
 	 * @return The corresponding element
-	 * @throws ch.bfh.unicrypt.exception.UniCryptException if no such element exists
+	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 */
 	public Element<V> getElementFrom(ByteArray value) throws UniCryptException;
 
@@ -412,7 +412,7 @@ public interface Set<V> {
 	 * <p>
 	 * @param value The given {@code String} value
 	 * @return The corresponding element
-	 * @throws ch.bfh.unicrypt.exception.UniCryptException if no such element exists
+	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 */
 	public Element<V> getElementFrom(String value) throws UniCryptException;
 

@@ -39,25 +39,28 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.exception;
+package ch.bfh.unicrypt;
 
 /**
  *
  * @author rolfhaenni
  */
-public class UniCryptException
-	   extends Exception {
+public class UniCryptRuntimeException
+	   extends RuntimeException {
 
 	private final ErrorCode errorCode;
+	private final Object[] failedObjects;
 
-	public UniCryptException(ErrorCode errorCode) {
+	public UniCryptRuntimeException(ErrorCode errorCode, Object... failedObjects) {
 		super();
 		this.errorCode = errorCode;
+		this.failedObjects = failedObjects;
 	}
 
-	public UniCryptException(ErrorCode errorCode, Throwable cause) {
+	public UniCryptRuntimeException(ErrorCode errorCode, Throwable cause, Object... failedObjects) {
 		super(cause);
 		this.errorCode = errorCode;
+		this.failedObjects = failedObjects;
 	}
 
 	public ErrorCode getErrorCode() {
@@ -66,7 +69,11 @@ public class UniCryptException
 
 	@Override
 	public String toString() {
-		return "UniCryptException[" + errorCode + ']';
+		String result = "UniCryptRuntimeException[" + errorCode;
+		for (Object object : failedObjects) {
+			result = result + ", " + object.toString();
+		}
+		return result + ']';
 	}
 
 }

@@ -39,41 +39,38 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.exception;
+package ch.bfh.unicrypt;
 
 /**
  *
  * @author rolfhaenni
  */
-public class UniCryptRuntimeException
-	   extends RuntimeException {
+public enum ErrorCode {
 
-	private final ErrorCode errorCode;
-	private final Object[] failedObjects;
-
-	public UniCryptRuntimeException(ErrorCode errorCode, Object... failedObjects) {
-		super();
-		this.errorCode = errorCode;
-		this.failedObjects = failedObjects;
-	}
-
-	public UniCryptRuntimeException(ErrorCode errorCode, Throwable cause, Object... failedObjects) {
-		super(cause);
-		this.errorCode = errorCode;
-		this.failedObjects = failedObjects;
-	}
-
-	public ErrorCode getErrorCode() {
-		return this.errorCode;
-	}
-
-	@Override
-	public String toString() {
-		String result = "UniCryptRuntimeException[" + errorCode;
-		for (Object object : failedObjects) {
-			result = result + ", " + object.toString();
-		}
-		return result + ']';
-	}
+	// error codes for checked exceptions
+	ELEMENT_CONVERSION_FAILURE,
+	// error codes for runtime exceptions
+	DIVISION_BY_ZERO,
+	DUPLICATE_VALUE,
+	ELEMENT_CONSTRUCTION_FAILURE,
+	IMPOSSIBLE_STATE,
+	INCOMPATIBLE_ARGUMENTS,
+	INVALID_AMOUNT,
+	INVALID_ARGUMENT,
+	INVALID_BITLENGTH,
+	INVALID_ELEMENT,
+	INVALID_DEGREE,
+	INVALID_INDEX,
+	INVALID_LENGTH,
+	INVALID_METHOD_CALL,
+	JAVA_AES_FAILURE,
+	NEGATIVE_VALUE,
+	NO_SOLUTION,
+	NOT_YET_IMPLEMENTED,
+	NULL_POINTER,
+	OBJECT_NOT_FOUND,
+	PROBABILISTIC_ENCODING_FAILURE,
+	SET_CONSTRUCTION_FAILURE,
+	UNSUPPORTED_OPERATION
 
 }

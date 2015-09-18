@@ -39,38 +39,34 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.exception;
+package ch.bfh.unicrypt;
 
 /**
  *
  * @author rolfhaenni
  */
-public enum ErrorCode {
+public class UniCryptException
+	   extends Exception {
 
-	// error codes for checked exceptions
-	ELEMENT_CONVERSION_FAILURE,
-	// error codes for runtime exceptions
-	DIVISION_BY_ZERO,
-	DUPLICATE_VALUE,
-	ELEMENT_CONSTRUCTION_FAILURE,
-	IMPOSSIBLE_STATE,
-	INCOMPATIBLE_ARGUMENTS,
-	INVALID_AMOUNT,
-	INVALID_ARGUMENT,
-	INVALID_BITLENGTH,
-	INVALID_ELEMENT,
-	INVALID_DEGREE,
-	INVALID_INDEX,
-	INVALID_LENGTH,
-	INVALID_METHOD_CALL,
-	JAVA_AES_FAILURE,
-	NEGATIVE_VALUE,
-	NO_SOLUTION,
-	NOT_YET_IMPLEMENTED,
-	NULL_POINTER,
-	OBJECT_NOT_FOUND,
-	PROBABILISTIC_ENCODING_FAILURE,
-	SET_CONSTRUCTION_FAILURE,
-	UNSUPPORTED_OPERATION
+	private final ErrorCode errorCode;
+
+	public UniCryptException(ErrorCode errorCode) {
+		super();
+		this.errorCode = errorCode;
+	}
+
+	public UniCryptException(ErrorCode errorCode, Throwable cause) {
+		super(cause);
+		this.errorCode = errorCode;
+	}
+
+	public ErrorCode getErrorCode() {
+		return this.errorCode;
+	}
+
+	@Override
+	public String toString() {
+		return "UniCryptException[" + errorCode + ']';
+	}
 
 }
