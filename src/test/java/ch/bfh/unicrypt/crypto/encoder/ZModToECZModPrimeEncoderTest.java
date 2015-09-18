@@ -13,13 +13,13 @@ import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.classes.SEC2_ECZModParameters;
 
 public class ZModToECZModPrimeEncoderTest {
 
 	@Test
 	public void encodeDecodeTest()throws Exception {
-		ECZModPrime cyclicGroup = ECZModPrime.getInstance(SECECCParamsFp.secp521r1);
+		ECZModPrime cyclicGroup = ECZModPrime.getInstance(SEC2_ECZModParameters.secp521r1);
 		Encoder encoder = ZModPrimeToECZModPrime.getInstance(cyclicGroup,15);
 		Element message = encoder.getDomain().getElementFrom(278);
 		Element encMessage=encoder.encode(message);

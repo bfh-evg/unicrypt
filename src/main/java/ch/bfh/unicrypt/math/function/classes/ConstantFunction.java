@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
@@ -103,7 +105,7 @@ public class ConstantFunction
 	 */
 	public static ConstantFunction getInstance(final Element element) {
 		if (element == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, element);
 		}
 		return new ConstantFunction(element.getSet(), element);
 	}
@@ -117,7 +119,7 @@ public class ConstantFunction
 	 */
 	public static ConstantFunction getInstance(final Monoid monoid) {
 		if (monoid == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, monoid);
 		}
 		return new ConstantFunction(monoid, monoid.getIdentityElement());
 	}

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -97,8 +99,11 @@ public final class ProductFunction
 	}
 
 	public static ProductFunction getInstance(DenseArray<Function> functions) {
-		if (functions == null || functions.getLength() == 0) {
-			throw new IllegalArgumentException();
+		if (functions == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, functions);
+		}
+		if (functions.getLength() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, functions);
 		}
 		ProductSet domain, coDomain;
 		if (functions.isUniform()) {

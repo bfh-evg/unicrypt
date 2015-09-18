@@ -78,17 +78,11 @@ public class RemovalFunction
 		return this.getIndex() == other.getIndex();
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Tuple abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
 		return element.removeAt(this.getIndex());
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the general constructor of this class. The resulting function selects and returns in a hierarchy of tuple
 	 * elements the element that corresponds to a given sequence of indices (e.g., 0,3,2 for the third element in the
@@ -100,7 +94,7 @@ public class RemovalFunction
 	 */
 	public static RemovalFunction getInstance(final ProductSet productSet, final int index) {
 		if (productSet == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, productSet);
 		}
 		if (index < 0 || index >= productSet.getArity()) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, productSet, index);

@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.EqualityPreimageProofSystem;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -139,7 +140,7 @@ public class EqualityPreimageProofSystemTest {
 
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = UniCryptRuntimeException.class)
 	public void testPreimageEqualityProof_Exception() {
 		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(4));
 		Function f2 = GeneratorFunction.getInstance(this.G_q1.getElement(2));

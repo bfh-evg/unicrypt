@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -89,10 +91,12 @@ public class MultiplicationFunction
 	 * @param arity                   The number of input elements
 	 * @return The resulting function
 	 */
-	public static MultiplicationFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup,
-		   final int arity) {
-		if (multiplicativeSemiGroup == null || arity < 0) {
-			throw new IllegalArgumentException();
+	public static MultiplicationFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup, final int arity) {
+		if (multiplicativeSemiGroup == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, multiplicativeSemiGroup);
+		}
+		if (arity < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);
 		}
 		return new MultiplicationFunction(ProductSemiGroup.getInstance(multiplicativeSemiGroup, arity),
 										  multiplicativeSemiGroup);

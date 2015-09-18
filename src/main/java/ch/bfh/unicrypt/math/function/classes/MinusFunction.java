@@ -68,17 +68,11 @@ public class MinusFunction
 		super(domain, coDomain);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected AdditiveElement abstractApply(final AdditiveElement element, final RandomByteSequence randomByteSequence) {
 		return element.negate();
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the default constructor for this class. It creates an invert function for a given group.
 	 * <p/>

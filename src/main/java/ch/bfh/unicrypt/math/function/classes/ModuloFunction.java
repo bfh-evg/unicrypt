@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -75,17 +77,11 @@ public class ModuloFunction
 		return this.getModulus().equals(other.getModulus());
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected ZModElement abstractApply(final Element<BigInteger> element, final RandomByteSequence randomByteSequence) {
 		return this.getCoDomain().getElement(element.getValue().mod(this.getModulus()));
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the default constructor for this class. It creates an identity function for a given group.
 	 * <p>
@@ -99,7 +95,7 @@ public class ModuloFunction
 
 	public static ModuloFunction getInstance(final Set<BigInteger> domain, ZMod coDomain) {
 		if (domain == null || coDomain == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, domain, coDomain);
 		}
 		return new ModuloFunction(domain, coDomain);
 	}

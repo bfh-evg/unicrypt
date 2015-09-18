@@ -160,9 +160,6 @@ public class FiniteStringSet
 		return this.getAlphabet().toString() + "^{" + this.minLength + "..." + this.maxLength + "}";
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	public static FiniteStringSet getInstance(final int maxLength) {
 		return FiniteStringSet.getInstance(Alphabet.getInstance(), maxLength);
 	}

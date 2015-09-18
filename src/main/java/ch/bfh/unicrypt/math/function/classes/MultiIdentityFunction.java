@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -66,9 +68,6 @@ public class MultiIdentityFunction
 		super(domain, coDomain);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Tuple abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
 		final Element[] elements = new Element[this.getCoDomain().getArity()];
@@ -76,9 +75,6 @@ public class MultiIdentityFunction
 		return this.getCoDomain().getElement(elements);
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	public static MultiIdentityFunction getInstance(final Set set) {
 		return MultiIdentityFunction.getInstance(set, 1);
 	}
@@ -92,8 +88,11 @@ public class MultiIdentityFunction
 	 * @return
 	 */
 	public static MultiIdentityFunction getInstance(final Set set, final int arity) {
-		if (set == null || arity < 0) {
-			throw new IllegalArgumentException();
+		if (set == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, set);
+		}
+		if (arity < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);
 		}
 		return new MultiIdentityFunction(set, ProductSet.getInstance(set, arity));
 	}

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -79,8 +81,11 @@ public class GeneratorFunction
 	}
 
 	public static GeneratorFunction getInstance(Element generator) {
-		if (generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()) {
-			throw new IllegalArgumentException();
+		if (generator == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, generator);
+		}
+		if (!generator.getSet().isCyclic() || !generator.isGenerator()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, generator);
 		}
 		CyclicGroup cyclicGroup = (CyclicGroup) generator.getSet();
 		return new GeneratorFunction(cyclicGroup.getZModOrder(), cyclicGroup, generator);
@@ -88,7 +93,7 @@ public class GeneratorFunction
 
 	public static GeneratorFunction getInstance(CyclicGroup cyclicGroup) {
 		if (cyclicGroup == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, cyclicGroup);
 		}
 		return new GeneratorFunction(cyclicGroup.getZModOrder(), cyclicGroup, cyclicGroup.getDefaultGenerator());
 	}

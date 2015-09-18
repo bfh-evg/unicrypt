@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -63,17 +65,11 @@ public class IdentityFunction
 		super(set, set);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
 		return element;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the default constructor for this class. It creates a generalized identity function for a given group,
 	 * which reproduces the input value multiple time.
@@ -83,7 +79,7 @@ public class IdentityFunction
 	 */
 	public static IdentityFunction getInstance(final Set set) {
 		if (set == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, set);
 		}
 		return new IdentityFunction(set);
 	}

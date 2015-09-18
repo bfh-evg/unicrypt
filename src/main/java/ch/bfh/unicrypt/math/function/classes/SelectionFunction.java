@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -78,17 +80,11 @@ public class SelectionFunction
 		return Arrays.equals(this.getIndices(), other.getIndices());
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Element abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
 		return element.getAt(this.indices);
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the general constructor of this class. The resulting function selects and returns in a hierarchy of tuple
 	 * elements the element that corresponds to a given sequence of indices (e.g., 0,3,2 for the third element in the
@@ -100,7 +96,7 @@ public class SelectionFunction
 	 */
 	public static SelectionFunction getInstance(final ProductSet productSet, final int... indices) {
 		if (productSet == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, productSet);
 		}
 		return new SelectionFunction(productSet, productSet.getAt(indices), indices);
 	}

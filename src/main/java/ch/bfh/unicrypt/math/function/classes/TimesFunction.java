@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -90,7 +92,7 @@ public class TimesFunction
 	 */
 	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup) {
 		if (additiveSemiGroup == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, additiveSemiGroup);
 		}
 		if (additiveSemiGroup.isFinite() && additiveSemiGroup.hasKnownOrder()) {
 			return TimesFunction.getInstance(additiveSemiGroup, additiveSemiGroup.getZModOrder());
@@ -110,7 +112,7 @@ public class TimesFunction
 	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup,
 		   final Set<BigInteger> amountSet) {
 		if (additiveSemiGroup == null || amountSet == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, additiveSemiGroup, amountSet);
 		}
 		return new TimesFunction(ProductSet.getInstance(additiveSemiGroup, amountSet), additiveSemiGroup);
 	}

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
@@ -79,7 +81,7 @@ public class RandomFunction
 	 */
 	public static RandomFunction getInstance(final Set set) {
 		if (set == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, set);
 		}
 		return new RandomFunction(set);
 	}

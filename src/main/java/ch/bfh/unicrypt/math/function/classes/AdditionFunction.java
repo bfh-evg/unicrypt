@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -90,8 +92,11 @@ public class AdditionFunction
 	 * @return The resulting function
 	 */
 	public static AdditionFunction getInstance(final AdditiveSemiGroup additiveSemiGroup, final int arity) {
-		if (additiveSemiGroup == null || arity < 0) {
-			throw new IllegalArgumentException();
+		if (additiveSemiGroup == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, additiveSemiGroup);
+		}
+		if (arity < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);
 		}
 		return new AdditionFunction(ProductSemiGroup.getInstance(additiveSemiGroup, arity), additiveSemiGroup);
 	}

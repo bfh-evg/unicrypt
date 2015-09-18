@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.math.MathUtil;
@@ -120,7 +122,7 @@ public class HashFunction
 	 */
 	public static <V> HashFunction getInstance(Set domain, ConvertMethod<V> convertMethod, final HashMethod<V> hashMethod) {
 		if (domain == null || convertMethod == null || hashMethod == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, domain, convertMethod, hashMethod);
 		}
 		FixedByteArraySet set = FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getByteLength());
 		return new HashFunction(domain, set, convertMethod, hashMethod);

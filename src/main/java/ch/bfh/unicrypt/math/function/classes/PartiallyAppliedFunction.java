@@ -113,9 +113,6 @@ public class PartiallyAppliedFunction
 			   && this.getIndex() == other.getIndex();
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Element abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
 		int arity = element.getArity();
@@ -131,9 +128,6 @@ public class PartiallyAppliedFunction
 		return this.getParentFunction().apply(allElements, randomByteSequence);
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the default constructor of this class. It derives from a given function a new function, in which one
 	 * input element is fixed to a given element and thus expects one input element less.
@@ -144,15 +138,18 @@ public class PartiallyAppliedFunction
 	 * @return
 	 */
 	public static PartiallyAppliedFunction getInstance(final Function parentFunction, final Element element, final int index) {
-		if (parentFunction == null || !parentFunction.getDomain().isProduct()) {
-			throw new IllegalArgumentException();
+		if (parentFunction == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, parentFunction);
+		}
+		if (!parentFunction.getDomain().isProduct()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, parentFunction);
 		}
 		ProductSet domain = (ProductSet) parentFunction.getDomain();
 		if (index < 0 || index >= domain.getArity()) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, domain, index);
 		}
 		if (!domain.getAt(index).contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, parentFunction, element);
 		}
 		return new PartiallyAppliedFunction(domain.removeAt(index), parentFunction.getCoDomain(), parentFunction, element, index);
 	}

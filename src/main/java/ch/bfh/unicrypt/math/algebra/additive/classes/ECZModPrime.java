@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.interfaces.ECZModParameters;
 import java.math.BigInteger;
 
 /**
@@ -274,7 +274,7 @@ public class ECZModPrime
 		}
 	}
 
-	public static ECZModPrime getInstance(final StandardECZModParams params) {
+	public static ECZModPrime getInstance(final ECZModParameters params) {
 		ZModPrime field;
 		ZModElement a, b, gx, gy;
 		BigInteger order, h;

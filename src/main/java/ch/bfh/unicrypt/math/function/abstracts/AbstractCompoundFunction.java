@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
@@ -144,14 +146,14 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	@Override
 	public Function getAt(int... indices) {
 		if (indices == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, indices);
 		}
 		Function function = this;
 		for (final int index : indices) {
 			if (function.isCompound()) {
 				function = ((ImmutableArray<Function>) function).getAt(index);
 			} else {
-				throw new IllegalArgumentException();
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, indices, index);
 			}
 		}
 		return function;

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -81,9 +83,6 @@ public class SelfApplyFunction
 		return element1.selfApply(element2.getValue());
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is a special constructor, where the group of the second parameter is selected automatically from the given
 	 * group.
@@ -93,7 +92,7 @@ public class SelfApplyFunction
 	 */
 	public static SelfApplyFunction getInstance(final SemiGroup semiGroup) {
 		if (semiGroup == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, semiGroup);
 		}
 		if (semiGroup.isFinite() && semiGroup.hasKnownOrder()) {
 			return SelfApplyFunction.getInstance(semiGroup, semiGroup.getZModOrder());
@@ -112,7 +111,7 @@ public class SelfApplyFunction
 	 */
 	public static SelfApplyFunction getInstance(final SemiGroup semiGroup, final Set<BigInteger> amountSet) {
 		if (semiGroup == null || amountSet == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, semiGroup, amountSet);
 		}
 		return new SelfApplyFunction(ProductSet.getInstance(semiGroup, amountSet), semiGroup);
 	}

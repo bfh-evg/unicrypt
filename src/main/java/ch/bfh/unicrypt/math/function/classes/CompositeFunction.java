@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -94,18 +96,21 @@ public final class CompositeFunction
 	 * @return The resulting composite function
 	 */
 	public static CompositeFunction getInstance(final DenseArray<Function> functions) {
-		if (functions == null || functions.getLength() == 0) {
-			throw new IllegalArgumentException();
+		if (functions == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, functions);
+		}
+		if (functions.getLength() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, functions);
 		}
 		int arity = functions.getLength();
 		if (functions.isUniform()) {
 			if (arity > 1 && !functions.getFirst().getDomain().isEquivalent(functions.getFirst().getCoDomain())) {
-				throw new IllegalArgumentException();
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, functions);
 			}
 		} else {
 			for (int i = 1; i < arity; i++) {
 				if (!(functions.getAt(i - 1).getCoDomain().isEquivalent(functions.getAt(i).getDomain()))) {
-					throw new IllegalArgumentException();
+					throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, functions.getAt(i - 1).getCoDomain(), functions.getAt(i).getDomain());
 				}
 			}
 		}

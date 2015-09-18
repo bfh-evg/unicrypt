@@ -39,34 +39,16 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.params.interfaces;
+package ch.bfh.unicrypt.math.algebra.additive.parameters.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 
 /**
  *
  * @author R. Haenni <rolf.haenni@bfh.ch>
- * @param <E>
- * @param <D>
  */
-public interface StandardECParams<E extends FiniteField, D extends DualisticElement> {
-
-	public abstract E getFiniteField();
-
-	public abstract BigInteger getP();
-
-	public abstract D getA();
-
-	public abstract D getB();
-
-	public abstract D getGx();
-
-	public abstract D getGy();
-
-	public abstract BigInteger getOrder();
-
-	public abstract BigInteger getH();
+public interface ECPolynomialFieldParameters
+	   extends ECParameters<PolynomialField, PolynomialElement> {
 
 }

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -97,8 +99,11 @@ public final class SharedDomainFunction
 	}
 
 	public static SharedDomainFunction getInstance(DenseArray<Function> functions) {
-		if (functions == null || functions.getLength() == 0) {
-			throw new IllegalArgumentException();
+		if (functions == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, functions);
+		}
+		if (functions.getLength() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, functions);
 		}
 		Set domain;
 		ProductSet coDomain;
@@ -113,7 +118,7 @@ public final class SharedDomainFunction
 				if (domain == null) {
 					domain = nextDomain;
 				} else if (!domain.isEquivalent(nextDomain)) {
-					throw new IllegalArgumentException();
+					throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, domain, nextDomain);
 				}
 				coDomains[i] = functions.getAt(i).getCoDomain();
 			}

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -74,9 +76,6 @@ public class PowerFunction
 		super(domain, coDomain);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected MultiplicativeElement abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
 		MultiplicativeElement element1 = (MultiplicativeElement) element.getFirst();
@@ -84,9 +83,6 @@ public class PowerFunction
 		return element1.power(element2.getValue());
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is a special constructor, where the group of the second parameter is selected automatically from the given
 	 * group.
@@ -96,7 +92,7 @@ public class PowerFunction
 	 */
 	public static PowerFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup) {
 		if (multiplicativeSemiGroup == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, multiplicativeSemiGroup);
 		}
 		if (multiplicativeSemiGroup.isFinite() && multiplicativeSemiGroup.hasKnownOrder()) {
 			return PowerFunction.getInstance(multiplicativeSemiGroup, multiplicativeSemiGroup.getZModOrder());
@@ -116,7 +112,7 @@ public class PowerFunction
 	public static PowerFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup,
 		   final Set<BigInteger> amountSet) {
 		if (multiplicativeSemiGroup == null || amountSet == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, multiplicativeSemiGroup, amountSet);
 		}
 		return new PowerFunction(ProductSet.getInstance(multiplicativeSemiGroup, amountSet), multiplicativeSemiGroup);
 	}

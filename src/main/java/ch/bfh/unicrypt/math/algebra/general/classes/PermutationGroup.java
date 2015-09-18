@@ -70,7 +70,7 @@ import java.util.Map;
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public class PermutationGroup
 	   extends AbstractGroup<PermutationElement, Permutation> {
@@ -189,9 +189,6 @@ public class PermutationGroup
 		return hash;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	private static final Map<Integer, PermutationGroup> instances = new HashMap<>();
 
 	/**

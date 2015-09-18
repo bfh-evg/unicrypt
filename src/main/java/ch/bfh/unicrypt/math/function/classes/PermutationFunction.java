@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Permutation;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -104,8 +106,11 @@ public class PermutationFunction
 	 * @return
 	 */
 	public static PermutationFunction getInstance(final Set set, final int arity) {
-		if (set == null || arity < 0) {
-			throw new IllegalArgumentException();
+		if (set == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, set);
+		}
+		if (arity < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);
 		}
 		return PermutationFunction.getInstance(ProductSet.getInstance(set, arity));
 	}
@@ -119,8 +124,11 @@ public class PermutationFunction
 	 * @return
 	 */
 	public static PermutationFunction getInstance(final ProductSet productSet) {
-		if (productSet == null || !productSet.isUniform()) {
-			throw new IllegalArgumentException();
+		if (productSet == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, productSet);
+		}
+		if (!productSet.isUniform()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, productSet);
 		}
 		return new PermutationFunction(ProductSet.getInstance(productSet,
 															  PermutationGroup.getInstance(productSet.getArity())),

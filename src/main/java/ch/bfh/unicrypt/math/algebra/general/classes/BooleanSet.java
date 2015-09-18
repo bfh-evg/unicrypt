@@ -65,9 +65,12 @@ import java.math.BigInteger;
 public class BooleanSet
 	   extends AbstractSet<BooleanElement, Boolean> {
 
+	private static final long serialVersionUID = 1L;
+
 	public static final BooleanElement TRUE = BooleanSet.getInstance().getElement(true);
 	public static final BooleanElement FALSE = BooleanSet.getInstance().getElement(false);
-	private static final long serialVersionUID = 1L;
+
+	private static BooleanSet instance;
 
 	private final BooleanElement trueElement;
 	private final BooleanElement falseElement;
@@ -129,11 +132,6 @@ public class BooleanSet
 	protected int abstractHashCode() {
 		return 1;
 	}
-
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static BooleanSet instance;
 
 	/**
 	 * Returns the singleton object of this class.

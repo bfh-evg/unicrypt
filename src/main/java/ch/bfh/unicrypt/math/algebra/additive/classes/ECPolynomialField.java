@@ -53,7 +53,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.interfaces.ECPolynomialFieldParameters;
 import java.math.BigInteger;
 
 /**
@@ -251,7 +251,7 @@ public class ECPolynomialField
 		}
 	}
 
-	public static ECPolynomialField getInstance(final StandardECPolynomialFieldParams params) {
+	public static ECPolynomialField getInstance(final ECPolynomialFieldParameters params) {
 		PolynomialField field;
 		PolynomialElement a, b, gx, gy;
 		BigInteger order, h;

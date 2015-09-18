@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
@@ -84,7 +86,7 @@ public class SubtractionFunction
 	 */
 	public static SubtractionFunction getInstance(final AdditiveGroup additiveGroup) {
 		if (additiveGroup == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, additiveGroup);
 		}
 		return new SubtractionFunction(ProductGroup.getInstance(additiveGroup, 2), additiveGroup);
 	}

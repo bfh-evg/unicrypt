@@ -68,17 +68,11 @@ public class OneOverFunction
 		super(domain, coDomain);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected MultiplicativeElement abstractApply(final MultiplicativeElement element, final RandomByteSequence randomByteSequence) {
 		return element.oneOver();
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the default constructor for this class. It creates an invert function for a given group.
 	 * <p/>

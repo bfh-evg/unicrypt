@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -77,9 +79,6 @@ public class AdapterFunction
 		return Arrays.equals(this.getIndices(), function.getIndices());
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Tuple abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
 		Element[] elements = new Element[this.getIndices().length];
@@ -89,9 +88,6 @@ public class AdapterFunction
 		return this.getCoDomain().getElement(elements);
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the general constructor of this class. The resulting function selects and returns in a hierarchy of tuple
 	 * elements the element that corresponds to a given sequence of indices (e.g., 0,3,2 for the third element in the
@@ -103,7 +99,7 @@ public class AdapterFunction
 	 */
 	public static AdapterFunction getInstance(final ProductSet productSet, final int... indices) {
 		if (productSet == null || indices == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, productSet, indices);
 		}
 		Set[] sets = new Set[indices.length];
 		for (int i = 0; i < indices.length; i++) {

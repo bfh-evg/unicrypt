@@ -96,7 +96,7 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 	@Override
 	public final CE apply(final Element element, RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
 		}
 		if (this.getDomain().contains(element)) {
 			return this.abstractApply((DE) element, randomByteSequence);
@@ -141,7 +141,7 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 	@Override
 	public final boolean isEquivalent(final Function function) {
 		if (function == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, function);
 		}
 		if (this == function) {
 			return true;

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.exception.ErrorCode;
+import ch.bfh.unicrypt.exception.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -95,8 +97,11 @@ public class ApplyFunction
 	 * @return The resulting function
 	 */
 	public static ApplyFunction getInstance(final SemiGroup semiGroup, final int arity) {
-		if (semiGroup == null || arity < 0) {
-			throw new IllegalArgumentException();
+		if (semiGroup == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, semiGroup);
+		}
+		if (arity < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);
 		}
 		return new ApplyFunction(ProductSemiGroup.getInstance(semiGroup, arity), semiGroup);
 	}
