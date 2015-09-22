@@ -49,13 +49,13 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class StandardCommitmentScheme
+public class DiscreteLogarithmCommitmentScheme
 	   extends AbstractDeterministicCommitmentScheme<ZMod, ZModElement, CyclicGroup, Element> {
 
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
 
-	protected StandardCommitmentScheme(CyclicGroup cyclicGroup, Element generator) {
+	protected DiscreteLogarithmCommitmentScheme(CyclicGroup cyclicGroup, Element generator) {
 		super(cyclicGroup.getZModOrder(), cyclicGroup);
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
@@ -74,18 +74,18 @@ public class StandardCommitmentScheme
 		return GeneratorFunction.getInstance(this.generator);
 	}
 
-	public static StandardCommitmentScheme getInstance(CyclicGroup cyclicGroup) {
+	public static DiscreteLogarithmCommitmentScheme getInstance(CyclicGroup cyclicGroup) {
 		if (cyclicGroup == null) {
 			throw new IllegalArgumentException();
 		}
-		return new StandardCommitmentScheme(cyclicGroup, cyclicGroup.getDefaultGenerator());
+		return new DiscreteLogarithmCommitmentScheme(cyclicGroup, cyclicGroup.getDefaultGenerator());
 	}
 
-	public static StandardCommitmentScheme getInstance(Element generator) {
+	public static DiscreteLogarithmCommitmentScheme getInstance(Element generator) {
 		if (generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()) {
 			throw new IllegalArgumentException();
 		}
-		return new StandardCommitmentScheme((CyclicGroup) generator.getSet(), generator);
+		return new DiscreteLogarithmCommitmentScheme((CyclicGroup) generator.getSet(), generator);
 	}
 
 }
