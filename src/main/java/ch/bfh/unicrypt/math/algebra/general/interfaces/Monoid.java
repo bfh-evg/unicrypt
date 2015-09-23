@@ -46,12 +46,13 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
  * element. It is therefore implemented as a specialization of {@link SemiGroup}.
  * <p>
  *
- * @param <V> Generic type of the values representing the elements of a monoid
+ * @param <V> The generic type of the values representing the elements of a monoid
  * @see "Handbook of Applied Cryptography, Definition 2.162"
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
+ * @see Element
  */
 public interface Monoid<V>
 	   extends SemiGroup<V> {

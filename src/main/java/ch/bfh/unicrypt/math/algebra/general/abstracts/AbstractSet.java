@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
@@ -87,8 +87,8 @@ import java.math.BigInteger;
  * necessary to override some default methods. Every abstract method has a name starting with {@code abstract...} and
  * every default method has a name starting with {@code default...}.
  * <p>
- * @param <E> Generic type of elements of this set
- * @param <V> Generic type of values stored in the elements of this set
+ * @param <E> The generic type of elements of this set
+ * @param <V> The generic type of values stored in the elements of this set
  * @see AbstractElement
  * <p>
  * @author R. Haenni
@@ -408,14 +408,6 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final Sequence<E> getElements() {
 		return this.defaultGetElements();
-	}
-
-	@Override
-	public final Sequence<E> getElements(final long n) {
-		if (n < 0) {
-			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, n);
-		}
-		return this.getElements().limit(n);
 	}
 
 	@Override

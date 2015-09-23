@@ -56,7 +56,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Inherits from ZStarMod but not from AbstractCyclicGroup. Therefore, the additional methods from AbstractCyclicGroup
+ * need to be implemented.
+ * <p>
  * @author R. Haenni
  */
 public class ZStarModPrime

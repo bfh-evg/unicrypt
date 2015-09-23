@@ -42,8 +42,14 @@
 package ch.bfh.unicrypt;
 
 /**
- *
- * @author rolfhaenni
+ * This is the default class for all unchecked runtime exceptions thrown by UniCrypt. The type of each thrown
+ * UniCryptRuntimeException is specified by an instance of the enum type {@link ErrorCode}. If the exception is thrown
+ * as a consequence of another (checked or runtime) exception, then the causing exception can be declared in addition to
+ * the error code. Finally, a list of objects can be declared, which are responsible for throwing the exception.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @see ErrorCode
  */
 public class UniCryptRuntimeException
 	   extends RuntimeException {
@@ -51,18 +57,39 @@ public class UniCryptRuntimeException
 	private final ErrorCode errorCode;
 	private final Object[] failedObjects;
 
-	public UniCryptRuntimeException(ErrorCode errorCode, Object... failedObjects) {
+	/**
+	 * This is the first general constructor of this class. It expects an error code and a list of responsible objects
+	 * as arguments.
+	 * <p>
+	 * @param errorCode          The error code
+	 * @param responsibleObjects The responsible objects
+	 */
+	public UniCryptRuntimeException(ErrorCode errorCode, Object... responsibleObjects) {
 		super();
 		this.errorCode = errorCode;
-		this.failedObjects = failedObjects;
+		this.failedObjects = responsibleObjects;
 	}
 
-	public UniCryptRuntimeException(ErrorCode errorCode, Throwable cause, Object... failedObjects) {
+	/**
+	 * This is the second general constructor of this class. It should be used as a consequence of catching another
+	 * (checked or runtime) exception. It expects an error code, the causing exception, and a list of responsible
+	 * objects as arguments.
+	 * <p>
+	 * @param errorCode          The error code
+	 * @param cause              The causing exception
+	 * @param responsibleObjects The responsible objects
+	 */
+	public UniCryptRuntimeException(ErrorCode errorCode, Throwable cause, Object... responsibleObjects) {
 		super(cause);
 		this.errorCode = errorCode;
-		this.failedObjects = failedObjects;
+		this.failedObjects = responsibleObjects;
 	}
 
+	/**
+	 * Returns the error code that specifies the type of this exception.
+	 * <p>
+	 * @return The error code
+	 */
 	public ErrorCode getErrorCode() {
 		return this.errorCode;
 	}

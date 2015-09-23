@@ -42,24 +42,46 @@
 package ch.bfh.unicrypt;
 
 /**
- *
- * @author rolfhaenni
+ * This is the default class for all checked exceptions thrown by UniCrypt. The type of each thrown UniCryptException is
+ * specified by an instance of the enum type {@link ErrorCode}. If the exception is thrown as a consequence of another
+ * (checked or runtime) exception, then the causing exception can be declared in addition to the error code.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @see ErrorCode
  */
 public class UniCryptException
 	   extends Exception {
 
 	private final ErrorCode errorCode;
 
+	/**
+	 * This is the first general constructor of this class. It expects an error code as argument.
+	 * <p>
+	 * @param errorCode The error code
+	 */
 	public UniCryptException(ErrorCode errorCode) {
 		super();
 		this.errorCode = errorCode;
 	}
 
+	/**
+	 * This is the second general constructor of this class. It should be used as a consequence of catching another
+	 * (checked or runtime) exception. It expects an error code and the causing exception as arguments.
+	 * <p>
+	 * @param errorCode The error code
+	 * @param cause     The causing exception
+	 */
 	public UniCryptException(ErrorCode errorCode, Throwable cause) {
 		super(cause);
 		this.errorCode = errorCode;
 	}
 
+	/**
+	 * Returns the error code that specifies the type of this exception.
+	 * <p>
+	 * @return The error code
+	 */
 	public ErrorCode getErrorCode() {
 		return this.errorCode;
 	}

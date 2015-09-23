@@ -68,8 +68,8 @@ import java.math.BigInteger;
  * <p>
  * Elements of a set are created by constructing instances of {@link Element}{@code <V>}. To construct a new element, an
  * object of the generic type {@code V} representing the element needs to be provided. This object is called the
- * element's value. The concrete type of these values depends on the actual set, to which the element belongs to. The
- * most common types are {@link BigInteger}, {@link String}, and {@link ByteArray}.
+ * element's value. The concrete type of these values depends on the actual set to which the element belongs. The most
+ * common types are {@link BigInteger}, {@link String}, and {@link ByteArray}.
  * <p>
  * Independently of the generic type {@code V} of a set, it is assumed that each element of the set can be converted
  * into unique {@link BigInteger}, {@link String}, or {@link ByteArray} values, and that corresponding elements can be
@@ -79,7 +79,7 @@ import java.math.BigInteger;
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of the values representing the elements of a set
+ * @param <V> The generic type of the values representing the elements of a set
  * @see Element
  */
 public interface Set<V> {
@@ -188,28 +188,30 @@ public interface Set<V> {
 	public boolean hasKnownOrder();
 
 	/**
-	 * Returns the set order. Since only non-empty sets are considered, the order is always greater than 0. If the set
-	 * order is unknown, {@link #UNKNOWN} is returned. If the set order is infinite, {@link #INFINITE} is returned.
+	 * Returns the set order. Since only non-empty sets are considered, the order is always greater or equals to 1. If
+	 * the set order is unknown, {@link #UNKNOWN} is returned. If the set order is infinite, {@link #INFINITE} is
+	 * returned.
 	 * <p>
-	 * @see "Handbook of Applied Cryptography, Definition 2.163"
 	 * @return The set order
+	 * @see "Handbook of Applied Cryptography, Definition 2.163"
 	 * @see #getOrderLowerBound()
 	 * @see #getOrderUpperBound()
 	 */
 	public BigInteger getOrder();
 
 	/**
-	 * Returns a lower bound for the set order in case the exact set order is unknown. The least return value is 1. If
-	 * the exact set order is known (or infinite), the exact set order is returned.
+	 * Returns a lower bound for the set order in case the exact set order is unknown. The smallest possible returned
+	 * value is 1. If the exact set order is known (or infinite), the exact set order is returned.
 	 * <p>
 	 * @return A lower bound for the set order
-	 * @see #getOrder() getOrderUpperBound()
+	 * @see #getOrder()
+	 * @see #getOrderUpperBound()
 	 */
 	public BigInteger getOrderLowerBound();
 
 	/**
-	 * Returns an upper bound for the set order in case the exact set order is unknown. The highest return value is
-	 * {@link #INFINITE}. If the exact set order is known (or infinite), the exact set order is returned.
+	 * Returns an upper bound for the set order in case the exact set order is unknown. The highest possible return
+	 * value is {@link #INFINITE}. If the exact set order is known (or infinite), the exact set order is returned.
 	 * <p>
 	 * @return An upper bound for the set order
 	 * @see #getOrder()
@@ -268,7 +270,8 @@ public interface Set<V> {
 	public boolean contains(V value);
 
 	/**
-	 * Returns the corresponding element for a given value, if such an element exists.
+	 * Returns the corresponding element for a given value, if such an element exists. Otherwise, an exception is
+	 * thrown.
 	 * <p>
 	 * @param value The given value
 	 * @return The element represented by the value
@@ -280,7 +283,7 @@ public interface Set<V> {
 	 * Selects and returns a random set element using the library's default random byte sequence. For sets of finite
 	 * order, the element is selected uniformly at random. For sets of infinite order, an exception is thrown.
 	 * <p>
-	 * @return A random element from the set
+	 * @return A random element
 	 */
 	public Element<V> getRandomElement();
 
@@ -289,19 +292,32 @@ public interface Set<V> {
 	 * element is selected uniformly at random. For sets of infinite order, an exception is thrown.
 	 * <p>
 	 * @param randomByteSequence The given random byte sequence
-	 * @return A random element from the set
+	 * @return A random element
 	 */
 	public Element<V> getRandomElement(RandomByteSequence randomByteSequence);
 
+	/**
+	 * Returns a sequence of random elements using the library's default random byte sequence. For sets of finite order,
+	 * the elements are selected uniformly at random. For sets of infinite order, an exception is thrown.
+	 * <p>
+	 * @return A sequence of random elements
+	 */
 	public Sequence<? extends Element<V>> getRandomElements();
 
+	/**
+	 * Returns a sequence of random elements using a given random byte sequence. For sets of finite order, the elements
+	 * are selected uniformly at random. For sets of infinite order, an exception is thrown.
+	 * <p>
+	 * @param randomByteSequence The given random byte sequence
+	 * @return A sequence of random elements
+	 */
 	public Sequence<? extends Element<V>> getRandomElements(RandomByteSequence randomByteSequence);
 
 	/**
 	 * Checks if two sets are mathematically equivalent. In most cases, this is equivalent to testing two sets for
-	 * equality using {@link Set#equals(java.lang.Object)}, but some mathematically equivalent sets are instances of
-	 * different classes and therefore are not passing the standard Java equality test. Calling this method is the
-	 * recommended way of checking the equality of two sets.
+	 * equality using {@link Set#equals(Object)}, but some mathematically equivalent sets are instances of different
+	 * classes and therefore are not passing the standard Java equality test. Calling this method is the recommended way
+	 * of checking the equality of two sets.
 	 * <p>
 	 * @param set The given Set
 	 * @return {@code true}, if the two sets are mathematically equivalent, {@code false} otherwise
@@ -309,21 +325,12 @@ public interface Set<V> {
 	public boolean isEquivalent(Set<?> set);
 
 	/**
-	 * Returns the sequence of all elements from this set. The size of this collection may be infinite. The order in
-	 * which the elements appear in the sequence is unspecified.
+	 * Returns the sequence of all elements from this set. The size of the sequence may be infinite. The order in which
+	 * the elements appear in the sequence is unspecified.
 	 * <p>
 	 * @return The sequence of all elements
 	 */
 	public Sequence<? extends Element<V>> getElements();
-
-	/**
-	 * Returns a sequence of some elements from this set. The maximal number of elements in the sequence is given as
-	 * parameter. Their order is unspecified.
-	 * <p>
-	 * @param n The maximal number of element in the resulting sequence
-	 * @return A sequence of elements
-	 */
-	public Sequence<? extends Element<V>> getElements(long n);
 
 	/**
 	 * Returns the class of the values representing the elements of this set.
@@ -333,93 +340,133 @@ public interface Set<V> {
 	public Class<?> getValueClass();
 
 	/**
-	 *
-	 * @param <W>
-	 * @param value
-	 * @param converter
-	 * @return
+	 * This method is the counter-part of the method {@link Element#convertTo(Converter)}. It re-constructs an element
+	 * of type {@code V} from a given value of type {@code W}. First, the given converter is used to re-constructs a
+	 * value of type {@code V}, and this value is then used to re-construct the element. A checked exception is thrown
+	 * if the conversion fails. This method is mostly used to re-construct atomic elements, but it contains the
+	 * conversion of tuples as a special case.
+	 * <p>
+	 * @param <W>       The type of the given value
+	 * @param value     The given value
+	 * @param converter The given converter
+	 * @return The re-constructed element
 	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
+	 * @see Element#convertTo(Converter)
 	 */
 	public <W> Element<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;
 
 	/**
-	 *
-	 * @param <W>
-	 * @param value
-	 * @param convertMethod
-	 * @param aggregator
-	 * @return
+	 * This method is the counter-part of the method {@link Element#convertTo(ConvertMethod, Aggregator)}. It
+	 * re-constructs an element of type {@code V} from a given value of type {@code W}. First, the given aggregator is
+	 * used to re-construct a tree of type {@code W}. This tree together with the given convert method is then used to
+	 * re-construct the element. A checked exception is thrown if the conversion fails. This method is mostly used to
+	 * re-construct tuples, but it contains the conversion of atomic elements as a special case.
+	 * <p>
+	 * <p>
+	 * @param <W>           The type of the given value
+	 * @param value         The given value
+	 * @param convertMethod The given convert method
+	 * @param aggregator    The given aggregator
+	 * @return The re-constructed element
 	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
+	 * @see Element#convertTo(ConvertMethod, Aggregator)
 	 */
 	public <W> Element<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
 
 	/**
-	 *
-	 * @param <W>
-	 * @param <X>
-	 * @param value
-	 * @param convertMethod
-	 * @param aggregator
-	 * @param finalConverter
+	 * This is the most general method for re-constructing elements of type {@code V} from a value of type {@code W}. It
+	 * is the counter-part of the method {@link Element#convertTo(ConvertMethod, Aggregator, Converter)}. First, the
+	 * value is converted into another value of an intermediate type {@code X}. Using the given aggregator, this value
+	 * is then converted into a tree of type {@code X}. Finally, this tree together with the given convert method is
+	 * used to re-construct the element. A checked exception is thrown if the conversion fails. This method is mostly
+	 * used to re-construct tuples, but it contains the conversion of atomic elements as a special case.
+	 * <p>
+	 * @param <W>            The type of the given value
+	 * @param <X>            The type of the intermediate value
+	 * @param value	         The given value
+	 * @param convertMethod  The given convert method
+	 * @param aggregator     The given aggregator
+	 * @param finalConverter The given converter
+	 * @return The re-constructed element
 	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
-	 * @return
+	 * @see Element#convertTo(ConvertMethod, Aggregator, Converter)
 	 */
 	public <W, X> Element<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
 
 	/**
-	 *
-	 * @param <W>
-	 * @param tree
-	 * @param convertMethod
-	 * @return
+	 * This method is the counter-part of the method {@link Element#convertTo(ConvertMethod)}. It can be used to convert
+	 * a tree of type {@code W} into an element of type {@code V}, using the given convert method. A checked exception
+	 * is thrown if the conversion fails.
+	 * <p>
+	 * @param <W>           The type of the given tree
+	 * @param tree          The given tree
+	 * @param convertMethod The given convert method
+	 * @return The re-constructed element
 	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
+	 * @see Element#convertTo(ConvertMethod)
 	 */
 	public <W> Element<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
 
 	/**
-	 * Creates and returns the element that corresponds to a given {@code long} value using the default conversion
-	 * method (if one exists).
+	 * Re-constructs the element that corresponds to a given {@code long} value using the default conversion method. A
+	 * checked exception is thrown if the conversion fails. This method is a convenient method for
+	 * {@link Set#getElementFrom(BigInteger)}.
 	 * <p>
 	 * @param value The given {@code long} value
-	 * @return The corresponding element
+	 * @return The re-constructed element
 	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 */
 	public Element<V> getElementFrom(long value) throws UniCryptException;
 
 	/**
-	 * Creates and returns the element that corresponds to a given {@code BigInteger} value using the default conversion
-	 * method(if one exists).
+	 * Re-constructs the element that corresponds to a given {@code BigInteger} value using the default conversion
+	 * method. A checked exception is thrown if the conversion fails.
 	 * <p>
 	 * @param value The given {@code BigInteger} value
-	 * @return The corresponding element
+	 * @return The re-constructed element
 	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 */
 	public Element<V> getElementFrom(BigInteger value) throws UniCryptException;
 
 	/**
-	 * Creates and returns the element that corresponds to a given {@code ByteArray} value using the default conversion
-	 * method(if one exists).
+	 * Re-constructs the element that corresponds to a given {@code ByteArray} value using the default conversion
+	 * method. A checked exception is thrown if the conversion fails.
 	 * <p>
 	 * @param value The given {@code ByteArray} value
-	 * @return The corresponding element
+	 * @return The re-constructed element
 	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 */
 	public Element<V> getElementFrom(ByteArray value) throws UniCryptException;
 
 	/**
-	 * Creates and returns the element that corresponds to a given {@code String} value using the default conversion
-	 * method.
+	 * CRe-constructs the element that corresponds to a given {@code String} value using the default conversion method.
+	 * A checked exception is thrown if the conversion fails.
 	 * <p>
 	 * @param value The given {@code String} value
-	 * @return The corresponding element
+	 * @return The re-constructed element
 	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 */
 	public Element<V> getElementFrom(String value) throws UniCryptException;
 
+	/**
+	 * Returns the default {@code BigInteger} converter.
+	 * <p>
+	 * @return The default converter
+	 */
 	public Converter<V, BigInteger> getBigIntegerConverter();
 
+	/**
+	 * Returns the default {@code ByteArray} converter.
+	 * <p>
+	 * @return The default converter
+	 */
 	public Converter<V, ByteArray> getByteArrayConverter();
 
+	/**
+	 * Returns the default {@code String} converter.
+	 * <p>
+	 * @return The default converter
+	 */
 	public Converter<V, String> getStringConverter();
 
 }

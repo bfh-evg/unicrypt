@@ -46,26 +46,27 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
  * for all elements in the group. It is therefore implemented as a specialization of {@link Monoid}.
  * <p>
  *
- * @param <V> Generic type of the values representing the elements of a group
+ * @param <V> The generic type of the values representing the elements of a group
  * @see "Handbook of Applied Cryptography, Definition 2.162"
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
+ * @see Element
  */
 public interface Group<V>
 	   extends Monoid<V> {
 
 	/**
-	 * Computes and returns the inverse of a given group element.
+	 * Computes and returns the inverse of the given group element.
 	 * <p>
-	 * @param element A given element
-	 * @return The inverse element of the input element
+	 * @param element The given element
+	 * @return The inverse of the given element
 	 */
 	public Element<V> invert(Element element);
 
 	/**
-	 * Applies the binary operation to the first and the inverse of the second given group element.
+	 * Applies the binary operation to the first and the inverse of the second element.
 	 * <p>
 	 * @param element1 The first element
 	 * @param element2 The second element

@@ -49,12 +49,13 @@ import java.math.BigInteger;
  * This interface represents the mathematical concept of a semigroup. It defines a set of elements and an associative
  * (but not necessarily commutative) binary operation. It is implemented as a specialization of {@link Set}.
  * <p>
- * @param <V> Generic type of the values representing the elements of a semigroup
+ * @param <V> The generic type of the values representing the elements of a semigroup
  * @see "Handbook of Applied Cryptography, Definition 2.162"
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
+ * @see Element
  */
 public interface SemiGroup<V>
 	   extends Set<V> {
@@ -62,8 +63,8 @@ public interface SemiGroup<V>
 	/**
 	 * Applies the binary operation to two elements (in the given order).
 	 * <p>
-	 * @param element1 The first element
-	 * @param element2 The second element
+	 * @param element1 The first input element
+	 * @param element2 The second input element
 	 * @return The result of applying the binary operation to the two input elements
 	 */
 	public Element<V> apply(Element element1, Element element2);
@@ -73,57 +74,59 @@ public interface SemiGroup<V>
 	 * as an array. If the array contains a single element, it is returned without applying the operation. If the given
 	 * collection is empty, an exception is thrown.
 	 * <p>
-	 * @param elements A given array of elements
+	 * @param elements The given array of input elements
 	 * @return The result of applying the operation to the input elements
 	 */
 	public Element<V> apply(Element... elements);
 
 	/**
 	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
-	 * as an array. If the array contains a single element, it is returned without applying the operation. If the given
-	 * collection is empty, an exception is thrown.
+	 * as an immutable array. If the array contains a single element, it is returned without applying the operation. If
+	 * the given collection is empty, an exception is thrown.
 	 * <p>
-	 * @param elements A given array of elements
+	 * @param elements The given immutable array of input elements
 	 * @return The result of applying the operation to the input elements
 	 */
 	public Element<V> apply(ImmutableArray<Element> elements);
 
 	/**
 	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
-	 * as a sequence. If the collection contains a single element, it is returned without applying the operation. If the
-	 * given collection is empty, an exception is thrown.
+	 * as a sequence. If the sequence contains a single element, it is returned without applying the operation. If the
+	 * given sequence is empty, an exception is thrown.
 	 * <p>
-	 * @param elements A given collection of elements
+	 * @param elements The given sequence of input elements
 	 * @return The result of applying the operation to the input elements
 	 */
 	public Element<V> apply(Sequence<Element> elements);
 
 	/**
-	 * Applies the binary operation repeatedly to {@code amount} many instances of a given element. If {@code amount=1},
-	 * the element is returned without applying the operation. If {@code amount<1}, an exception is thrown.
+	 * Applies the binary operation repeatedly to {@code amount} many instances of a given input element. If
+	 * {@code amount=1}, the element is returned without applying the operation. If {@code amount<1}, an exception is
+	 * thrown. This is a convenient method for {@link SemiGroup#selfApply(Element, BigInteger)}.
 	 * <p>
-	 * @param element A given element
+	 * @param element The given input element
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying the operation multiple times to the input element
 	 */
 	public Element<V> selfApply(Element element, long amount);
 
 	/**
-	 * Applies the binary operation repeatedly to {@code amount} many instances of a given element. If {@code amount=1},
-	 * the element is returned without applying the operation. If {@code amount<1}, an exception is thrown.
+	 * Applies the binary operation repeatedly to {@code amount} many instances of a given input element. If
+	 * {@code amount=1}, the element is returned without applying the operation. If {@code amount<1}, an exception is
+	 * thrown.
 	 * <p>
-	 * @param element The given element
+	 * @param element The given input element
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying the operation multiple times to the input element
 	 */
 	public Element<V> selfApply(Element element, BigInteger amount);
 
 	/**
-	 * Same as {@link SemiGroup#selfApply(Element, BigInteger)}, except that the amount is given as an
-	 * {@link Element}{@code <BigInteger>}, from which a {@code BigInteger} value can be extracted using
+	 * Same as {@link SemiGroup#selfApply(Element, BigInteger)}, except that the amount is given as an instance of
+	 * {@code Element<BigInteger>}, from which a {@code BigInteger} value can be extracted using
 	 * {@link Element#getValue()}.
 	 * <p>
-	 * @param element A given element
+	 * @param element The given input element
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying the operation multiple times to the input element
 	 */
@@ -133,8 +136,8 @@ public interface SemiGroup<V>
 	 * Applies the group operation to two instances of a given element. This is equivalent to
 	 * {@link SemiGroup#selfApply(Element, long)} for {@code amount=2}.
 	 * <p>
-	 * @param element A given element
-	 * @return The result of applying the group operation to the input element
+	 * @param element The given input element
+	 * @return The result of applying the group operation to two instances of the input element
 	 */
 	public Element<V> selfApply(Element element);
 
@@ -144,7 +147,7 @@ public interface SemiGroup<V>
 	 * operation is an addition or multiplication. If the two input lists are not of equal length, an exception is
 	 * thrown.
 	 * <p>
-	 * @param elements A given array of elements
+	 * @param elements The given array of elements
 	 * @param amounts  Corresponding amounts
 	 * @return The result of this operation
 	 */

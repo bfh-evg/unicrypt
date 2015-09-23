@@ -42,8 +42,12 @@
 package ch.bfh.unicrypt;
 
 /**
- *
- * @author rolfhaenni
+ * This enum class lists different types of UniCrypt exceptions. A single instance of this class is required when
+ * throwing a {@link UniCryptException} or a {@link UniCryptRuntimeException}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @see ErrorCode
  */
 public enum ErrorCode {
 

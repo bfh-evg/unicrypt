@@ -52,37 +52,76 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
  * isomorphism) with that order, and there is exactly one infinite cyclic group. This interface extends {@link Group}
  * with additional methods for dealing with generators. Each implementing class must provide a default generator.
  * <p>
- * @param <V> Generic type of the values representing the elements of a cyclic group
+ * @param <V> The generic type of the values representing the elements of a cyclic group
  * @see "Handbook of Applied Cryptography, Definition 2.167"
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
+ * @see Element
  */
 public interface CyclicGroup<V>
 	   extends Group<V> {
 
 	/**
-	 * TODO Returns a default generator of this cyclic group.
+	 * Returns a default generator of the cyclic group.
 	 * <p>
 	 * @return The default generator
 	 */
 	public Element<V> getDefaultGenerator();
 
+	/**
+	 * Derives and returns a sequence of independent generators from the library's default deterministic random byte
+	 * sequence.
+	 * <p>
+	 * @return A sequence of independent generators
+	 */
 	public Sequence<? extends Element<V>> getIndependentGenerators();
 
+	/**
+	 * Derives and returns a sequence of independent generators from a given deterministic random byte sequence.
+	 * <p>
+	 * @param randomByteSequence The given deterministic random byte sequence.
+	 * @return A sequence of independent generators
+	 */
 	public Sequence<? extends Element<V>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
 
+	/**
+	 * Derives and returns a random generator from the library's default random byte sequence. It is selected uniformly
+	 * at random from the set of all generators.
+	 * <p>
+	 * @return A random generator
+	 */
 	public Element<V> getRandomGenerator();
 
+	/**
+	 * Derives and returns a random generator from the given random byte sequence. It is selected uniformly at random
+	 * from the set of all generators.
+	 * <p>
+	 * @param randomByteSequence The given random byte sequence
+	 * @return A random generator
+	 */
 	public Element<V> getRandomGenerator(RandomByteSequence randomByteSequence);
 
+	/**
+	 * Derives and returns a sequence of random generators from the library's default random byte sequence. The random
+	 * generators are selected uniformly at random from the set of all generators.
+	 * <p>
+	 * @return The sequence of random generators
+	 */
 	public Sequence<? extends Element<V>> getRandomGenerators();
 
+	/**
+	 * Derives and returns a sequence of random generators from the given random byte sequence. The random generators
+	 * are selected uniformly at random from the set of all generators.
+	 * <p>
+	 * @param randomByteSequence The given random byte sequence
+	 * @return The sequence of random generators
+	 */
 	public Sequence<? extends Element<V>> getRandomGenerators(RandomByteSequence randomByteSequence);
 
 	/**
-	 * TODO Checks if a given element is a generator of this cyclic group.
+	 * Checks if the given element is a generator of the cyclic group.
 	 * <p>
 	 * @param element The given element
 	 * @return {@code true} if the element is a generator, {@code false} otherwise
