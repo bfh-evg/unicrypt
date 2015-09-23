@@ -54,11 +54,11 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
  * <p>
  * @param <V> The generic type of the values representing the elements of a cyclic group
  * @see "Handbook of Applied Cryptography, Definition 2.167"
+ * @see Element
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @see Element
  */
 public interface CyclicGroup<V>
 	   extends Group<V> {

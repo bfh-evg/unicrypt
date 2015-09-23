@@ -48,10 +48,10 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
 
 /**
- * This abstract class provides a basis implementation for objects of type {@link Group}.
+ * This abstract class provides a base implementation for the interface {@link Group}.
  * <p>
- * @param <E> Generic type of elements of this group
- * @param <V> Generic type of values stored in the elements of this group
+ * @param <E> The generic type of elements of this group
+ * @param <V> The generic type of values stored in the elements of this group
  * @see AbstractElement
  * <p>
  * @author R. Haenni

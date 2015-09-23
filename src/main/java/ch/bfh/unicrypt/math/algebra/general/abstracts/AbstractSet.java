@@ -322,7 +322,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	}
 
 	@Override
-	public <W, X> E getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException {
+	public final <W, X> E getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException {
 		if (value == null || convertMethod == null || aggregator == null || finalConverter == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value, convertMethod, aggregator, finalConverter);
 		}
@@ -435,23 +435,6 @@ public abstract class AbstractSet<E extends Element<V>, V>
 		return this.abstractEquals((Set) other);
 	}
 
-	protected final <W> Converter<V, W> getConverter(ConvertMethod<W> convertMethod) {
-		Converter<V, W> converter = (Converter<V, W>) convertMethod.getConverter(this.getValueClass());
-		if (converter == null) {
-			Class<W> outputClass = convertMethod.getOutputClass();
-			if (outputClass == String.class) {
-				converter = (Converter<V, W>) this.getStringConverter();
-			} else if (outputClass == BigInteger.class) {
-				converter = (Converter<V, W>) this.getBigIntegerConverter();
-			} else if (outputClass == ByteArray.class) {
-				converter = (Converter<V, W>) this.getByteArrayConverter();
-			} else {
-				throw new UniCryptRuntimeException(ErrorCode.OBJECT_NOT_FOUND, this, convertMethod);
-			}
-		}
-		return converter;
-	}
-
 	@Override
 	public final Converter<V, BigInteger> getBigIntegerConverter() {
 		if (this.bigIntegerConverter == null) {
@@ -474,6 +457,25 @@ public abstract class AbstractSet<E extends Element<V>, V>
 			this.stringConverter = this.defaultGetStringConverter();
 		}
 		return this.stringConverter;
+	}
+
+	// helper method for selecting a converter from a given convert method or to return one of the default converters for
+	// bigIntgers, strings, or byteArrays if no converter exists
+	protected final <W> Converter<V, W> getConverter(ConvertMethod<W> convertMethod) {
+		Converter<V, W> converter = (Converter<V, W>) convertMethod.getConverter(this.getValueClass());
+		if (converter == null) {
+			Class<W> outputClass = convertMethod.getOutputClass();
+			if (outputClass == String.class) {
+				converter = (Converter<V, W>) this.getStringConverter();
+			} else if (outputClass == BigInteger.class) {
+				converter = (Converter<V, W>) this.getBigIntegerConverter();
+			} else if (outputClass == ByteArray.class) {
+				converter = (Converter<V, W>) this.getByteArrayConverter();
+			} else {
+				throw new UniCryptRuntimeException(ErrorCode.OBJECT_NOT_FOUND, this, convertMethod);
+			}
+		}
+		return converter;
 	}
 
 	// this method is only called for sets of unknown order
@@ -506,14 +508,14 @@ public abstract class AbstractSet<E extends Element<V>, V>
 		return this.getElement(converter.reconvert(value));
 	}
 
-	// this method us usually overriden in classes of value type String
-	protected Converter<V, String> defaultGetStringConverter() {
-		return CompositeConverter.getInstance(this.getBigIntegerConverter(), BigIntegerToString.getInstance());
-	}
-
 	// this method us usually overriden in classes of value type ByteArray
 	protected Converter<V, ByteArray> defaultGetByteArrayConverter() {
 		return CompositeConverter.getInstance(this.getBigIntegerConverter(), BigIntegerToByteArray.getInstance());
+	}
+
+	// this method us usually overriden in classes of value type String
+	protected Converter<V, String> defaultGetStringConverter() {
+		return CompositeConverter.getInstance(this.getBigIntegerConverter(), BigIntegerToString.getInstance());
 	}
 
 	// isEquivalent is usually the same as equals, but there are a few exceptions

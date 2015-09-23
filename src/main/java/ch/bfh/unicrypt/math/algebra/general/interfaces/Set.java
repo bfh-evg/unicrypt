@@ -76,11 +76,12 @@ import java.math.BigInteger;
  * constructed from such {@link BigInteger}, {@link String}, or {@link ByteArray} values. This is the recommended way of
  * converting the mathematical objects of the library into common Java objects.
  * <p>
+ * @param <V> The generic type of the values representing the elements of a set
+ * @see Element
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> The generic type of the values representing the elements of a set
- * @see Element
  */
 public interface Set<V> {
 

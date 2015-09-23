@@ -51,89 +51,119 @@ import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
 
 /**
- * This interface provides the renaming of some group operations for the case of a multiplicatively written
- * {@link SemiGroup}. No functionality is added. Some return types are updated.
+ * This interface provides the renaming of some methods for the case of a multiplicatively written commutative
+ * {@link SemiGroup}. No functionality is added. Some return types are adjusted.
+ * <p>
+ * @param <V> The generic type of the values stored in the elements of this semigroup
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of this semigroup
  */
 public interface MultiplicativeSemiGroup<V>
 	   extends SemiGroup<V> {
 
 	/**
-	 * This method is a synonym for {@link Group#apply(Element, Element)}.
+	 * This method is a synonym for {@link SemiGroup#apply(Element, Element)}. It multiplies to two input elements (in
+	 * the given order).
 	 * <p>
-	 * @param element1 the same as in {@link Group#apply(Element, Element)}
-	 * @param element2 the same as in {@link Group#apply(Element, Element)}
-	 * @return the same as in {@link Group#apply(Element, Element)}
+	 * @param element1 The first input element
+	 * @param element2 The second input element
+	 * @return The result of applying the multiplying the two input elements
+	 * @see SemiGroup#apply(Element, Element)
 	 */
 	public MultiplicativeElement<V> multiply(Element element1, Element element2);
 
 	/**
-	 * This method is a synonym for {@link Group#apply(Element...)}.
+	 * This method is a synonym for {@link SemiGroup#apply(Element...)}. It multiplies the input elements, which are
+	 * given as an array.
 	 * <p>
-	 * @param elements the same as in {@link Group#apply(Element...)}
-	 * @return the same as in {@link Group#apply(Element...)}
+	 * @param elements The given array of input elements
+	 * @return The result of multiplying the input elements
+	 * @see SemiGroup#apply(Element...)
 	 */
 	public MultiplicativeElement<V> multiply(Element... elements);
 
+	/**
+	 * This method is a synonym for {@link SemiGroup#apply(ImmutableArray)}. It multiplies the input elements, which are
+	 * given as immutable array.
+	 * <p>
+	 * @param elements The given immutable array of input elements
+	 * @return The result of multiplying the input elements
+	 * @see SemiGroup#apply(ImmutableArray)
+	 */
 	public MultiplicativeElement<V> multiply(ImmutableArray<Element> elements);
 
+	/**
+	 * This method is a synonym for {@link SemiGroup#apply(Sequence)}. It multiplies the input elements, which are given
+	 * as a sequence.
+	 * <p>
+	 * @param elements The given sequence of input elements
+	 * @return The result of multiplying the input elements
+	 * @see SemiGroup#apply(Sequence)
+	 */
 	public MultiplicativeElement<V> multiply(Sequence<Element> elements);
 
 	/**
-	 * This method is a synonym for {@link Group#selfApply(Element, BigInteger)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, long)}. It raises the given element to the power
+	 * of the exponent. This is a convenient method for {@link MultiplicativeSemiGroup#power(Element, BigInteger)}.
 	 * <p>
-	 * @param element the same as in {@link Group#selfApply(Element, BigInteger)}
-	 * @param amount  the same as in {@link Group#selfApply(Element, BigInteger)}
-	 * @return the same as in {@link Group#selfApply(Element, BigInteger)}
+	 * @param element  The given input element
+	 * @param exponent The given exponent
+	 * @return The element raised to the power of the exponent
+	 * @see SemiGroup#selfApply(Element, long)
 	 */
-	public MultiplicativeElement<V> power(Element element, BigInteger amount);
+	public MultiplicativeElement<V> power(Element element, long exponent);
 
 	/**
-	 * This method is a synonym for {@link Group#selfApply(Element, Element)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, BigInteger)}. It raises the given element to the
+	 * power of the exponent.
 	 * <p>
-	 * @param element the same as in {@link Group#selfApply(Element, Element)}
-	 * @param amount  the same as in {@link Group#selfApply(Element, Element)}
-	 * @return the same as in {@link Group#selfApply(Element, Element)}
+	 * @param element  The given input element
+	 * @param exponent The given exponent
+	 * @return The element raised to the power of the exponent
+	 * @see SemiGroup#selfApply(Element, BigInteger)
 	 */
-	public MultiplicativeElement<V> power(Element element, Element<BigInteger> amount);
+	public MultiplicativeElement<V> power(Element element, BigInteger exponent);
 
 	/**
-	 * This method is a synonym for {@link Group#selfApply(Element, long)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, Element)} and the same as
+	 * {@link MultiplicativeSemiGroup#power(Element, BigInteger)}, except that the exponent is given as an instance of
+	 * {@code Element<BigInteger>}, from which a {@code BigInteger} exponent can be extracted using
+	 * {@link Element#getValue()}.
 	 * <p>
-	 * @param element the same as in {@link Group#selfApply(Element, long)}
-	 * @param amount  the same as in {@link Group#selfApply(Element, long)}
-	 * @return the same as in {@link Group#selfApply(Element, long)}
+	 * @param element  The given input element
+	 * @param exponent The given exponent
+	 * @return The element raised to the power of the exponent
+	 * @see SemiGroup#selfApply(Element, Element)
 	 */
-	public MultiplicativeElement<V> power(Element element, long amount);
+	public MultiplicativeElement<V> power(Element element, Element<BigInteger> exponent);
 
 	/**
-	 * Applies the group operation to two instances of a given group element. This is equivalent to
-	 * {@code selfApply(element, 2)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element)}. It computes the square of the given input
+	 * element.
 	 * <p>
-	 * @param element A given group element
-	 * @return The result of applying the group operation to the input element
+	 * @param element A given input element
+	 * @return The square of the input element
+	 * @see SemiGroup#selfApply(Element)
 	 */
 	public MultiplicativeElement<V> square(Element element);
 
 	/**
-	 * Applies the binary operation pair-wise sequentially to the results of computing
-	 * {@link #selfApply(Element, BigInteger)} multiple times. In an additive group, this operation is sometimes called
-	 * 'weighed sum', and 'product-of-powers' in a multiplicative group.
+	 * This method is a synonym for {@link SemiGroup#multiSelfApply(Element[], BigInteger[])}. It computes the
+	 * 'product-of-powers' for given input elements and exponents. If the two input arrays are not of equal length, an
+	 * exception is thrown.
 	 * <p>
-	 * @param elements A given array of elements
-	 * @param amounts  Corresponding amounts
-	 * @return The result of this operation
+	 * @param elements  A given array of elements
+	 * @param exponents Corresponding exponents
+	 * @return The resulting 'product-of-powers'
+	 * @see SemiGroup#multiSelfApply(Element[], BigInteger[])
 	 */
-	public MultiplicativeElement<V> productOfPowers(Element[] elements, BigInteger[] amounts);
+	public MultiplicativeElement<V> productOfPowers(Element[] elements, BigInteger[] exponents);
 
 	@Override
 	public <W> MultiplicativeElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;
@@ -184,18 +214,18 @@ public interface MultiplicativeSemiGroup<V>
 	public MultiplicativeElement<V> apply(Sequence<Element> elements);
 
 	@Override
-	public MultiplicativeElement<V> selfApply(Element element, BigInteger amount);
+	public MultiplicativeElement<V> selfApply(Element element, long exponent);
 
 	@Override
-	public MultiplicativeElement<V> selfApply(Element element, Element<BigInteger> amount);
+	public MultiplicativeElement<V> selfApply(Element element, BigInteger exponent);
 
 	@Override
-	public MultiplicativeElement<V> selfApply(Element element, long amount);
+	public MultiplicativeElement<V> selfApply(Element element, Element<BigInteger> exponent);
 
 	@Override
 	public MultiplicativeElement<V> selfApply(Element element);
 
 	@Override
-	public MultiplicativeElement<V> multiSelfApply(Element[] elements, BigInteger[] amounts);
+	public MultiplicativeElement<V> multiSelfApply(Element[] elements, BigInteger[] exponents);
 
 }

@@ -85,18 +85,18 @@ public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElemen
 	}
 
 	@Override
-	public final E power(final Element element, final BigInteger amount) {
-		return this.selfApply(element, amount);
+	public final E power(final Element element, final long exponent) {
+		return this.selfApply(element, exponent);
 	}
 
 	@Override
-	public final E power(final Element element, final Element<BigInteger> amount) {
-		return this.selfApply(element, amount);
+	public final E power(final Element element, final BigInteger exponent) {
+		return this.selfApply(element, exponent);
 	}
 
 	@Override
-	public final E power(final Element element, final long amount) {
-		return this.selfApply(element, amount);
+	public final E power(final Element element, final Element<BigInteger> exponent) {
+		return this.selfApply(element, exponent);
 	}
 
 	@Override
@@ -105,18 +105,8 @@ public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElemen
 	}
 
 	@Override
-	public final E productOfPowers(Element[] elements, BigInteger[] amounts) {
-		return this.multiSelfApply(elements, amounts);
-	}
-
-	@Override
-	public final E divide(final Element element1, final Element element2) {
-		return this.applyInverse(element1, element2);
-	}
-
-	@Override
-	public final E oneOver(final Element element) {
-		return this.invert(element);
+	public final E productOfPowers(Element[] elements, BigInteger[] exponents) {
+		return this.multiSelfApply(elements, exponents);
 	}
 
 	@Override
@@ -127,6 +117,16 @@ public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElemen
 	@Override
 	public final boolean isOneElement(Element element) {
 		return this.isIdentityElement(element);
+	}
+
+	@Override
+	public final E oneOver(final Element element) {
+		return this.invert(element);
+	}
+
+	@Override
+	public final E divide(final Element element1, final Element element2) {
+		return this.applyInverse(element1, element2);
 	}
 
 }

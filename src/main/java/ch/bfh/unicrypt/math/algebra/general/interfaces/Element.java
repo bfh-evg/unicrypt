@@ -55,19 +55,19 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import java.math.BigInteger;
 
 /**
- * This interface represents the concept of an element in a mathematical set. Each instance of {@link Element} is
- * therefore linked to a (unique) instance of {@link Set}. In case the same element is contained in more than one set,
- * multiple instances need to be created, one for each set membership. In other words, sets are treated as being
- * disjoint, which may not be true in a strict mathematical sense.
+ * This interface represents the concept of an element of a mathematical set. Each instance of {@link Element} is linked
+ * to a (unique) instance of {@link Set}. In case the same element is contained in more than one set, multiple instances
+ * need to be created, one for each set membership. In other words, sets in UniCrypt are treated as being disjoint,
+ * which is not true in a strict mathematical sense.
  * <p>
- * Each element is internally represented by value of the generic type {@code V}. Elements are usually constructed by
+ * Internally, each element is represented by value of the generic type {@code V}. Elements are usually constructed by
  * specifying this value.
  * <p>
  * For improved convenience, several pairs of equivalent methods exist for {@link Set} and {@link Element} and for
  * corresponding sub-interfaces. This allows both set-oriented and element-oriented writing of code.
  * <p>
- * @param <V> Generic type of values stored in this element
- * @see Group
+ * @param <V> The generic type of values stored in this element
+ * @see Set
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -141,21 +141,8 @@ public interface Element<V> {
 
 	public String convertToString();
 
-	/**
-	 * TODO
-	 * <p>
-	 * @return
-	 */
 	public ByteArray getHashValue();
 
-	/**
-	 * TODO
-	 * <p>
-	 * @param <W>
-	 * @param convertMethod
-	 * @param hashMethod
-	 * @return
-	 */
 	public <W> ByteArray getHashValue(ConvertMethod<W> convertMethod, HashMethod<W> hashMethod);
 
 	/**
@@ -167,18 +154,7 @@ public interface Element<V> {
 	 */
 	public boolean isEquivalent(Element element);
 
-	/**
-	 * @param element
-	 * @return
-	 * @see Group#apply(Element, Element)
-	 */
 	public Element<V> apply(Element element);
-
-	/**
-	 * @param element
-	 * @return @see Group#applyInverse(Element, Element)
-	 */
-	public Element<V> applyInverse(Element element);
 
 	/**
 	 * @param amount
@@ -204,14 +180,20 @@ public interface Element<V> {
 	public Element<V> selfApply();
 
 	/**
+	 * @return @see Group#isIdentityElement(Element)
+	 */
+	public boolean isIdentity();
+
+	/**
 	 * @return @see Group#invert(Element)
 	 */
 	public Element<V> invert();
 
 	/**
-	 * @return @see Group#isIdentityElement(Element)
+	 * @param element
+	 * @return @see Group#applyInverse(Element, Element)
 	 */
-	public boolean isIdentity();
+	public Element<V> applyInverse(Element element);
 
 	/**
 	 * @return @see CyclicGroup#isGenerator(Element)

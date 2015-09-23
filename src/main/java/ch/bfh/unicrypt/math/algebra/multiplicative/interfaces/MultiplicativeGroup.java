@@ -45,33 +45,38 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 /**
- * This interface provides the renaming of one group operation for the case of a multiplicatively written {@link Group}.
- * No functionality is added. Some return types are updated.
+ * This interface provides the renaming of some methods for the case of a multiplicatively written commutative
+ * {@link Group}. No functionality is added. Some return types are adjusted.
+ * <p>
+ * @param <V> The generic type of the values stored in the elements of this group
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of this group
  */
 public interface MultiplicativeGroup<V>
 	   extends Group<V>, MultiplicativeMonoid<V> {
 
 	/**
-	 * This method is a synonym for {@link #Group.applyInverse(Element, Element)}.
+	 * This method is a synonym for {@link Group#invert(Element)}. It computes the multiplicative inverse of the given
+	 * element.
 	 * <p>
-	 * @param element1 the same as in {@link #Group.applyInverse(Element, Element)}
-	 * @param element2 the same as in {@link #Group.applyInverse(Element, Element)}
-	 * @return the same as in {@link #Group.applyInverse(Element, Element)}
-	 */
-	public MultiplicativeElement<V> divide(Element element1, Element element2);
-
-	/**
-	 * TODO This method is a synonym for {@link #Group.inverse(Element, Element)}.
-	 * <p>
-	 * @param element the same as in {@link #Group.inverse(Element, Element)}
-	 * @return the same as in {@link #Group.inverse(Element, Element)}
+	 * @param element The given element
+	 * @return The multiplicative inverse of the given element
+	 * @see Group#invert(Element)
 	 */
 	public MultiplicativeElement<V> oneOver(Element element);
+
+	/**
+	 * This method is a synonym for {@link Group#applyInverse(Element, Element)}. It computes the division of the first
+	 * element over the second element.
+	 * <p>
+	 * @param element1 The first given element
+	 * @param element2 The second given element
+	 * @return The first element divided by the second element
+	 * @see Group#applyInverse(Element, Element)
+	 */
+	public MultiplicativeElement<V> divide(Element element1, Element element2);
 
 	@Override
 	public MultiplicativeElement<V> invert(Element element);

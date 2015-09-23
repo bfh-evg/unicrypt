@@ -45,29 +45,34 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 
 /**
- * This interface provides the renaming of some group operations for the case of a multiplicatively written
+ * This interface provides the renaming of some methods for the case of a multiplicatively written commutative
  * {@link Monoid}. No functionality is added. Some return types are updated.
+ * <p>
+ * @param <V> The generic type of the values stored in the elements of this monoid
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of this monoid
  */
 public interface MultiplicativeMonoid<V>
 	   extends Monoid<V>, MultiplicativeSemiGroup<V> {
 
 	/**
-	 * Returns the identity element, which in the case of a multiplicatively written monoid is 1.
+	 * This method is a synonym for {@link Monoid#getIdentityElement()}. It returns the identity element, which in the
+	 * case of a multiplicatively written monoid is 1.
 	 * <p>
-	 * @return the identity element of this monoid
+	 * @return The identity element of this monoid
+	 * @see Monoid#getIdentityElement()
 	 */
 	public MultiplicativeElement<V> getOneElement();
 
 	/**
-	 * Returns {@code true} if the given element is the identity element of this monoid.
+	 * This method is a synonym for {@link Monoid#isIdentityElement(Element)}. Returns {@code true} if the given element
+	 * is the identity element of this monoid.
 	 * <p>
 	 * @param element The given element
-	 * @return {@code true} if the given element is the identity element
+	 * @return {@code true} if the given element is the identity element, {@code false} otherwise
+	 * @see Monoid#isIdentityElement(Element)
 	 */
 	public boolean isOneElement(Element element);
 

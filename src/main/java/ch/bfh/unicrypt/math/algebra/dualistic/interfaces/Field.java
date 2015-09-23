@@ -48,6 +48,8 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGrou
  * This interface represents the mathematical concept of a field. A field is a commutative ring in which one can divide
  * by any nonzero element. It is implemented as a specialization of {@link Ring}.
  * <p>
+ * @see "Handbook of Applied Cryptography, Definition 2.181"
+ * <p>
  * @author R. Haenni
  * @param <V> Generic type of values stored in the elements of this field
  */

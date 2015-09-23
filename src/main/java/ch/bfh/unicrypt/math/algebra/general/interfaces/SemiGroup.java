@@ -50,18 +50,17 @@ import java.math.BigInteger;
  * (but not necessarily commutative) binary operation. It is implemented as a specialization of {@link Set}.
  * <p>
  * @param <V> The generic type of the values representing the elements of a semigroup
- * @see "Handbook of Applied Cryptography, Definition 2.162"
+ * @see Element
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @see Element
  */
 public interface SemiGroup<V>
 	   extends Set<V> {
 
 	/**
-	 * Applies the binary operation to two elements (in the given order).
+	 * Applies the binary operation to two input elements (in the given order).
 	 * <p>
 	 * @param element1 The first input element
 	 * @param element2 The second input element
@@ -70,9 +69,8 @@ public interface SemiGroup<V>
 	public Element<V> apply(Element element1, Element element2);
 
 	/**
-	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
-	 * as an array. If the array contains a single element, it is returned without applying the operation. If the given
-	 * collection is empty, an exception is thrown.
+	 * Applies the binary group operation sequentially to multiple input elements (in the given order). The elements are
+	 * given as an array.
 	 * <p>
 	 * @param elements The given array of input elements
 	 * @return The result of applying the operation to the input elements
@@ -80,9 +78,8 @@ public interface SemiGroup<V>
 	public Element<V> apply(Element... elements);
 
 	/**
-	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
-	 * as an immutable array. If the array contains a single element, it is returned without applying the operation. If
-	 * the given collection is empty, an exception is thrown.
+	 * Applies the binary group operation sequentially to multiple input elements (in the given order). The elements are
+	 * given as an immutable array.
 	 * <p>
 	 * @param elements The given immutable array of input elements
 	 * @return The result of applying the operation to the input elements
@@ -90,9 +87,8 @@ public interface SemiGroup<V>
 	public Element<V> apply(ImmutableArray<Element> elements);
 
 	/**
-	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
-	 * as a sequence. If the sequence contains a single element, it is returned without applying the operation. If the
-	 * given sequence is empty, an exception is thrown.
+	 * Applies the binary group operation sequentially to multiple input elements (in the given order). The elements are
+	 * given as a sequence.
 	 * <p>
 	 * @param elements The given sequence of input elements
 	 * @return The result of applying the operation to the input elements
@@ -100,9 +96,8 @@ public interface SemiGroup<V>
 	public Element<V> apply(Sequence<Element> elements);
 
 	/**
-	 * Applies the binary operation repeatedly to {@code amount} many instances of a given input element. If
-	 * {@code amount=1}, the element is returned without applying the operation. If {@code amount<1}, an exception is
-	 * thrown. This is a convenient method for {@link SemiGroup#selfApply(Element, BigInteger)}.
+	 * Applies the binary operation repeatedly to {@code amount} many instances of a given input element. This is a
+	 * convenient method for {@link SemiGroup#selfApply(Element, BigInteger)}.
 	 * <p>
 	 * @param element The given input element
 	 * @param amount  The number of instances of the input element
@@ -111,9 +106,7 @@ public interface SemiGroup<V>
 	public Element<V> selfApply(Element element, long amount);
 
 	/**
-	 * Applies the binary operation repeatedly to {@code amount} many instances of a given input element. If
-	 * {@code amount=1}, the element is returned without applying the operation. If {@code amount<1}, an exception is
-	 * thrown.
+	 * Applies the binary operation repeatedly to {@code amount} many instances of a given input element.
 	 * <p>
 	 * @param element The given input element
 	 * @param amount  The number of instances of the input element
@@ -144,7 +137,7 @@ public interface SemiGroup<V>
 	/**
 	 * Applies the binary operation sequentially to the results of computing {@link #selfApply(Element, BigInteger)}
 	 * multiple times. This operation is sometimes called 'weighed sum' or 'product-of-powers', depending on whether the
-	 * operation is an addition or multiplication. If the two input lists are not of equal length, an exception is
+	 * operation is an addition or multiplication. If the two input arrays are not of equal length, an exception is
 	 * thrown.
 	 * <p>
 	 * @param elements The given array of elements

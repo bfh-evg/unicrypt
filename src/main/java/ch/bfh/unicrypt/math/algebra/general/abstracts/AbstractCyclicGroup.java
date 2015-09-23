@@ -51,17 +51,17 @@ import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 /**
- * This abstract class provides a basis implementation for additive objects of type {@link CyclicGroup}.
+ * This abstract class provides a base implementation for the interface {@link CyclicGroup}.
  * <p>
- * @param <E> Generic type of elements of this cyclic group
- * @param <V> Generic type of values stored in the elements of this cyclic group
- * @see Group
+ * @param <E> The generic type of elements of this cyclic group
+ * @param <V> The generic type of values stored in the elements of this cyclic group
+ * @see AbstractElement
  * <p>
- * TODO
- * @author
+ * @author R. Haenni
+ * @author R. E. Koenig
+ * @version 2.0
  */
 public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 	   extends AbstractGroup<E, V>
@@ -127,18 +127,6 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 		return this.abstractIsGenerator((E) element);
 	}
 
-	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-	protected Sequence<E> defaultGetRandomGenerators(RandomByteSequence randomByteSequence) {
-		return this.abstractGetRandomElements(randomByteSequence).filter(new Predicate<E>() {
-
-			@Override
-			public boolean test(E value) {
-				return isGenerator(value);
-			}
-
-		});
-	}
-
 	@Override
 	protected Sequence<E> defaultGetElements() {
 		final AbstractCyclicGroup<E, V> group = this;
@@ -154,6 +142,18 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 			@Override
 			public boolean test(E element) {
 				return group.getIdentityElement().equals(element);
+			}
+
+		});
+	}
+
+	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
+	protected Sequence<E> defaultGetRandomGenerators(RandomByteSequence randomByteSequence) {
+		return this.abstractGetRandomElements(randomByteSequence).filter(new Predicate<E>() {
+
+			@Override
+			public boolean test(E value) {
+				return isGenerator(value);
 			}
 
 		});

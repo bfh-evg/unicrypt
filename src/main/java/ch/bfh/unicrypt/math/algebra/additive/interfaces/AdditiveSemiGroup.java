@@ -55,13 +55,14 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
 
 /**
- * This interface provides the renaming of {@link SemiGroup} methods for the case of an additively written semigroup. No
- * functionality is added. Some return types are updated.
+ * This interface provides the renaming of some methods for the case of a additively written commutative
+ * {@link SemiGroup}. No functionality is added. Some return types are adjusted.
+ * <p>
+ * @param <V> The generic type of the values stored in the elements of this semigroup
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of this semigroup
  */
 public interface AdditiveSemiGroup<V>
 	   extends SemiGroup<V> {

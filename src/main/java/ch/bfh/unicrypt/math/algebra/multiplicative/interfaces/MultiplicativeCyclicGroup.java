@@ -46,13 +46,14 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 
 /**
- * This interface provides the renaming of some group operations for the case of a multiplicatively written
- * {@link CyclicGroup}. No functionality is added, only the return types are updated.
+ * This interface represents a multiplicatively written commutative {@link CyclicGroup}. No functionality is added. Some
+ * return types are adjusted.
+ * <p>
+ * @param <V> The generic type of the values stored in the elements of this cyclic group
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of this cyclic group
  */
 public interface MultiplicativeCyclicGroup<V>
 	   extends CyclicGroup<V>, MultiplicativeGroup<V> {

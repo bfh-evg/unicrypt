@@ -52,10 +52,10 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
 
 /**
- * This abstract class provides a basis implementation for objects of type {@link Monoid}.
+ * This abstract class provides a base implementation for the interface {@link Monoid}.
  * <p>
- * @param <E> Generic type of elements of this monoid
- * @param <V> Generic type of values stored in the elements of this monoid
+ * @param <E> The generic type of elements of this monoid
+ * @param <V> The generic type of values stored in the elements of this monoid
  * @see AbstractElement
  * <p>
  * @author R. Haenni

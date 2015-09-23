@@ -77,32 +77,32 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
 	}
 
 	@Override
-	public final E divide(final Element element) {
-		if (this.getSet().isGroup()) {
-			MultiplicativeGroup group = ((MultiplicativeGroup) this.getSet());
-			return (E) group.divide(this, element);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	public final E power(final long exponent) {
+		return (E) this.getSet().power(this, exponent);
 	}
 
 	@Override
-	public final E power(final BigInteger amount) {
-		return (E) this.getSet().power(this, amount);
+	public final E power(final BigInteger exponent) {
+		return (E) this.getSet().power(this, exponent);
 	}
 
 	@Override
-	public final E power(final Element<BigInteger> amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E power(final long amount) {
-		return (E) this.getSet().power(this, amount);
+	public final E power(final Element<BigInteger> exponent) {
+		return (E) this.getSet().power(this, exponent);
 	}
 
 	@Override
 	public final E square() {
 		return (E) this.getSet().square(this);
+	}
+
+	@Override
+	public boolean isOne() {
+		if (this.getSet().isMonoid()) {
+			MultiplicativeMonoid monoid = ((MultiplicativeMonoid) this.getSet());
+			return monoid.isOneElement(this);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override
@@ -115,10 +115,10 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
 	}
 
 	@Override
-	public boolean isOne() {
-		if (this.getSet().isMonoid()) {
-			MultiplicativeMonoid monoid = ((MultiplicativeMonoid) this.getSet());
-			return monoid.isOneElement(this);
+	public final E divide(final Element element) {
+		if (this.getSet().isGroup()) {
+			MultiplicativeGroup group = ((MultiplicativeGroup) this.getSet());
+			return (E) group.divide(this, element);
 		}
 		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}

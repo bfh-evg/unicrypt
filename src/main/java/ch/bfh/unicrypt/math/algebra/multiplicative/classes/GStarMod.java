@@ -126,12 +126,12 @@ public class GStarMod
 		return this.superGroup;
 	}
 
-	public final boolean contains(long integerValue) {
-		return this.contains(BigInteger.valueOf(integerValue));
+	public final boolean contains(long value) {
+		return this.contains(BigInteger.valueOf(value));
 	}
 
-	public final GStarModElement getElement(long integerValue) {
-		return this.getElement(BigInteger.valueOf(integerValue));
+	public final GStarModElement getElement(long value) {
+		return this.getElement(BigInteger.valueOf(value));
 	}
 
 	/**
@@ -144,13 +144,9 @@ public class GStarMod
 		return this.getZStarMod().getOrder().divide(this.getOrder());
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
-	protected GStarModElement defaultSelfApplyAlgorithm(final GStarModElement element, final BigInteger posAmount) {
-		return this.abstractGetElement(element.getValue().modPow(posAmount, this.modulus));
+	protected GStarModElement defaultSelfApplyAlgorithm(final GStarModElement element, final BigInteger posExponent) {
+		return this.abstractGetElement(element.getValue().modPow(posExponent, this.modulus));
 	}
 
 	@Override

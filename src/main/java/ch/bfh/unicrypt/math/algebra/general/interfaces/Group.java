@@ -48,11 +48,11 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
  *
  * @param <V> The generic type of the values representing the elements of a group
  * @see "Handbook of Applied Cryptography, Definition 2.162"
+ * @see Element
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @see Element
  */
 public interface Group<V>
 	   extends Monoid<V> {

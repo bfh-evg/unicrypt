@@ -109,17 +109,17 @@ public class ZStarMod
 		return this.modulusFactorization;
 	}
 
-	public final boolean contains(long integerValue) {
-		return this.contains(BigInteger.valueOf(integerValue));
+	public final boolean contains(long value) {
+		return this.contains(BigInteger.valueOf(value));
 	}
 
-	public final ZStarModElement getElement(long integerValue) {
-		return this.getElement(BigInteger.valueOf(integerValue));
+	public final ZStarModElement getElement(long value) {
+		return this.getElement(BigInteger.valueOf(value));
 	}
 
 	@Override
-	protected ZStarModElement defaultSelfApplyAlgorithm(final ZStarModElement element, final BigInteger posAmount) {
-		return this.abstractGetElement(element.getValue().modPow(posAmount, this.modulus));
+	protected ZStarModElement defaultSelfApplyAlgorithm(final ZStarModElement element, final BigInteger posExponent) {
+		return this.abstractGetElement(element.getValue().modPow(posExponent, this.modulus));
 	}
 
 	@Override

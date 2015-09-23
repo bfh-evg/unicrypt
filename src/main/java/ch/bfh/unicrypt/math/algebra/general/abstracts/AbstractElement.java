@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
@@ -64,14 +64,12 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import java.math.BigInteger;
 
 /**
- * This abstract class represents the concept an element in a mathematical group. It allows applying the group operation
- * and other methods from a {@link Group} in a convenient way. Most methods provided by {@link AbstractElement} have an
- * equivalent method in {@link Group}.
+ * This abstract class provides a base implementation for the interface {@link Element}.
  * <p>
- * @param <S> Generic type of {@link Set} of this element
- * @param <E> Generic type of this element
- * @param <V> Generic type of value stored in this element
- * @see Group
+ * @param <S> The generic type of {@link Set} of this element
+ * @param <E> The generic type of this element
+ * @param <V> The generic type of value stored in this element
+ * @see AbstractSet
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -116,21 +114,11 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 		return this instanceof Tuple;
 	}
 
-	/**
-	 * Returns the unique {@link Set} to which this element belongs
-	 * <p>
-	 * @return The element's set
-	 */
 	@Override
 	public final S getSet() {
 		return (S) this.set;
 	}
 
-	/**
-	 * Returns the positive BigInteger value that corresponds the element.
-	 * <p>
-	 * @return The corresponding BigInteger value
-	 */
 	@Override
 	public final V getValue() {
 		return this.value;

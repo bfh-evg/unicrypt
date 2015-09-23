@@ -45,8 +45,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- * This interface represents an additively written {@link Element}. No functionality is added. Some return types are
- * updated.
+ * This interface represents an {@link Element} of a multiplicatively written semigroup. No functionality is added. Some
+ * return types are updated.
  * <p>
  * @author R. Haenni
  * @param <V> Generic type of values stored in this element
@@ -55,41 +55,58 @@ public interface MultiplicativeElement<V>
 	   extends Element<V> {
 
 	/**
-	 * @see Group#apply(Element, Element)
+	 * @param element
+	 * @return
+	 * @see Element#apply(Element)
 	 */
 	public MultiplicativeElement<V> multiply(Element element);
 
 	/**
-	 * @see Group#applyInverse(Element, Element)
+	 * @param exponent
+	 * @return
+	 * @see Element#selfApply(long)
 	 */
-	public MultiplicativeElement<V> divide(Element element);
+	public MultiplicativeElement<V> power(long exponent);
 
 	/**
-	 * @see Group#selfApply(Element, BigInteger)
+	 * @param exponent
+	 * @return
+	 * @see Element#selfApply(BigInteger)
 	 */
-	public MultiplicativeElement<V> power(BigInteger amount);
+	public MultiplicativeElement<V> power(BigInteger exponent);
 
 	/**
-	 * @see Group#selfApply(Element, Element)
+	 * @param exponent
+	 * @return
+	 * @see Element#selfApply(Element)
 	 */
-	public MultiplicativeElement<V> power(Element<BigInteger> amount);
+	public MultiplicativeElement<V> power(Element<BigInteger> exponent);
 
 	/**
-	 * @see Group#selfApply(Element, long)
-	 */
-	public MultiplicativeElement<V> power(long amount);
-
-	/**
-	 * @see Group#selfApply(Element)
+	 * @return x
+	 * @see Element#selfApply()
 	 */
 	public MultiplicativeElement<V> square();
 
 	/**
-	 * @see Group#oneOver(Element)
+	 *
+	 * @return x
+	 * @see Element#isIdentity()
+	 */
+	public boolean isOne();
+
+	/**
+	 * @return x
+	 * @see Element#invert()
 	 */
 	public MultiplicativeElement<V> oneOver();
 
-	public boolean isOne();
+	/**
+	 * @param element
+	 * @return
+	 * @see Element#applyInverse(Element)
+	 */
+	public MultiplicativeElement<V> divide(Element element);
 
 	@Override
 	public MultiplicativeSemiGroup<V> getSet();
@@ -98,21 +115,21 @@ public interface MultiplicativeElement<V>
 	public MultiplicativeElement<V> apply(Element element);
 
 	@Override
-	public MultiplicativeElement<V> applyInverse(Element element);
+	public MultiplicativeElement<V> selfApply(long exponent);
 
 	@Override
-	public MultiplicativeElement<V> selfApply(BigInteger amount);
+	public MultiplicativeElement<V> selfApply(BigInteger exponent);
 
 	@Override
-	public MultiplicativeElement<V> selfApply(Element<BigInteger> amount);
-
-	@Override
-	public MultiplicativeElement<V> selfApply(long amount);
+	public MultiplicativeElement<V> selfApply(Element<BigInteger> exponent);
 
 	@Override
 	public MultiplicativeElement<V> selfApply();
 
 	@Override
 	public MultiplicativeElement<V> invert();
+
+	@Override
+	public MultiplicativeElement<V> applyInverse(Element element);
 
 }

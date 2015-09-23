@@ -49,6 +49,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
  * a commutative {@link Group}. It is therefore implemented as a specialization of {@link SemiRing}. One familiar
  * example of a ring is the set of integers. Some return types are updated.
  * <p>
+ * @see "Handbook of Applied Cryptography, Definition 2.175"
+ * <p>
  * @author R. Haenni
  * @param <V> Generic type of values stored in the elements of this ring
  */

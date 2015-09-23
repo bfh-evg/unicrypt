@@ -87,18 +87,18 @@ public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeEl
 	}
 
 	@Override
-	public final E power(final Element element, final BigInteger amount) {
-		return this.selfApply(element, amount);
+	public final E power(final Element element, final long exponent) {
+		return this.selfApply(element, exponent);
 	}
 
 	@Override
-	public final E power(final Element element, final Element<BigInteger> amount) {
-		return this.selfApply(element, amount);
+	public final E power(final Element element, final BigInteger exponent) {
+		return this.selfApply(element, exponent);
 	}
 
 	@Override
-	public final E power(final Element element, final long amount) {
-		return this.selfApply(element, amount);
+	public final E power(final Element element, final Element<BigInteger> exponent) {
+		return this.selfApply(element, exponent);
 	}
 
 	@Override
@@ -107,8 +107,8 @@ public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeEl
 	}
 
 	@Override
-	public final E productOfPowers(Element[] elements, BigInteger[] amounts) {
-		return this.multiSelfApply(elements, amounts);
+	public final E productOfPowers(Element[] elements, BigInteger[] exponents) {
+		return this.multiSelfApply(elements, exponents);
 	}
 
 }
