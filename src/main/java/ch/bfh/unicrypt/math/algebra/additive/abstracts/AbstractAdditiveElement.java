@@ -55,12 +55,9 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link AdditiveElement}.
  * <p>
- * TODO
- * <p>
- * @param <S> Generic type of {@link AdditiveSemiGroup} of this element
- * @param <E> Generic type of the element
- * @param <V> Generic type of value stored in the element and the elements of the additive semigroup
- * @see Element
+ * @param <S> The generic type of the {@link AdditiveSemiGroup} of this element
+ * @param <E> The generic type of this element
+ * @param <V> The generic type of the value stored in this element
  * <p>
  * @author R. Haenni
  */
@@ -80,32 +77,32 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E 
 	}
 
 	@Override
-	public final E subtract(final Element element) {
-		if (this.getSet().isGroup()) {
-			AdditiveGroup group = ((AdditiveGroup) this.getSet());
-			return (E) group.subtract(this, element);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, element);
+	public final E times(final BigInteger factor) {
+		return (E) this.getSet().times(this, factor);
 	}
 
 	@Override
-	public final E times(final BigInteger amount) {
-		return (E) this.getSet().times(this, amount);
+	public final E times(final Element<BigInteger> factor) {
+		return (E) this.getSet().times(this, factor);
 	}
 
 	@Override
-	public final E times(final Element<BigInteger> amount) {
-		return (E) this.getSet().times(this, amount);
-	}
-
-	@Override
-	public final E times(final long amount) {
-		return (E) this.getSet().times(this, amount);
+	public final E times(final long factor) {
+		return (E) this.getSet().times(this, factor);
 	}
 
 	@Override
 	public final E timesTwo() {
 		return (E) this.getSet().timesTwo(this);
+	}
+
+	@Override
+	public boolean isZero() {
+		if (this.getSet().isMonoid()) {
+			AdditiveMonoid monoid = ((AdditiveMonoid) this.getSet());
+			return monoid.isZeroElement(this);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override
@@ -118,12 +115,12 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E 
 	}
 
 	@Override
-	public boolean isZero() {
-		if (this.getSet().isMonoid()) {
-			AdditiveMonoid monoid = ((AdditiveMonoid) this.getSet());
-			return monoid.isZeroElement(this);
+	public final E subtract(final Element element) {
+		if (this.getSet().isGroup()) {
+			AdditiveGroup group = ((AdditiveGroup) this.getSet());
+			return (E) group.subtract(this, element);
 		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, element);
 	}
 
 }

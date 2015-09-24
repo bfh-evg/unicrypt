@@ -48,44 +48,56 @@ import java.math.BigInteger;
  * This interface represents an additively written {@link Element}. No functionality is added. Some return types are
  * updated.
  * <p>
+ * @param <V> The generic type of values stored in the element
+ * <p>
  * @author R. Haenni
- * @param <V> Generic type of values stored in the element
+ * @version 2.0
  */
 public interface AdditiveElement<V>
 	   extends Element<V> {
 
 	/**
+	 * @param element
+	 * @return
 	 * @see AdditiveSemiGroup#add(Element, Element)
 	 */
 	public AdditiveElement<V> add(Element element);
 
 	/**
+	 * @param element
+	 * @return
 	 * @see AdditiveGroup#subtract(Element, Element)
 	 */
 	public AdditiveElement<V> subtract(Element element);
 
 	/**
+	 * @param factor
+	 * @return
 	 * @see AdditiveSemiGroup#times(Element, BigInteger)
 	 */
-	public AdditiveElement<V> times(BigInteger amount);
+	public AdditiveElement<V> times(BigInteger factor);
 
 	/**
+	 * @param factor
+	 * @return
 	 * @see AdditiveSemiGroup#times(Element, Element)
 	 */
-	public AdditiveElement<V> times(Element<BigInteger> amount);
+	public AdditiveElement<V> times(Element<BigInteger> factor);
 
 	/**
+	 * @param factor
+	 * @return
 	 * @see AdditiveSemiGroup#times(Element, long)
 	 */
-	public AdditiveElement<V> times(long amount);
+	public AdditiveElement<V> times(long factor);
 
 	/**
-	 * @see AdditiveSemiGroup#timesTwo(Element)
+	 * @return @see AdditiveSemiGroup#timesTwo(Element)
 	 */
 	public AdditiveElement<V> timesTwo();
 
 	/**
-	 * @see AdditiveGroup#negate(Element)
+	 * @return @see AdditiveGroup#negate(Element)
 	 */
 	public AdditiveElement<V> negate();
 
@@ -101,13 +113,13 @@ public interface AdditiveElement<V>
 	public AdditiveElement<V> applyInverse(Element element);
 
 	@Override
-	public AdditiveElement<V> selfApply(BigInteger amount);
+	public AdditiveElement<V> selfApply(BigInteger factor);
 
 	@Override
-	public AdditiveElement<V> selfApply(Element<BigInteger> amount);
+	public AdditiveElement<V> selfApply(Element<BigInteger> factor);
 
 	@Override
-	public AdditiveElement<V> selfApply(long amount);
+	public AdditiveElement<V> selfApply(long factor);
 
 	@Override
 	public AdditiveElement<V> selfApply();

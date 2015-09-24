@@ -48,8 +48,10 @@ import java.math.BigInteger;
  * This interface represents an {@link Element} of a multiplicatively written semigroup. No functionality is added. Some
  * return types are updated.
  * <p>
+ * @param <V> The generic type of values stored in this element
+ * <p>
  * @author R. Haenni
- * @param <V> Generic type of values stored in this element
+ * @version 2.0
  */
 public interface MultiplicativeElement<V>
 	   extends Element<V> {

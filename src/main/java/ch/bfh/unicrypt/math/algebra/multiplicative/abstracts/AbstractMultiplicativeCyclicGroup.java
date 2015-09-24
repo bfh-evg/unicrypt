@@ -52,9 +52,10 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link MultipicativeCyclicGroup}.
  * <p>
- * @param <E> Generic type of the elements of this cyclic group
- * @param <V> Generic type of values stored in the elements of this cyclic group
- * @author
+ * @param <E> The generic type of the elements of this cyclic group
+ * @param <V> The generic type of the values stored in the elements of this cyclic group
+ * <p>
+ * @author R. Haenni
  */
 public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement<V>, V>
 	   extends AbstractCyclicGroup<E, V>

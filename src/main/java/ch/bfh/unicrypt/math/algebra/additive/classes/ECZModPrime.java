@@ -50,9 +50,9 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.ECZModParameters;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.ECZModParameters;
 import java.math.BigInteger;
 
 /**
@@ -220,14 +220,14 @@ public class ECZModPrime
 	 * Private method implements selfApply to check if a ECZmodElement is a valid generator
 	 * <p>
 	 * @param element
-	 * @param posAmount
+	 * @param posFactor
 	 * @return
 	 */
-	private ECZModElement selfApply(ECZModElement element, BigInteger posAmount) {
+	private ECZModElement selfApply(ECZModElement element, BigInteger posFactor) {
 		ECZModElement result = element;
-		for (int i = posAmount.bitLength() - 2; i >= 0; i--) {
+		for (int i = posFactor.bitLength() - 2; i >= 0; i--) {
 			result = result.add(result);
-			if (posAmount.testBit(i)) {
+			if (posFactor.testBit(i)) {
 				result = result.add(element);
 			}
 		}

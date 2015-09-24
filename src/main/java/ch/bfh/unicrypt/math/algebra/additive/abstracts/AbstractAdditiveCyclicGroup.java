@@ -52,8 +52,9 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link AdditiveCyclicGroup}.
  * <p>
- * @param <E> Generic type of the elements of this cyclic group
- * @param <V> Generic type of values stored in the elements of this cyclic group
+ * @param <E> The generic type of the elements of this cyclic group
+ * @param <V> The generic type of the values stored in the elements of this cyclic group
+ * <p>
  * @author R. Haenni
  */
 public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, V>
@@ -87,18 +88,18 @@ public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, 
 	}
 
 	@Override
-	public final E times(final Element element, final BigInteger amount) {
-		return this.selfApply(element, amount);
+	public final E times(final Element element, final BigInteger factor) {
+		return this.selfApply(element, factor);
 	}
 
 	@Override
-	public final E times(final Element element, final Element<BigInteger> amount) {
-		return this.selfApply(element, amount);
+	public final E times(final Element element, final Element<BigInteger> factor) {
+		return this.selfApply(element, factor);
 	}
 
 	@Override
-	public final E times(final Element element, final long amount) {
-		return this.selfApply(element, amount);
+	public final E times(final Element element, final long factor) {
+		return this.selfApply(element, factor);
 	}
 
 	@Override
@@ -107,18 +108,8 @@ public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, 
 	}
 
 	@Override
-	public final E sumOfProducts(Element[] elements, BigInteger[] amounts) {
-		return this.multiSelfApply(elements, amounts);
-	}
-
-	@Override
-	public final E subtract(final Element element1, final Element element2) {
-		return this.applyInverse(element1, element2);
-	}
-
-	@Override
-	public final E negate(final Element element) {
-		return this.invert(element);
+	public final E sumOfProducts(Element[] elements, BigInteger[] factors) {
+		return this.multiSelfApply(elements, factors);
 	}
 
 	@Override
@@ -129,6 +120,16 @@ public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, 
 	@Override
 	public final boolean isZeroElement(Element element) {
 		return this.isIdentityElement(element);
+	}
+
+	@Override
+	public final E negate(final Element element) {
+		return this.invert(element);
+	}
+
+	@Override
+	public final E subtract(final Element element1, final Element element2) {
+		return this.applyInverse(element1, element2);
 	}
 
 }

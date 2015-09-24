@@ -69,17 +69,17 @@ public interface ECElement<V, DE extends DualisticElement<V>>
 	/**
 	 * @see Group#selfApply(Element, BigInteger)
 	 */
-	public ECElement<V, DE> times(BigInteger amount);
+	public ECElement<V, DE> times(BigInteger factor);
 
 	/**
 	 * @see Group#selfApply(Element, Element)
 	 */
-	public ECElement<V, DE> times(Element<BigInteger> amount);
+	public ECElement<V, DE> times(Element<BigInteger> factor);
 
 	/**
 	 * @see Group#selfApply(Element, long)
 	 */
-	public ECElement<V, DE> times(long amount);
+	public ECElement<V, DE> times(long factor);
 
 	/**
 	 * @see Group#selfApply(Element)
@@ -100,13 +100,13 @@ public interface ECElement<V, DE extends DualisticElement<V>>
 	public ECElement<V, DE> applyInverse(Element element);
 
 	@Override
-	public ECElement<V, DE> selfApply(BigInteger amount);
+	public ECElement<V, DE> selfApply(BigInteger factor);
 
 	@Override
-	public ECElement<V, DE> selfApply(Element<BigInteger> amount);
+	public ECElement<V, DE> selfApply(Element<BigInteger> factor);
 
 	@Override
-	public ECElement<V, DE> selfApply(long amount);
+	public ECElement<V, DE> selfApply(long factor);
 
 	@Override
 	public ECElement<V, DE> selfApply();

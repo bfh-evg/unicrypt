@@ -152,13 +152,13 @@ public interface EC<V, E extends DualisticElement<V>>
 	public ECElement<V, E> add(Sequence<Element> elements);
 
 	@Override
-	public ECElement<V, E> times(Element element, BigInteger amount);
+	public ECElement<V, E> times(Element element, BigInteger factor);
 
 	@Override
-	public ECElement<V, E> times(Element element, Element<BigInteger> amount);
+	public ECElement<V, E> times(Element element, Element<BigInteger> factor);
 
 	@Override
-	public ECElement<V, E> times(Element element, long amount);
+	public ECElement<V, E> times(Element element, long factor);
 
 	@Override
 	public ECElement<V, E> timesTwo(Element element);
@@ -212,19 +212,19 @@ public interface EC<V, E extends DualisticElement<V>>
 	public ECElement<V, E> apply(Sequence<Element> elements);
 
 	@Override
-	public ECElement<V, E> selfApply(Element element, BigInteger amount);
+	public ECElement<V, E> selfApply(Element element, BigInteger factor);
 
 	@Override
-	public ECElement<V, E> selfApply(Element element, Element<BigInteger> amount);
+	public ECElement<V, E> selfApply(Element element, Element<BigInteger> factor);
 
 	@Override
-	public ECElement<V, E> selfApply(Element element, long amount);
+	public ECElement<V, E> selfApply(Element element, long factor);
 
 	@Override
 	public ECElement<V, E> selfApply(Element element);
 
 	@Override
-	public ECElement<V, E> multiSelfApply(Element[] elements, BigInteger[] amounts);
+	public ECElement<V, E> multiSelfApply(Element[] elements, BigInteger[] factors);
 
 	@Override
 	public ECElement<V, E> invert(Element element);

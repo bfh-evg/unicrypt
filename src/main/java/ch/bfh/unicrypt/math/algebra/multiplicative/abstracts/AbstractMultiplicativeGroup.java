@@ -52,9 +52,10 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link MultiplicativeGroup}.
  * <p>
- * @param <E> Generic type of the elements of this group
- * @param <V> Generic type of values stored in the elements of this group
- * @author
+ * @param <E> The generic type of the elements of this group
+ * @param <V> The generic type of the values stored in the elements of this group
+ * <p>
+ * @author R. Haenni
  */
 public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElement<V>, V>
 	   extends AbstractGroup<E, V>

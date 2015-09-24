@@ -52,9 +52,10 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link MulitplicativeMonoid}.
  * <p>
- * @param <E> Generic type of the elements of this monoid
- * @param <V> Generic type of values stored in the elements of this monoid
- * @author
+ * @param <E> The generic type of the elements of this monoid
+ * @param <V> The generic type of the values stored in the elements of this monoid
+ * <p>
+ * @author R. Haenni
  */
 public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement<V>, V>
 	   extends AbstractMonoid<E, V>

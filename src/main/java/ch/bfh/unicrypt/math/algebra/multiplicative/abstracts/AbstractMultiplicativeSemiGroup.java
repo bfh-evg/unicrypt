@@ -52,9 +52,10 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link MultiplicativeSemiGroup}.
  * <p>
- * @param <E> Generic type of the elements of this semigroup
- * @param <V> Generic type of values stored in the elements of this semigroup
- * @author
+ * @param <E> The generic type of the elements of this semigroup
+ * @param <V> The generic type of the values stored in the elements of this semigroup
+ * <p>
+ * @author R. Haenni
  */
 public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeElement<V>, V>
 	   extends AbstractSemiGroup<E, V>

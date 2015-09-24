@@ -68,8 +68,7 @@ public interface MultiplicativeSemiGroup<V>
 	   extends SemiGroup<V> {
 
 	/**
-	 * This method is a synonym for {@link SemiGroup#apply(Element, Element)}. It multiplies to two input elements (in
-	 * the given order).
+	 * This method is a synonym for {@link SemiGroup#apply(Element, Element)}. It multiplies to two input elements.
 	 * <p>
 	 * @param element1 The first input element
 	 * @param element2 The second input element
@@ -114,7 +113,7 @@ public interface MultiplicativeSemiGroup<V>
 	 * <p>
 	 * @param element  The given input element
 	 * @param exponent The given exponent
-	 * @return The element raised to the power of the exponent
+	 * @return The input element raised to the power of the exponent
 	 * @see SemiGroup#selfApply(Element, long)
 	 */
 	public MultiplicativeElement<V> power(Element element, long exponent);
@@ -125,7 +124,7 @@ public interface MultiplicativeSemiGroup<V>
 	 * <p>
 	 * @param element  The given input element
 	 * @param exponent The given exponent
-	 * @return The element raised to the power of the exponent
+	 * @return The input element raised to the power of the exponent
 	 * @see SemiGroup#selfApply(Element, BigInteger)
 	 */
 	public MultiplicativeElement<V> power(Element element, BigInteger exponent);
@@ -138,7 +137,7 @@ public interface MultiplicativeSemiGroup<V>
 	 * <p>
 	 * @param element  The given input element
 	 * @param exponent The given exponent
-	 * @return The element raised to the power of the exponent
+	 * @return The input element raised to the power of the exponent
 	 * @see SemiGroup#selfApply(Element, Element)
 	 */
 	public MultiplicativeElement<V> power(Element element, Element<BigInteger> exponent);

@@ -52,8 +52,9 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link AdditiveMonoid}.
  * <p>
- * @param <E> Generic type of elements of this monoid
- * @param <V> Generic type of values stored in the elements of this monoid
+ * @param <E> The generic type of the elements of this monoid
+ * @param <V> The generic type of the values stored in the elements of this monoid
+ * <p>
  * @author R. Haenni
  */
 public abstract class AbstractAdditiveMonoid<E extends AdditiveElement<V>, V>
@@ -87,18 +88,18 @@ public abstract class AbstractAdditiveMonoid<E extends AdditiveElement<V>, V>
 	}
 
 	@Override
-	public final E times(final Element element, final BigInteger amount) {
-		return this.selfApply(element, amount);
+	public final E times(final Element element, final BigInteger factor) {
+		return this.selfApply(element, factor);
 	}
 
 	@Override
-	public final E times(final Element element, final Element<BigInteger> amount) {
-		return this.selfApply(element, amount);
+	public final E times(final Element element, final Element<BigInteger> factor) {
+		return this.selfApply(element, factor);
 	}
 
 	@Override
-	public final E times(final Element element, final long amount) {
-		return this.selfApply(element, amount);
+	public final E times(final Element element, final long factor) {
+		return this.selfApply(element, factor);
 	}
 
 	@Override
@@ -107,8 +108,8 @@ public abstract class AbstractAdditiveMonoid<E extends AdditiveElement<V>, V>
 	}
 
 	@Override
-	public final E sumOfProducts(Element[] elements, BigInteger[] amounts) {
-		return this.multiSelfApply(elements, amounts);
+	public final E sumOfProducts(Element[] elements, BigInteger[] factors) {
+		return this.multiSelfApply(elements, factors);
 	}
 
 	@Override

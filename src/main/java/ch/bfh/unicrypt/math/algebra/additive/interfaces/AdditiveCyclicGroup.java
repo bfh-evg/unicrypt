@@ -46,13 +46,14 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 
 /**
- * This interface represents an additively written {@link CyclicGroup}. No functionality is added, only the return types
- * are updated.
+ * This interface represents a additively written commutative {@link CyclicGroup}. No functionality is added. Some
+ * return types are adjusted.
+ * <p>
+ * @param <V> The generic type of the values stored in the elements of this cyclic group
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of the cyclic group
  */
 public interface AdditiveCyclicGroup<V>
 	   extends CyclicGroup<V>, AdditiveGroup<V> {
