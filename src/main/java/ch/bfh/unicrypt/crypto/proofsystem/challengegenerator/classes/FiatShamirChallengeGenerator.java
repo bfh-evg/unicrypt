@@ -93,7 +93,7 @@ public class FiatShamirChallengeGenerator
 		ConvertMethod<ByteArray> convertMethod = ConvertMethod.getInstance();
 		HashMethod<ByteArray> hashMethod = HashMethod.getInstance();
 		int hashLength = hashMethod.getHashAlgorithm().getByteLength();
-		Converter<ByteArray, BigInteger> converter = ByteArrayToBigInteger.getInstance(hashLength, 1);
+		Converter<ByteArray, BigInteger> converter = ByteArrayToBigInteger.getInstance(hashLength);
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, proverId, convertMethod, hashMethod, converter);
 	}
 

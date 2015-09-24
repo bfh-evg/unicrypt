@@ -61,10 +61,26 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
+/**
+ * This class implements the validity proof system for ElGamal encryptions: ZKP[(m,r) : y=enc(m,r) ∧ m ∈ M] where enc
+ * creates an ElGamal encryption and M is the set of permitted plaintexts.
+ * <p>
+ * The class only provides instantiation functions and methods to get the setMembershipFunction and deltaFunction.
+ * Everything else is implemented in the superclass {@link AbstractValidityProofSystem}.
+ * <p>
+ * @author P. Locher
+ */
 public class ElGamalEncryptionValidityProofSystem
 	   extends AbstractValidityProofSystem<ProductGroup, Pair> {
 
+	/**
+	 * The ElGamal encryption scheme.
+	 */
 	private final ElGamalEncryptionScheme elGamalES;
+
+	/**
+	 * The public key of the ElGamal encryption.
+	 */
 	private final Element publicKey;
 
 	protected ElGamalEncryptionValidityProofSystem(final SigmaChallengeGenerator challengeGenerator,
@@ -72,6 +88,27 @@ public class ElGamalEncryptionValidityProofSystem
 		super(challengeGenerator, plaintexts);
 		this.elGamalES = elGamalES;
 		this.publicKey = publicKey;
+	}
+
+	@Override
+	protected Function abstractGetSetMembershipFunction() {
+		return this.elGamalES.getEncryptionFunction().partiallyApply(this.publicKey, 0);
+	}
+
+	@Override
+	protected Function abstractGetDeltaFunction() {
+		final CyclicGroup elGamalCyclicGroup = this.elGamalES.getCyclicGroup();
+		final ProductSet deltaFunctionDomain
+			   = ProductSet.getInstance(elGamalCyclicGroup, this.getSetMembershipProofFunction().getCoDomain());
+		return SharedDomainFunction.getInstance(
+			   SelectionFunction.getInstance(deltaFunctionDomain, 1, 0),
+			   CompositeFunction.getInstance(
+					  SharedDomainFunction.getInstance(
+							 SelectionFunction.getInstance(deltaFunctionDomain, 1, 1),
+							 CompositeFunction.getInstance(
+									SelectionFunction.getInstance(deltaFunctionDomain, 0),
+									InvertFunction.getInstance(elGamalCyclicGroup))),
+					  ApplyFunction.getInstance(elGamalCyclicGroup)));
 	}
 
 	public static ElGamalEncryptionValidityProofSystem getInstance(final ElGamalEncryptionScheme elGamalES,
@@ -97,27 +134,6 @@ public class ElGamalEncryptionValidityProofSystem
 			throw new IllegalArgumentException();
 		}
 		return new ElGamalEncryptionValidityProofSystem(challengeGenerator, elGamalES, publicKey, plaintexts);
-	}
-
-	@Override
-	protected Function abstractGetSetMembershipFunction() {
-		return this.elGamalES.getEncryptionFunction().partiallyApply(this.publicKey, 0);
-	}
-
-	@Override
-	protected Function abstractGetDeltaFunction() {
-		final CyclicGroup elGamalCyclicGroup = this.elGamalES.getCyclicGroup();
-		final ProductSet deltaFunctionDomain
-			   = ProductSet.getInstance(elGamalCyclicGroup, this.getSetMembershipProofFunction().getCoDomain());
-		return SharedDomainFunction.getInstance(
-			   SelectionFunction.getInstance(deltaFunctionDomain, 1, 0),
-			   CompositeFunction.getInstance(
-					  SharedDomainFunction.getInstance(
-							 SelectionFunction.getInstance(deltaFunctionDomain, 1, 1),
-							 CompositeFunction.getInstance(
-									SelectionFunction.getInstance(deltaFunctionDomain, 0),
-									InvertFunction.getInstance(elGamalCyclicGroup))),
-					  ApplyFunction.getInstance(elGamalCyclicGroup)));
 	}
 
 	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(

@@ -47,8 +47,19 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
-public abstract class AbstractProofSystem<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element,
-	   PS extends Set, PE extends Element>
+/**
+ * The abstract implementation of the {@link ProofSystem}. Most method calls are routed directly to the abstract-method
+ * of the subclass. Only, if possible, some input validation is done beforehand.
+ * <p>
+ * @author P. Locher
+ * @param <PRS> The private input space.
+ * @param <PRE> The private input element.
+ * @param <PUS> The public input space.
+ * @param <PUE> The public input element.
+ * @param <PS>  The proof space.
+ * @param <PE>  The proof element.
+ */
+public abstract class AbstractProofSystem<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element, PS extends Set, PE extends Element>
 	   implements ProofSystem {
 
 	@Override
@@ -98,4 +109,5 @@ public abstract class AbstractProofSystem<PRS extends Set, PRE extends Element, 
 	protected abstract PUS abstractGetPublicInputSpace();
 
 	protected abstract PS abstractGetProofSpace();
+
 }

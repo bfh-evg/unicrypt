@@ -48,6 +48,12 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
+/**
+ * This class covers the simplest case of a preimage proof system: ZKP[x : y=f(x)]. The function f can be any function
+ * as long as it is a one-way group homomorphism.
+ * <p>
+ * @author P. Locher
+ */
 public class PlainPreimageProofSystem
 	   extends AbstractPreimageProofSystem<SemiGroup, Element, SemiGroup, Element, Function> {
 
@@ -60,8 +66,8 @@ public class PlainPreimageProofSystem
 	}
 
 	public static PlainPreimageProofSystem getInstance(final Element proverId, final Function proofFunction) {
-		SigmaChallengeGenerator challengeGenerator =
-			   RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+		SigmaChallengeGenerator challengeGenerator
+			   = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return PlainPreimageProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
@@ -77,4 +83,5 @@ public class PlainPreimageProofSystem
 
 		return new PlainPreimageProofSystem(challengeGenerator, proofFunction);
 	}
+
 }

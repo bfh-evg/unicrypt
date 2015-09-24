@@ -41,10 +41,18 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem.interfaces;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
+/**
+ * This interface represents the concept of a proof system. In general, a proof system allows the generation and the
+ * verification of a proof of knowledge. Meaning that a prover proves knowledge of a private value which is related, in
+ * any way, to a public value. Based on the proof, a verifier can be convinced that the prover indeed knows the private
+ * value belonging to the given public value.
+ * <p>
+ * @author P. Locher
+ */
 public interface ProofSystem {
 
 	public Element generate(Element privateInput, Element publicInput);

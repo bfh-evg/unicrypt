@@ -46,12 +46,10 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracl
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
@@ -62,15 +60,47 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
+/**
+ * This class implements the validity proof system for Pedersen commitments: ZKP[(m,r) : y=com(m,r) ∧ m ∈ M] where com
+ * creates a Pedersen commitment and M is the set of permitted messages.
+ * <p>
+ * The class only provides instantiation functions and methods to get the setMembershipFunction and deltaFunction.
+ * Everything else is implemented in the superclass {@link AbstractValidityProofSystem}.
+ * <p>
+ * @author P. Locher
+ */
 public class PedersenCommitmentValidityProofSystem
 	   extends AbstractValidityProofSystem<CyclicGroup, Element> {
 
+	/**
+	 * The Pedersen commitment scheme.
+	 */
 	private final PedersenCommitmentScheme pedersenCS;
 
 	protected PedersenCommitmentValidityProofSystem(final SigmaChallengeGenerator challengeGenerator,
 		   final PedersenCommitmentScheme pedersenCS, final Subset messages) {
 		super(challengeGenerator, messages);
 		this.pedersenCS = pedersenCS;
+	}
+
+	@Override
+	protected Function abstractGetSetMembershipFunction() {
+		return this.pedersenCS.getCommitmentFunction();
+	}
+
+	@Override
+	protected Function abstractGetDeltaFunction() {
+		final ProductSet deltaFunctionDomain = ProductSet.getInstance(this.pedersenCS.getMessageSpace(),
+																	  this.getSetMembershipProofFunction().getCoDomain());
+		final Function deltaFunction = CompositeFunction.getInstance(
+			   SharedDomainFunction.getInstance(
+					  SelectionFunction.getInstance(deltaFunctionDomain, 1),
+					  CompositeFunction.getInstance(
+							 SelectionFunction.getInstance(deltaFunctionDomain, 0),
+							 GeneratorFunction.getInstance(this.pedersenCS.getMessageGenerator()),
+							 InvertFunction.getInstance(this.pedersenCS.getCyclicGroup()))),
+			   ApplyFunction.getInstance(this.pedersenCS.getCyclicGroup()));
+		return deltaFunction;
 	}
 
 	public static PedersenCommitmentValidityProofSystem getInstance(final PedersenCommitmentScheme pedersenCS,
@@ -94,34 +124,11 @@ public class PedersenCommitmentValidityProofSystem
 			throw new IllegalArgumentException();
 		}
 
-		final Set codomain
-			   = ProductGroup.getInstance(pedersenCS.getCommitmentFunction().getCoDomain(),
-										  messages.getOrder().intValue());
 		if (!ZMod.getInstance(pedersenCS.getCyclicGroup().getOrder())
 			   .isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
 		}
 		return new PedersenCommitmentValidityProofSystem(challengeGenerator, pedersenCS, messages);
-	}
-
-	@Override
-	protected Function abstractGetSetMembershipFunction() {
-		return this.pedersenCS.getCommitmentFunction();
-	}
-
-	@Override
-	protected Function abstractGetDeltaFunction() {
-		final ProductSet deltaFunctionDomain = ProductSet.getInstance(this.pedersenCS.getMessageSpace(),
-																	  this.getSetMembershipProofFunction().getCoDomain());
-		final Function deltaFunction = CompositeFunction.getInstance(
-			   SharedDomainFunction.getInstance(
-					  SelectionFunction.getInstance(deltaFunctionDomain, 1),
-					  CompositeFunction.getInstance(
-							 SelectionFunction.getInstance(deltaFunctionDomain, 0),
-							 GeneratorFunction.getInstance(this.pedersenCS.getMessageGenerator()),
-							 InvertFunction.getInstance(this.pedersenCS.getCyclicGroup()))),
-			   ApplyFunction.getInstance(this.pedersenCS.getCyclicGroup()));
-		return deltaFunction;
 	}
 
 	public static RandomOracleSigmaChallengeGenerator

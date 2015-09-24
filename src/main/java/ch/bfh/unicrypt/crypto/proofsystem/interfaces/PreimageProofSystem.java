@@ -43,6 +43,14 @@ package ch.bfh.unicrypt.crypto.proofsystem.interfaces;
 
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
+/**
+ * This interface represents the concept of a preimage proof system. A preimage proof is a sigma proof where the prover
+ * proves knowledge of the preimage x of a homomorphic one-way function f (the proof function) for a given image y.
+ * <p>
+ * ZKP [x : y = f(x)]
+ * <p>
+ * @author P. Locher
+ */
 public interface PreimageProofSystem
 	   extends ProofSystem {
 
