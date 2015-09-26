@@ -57,55 +57,78 @@ public interface MultiplicativeElement<V>
 	   extends Element<V> {
 
 	/**
-	 * @param element
-	 * @return
+	 * This method is a synonym for {@link Element#apply(Element)}. It multiplies this element with the given element.
+	 * <p>
+	 * @param element The given element
+	 * @return The result of multiplying the two elements
 	 * @see Element#apply(Element)
 	 */
 	public MultiplicativeElement<V> multiply(Element element);
 
 	/**
-	 * @param exponent
-	 * @return
+	 * This method is a synonym for {@link Element#selfApply(long)}. It raises the element to the power of the given
+	 * exponent. This is a convenient method for {@link MultiplicativeElement#power(BigInteger)}.
+	 * <p>
+	 * @param exponent The given exponent
+	 * @return The element raised to the power of the exponent
 	 * @see Element#selfApply(long)
 	 */
 	public MultiplicativeElement<V> power(long exponent);
 
 	/**
-	 * @param exponent
-	 * @return
+	 * This method is a synonym for {@link Element#selfApply(BigInteger)}. It raises the element to the power of the
+	 * given exponent.
+	 * <p>
+	 * @param exponent The given exponent
+	 * @return The element raised to the power of the exponent
 	 * @see Element#selfApply(BigInteger)
 	 */
 	public MultiplicativeElement<V> power(BigInteger exponent);
 
 	/**
-	 * @param exponent
-	 * @return
+	 * This method is a synonym for {@link Element#selfApply(Element)} and the same as
+	 * {@link MultiplicativeElement#power(BigInteger)}, except that the exponent is given as an instance of
+	 * {@code Element<BigInteger>}, from which a {@code BigInteger} exponent can be extracted using
+	 * {@link Element#getValue()}.
+	 * <p>
+	 * @param exponent The given exponent
+	 * @return The element raised to the power of the exponent
 	 * @see Element#selfApply(Element)
 	 */
 	public MultiplicativeElement<V> power(Element<BigInteger> exponent);
 
 	/**
-	 * @return x
+	 * This method is a synonym for {@link Element#selfApply()}. It computes the square of this element.
+	 * <p>
+	 * @return The square of this element
 	 * @see Element#selfApply()
 	 */
 	public MultiplicativeElement<V> square();
 
 	/**
-	 *
-	 * @return x
+	 * This method is a synonym for {@link Element#isIdentity()}. Returns {@code true} if the element is the identity
+	 * element of the monoid. Throws an exception if the method is called for an element not belonging to a monoid.
+	 * <p>
+	 * @return {@code true} if the element is the identity element, {@code false} otherwise
 	 * @see Element#isIdentity()
 	 */
 	public boolean isOne();
 
 	/**
-	 * @return x
+	 * This method is a synonym for {@link Element#invert()}. It computes the multiplicative inverse of the element.
+	 * Throws an exception if the method is called for an element not belonging to a group.
+	 * <p>
+	 * @return The multiplicative inverse of the element
 	 * @see Element#invert()
 	 */
 	public MultiplicativeElement<V> oneOver();
 
 	/**
-	 * @param element
-	 * @return
+	 * This method is a synonym for {@link Element#applyInverse(Element)}. It divides this element over the given
+	 * element. Throws an exception if the method is called for an element not belonging to a group.
+	 * <p>
+	 * @param element The given element
+	 * @return This element divided over the given element
 	 * @see Element#applyInverse(Element)
 	 */
 	public MultiplicativeElement<V> divide(Element element);

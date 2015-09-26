@@ -72,7 +72,7 @@ public interface MultiplicativeSemiGroup<V>
 	 * <p>
 	 * @param element1 The first input element
 	 * @param element2 The second input element
-	 * @return The result of applying the multiplying the two input elements
+	 * @return The result of multiplying the two input elements
 	 * @see SemiGroup#apply(Element, Element)
 	 */
 	public MultiplicativeElement<V> multiply(Element element1, Element element2);

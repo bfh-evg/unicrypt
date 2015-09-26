@@ -109,23 +109,23 @@ public interface AdditiveSemiGroup<V>
 	public AdditiveElement<V> add(Sequence<Element> elements);
 
 	/**
-	 * This method is a synonym for {@link SemiGroup#selfApply(Element, long)}. It multiplies the given element with
-	 * some factor. This is a convenient method for {@link AdditiveSemiGroup#times(Element, BigInteger)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, long)}. It multiplies the given element by some
+	 * factor. This is a convenient method for {@link AdditiveSemiGroup#times(Element, BigInteger)}.
 	 * <p>
 	 * @param element The given input element
 	 * @param factor  The given factor
-	 * @return The input element multiplied with the factor
+	 * @return The input element multiplied by the factor
 	 * @see SemiGroup#selfApply(Element, long)
 	 */
 	public AdditiveElement<V> times(Element element, long factor);
 
 	/**
-	 * This method is a synonym for {@link SemiGroup#selfApply(Element, BigInteger)}. It multiplies the given element
-	 * with some factor.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, BigInteger)}. It multiplies the given element by
+	 * some factor.
 	 * <p>
 	 * @param element The given input element
 	 * @param factor  The given factor
-	 * @return The input element multiplied with the factor
+	 * @return The input element multiplied by the factor
 	 * @see SemiGroup#selfApply(Element, BigInteger)
 	 */
 	public AdditiveElement<V> times(Element element, BigInteger factor);

@@ -68,8 +68,8 @@ public interface AdditiveGroup<V>
 	public AdditiveElement<V> negate(Element element);
 
 	/**
-	 * This method is a synonym for {@link Group#applyInverse(Element, Element)}. It computes the subtracts the second
-	 * element from the first element.
+	 * This method is a synonym for {@link Group#applyInverse(Element, Element)}. It subtracts the second element from
+	 * the first element.
 	 * <p>
 	 * @param element1 The first given element
 	 * @param element2 The second given element

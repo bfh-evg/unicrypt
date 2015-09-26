@@ -409,8 +409,8 @@ public interface Set<V> {
 	public <W> Element<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
 
 	/**
-	 * Re-constructs the element that corresponds to a given {@code long} value using the default conversion method. A
-	 * checked exception is thrown if the conversion fails. This method is a convenient method for
+	 * Re-constructs the element that corresponds to a given {@code long} value using the default converter. A checked
+	 * exception is thrown if the conversion fails. This method is a convenient method for
 	 * {@link Set#getElementFrom(BigInteger)}.
 	 * <p>
 	 * @param value The given {@code long} value
@@ -420,8 +420,8 @@ public interface Set<V> {
 	public Element<V> getElementFrom(long value) throws UniCryptException;
 
 	/**
-	 * Re-constructs the element that corresponds to a given {@code BigInteger} value using the default conversion
-	 * method. A checked exception is thrown if the conversion fails.
+	 * Re-constructs the element that corresponds to a given {@code BigInteger} value using the default converter. A
+	 * checked exception is thrown if the conversion fails.
 	 * <p>
 	 * @param value The given {@code BigInteger} value
 	 * @return The re-constructed element
@@ -430,8 +430,8 @@ public interface Set<V> {
 	public Element<V> getElementFrom(BigInteger value) throws UniCryptException;
 
 	/**
-	 * Re-constructs the element that corresponds to a given {@code ByteArray} value using the default conversion
-	 * method. A checked exception is thrown if the conversion fails.
+	 * Re-constructs the element that corresponds to a given {@code ByteArray} value using the default converter. A
+	 * checked exception is thrown if the conversion fails.
 	 * <p>
 	 * @param value The given {@code ByteArray} value
 	 * @return The re-constructed element

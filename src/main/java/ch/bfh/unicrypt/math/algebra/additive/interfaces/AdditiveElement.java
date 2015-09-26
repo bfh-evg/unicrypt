@@ -45,8 +45,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- * This interface represents an additively written {@link Element}. No functionality is added. Some return types are
- * updated.
+ * This interface represents an {@link Element} of a additively written semigroup. No functionality is added. Some
+ * return types are updated.
  * <p>
  * @param <V> The generic type of values stored in the element
  * <p>
@@ -57,51 +57,81 @@ public interface AdditiveElement<V>
 	   extends Element<V> {
 
 	/**
-	 * @param element
-	 * @return
-	 * @see AdditiveSemiGroup#add(Element, Element)
+	 * This method is a synonym for {@link Element#apply(Element)}. It computes the sum of this element and the given
+	 * element.
+	 * <p>
+	 * @param element The given element
+	 * @return The sum of the two elements
+	 * @see Element#apply(Element)
 	 */
 	public AdditiveElement<V> add(Element element);
 
 	/**
-	 * @param element
-	 * @return
-	 * @see AdditiveGroup#subtract(Element, Element)
-	 */
-	public AdditiveElement<V> subtract(Element element);
-
-	/**
-	 * @param factor
-	 * @return
-	 * @see AdditiveSemiGroup#times(Element, BigInteger)
-	 */
-	public AdditiveElement<V> times(BigInteger factor);
-
-	/**
-	 * @param factor
-	 * @return
-	 * @see AdditiveSemiGroup#times(Element, Element)
-	 */
-	public AdditiveElement<V> times(Element<BigInteger> factor);
-
-	/**
-	 * @param factor
-	 * @return
-	 * @see AdditiveSemiGroup#times(Element, long)
+	 * This method is a synonym for {@link Element#selfApply(long)}. It multiplies this element by some factor. This is
+	 * a convenient method for {@link AdditiveElement#times(BigInteger)}.
+	 * <p>
+	 * @param factor The given factor
+	 * @return The element multiplied by the factor
+	 * @see Element#selfApply(long)
 	 */
 	public AdditiveElement<V> times(long factor);
 
 	/**
-	 * @return @see AdditiveSemiGroup#timesTwo(Element)
+	 * This method is a synonym for {@link Element#selfApply(long)}. It multiplies this element by some factor.
+	 * <p>
+	 * @param factor The given factor
+	 * @return The element multiplied by the factor
+	 * @see Element#selfApply(long)
+	 */
+	public AdditiveElement<V> times(BigInteger factor);
+
+	/**
+	 * This method is a synonym for {@link Element#selfApply(Element)} and the same as
+	 * {@link AdditiveElement#times(BigInteger)}, except that the exponent is given as an instance of
+	 * {@code Element<BigInteger>}, from which a {@code BigInteger} exponent can be extracted using
+	 * {@link Element#getValue()}.
+	 * <p>
+	 * @param factor The given factor
+	 * @return The element multiplied by the factor
+	 * @see Element#selfApply(Element)
+	 */
+	public AdditiveElement<V> times(Element<BigInteger> factor);
+
+	/**
+	 * This method is a synonym for {@link Element#selfApply()}. It computes multiplies this element by 2.
+	 * <p>
+	 * @return The element multiplied by 2
+	 * @see Element#selfApply()
 	 */
 	public AdditiveElement<V> timesTwo();
 
 	/**
-	 * @return @see AdditiveGroup#negate(Element)
+	 * This method is a synonym for {@link Element#isIdentity()}. Returns {@code true} if the element is the identity
+	 * element of the monoid. Throws an exception if the method is called for an element not belonging to a monoid.
+	 * <p>
+	 * @return {@code true} if the element is the identity element, {@code false} otherwise
+	 * @see Element#isIdentity()
+	 */
+	public boolean isZero();
+
+	/**
+	 * This method is a synonym for {@link Element#invert()}. It computes the additive inverse of the given element.
+	 * Throws an exception if the method is called for an element not belonging to a group.
+	 * <p>
+	 * @return The additive inverse of the element
+	 * @see Element#invert()
 	 */
 	public AdditiveElement<V> negate();
 
-	public boolean isZero();
+	/**
+	 * This method is a synonym for {@link Element#applyInverse(Element)}. It subtracts the given element from the this
+	 * element.Throws an exception if the method is called for an element not belonging to a group.
+	 * <p>
+	 * @param element The given element
+	 * @return The given element subtracted from this element
+	 * @see Element#applyInverse(Element)
+	 */
+	public AdditiveElement<V> subtract(Element element);
 
 	@Override
 	public AdditiveSemiGroup<V> getSet();
