@@ -47,9 +47,11 @@ import java.math.BigInteger;
 
 /**
  *
- * @author R. Haenni <rolf.haenni@bfh.ch>
  * @param <E>
- * @param <D>
+ * @param <D> x
+ * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public interface ECParameters<E extends FiniteField, D extends DualisticElement> {
 

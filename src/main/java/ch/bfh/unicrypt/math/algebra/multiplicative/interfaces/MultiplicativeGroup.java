@@ -73,7 +73,7 @@ public interface MultiplicativeGroup<V>
 	 * <p>
 	 * @param element1 The first given element
 	 * @param element2 The second given element
-	 * @return The first element divided by the second element
+	 * @return The first element divided over the second element
 	 * @see Group#applyInverse(Element, Element)
 	 */
 	public MultiplicativeElement<V> divide(Element element1, Element element2);

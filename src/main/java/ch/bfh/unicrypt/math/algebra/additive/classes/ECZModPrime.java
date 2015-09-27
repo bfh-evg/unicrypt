@@ -57,7 +57,9 @@ import java.math.BigInteger;
 
 /**
  *
- * @author Christian Lutz
+ * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public class ECZModPrime
 	   extends AbstractEC<ZModPrime, BigInteger, ZModElement, ECZModElement> {
@@ -186,12 +188,8 @@ public class ECZModPrime
 
 	}
 
-	/**
-	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptography Ver. 1.0 page 18
-	 * <p>
-	 * @return True if curve parameters are valid
-	 */
-	public boolean isValid() {
+	// Checks curve parameters for validity according SEC1: Elliptic Curve Cryptography Ver. 1.0 page 18
+	private boolean isValid() {
 		boolean c11, c21, c22, c23, c24, c3, c4, c5, c61, c62;
 
 		ZModElement i4 = getFiniteField().getElement(4);
@@ -216,13 +214,7 @@ public class ECZModPrime
 		return c11 && c21 && c22 && c23 && c24 && c3 && c4 && c5 && c61 && c62;
 	}
 
-	/**
-	 * Private method implements selfApply to check if a ECZmodElement is a valid generator
-	 * <p>
-	 * @param element
-	 * @param posFactor
-	 * @return
-	 */
+	// Implements selfApply to check if a ECZmodElement is a valid generator
 	private ECZModElement selfApply(ECZModElement element, BigInteger posFactor) {
 		ECZModElement result = element;
 		for (int i = posFactor.bitLength() - 2; i >= 0; i--) {

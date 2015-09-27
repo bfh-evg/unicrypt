@@ -53,7 +53,6 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemi
 import java.math.BigInteger;
 
 /**
- *
  * This abstract class provides a basis implementation for objects of type {@link MultiplicativeElement}.
  * <p>
  * @param <S> The generic type of the {@link MultiplicativeSemiGroup} of this element

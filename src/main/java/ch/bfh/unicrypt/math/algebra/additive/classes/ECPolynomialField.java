@@ -58,20 +58,22 @@ import java.math.BigInteger;
 
 /**
  *
- * @author Christian Lutz
+ * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public class ECPolynomialField
 	   extends AbstractEC<PolynomialField, Polynomial<? extends DualisticElement<BigInteger>>, PolynomialElement, ECPolynomialElement> {
 
 	private static final long serialVersionUID = 1L;
 
-	public ECPolynomialField(PolynomialField finiteField, PolynomialElement a,
+	protected ECPolynomialField(PolynomialField finiteField, PolynomialElement a,
 		   PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
 	}
 
-	public ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b,
+	protected ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, givenOrder, coFactor);
 	}

@@ -51,10 +51,12 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 
 /**
  *
- * @author R. Haenni <rolf.haenni@bfh.ch>
- * @param <V>  Type Finite Field of EC
+ * @param <V>  Type finite field of EC
  * @param <DE> Type of FiniteFieldElement
- * @param <EE>
+ * @param <EE> x
+ * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public class AbstractECElement<V, DE extends DualisticElement<V>, EE extends ECElement<V, DE>>
 	   extends AbstractAdditiveElement<EC<V, DE>, EE, Point<DE>>
@@ -62,6 +64,7 @@ public class AbstractECElement<V, DE extends DualisticElement<V>, EE extends ECE
 
 	private static final long serialVersionUID = 1L;
 
+	// flag the distinguish the point of infinity from normal curve points
 	private final boolean infinity;
 
 	// the main constructor

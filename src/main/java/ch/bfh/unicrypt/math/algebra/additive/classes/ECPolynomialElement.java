@@ -50,8 +50,9 @@ import java.math.BigInteger;
 
 /**
  *
- * @author Christian Lutz
  * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public class ECPolynomialElement
 	   extends AbstractECElement<Polynomial<? extends DualisticElement<BigInteger>>, PolynomialElement, ECPolynomialElement> {
@@ -62,7 +63,7 @@ public class ECPolynomialElement
 		super(ecGroup, value);
 	}
 
-	public ECPolynomialElement(ECPolynomialField ecGroup) {
+	protected ECPolynomialElement(ECPolynomialField ecGroup) {
 		super(ecGroup);
 	}
 

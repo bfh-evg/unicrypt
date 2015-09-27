@@ -54,10 +54,11 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link ConcatenativeElement}.
  * <p>
- * @param <S> Generic type of the {@link ConcatenativeSemiGroup} of this element
- * @param <E> Generic type of this element
- * @param <V> Generic type of value stored in this element
- * @author R. Haennip
+ * @param <S> The generic type of the {@link ConcatenativeSemiGroup} of this element
+ * @param <E> The generic type of this element
+ * @param <V> The generic type of the value stored in this element
+ * <p>
+ * @author R. Haenni
  */
 public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup<V>, E extends ConcatenativeElement<V>, V>
 	   extends AbstractElement<S, E, V>

@@ -49,55 +49,63 @@ import java.math.BigInteger;
 /**
  * Some return types are updated.
  * <p>
- * @author R. Haenni
  * @param <V>
  * @param <DE>
+ * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public interface ECElement<V, DE extends DualisticElement<V>>
 	   extends AdditiveElement<Point<DE>> {
 
 	/**
-	 * @see Group#apply(Element, Element)
+	 * Additional convenience getter method to handle to point of infinity
+	 * <p>
+	 * @return
+	 */
+	public DE getY();
+
+	/**
+	 * Additional convenience getter method to handle to point of infinity
+	 * <p>
+	 * @return
+	 */
+	public DE getX();
+
+	/**
 	 */
 	public ECElement<V, DE> add(Element element);
 
 	/**
-	 * @see Group#applyInverse(Element, Element)
-	 */
-	public ECElement<V, DE> subtract(Element element);
-
-	/**
-	 * @see Group#selfApply(Element, BigInteger)
 	 */
 	public ECElement<V, DE> times(BigInteger factor);
 
 	/**
-	 * @see Group#selfApply(Element, Element)
 	 */
 	public ECElement<V, DE> times(Element<BigInteger> factor);
 
 	/**
-	 * @see Group#selfApply(Element, long)
 	 */
 	public ECElement<V, DE> times(long factor);
 
 	/**
-	 * @see Group#selfApply(Element)
 	 */
 	public ECElement<V, DE> timesTwo();
 
 	/**
-	 * @see Group#negate(Element)
+	 */
+	public boolean isZero();
+
+	/**
 	 */
 	public ECElement<V, DE> negate();
 
-	public boolean isZero();
+	/**
+	 */
+	public ECElement<V, DE> subtract(Element element);
 
 	@Override
 	public ECElement<V, DE> apply(Element element);
-
-	@Override
-	public ECElement<V, DE> applyInverse(Element element);
 
 	@Override
 	public ECElement<V, DE> selfApply(BigInteger factor);
@@ -114,18 +122,7 @@ public interface ECElement<V, DE extends DualisticElement<V>>
 	@Override
 	public ECElement<V, DE> invert();
 
-	/**
-	 * Additional convenience getter method to handle to point of infinity
-	 * <p>
-	 * @return
-	 */
-	public DE getY();
-
-	/**
-	 * Additional convenience getter method to handle to point of infinity
-	 * <p>
-	 * @return
-	 */
-	public DE getX();
+	@Override
+	public ECElement<V, DE> applyInverse(Element element);
 
 }

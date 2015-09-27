@@ -67,7 +67,10 @@ import java.math.BigInteger;
  * @param <F>  Generic type of the {@link FiniteField} of this elliptic curve
  * @param <V>  Generic type of values stored in the elements of this elliptic curve
  * @param <D>
- * @param <EE>
+ * @param <EE> x
+ * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public abstract class AbstractEC<F extends FiniteField<V>, V, D extends DualisticElement<V>, EE extends ECElement<V, D>>
 	   extends AbstractAdditiveCyclicGroup<EE, Point<D>>
@@ -99,6 +102,15 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 		this.givenOrder = givenOrder;
 		this.coFactor = coFactor;
 		this.givenGenerator = this.computeGenerator();
+	}
+
+	// helper method to compute a default generator
+	private EE computeGenerator() {
+		EE element = this.selfApply(this.getRandomElement(), this.getCoFactor());
+		while (!this.isGenerator(element)) {
+			element = this.getRandomElement();
+		}
+		return element;
 	}
 
 	@Override
@@ -213,14 +225,6 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 		return this.givenGenerator;
 	}
 
-	private EE computeGenerator() {
-		EE element = this.selfApply(this.getRandomElement(), this.getCoFactor());
-		while (!this.isGenerator(element)) {
-			element = this.getRandomElement();
-		}
-		return element;
-	}
-
 	@Override
 	protected boolean abstractIsGenerator(EE element) {
 		return MathUtil.isPrime(this.getOrder()) && this.selfApply(element, this.getOrder()).isZero();
@@ -260,10 +264,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 		if (!this.coFactor.equals(other.coFactor)) {
 			return false;
 		}
-		if (!this.givenGenerator.equals(other.givenGenerator)) {
-			return false;
-		}
-		return true;
+		return this.givenGenerator.equals(other.givenGenerator);
 	}
 
 	@Override
@@ -293,10 +294,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 		if (!this.givenOrder.equals(other.givenOrder)) {
 			return false;
 		}
-		if (!this.coFactor.equals(other.coFactor)) {
-			return false;
-		}
-		return true;
+		return this.coFactor.equals(other.coFactor);
 	}
 
 	@Override
@@ -310,7 +308,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 
 	protected abstract boolean abstractContains(D xValue, D yValue);
 
-	// Returns random element with coFactorout knowing a generator of tcoFactore group.
+	// Returns a random element without knowing a generator of the group.
 	protected abstract Sequence<EE> abstractGetRandomElementsWithoutGenerator(RandomByteSequence randomByteSequence);
 
 }

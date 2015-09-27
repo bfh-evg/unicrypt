@@ -45,11 +45,13 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- * This interface represents an additively written {@link Element}. No functionality is added. Some return types are
- * updated.
+ * This interface represents an {@link Element} of a semigroup with concatenation as binary operation. No functionality
+ * is added. Some return types are updated.
+ * <p>
+ * @param <V> The generic type of values stored in this element
+ * <p>
  * <p>
  * @author R. Haenni
- * @param <V> Generic type of values of this element
  */
 public interface ConcatenativeElement<V>
 	   extends Element<V> {

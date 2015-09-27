@@ -46,6 +46,12 @@ import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import java.math.BigInteger;
 
+/**
+ *
+ * <p>
+ * @author C. Lutz
+ * @author R. Haenni
+ */
 public class ECZModElement
 	   extends AbstractECElement<BigInteger, ZModElement, ECZModElement> {
 

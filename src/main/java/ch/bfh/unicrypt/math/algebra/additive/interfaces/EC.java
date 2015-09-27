@@ -58,63 +58,57 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- * TODO This interface represents an elliptic curve. Its set of points creates an additive group so that adding two
- * points creates another point. Some return types are updated.
+ * This interface represents an elliptic curve. Its set of points creates an additive group so that adding two points
+ * creates another point. Some return types are updated.
  * <p>
- *
- * @author R. Haenni <rolf.haenni@bfh.ch>
  * @param <V> Generic type of values stored in the elements of the elliptic curve
- * @param <E>
+ * @param <E> xxx
+ * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public interface EC<V, E extends DualisticElement<V>>
-	   extends
-	   AdditiveCyclicGroup<Point<E>> {
+	   extends AdditiveCyclicGroup<Point<E>> {
 
 	/**
 	 * Returns the finite Field of this elliptic curve
 	 * <p>
-	 *
 	 * @return The finite field of this elliptic curve
 	 */
 	public FiniteField<V> getFiniteField();
 
 	/**
-	 * Returns the co-efficient a of this elliptic curve.
+	 * Returns the coefficient a of this elliptic curve.
 	 * <p>
-	 *
-	 * @return The co-efficient a
+	 * @return The coefficient a
 	 */
 	public E getA();
 
 	/**
-	 * Returns the co-efficient b of this elliptic curve.
+	 * Returns the coefficient b of this elliptic curve.
 	 * <p>
-	 *
-	 * @return The co-efficient b
+	 * @return The coefficient b
 	 */
 	public E getB();
 
 	/**
 	 * Returns the cofactor of this elliptic curve.
 	 * <p>
-	 *
 	 * @return The cofactor
 	 */
 	public BigInteger getCoFactor();
 
 	/**
-	 * TODO Returns {@code true} if this elliptic curve lies on the given x co-ordinate.
+	 * Returns {@code true} if this elliptic curve lies on the given x coordinate.
 	 * <p>
-	 *
 	 * @param xValue The given x value
-	 * @return {@code true} if this elliptic curve lies on the given x co-ordinate
+	 * @return {@code true} if this elliptic curve lies on the given x coordinate
 	 */
 	public boolean contains(E xValue);
 
 	/**
-	 * TODO Returns {@code true} if the given x and y value are the co-ordinates for a point on this elliptic curve.
+	 * Returns {@code true} if the given x and y value are the coordinates for a point on this elliptic curve.
 	 * <p>
-	 *
 	 * @param xValue The given xValue
 	 * @param yValue The given yValue
 	 * @return {@code true} if xValue and yValue form a point on this elliptic curve.
@@ -122,9 +116,8 @@ public interface EC<V, E extends DualisticElement<V>>
 	public boolean contains(E xValue, E yValue);
 
 	/**
-	 * TODO Returns the corresponding point for a given x and y value.
+	 * Returns the corresponding point for a given x and y value.
 	 * <p>
-	 *
 	 * @param xValue The given xValue
 	 * @param yValue The given yValue
 	 * @return The corresponding point for a given x and y value
@@ -152,13 +145,13 @@ public interface EC<V, E extends DualisticElement<V>>
 	public ECElement<V, E> add(Sequence<Element> elements);
 
 	@Override
+	public ECElement<V, E> times(Element element, long factor);
+
+	@Override
 	public ECElement<V, E> times(Element element, BigInteger factor);
 
 	@Override
 	public ECElement<V, E> times(Element element, Element<BigInteger> factor);
-
-	@Override
-	public ECElement<V, E> times(Element element, long factor);
 
 	@Override
 	public ECElement<V, E> timesTwo(Element element);
@@ -227,13 +220,13 @@ public interface EC<V, E extends DualisticElement<V>>
 	public ECElement<V, E> multiSelfApply(Element[] elements, BigInteger[] factors);
 
 	@Override
+	public ECElement<V, E> getIdentityElement();
+
+	@Override
 	public ECElement<V, E> invert(Element element);
 
 	@Override
 	public ECElement<V, E> applyInverse(Element element1, Element element2);
-
-	@Override
-	public ECElement<V, E> getIdentityElement();
 
 	@Override
 	public ECElement<V, E> getDefaultGenerator();

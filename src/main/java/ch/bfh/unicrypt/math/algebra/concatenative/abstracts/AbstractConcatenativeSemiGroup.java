@@ -56,9 +56,10 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link ConcatenativeSemiGroup}.
  * <p>
- * @param <E> Generic type of the elements of this semigroup
- * @param <V> Generic type of values stored in the elements of this semigroup
- * @author
+ * @param <E> The generic type of the elements of this semigroup
+ * @param <V> The generic type of the values stored in the elements of this semigroup
+ * <p>
+ * @author R. Haenni
  */
 public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElement<V>, V>
 	   extends AbstractSemiGroup<E, V>
@@ -66,6 +67,7 @@ public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElem
 
 	private static final long serialVersionUID = 1L;
 
+	// the block length of this semigroup
 	protected final int blockLength;
 
 	protected AbstractConcatenativeSemiGroup(Class<?> valueClass, int blockLength) {

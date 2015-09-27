@@ -48,15 +48,14 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.ECPolynomialFieldParameters;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
 /**
  * "SEC 2: Recommended Elliptic Curve Domain Parameters", Version 2.0, Certicom Research, 2010
  * <p>
- * @author Christian Lutz
- * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public enum SEC2_ECPolynomialField
 	   implements ECPolynomialFieldParameters {

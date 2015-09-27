@@ -51,8 +51,8 @@ import java.math.BigInteger;
 /**
  * "SEC 2: Recommended Elliptic Curve Domain Parameters", Version 2.0, Certicom Research, 2010
  * <p>
- * @author Christian Lutz
- * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public enum SEC2_ECZModParameters
 	   implements ECZModParameters {
