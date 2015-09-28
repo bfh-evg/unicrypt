@@ -45,14 +45,20 @@ import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
- * TODO This interface represents the mathematical concept of a ring. A ring is a semiring where additive operations are
- * a commutative {@link Group}. It is therefore implemented as a specialization of {@link SemiRing}. One familiar
- * example of a ring is the set of integers. Some return types are updated.
+ * This interface represents the mathematical concept of a ring. A ring is a semiring where the set together with
+ * addition forms a commutative group. Therefore, every element of the ring has an additive inverse.
  * <p>
- * @see "Handbook of Applied Cryptography, Definition 2.175"
+ * The ring interface is therefore implemented as a specialization of {@link SemiRing} and {@link AdditiveGroup}. No
+ * functionality is added. Some return types are updated.
+ * <p>
+ * @param <V> The generic type of the values representing the elements of a ring
  * <p>
  * @author R. Haenni
- * @param <V> Generic type of values stored in the elements of this ring
+ * <p>
+ * @see SemiRing
+ * @see AdditiveGroup
+ * @see DualisticElement
+ * @see "Handbook of Applied Cryptography, Definition 2.175"
  */
 public interface Ring<V>
 	   extends SemiRing<V>, AdditiveGroup<V> {

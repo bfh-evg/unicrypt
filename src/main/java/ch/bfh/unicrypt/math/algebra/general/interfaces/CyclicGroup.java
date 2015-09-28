@@ -46,9 +46,9 @@ import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequen
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
- * This interface represents the concept a cyclic group. Every element of a cyclic group can be written as a power of
- * some particular element in multiplicative notation, or as a multiple of the element in additive notation. Such an
- * element is called generator of the group. For every positive integer there is exactly one cyclic group (up to
+ * This interface represents the mathematical concept a cyclic group. Every element of a cyclic group can be written as
+ * a power of some particular element in multiplicative notation, or as a multiple of the element in additive notation.
+ * Such an element is called generator of the group. For every positive integer there is exactly one cyclic group (up to
  * isomorphism) with that order, and there is exactly one infinite cyclic group. This interface extends {@link Group}
  * with additional methods for dealing with generators. Each implementing class must provide a default generator.
  * <p>

@@ -52,18 +52,31 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
 import java.math.BigInteger;
 
 /**
- * TODO This interface represents the mathematical concept of a semiring. A semiring is a monoid with a second
- * associative compositions: the first binary operation is called "addition" and is commutative and the second binary
- * operation is called "multiplication". It is implemented as a specialization of {@link Monoid}. Some return types are
- * updated.
+ * This interface represents the mathematical concept of a mathematical semiring. A semiring is a set of elements
+ * equipped with two binary operations. The first operation is called "addition" and the second "multiplication". The
+ * set together with addition forms a commutative monoid, whereas the set together with multiplication forms a (not
+ * necessarily commutative) monoid. Additionally, multiplication is distributive with respect to addition. The identity
+ * element of the addition is called zero, and the identity element of the multiplication is called one.
+ * <p>
+ * The semiring interface is implemented as a specialization of {@link AdditiveMonoid} and {@link MultiplicativeMonoid}.
+ * The neutral method names inherited from {@link SemiGroup}, for example {@code apply} or {@code selfApply}, are
+ * interpreted additively. No functionality is added.
+ * <p>
+ * The elements of a semiring are called "dualistic" (something conceptually divided into two contrasted aspects), see
+ * {@link DualisticElement}. The return types are adjusted accordingly.
+ * <p>
+ * @param <V> The generic type of the values representing the elements of a ring
  * <p>
  * @author R. Haenni
- * @param <V> Generic type of values stored in the elements of this semiring
+ * <p>
+ * @see AdditiveMonoid
+ * @see MultiplicativeMonoid
+ * @see DualisticElement
  */
 public interface SemiRing<V>
 	   extends AdditiveMonoid<V>, MultiplicativeMonoid<V> {
@@ -117,13 +130,13 @@ public interface SemiRing<V>
 	public DualisticElement<V> apply(Sequence<Element> elements);
 
 	@Override
+	public DualisticElement<V> selfApply(Element element, long amount);
+
+	@Override
 	public DualisticElement<V> selfApply(Element element, BigInteger amount);
 
 	@Override
 	public DualisticElement<V> selfApply(Element element, Element<BigInteger> amount);
-
-	@Override
-	public DualisticElement<V> selfApply(Element element, long amount);
 
 	@Override
 	public DualisticElement<V> selfApply(Element element);
@@ -147,13 +160,13 @@ public interface SemiRing<V>
 	public DualisticElement<V> add(Sequence<Element> elements);
 
 	@Override
+	public DualisticElement<V> times(Element element, long amount);
+
+	@Override
 	public DualisticElement<V> times(Element element, BigInteger amount);
 
 	@Override
 	public DualisticElement<V> times(Element element, Element<BigInteger> amount);
-
-	@Override
-	public DualisticElement<V> times(Element element, long amount);
 
 	@Override
 	public DualisticElement<V> timesTwo(Element element);
@@ -177,13 +190,13 @@ public interface SemiRing<V>
 	public DualisticElement<V> multiply(Sequence<Element> elements);
 
 	@Override
+	public DualisticElement<V> power(Element element, long amount);
+
+	@Override
 	public DualisticElement<V> power(Element element, BigInteger amount);
 
 	@Override
 	public DualisticElement<V> power(Element element, Element<BigInteger> amount);
-
-	@Override
-	public DualisticElement<V> power(Element element, long amount);
 
 	@Override
 	public DualisticElement<V> square(Element element);
