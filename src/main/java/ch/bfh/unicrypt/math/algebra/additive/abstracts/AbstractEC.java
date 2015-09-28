@@ -62,7 +62,8 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import java.math.BigInteger;
 
 /**
- * This abstract class provides a basis implementation for objects of type {@link EC}.
+ * This abstract class provides a basis implementation for objects of type {@link EC}. Many of the EC particularities
+ * are pre-implemented.
  * <p>
  * @param <F>  Generic type of the {@link FiniteField} of this elliptic curve
  * @param <V>  Generic type of values stored in the elements of this elliptic curve
