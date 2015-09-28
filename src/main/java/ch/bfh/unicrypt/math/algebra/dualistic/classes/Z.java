@@ -84,8 +84,8 @@ public class Z
 	}
 
 	@Override
-	protected ZElement defaultSelfApply(ZElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().multiply(amount));
+	protected ZElement defaultSelfApply(ZElement element, BigInteger factor) {
+		return this.abstractGetElement(element.getValue().multiply(factor));
 	}
 
 	@Override

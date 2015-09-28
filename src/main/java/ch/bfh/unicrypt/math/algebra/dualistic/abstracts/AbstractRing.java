@@ -51,8 +51,9 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link Ring}.
  * <p>
- * @param <E> Generic type of the elements of this ring
- * @param <V> Generic type of values stored in the elements of this ring
+ * @param <E> The generic type of the elements of this ring
+ * @param <V> The generic type of the values stored in the elements of this ring
+ * <p>
  * @author R. Haenni
  */
 public abstract class AbstractRing<E extends DualisticElement<V>, V>
@@ -89,17 +90,17 @@ public abstract class AbstractRing<E extends DualisticElement<V>, V>
 	}
 
 	@Override
-	protected E defaultSelfApply(E element, BigInteger amount) {
-		boolean negAmount = (amount.signum() < 0);
-		amount = amount.abs();
+	protected E defaultSelfApply(E element, BigInteger factor) {
+		boolean negFactor = (factor.signum() < 0);
+		factor = factor.abs();
 		if (this.isFinite() && this.hasKnownOrder()) {
-			amount = amount.mod(this.getOrder());
+			factor = factor.mod(this.getOrder());
 		}
-		if (amount.signum() == 0) {
+		if (factor.signum() == 0) {
 			return this.getIdentityElement();
 		}
-		E result = this.defaultSelfApplyAlgorithm(element, amount);
-		if (negAmount) {
+		E result = this.defaultSelfApplyAlgorithm(element, factor);
+		if (negFactor) {
 			return this.invert(result);
 		}
 		return result;

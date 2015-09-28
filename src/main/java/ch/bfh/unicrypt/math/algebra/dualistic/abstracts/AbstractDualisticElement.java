@@ -76,18 +76,18 @@ public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends 
 	}
 
 	@Override
-	public final E power(final BigInteger amount) {
-		return (E) this.getSet().power(this, amount);
+	public final E power(final long exponent) {
+		return (E) this.getSet().power(this, exponent);
 	}
 
 	@Override
-	public final E power(final Element<BigInteger> amount) {
-		return (E) this.getSet().power(this, amount);
+	public final E power(final BigInteger exponent) {
+		return (E) this.getSet().power(this, exponent);
 	}
 
 	@Override
-	public final E power(final long amount) {
-		return (E) this.getSet().power(this, amount);
+	public final E power(final Element<BigInteger> exponent) {
+		return (E) this.getSet().power(this, exponent);
 	}
 
 	@Override

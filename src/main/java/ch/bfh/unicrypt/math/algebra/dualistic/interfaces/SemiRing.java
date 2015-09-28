@@ -130,19 +130,19 @@ public interface SemiRing<V>
 	public DualisticElement<V> apply(Sequence<Element> elements);
 
 	@Override
-	public DualisticElement<V> selfApply(Element element, long amount);
+	public DualisticElement<V> selfApply(Element element, long factor);
 
 	@Override
-	public DualisticElement<V> selfApply(Element element, BigInteger amount);
+	public DualisticElement<V> selfApply(Element element, BigInteger factor);
 
 	@Override
-	public DualisticElement<V> selfApply(Element element, Element<BigInteger> amount);
+	public DualisticElement<V> selfApply(Element element, Element<BigInteger> factor);
 
 	@Override
 	public DualisticElement<V> selfApply(Element element);
 
 	@Override
-	public DualisticElement<V> multiSelfApply(Element[] elements, BigInteger[] amounts);
+	public DualisticElement<V> multiSelfApply(Element[] elements, BigInteger[] factors);
 
 	@Override
 	public DualisticElement<V> getIdentityElement();
@@ -160,19 +160,19 @@ public interface SemiRing<V>
 	public DualisticElement<V> add(Sequence<Element> elements);
 
 	@Override
-	public DualisticElement<V> times(Element element, long amount);
+	public DualisticElement<V> times(Element element, long factor);
 
 	@Override
-	public DualisticElement<V> times(Element element, BigInteger amount);
+	public DualisticElement<V> times(Element element, BigInteger factor);
 
 	@Override
-	public DualisticElement<V> times(Element element, Element<BigInteger> amount);
+	public DualisticElement<V> times(Element element, Element<BigInteger> factor);
 
 	@Override
 	public DualisticElement<V> timesTwo(Element element);
 
 	@Override
-	public DualisticElement<V> sumOfProducts(Element[] elements, BigInteger[] amounts);
+	public DualisticElement<V> sumOfProducts(Element[] elements, BigInteger[] factors);
 
 	@Override
 	public DualisticElement<V> getZeroElement();
@@ -190,19 +190,19 @@ public interface SemiRing<V>
 	public DualisticElement<V> multiply(Sequence<Element> elements);
 
 	@Override
-	public DualisticElement<V> power(Element element, long amount);
+	public DualisticElement<V> power(Element element, long exponent);
 
 	@Override
-	public DualisticElement<V> power(Element element, BigInteger amount);
+	public DualisticElement<V> power(Element element, BigInteger exponent);
 
 	@Override
-	public DualisticElement<V> power(Element element, Element<BigInteger> amount);
+	public DualisticElement<V> power(Element element, Element<BigInteger> exponent);
 
 	@Override
 	public DualisticElement<V> square(Element element);
 
 	@Override
-	public DualisticElement<V> productOfPowers(Element[] elements, BigInteger[] amounts);
+	public DualisticElement<V> productOfPowers(Element[] elements, BigInteger[] exponents);
 
 	@Override
 	public DualisticElement<V> getOneElement();

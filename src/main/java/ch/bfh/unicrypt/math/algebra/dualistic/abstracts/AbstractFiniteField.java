@@ -49,17 +49,19 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link FiniteField}.
  * <p>
- * @param <E> Generic type of the elements of this finite field
- * @param <M> Generic type of the {@link MultplicativeGroup} of this finite field
- * @param <V> Generic type of values stored in the elements of this finite field
+ * @param <E> The generic type of the elements of this finite field
+ * @param <V> The generic type of the values stored in the elements of this finite field
+ * @param <M> The generic type of the multiplicative group of this finite field
+ * <p>
  * @author R. Haenni
  */
-public abstract class AbstractFiniteField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V>
+public abstract class AbstractFiniteField<E extends DualisticElement<V>, M extends MultiplicativeGroup<V>, V>
 	   extends AbstractField<E, M, V>
 	   implements FiniteField<V> {
 
 	private static final long serialVersionUID = 1L;
 
+	// the charcteristic of this finite field
 	private BigInteger characteristic;
 
 	protected AbstractFiniteField(Class<?> valueClass) {

@@ -47,11 +47,16 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import java.math.BigInteger;
 
 /**
- * TODO A dualistic element can be understood as an element that can be additive or multiplicative. It is implemented as
- * a specialization of {@link Element}. Some return types are updated.
+ * This interface represents an element of a semigroup, ring, or field. It is called "dualistic" due to the two
+ * conceptually contrasted aspects of the two operations of addition and multiplication.
+ * <p>
+ * The interface is implemented as a specialization of both {@link AdditiveElement} and {@link MultiplicativeElement}.
+ * No functionality is added. Some return types are updated.
+ * <p>
+ * @param <V> The generic type of values stored in this element
  * <p>
  * @author R. Haenni
- * @param <V> Generic type of values stored in this element
+ * @version 2.0
  */
 public interface DualisticElement<V>
 	   extends AdditiveElement<V>, MultiplicativeElement<V> {
@@ -66,13 +71,13 @@ public interface DualisticElement<V>
 	public DualisticElement<V> applyInverse(Element element);
 
 	@Override
-	public DualisticElement<V> selfApply(BigInteger amount);
+	public DualisticElement<V> selfApply(long factor);
 
 	@Override
-	public DualisticElement<V> selfApply(Element<BigInteger> amount);
+	public DualisticElement<V> selfApply(BigInteger factor);
 
 	@Override
-	public DualisticElement<V> selfApply(long amount);
+	public DualisticElement<V> selfApply(Element<BigInteger> factor);
 
 	@Override
 	public DualisticElement<V> selfApply();
@@ -87,13 +92,13 @@ public interface DualisticElement<V>
 	public DualisticElement<V> subtract(Element element);
 
 	@Override
-	public DualisticElement<V> times(BigInteger amount);
+	public DualisticElement<V> times(long factor);
 
 	@Override
-	public DualisticElement<V> times(Element<BigInteger> amount);
+	public DualisticElement<V> times(BigInteger factor);
 
 	@Override
-	public DualisticElement<V> times(long amount);
+	public DualisticElement<V> times(Element<BigInteger> factor);
 
 	@Override
 	public DualisticElement<V> timesTwo();
@@ -108,13 +113,13 @@ public interface DualisticElement<V>
 	public DualisticElement<V> divide(Element element);
 
 	@Override
-	public DualisticElement<V> power(BigInteger amount);
+	public DualisticElement<V> power(long exponent);
 
 	@Override
-	public DualisticElement<V> power(Element<BigInteger> amount);
+	public DualisticElement<V> power(BigInteger exponent);
 
 	@Override
-	public DualisticElement<V> power(long amount);
+	public DualisticElement<V> power(Element<BigInteger> exponent);
 
 	@Override
 	public DualisticElement<V> square();

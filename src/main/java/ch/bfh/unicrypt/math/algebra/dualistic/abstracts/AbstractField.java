@@ -53,17 +53,19 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link Field}.
  * <p>
- * @param <E> Generic type of elements of this field
- * @param <M> Generic type of the {@link MultiplicativeGroup} of this field
- * @param <V> Generic type of values stored in the elements of this field
+ * @param <E> The generic type of the elements of this field
+ * @param <V> The generic type of the values stored in the elements of this field
+ * @param <M> The generic type of the multiplicative group of this field
+ * <p>
  * @author R. Haenni
  */
-public abstract class AbstractField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V>
+public abstract class AbstractField<E extends DualisticElement<V>, M extends MultiplicativeGroup<V>, V>
 	   extends AbstractRing<E, V>
 	   implements Field<V> {
 
 	private static final long serialVersionUID = 1L;
 
+	// the multiplicative group of this field
 	private M multiplicativeGroup;
 
 	protected AbstractField(Class<?> valueClass) {
@@ -71,7 +73,7 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 	}
 
 	@Override
-	public M getMultiplicativeGroup() {
+	public final M getMultiplicativeGroup() {
 		if (this.multiplicativeGroup == null) {
 			this.multiplicativeGroup = this.abstractGetMultiplicativeGroup();
 		}
@@ -95,36 +97,27 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 	}
 
 	@Override
-	protected E defaultPower(E element, BigInteger amount) {
+	protected E defaultPower(E element, BigInteger exponent) {
 		if (element.isZero()) {
 			return element;
 		}
-		boolean negAmount = (amount.signum() < 0);
-		amount = amount.abs();
+		boolean negExponent = (exponent.signum() < 0);
+		exponent = exponent.abs();
 		if (this.isFinite() && this.hasKnownOrder()) {
-			amount = amount.mod(this.getOrder().subtract(MathUtil.ONE));
+			exponent = exponent.mod(this.getOrder().subtract(MathUtil.ONE));
 		}
-		if (amount.signum() == 0) {
+		if (exponent.signum() == 0) {
 			return this.getOneElement();
 		}
-		E result = this.defaultPowerAlgorithm(element, amount);
-		if (negAmount) {
+		E result = this.defaultPowerAlgorithm(element, exponent);
+		if (negExponent) {
 			return this.oneOver(result);
 		}
 		return result;
 	}
 
-	/**
-	 *
-	 * @param element
-	 * @return
-	 */
-	protected abstract E abstractOneOver(E element);
-
-	/**
-	 *
-	 * @return
-	 */
 	protected abstract M abstractGetMultiplicativeGroup();
+
+	protected abstract E abstractOneOver(E element);
 
 }

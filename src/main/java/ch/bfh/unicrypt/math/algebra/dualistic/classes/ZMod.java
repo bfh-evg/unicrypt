@@ -105,13 +105,13 @@ public class ZMod
 	}
 
 	@Override
-	protected ZModElement defaultSelfApplyAlgorithm(ZModElement element, BigInteger posAmount) {
-		return this.abstractGetElement(element.getValue().multiply(posAmount).mod(this.modulus));
+	protected ZModElement defaultSelfApplyAlgorithm(ZModElement element, BigInteger posFactor) {
+		return this.abstractGetElement(element.getValue().multiply(posFactor).mod(this.modulus));
 	}
 
 	@Override
-	protected ZModElement defaultPowerAlgorithm(ZModElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().modPow(amount, this.modulus));
+	protected ZModElement defaultPowerAlgorithm(ZModElement element, BigInteger exponent) {
+		return this.abstractGetElement(element.getValue().modPow(exponent, this.modulus));
 	}
 
 	@Override

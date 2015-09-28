@@ -85,7 +85,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 		if (elements == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
 		}
-		return this.defaultApply(Sequence.getInstance(elements));
+		return this.defaultApply(Sequence.getInstance(elements).filter(Predicate.NOT_NULL));
 	}
 
 	@Override
@@ -93,6 +93,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 		if (elements == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
 		}
+		// no filtering of null value required
 		return this.defaultApply(Sequence.getInstance(elements));
 	}
 
@@ -101,7 +102,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 		if (elements == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
 		}
-		return this.defaultApply(elements);
+		return this.defaultApply(elements.filter(Predicate.NOT_NULL));
 	}
 
 	@Override
@@ -147,7 +148,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 	// this method is overriden in AbstractMonoid
 	protected E defaultApply(final Sequence<Element> elements) {
 		final SemiGroup<V> semiGroup = this;
-		return (E) elements.filter(Predicate.NOT_NULL).reduce(new Operator<Element>() {
+		return (E) elements.reduce(new Operator<Element>() {
 
 			@Override
 			public Element apply(Element element1, Element element2) {

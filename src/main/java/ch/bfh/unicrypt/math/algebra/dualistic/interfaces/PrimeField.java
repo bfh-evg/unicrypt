@@ -42,12 +42,14 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
 /**
- * TODO This interface represents the mathematical concept of a prime field. A prime field is the minimal subfield of a
- * field, the smallest subfield containing 1F(? see wikipedia http://en.wikipedia.org/wiki/Field_extension). It is
- * implemented as a specialization of {@link FiniteField} and {@link CyclicRing}.
+ * This interface represents the mathematical concept of a prime field. A prime field is finite field of prime order
+ * {@code p}. Therefore, the order of a prime field corresponds to its characteristic.
+ * <p>
+ * The prime order interface is implemented as a specialization of {@link FiniteField}. No functionality is added.
+ * <p>
+ * @param <V> The generic type of the values representing the elements of a prime field
  * <p>
  * @author R. Haenni
- * @param <V> Generic type of values stored in the elements of this field
  */
 public interface PrimeField<V>
 	   extends FiniteField<V> {

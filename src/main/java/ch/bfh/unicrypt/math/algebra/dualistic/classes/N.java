@@ -83,8 +83,8 @@ public class N
 	}
 
 	@Override
-	protected NElement defaultSelfApply(NElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().multiply(amount));
+	protected NElement defaultSelfApply(NElement element, BigInteger factor) {
+		return this.abstractGetElement(element.getValue().multiply(factor));
 	}
 
 	@Override

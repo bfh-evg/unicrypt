@@ -310,12 +310,12 @@ public class PolynomialSemiRing
 	}
 
 	@Override
-	protected PolynomialElement defaultSelfApplyAlgorithm(PolynomialElement element, BigInteger posAmount) {
+	protected PolynomialElement defaultSelfApplyAlgorithm(PolynomialElement element, BigInteger posFactor) {
 		// TODO Optimize for binary
 		Polynomial<? extends DualisticElement<BigInteger>> polynomial = element.getValue();
 		Map<Integer, DualisticElement<BigInteger>> coefficientMap = new HashMap();
 		for (Integer i : polynomial.getCoefficientIndices()) {
-			coefficientMap.put(i, polynomial.getCoefficient(i).selfApply(posAmount));
+			coefficientMap.put(i, polynomial.getCoefficient(i).selfApply(posFactor));
 		}
 		return this.getElementUnchecked(coefficientMap);
 	}

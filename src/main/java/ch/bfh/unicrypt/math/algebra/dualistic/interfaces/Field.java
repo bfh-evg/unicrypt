@@ -46,13 +46,13 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGrou
 
 /**
  * This interface represents the mathematical concept of a field. A field is a commutative ring with the additional
- * property that the set (minus the zero element) together with multiplication forms a second commutative group.
- * Therefore, both operations form a commutative group with corresponding additive and multiplicative inverses.
+ * property that the set of non-zero elements together with multiplication forms a second commutative group. Therefore,
+ * both operations form a commutative group with corresponding additive and multiplicative inverses.
  * <p>
  * The field interface is implemented as a specialization of {@link Ring} with additional methods for returning the
  * multiplicative group and for computing multiplicative inverses and divisions.
  * <p>
- * @param <V> Generic type of values stored in the elements of this field
+ * @param <V> The generic type of the values representing the elements of a field
  * <p>
  * @author R. Haenni
  * <p>
