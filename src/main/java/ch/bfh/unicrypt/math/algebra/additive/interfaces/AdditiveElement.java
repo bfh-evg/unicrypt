@@ -98,7 +98,7 @@ public interface AdditiveElement<V>
 	public AdditiveElement<V> times(Element<BigInteger> factor);
 
 	/**
-	 * This method is a synonym for {@link Element#selfApply()}. It computes multiplies this element by 2.
+	 * This method is a synonym for {@link Element#selfApply()}. It multiplies this element by 2.
 	 * <p>
 	 * @return The element multiplied by 2
 	 * @see Element#selfApply()

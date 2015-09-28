@@ -70,7 +70,7 @@ public interface AdditiveMonoid<V>
 	 * is the identity element of this monoid.
 	 * <p>
 	 * @param element The given element
-	 * @return {@code true} if the given element is the identity element, {@code false} otherwise
+	 * @return {@code true} if this given element is the identity element, {@code false} otherwise
 	 * @see Monoid#isIdentityElement(Element)
 	 */
 	public boolean isZeroElement(Element element);

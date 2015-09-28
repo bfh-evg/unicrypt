@@ -59,10 +59,17 @@ public interface ConcatenativeMonoid<V>
 	   extends Monoid<V>, ConcatenativeSemiGroup<V> {
 
 	/**
+	 * Returns the monoid's unique identity element, an empty element of length 0.
+	 * <p>
+	 * @return The empty element
 	 */
 	public ConcatenativeElement<V> getEmptyElement();
 
 	/**
+	 * Checks if a given element is the empty element.
+	 * <p>
+	 * @param element The given element
+	 * @return {@code true} if {@code element} is the empty element, {@code false} otherwise
 	 */
 	public boolean isEmptyElement(Element element);
 

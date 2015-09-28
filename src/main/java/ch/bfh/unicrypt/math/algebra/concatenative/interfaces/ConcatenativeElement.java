@@ -57,39 +57,65 @@ public interface ConcatenativeElement<V>
 	   extends Element<V> {
 
 	/**
-	 *
-	 * @return
+	 * Returns the length of the element.
+	 * <p>
+	 * @return The length of the element
 	 */
 	public int getLength();
 
 	/**
-	 * @see Group#apply(Element, Element)
+	 * This method is a synonym for {@link Element#apply(Element)}. It concatenates this element with the given element.
+	 * <p>
+	 * @param element The given element
+	 * @return The concatenation of the two elements
+	 * @see Element#apply(Element)
 	 */
 	public ConcatenativeElement<V> concatenate(Element element);
 
 	/**
-	 * @see Group#selfApply(Element, BigInteger)
-	 */
-	public ConcatenativeElement<V> selfConcatenate(BigInteger amount);
-
-	/**
-	 * @see Group#selfApply(Element, Element)
-	 */
-	public ConcatenativeElement<V> selfConcatenate(Element<BigInteger> amount);
-
-	/**
-	 * @see Group#selfApply(Element, long)
+	 * This method is a synonym for {@link Element#selfApply(long)}. It applies the concatenation operation multiple
+	 * times to this element. This is a convenient method for {@link ConcatenativeElement#times(BigInteger)}.
+	 * <p>
+	 * @param amount The given amount
+	 * @return The result of applying concatenation multiple times to this element
+	 * @see Element#selfApply(long)
 	 */
 	public ConcatenativeElement<V> selfConcatenate(long amount);
 
 	/**
-	 * @see Group#selfApply(Element)
+	 * This method is a synonym for {@link Element#selfApply(BigInteger)}. It applies the concatenation operation
+	 * multiple times to this element.
+	 * <p>
+	 * @param amount The given amount
+	 * @return The result of applying concatenation multiple times to this element
+	 */
+	public ConcatenativeElement<V> selfConcatenate(BigInteger amount);
+
+	/**
+	 * This method is a synonym for {@link Element#selfApply(Element)} and the same as
+	 * {@link ConcatenativeElement#selfConcatenate(BigInteger)}, except that the exponent is given as an instance of
+	 * {@code Element<BigInteger>}, from which a {@code BigInteger} exponent can be extracted using
+	 * {@link Element#getValue()}.
+	 * <p>
+	 * @param amount The given amount
+	 * @return The result of applying concatenation multiple times to this element
+	 */
+	public ConcatenativeElement<V> selfConcatenate(Element<BigInteger> amount);
+
+	/**
+	 * This method is a synonym for {@link Element#selfApply()}. It concatenates this element with itself.
+	 * <p>
+	 * @return The concatenated with itself
+	 * @see Element#selfApply()
 	 */
 	public ConcatenativeElement<V> selfConcatenate();
 
 	/**
-	 *
-	 * @return
+	 * This method is a synonym for {@link Element#isIdentity()}. Returns {@code true} if the element is the empty
+	 * element of length 0. Throws an exception if the method is called for an element not belonging to a monoid.
+	 * <p>
+	 * @return {@code true} if this element is the empty element, {@code false} otherwise
+	 * @see Element#isIdentity()
 	 */
 	public boolean isEmptyElement();
 

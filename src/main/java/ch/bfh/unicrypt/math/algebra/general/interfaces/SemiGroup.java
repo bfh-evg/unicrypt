@@ -126,11 +126,11 @@ public interface SemiGroup<V>
 	public Element<V> selfApply(Element element, Element<BigInteger> amount);
 
 	/**
-	 * Applies the group operation to two instances of a given element. This is equivalent to
+	 * Applies the binary operation to two instances of a given element. This is equivalent to
 	 * {@link SemiGroup#selfApply(Element, long)} for {@code amount=2}.
 	 * <p>
 	 * @param element The given input element
-	 * @return The result of applying the group operation to two instances of the input element
+	 * @return The result of applying the operation to two instances of the input element
 	 */
 	public Element<V> selfApply(Element element);
 

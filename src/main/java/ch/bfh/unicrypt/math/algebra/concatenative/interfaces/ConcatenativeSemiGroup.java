@@ -97,38 +97,93 @@ public interface ConcatenativeSemiGroup<V>
 	public ConcatenativeElement<V> getRandomElement(int length, RandomByteSequence randomByteSequence);
 
 	/**
+	 * This method is a synonym for {@link SemiGroup#apply(Element, Element)}. It concatenates the two input elements in
+	 * the given order .
+	 * <p>
+	 * @param element1 The first input element
+	 * @param element2 The second input element
+	 * @return The concatenation of the two input elements
+	 * @see SemiGroup#apply(Element, Element)
 	 */
 	public ConcatenativeElement<V> concatenate(Element element1, Element element2);
 
 	/**
+	 * This method is a synonym for {@link SemiGroup#apply(Element...)}. It concatenates the input elements in the given
+	 * order from left to right. The input elements are given as an array.
+	 * <p>
+	 * @param elements The given array of input elements
+	 * @return The concatenation of the input elements
+	 * @see SemiGroup#apply(Element...)
 	 */
 	public ConcatenativeElement<V> concatenate(Element... elements);
 
 	/**
+	 * This method is a synonym for {@link SemiGroup#apply(ImmutableArray)}. It concatenates the input elements in the
+	 * given order from left to right. The input elements are given as a immutable array.
+	 * <p>
+	 * @param elements The given array of input elements
+	 * @return The concatenation of the input elements
+	 * @see SemiGroup#apply(ImmutableArray)
 	 */
 	public ConcatenativeElement<V> concatenate(ImmutableArray<Element> elements);
 
 	/**
+	 * This method is a synonym for {@link SemiGroup#apply(Sequence)}. It concatenates the input elements in the given
+	 * order from left to right. The input elements are given as a sequence.
+	 * <p>
+	 * @param elements The given array of input elements
+	 * @return The concatenation of the input elements
+	 * @see SemiGroup#apply(Sequence)
 	 */
 	public ConcatenativeElement<V> concatenate(Sequence<Element> elements);
 
 	/**
-	 */
-	public ConcatenativeElement<V> selfConcatenate(Element element, BigInteger amount);
-
-	/**
-	 */
-	public ConcatenativeElement<V> selfConcatenate(Element element, Element<BigInteger> amount);
-
-	/**
+	 * Applies the concatenation operation repeatedly to {@code amount} many instances of a given input element. This is
+	 * a convenient method for {@link ConcatenativeSemiGroup#selfConcatenate(Element, BigInteger)}.
+	 * <p>
+	 * @param element The given input element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of applying concatenation multiple times to the input element
 	 */
 	public ConcatenativeElement<V> selfConcatenate(Element element, long amount);
 
 	/**
+	 * Applies the concatenation operation repeatedly to {@code amount} many instances of a given input element.
+	 * <p>
+	 * @param element The given input element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of applying concatenation multiple times to the input element
+	 */
+	public ConcatenativeElement<V> selfConcatenate(Element element, BigInteger amount);
+
+	/**
+	 * Same as {@link ConcatenativeSemiGroup#selfConcatenate(Element, BigInteger)}, except that the amount is given as
+	 * an instance of {@code Element<BigInteger>}, from which a {@code BigInteger} value can be extracted using
+	 * {@link Element#getValue()}.
+	 * <p>
+	 * @param element The given input element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of applying concatenation multiple times to the input element
+	 */
+	public ConcatenativeElement<V> selfConcatenate(Element element, Element<BigInteger> amount);
+
+	/**
+	 * Applies the concatenation operation to two instances of a given element. This is equivalent to
+	 * {@link ConcatenativeSemiGroup#selfConcatenate(Element, long)} for {@code amount=2}.
+	 * <p>
+	 * @param element The given input element
+	 * @return The result of applying the concatenation operation to two instances of the input element
 	 */
 	public ConcatenativeElement<V> selfConcatenate(Element element);
 
 	/**
+	 * Applies the concatenation operation sequentially to the results of computing
+	 * {@link #selfConcatenate(Element, BigInteger)} multiple times. If the two input arrays are not of equal length, an
+	 * exception is thrown.
+	 * <p>
+	 * @param elements The given array of elements
+	 * @param amounts  Corresponding amounts
+	 * @return The result of this operation
 	 */
 	public ConcatenativeElement<V> multiSelfConcatenate(Element[] elements, BigInteger[] amounts);
 
