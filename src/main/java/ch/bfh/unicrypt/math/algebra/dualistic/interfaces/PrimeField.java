@@ -50,5 +50,5 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
  * @param <V> Generic type of values stored in the elements of this field
  */
 public interface PrimeField<V>
-	   extends FiniteField<V>, CyclicRing<V> {
+	   extends FiniteField<V> {
 }

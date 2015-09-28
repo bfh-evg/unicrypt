@@ -79,11 +79,6 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 	}
 
 	@Override
-	public final E divide(Element element1, Element element2) {
-		return this.multiply(element1, this.oneOver(element2));
-	}
-
-	@Override
 	public final E oneOver(Element element) {
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
@@ -92,6 +87,11 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this, element);
 		}
 		return this.abstractOneOver((E) element);
+	}
+
+	@Override
+	public final E divide(Element element1, Element element2) {
+		return this.multiply(element1, this.oneOver(element2));
 	}
 
 	@Override

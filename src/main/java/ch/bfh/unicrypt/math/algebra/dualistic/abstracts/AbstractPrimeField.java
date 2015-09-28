@@ -58,7 +58,7 @@ import java.math.BigInteger;
  * @author R. Haenni
  */
 public abstract class AbstractPrimeField<E extends DualisticElement<V>, M extends MultiplicativeCyclicGroup, V>
-	   extends AbstractCyclicRing<E, V>
+	   extends AbstractRing<E, V>
 	   implements PrimeField<V> {
 
 	private static final long serialVersionUID = 1L;

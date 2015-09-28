@@ -44,20 +44,26 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 import java.math.BigInteger;
 
 /**
- * This interface represents the mathematical concept of a finite field. A finite field is a field that contains a
- * finite number of elements, called its order. It is implemented as a specialization of {@link Field}.
+ * This interface represents the mathematical concept of a finite field (also called Galois field). A finite field is a
+ * field that contains a finite number of elements. The order of a finite field is always {@code p^k}, where {@code p}
+ * is a prime number called characteristic of the field and {@code k>0} a positive integer.
+ * <p>
+ * The finite field interface is implemented as a specialization of {@link Field} with an additional method for
+ * returning the characteristic of the field.
+ * <p>
+ * @param <V> Generic type of values stored in the elements of this field
  * <p>
  * @author R. Haenni
- * @param <V>
+ * <p>
+ * @see "Handbook of Applied Cryptography, Definition 2.208"
  */
 public interface FiniteField<V>
 	   extends Field<V> {
 
 	/**
-	 * Returns the characteristic of this field. The number of elements in a finite field is of the form pn, where p is
-	 * a prime number called the characteristic of the field, and n is a positive integer.
+	 * Returns the characteristic of this field.
 	 * <p>
-	 * @return the characteristic of this field
+	 * @return The characteristic of this field
 	 */
 	public BigInteger getCharacteristic();
 
