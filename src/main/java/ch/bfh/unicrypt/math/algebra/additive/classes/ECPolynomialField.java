@@ -90,15 +90,6 @@ public class ECPolynomialField
 	}
 
 	@Override
-	protected PolynomialElement abstractGetY(PolynomialElement x) {
-		// described in "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)" p.172
-		PolynomialElement t = x.add(this.getA()).add(this.getB().divide(x.square()));
-		PolynomialElement l = this.getFiniteField().solveQuadradicEquation(t);
-
-		return l.add(l.getSet().getOneElement()).multiply(x);
-	}
-
-	@Override
 	protected ECPolynomialElement abstractGetIdentityElement() {
 		return new ECPolynomialElement(this);
 	}
@@ -130,6 +121,15 @@ public class ECPolynomialField
 			ry = s.multiply(px.add(rx)).add(rx).add(py);
 		}
 		return this.abstractGetElement(Point.getInstance(rx, ry));
+	}
+
+	@Override
+	protected PolynomialElement abstractGetY(PolynomialElement x) {
+		// described in "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)" p.172
+		PolynomialElement t = x.add(this.getA()).add(this.getB().divide(x.square()));
+		PolynomialElement l = this.getFiniteField().solveQuadradicEquation(t);
+
+		return l.add(l.getSet().getOneElement()).multiply(x);
 	}
 
 	@Override
@@ -168,13 +168,7 @@ public class ECPolynomialField
 		return c1 && c2 && c3 && c4 && c5 && c6 && c7 && c8;
 	}
 
-	/**
-	 * Private method implements selfApply to check if a ECPolynomialElement is a valid generator
-	 * <p>
-	 * @param element
-	 * @param posFactor
-	 * @return
-	 */
+	// Implements selfApply to check if a ECPolynomialElement is a valid generator
 	private ECPolynomialElement selfApply(ECPolynomialElement element, BigInteger posFactor) {
 		ECPolynomialElement result = element;
 		for (int i = posFactor.bitLength() - 2; i >= 0; i--) {
@@ -186,74 +180,9 @@ public class ECPolynomialField
 		return result;
 	}
 
-	/**
-	 * Returns an elliptic curve over F2m y²+yx=x³+ax²+b if parameters are valid.
-	 * <p>
-	 * @param f          Finite field of type BinaryPolynomial
-	 * @param a          Element of f representing a in the curve equation
-	 * @param b          Element of f representing b in the curve equation
-	 * @param givenOrder Order of the the used subgroup
-	 * @param coFactor   Co-factor h*order= N -> total order of the group
-	 * @return
-	 */
-	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, BigInteger givenOrder, BigInteger coFactor) {
-		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, givenOrder, coFactor);
-
-		if (newInstance.isValid()) {
-			return newInstance;
-		} else {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, givenOrder, coFactor);
-		}
-	}
-
-	/**
-	 * Returns an elliptic curve over Fp y²=x³+ax+b if parameters are valid.
-	 * <p>
-	 * @param f          Finite field of type ZModPrime
-	 * @param a          Element of F_p representing a in the curve equation
-	 * @param b          Element of F_p representing b in the curve equation
-	 * @param gx         x-coordinate of the generator
-	 * @param gy         y-coordinate of the generator
-	 * @param givenOrder Order of the the used subgroup
-	 * @param coFactor   Co-factor h*order= N -> total order of the group
-	 * @return
-	 */
-	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b,
-		   PolynomialElement gx, PolynomialElement gy, BigInteger givenOrder, BigInteger coFactor) {
-		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
-
-		if (newInstance.isValid()) {
-			return newInstance;
-		} else {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, gx, gy, givenOrder, coFactor);
-		}
-	}
-
-	public static ECPolynomialField getInstance(final ECPolynomialFieldParameters params) {
-		PolynomialField field;
-		PolynomialElement a, b, gx, gy;
-		BigInteger order, h;
-
-		field = params.getFiniteField();
-		a = params.getA();
-		b = params.getB();
-		gx = params.getGx();
-		gy = params.getGy();
-		order = params.getOrder();
-		h = params.getH();
-		return ECPolynomialField.getInstance(field, a, b, gx, gy, order, h);
-	}
-
-	/**
-	 * <p>
-	 * Returns the trace of an polynomial of characteristic 2 Source;: Quadratic Equations in Finite Fields of
-	 * Characteristic 2 Klaus Pommerening May 2000 – english version February 2012, Page 2</p>
-	 * <p>
-	 * @param x
-	 * @param ec
-	 * @return </p>
-	 */
-	public static DualisticElement<BigInteger> traceGF2m(PolynomialElement x, ECPolynomialField ec) {
+	// Returns the trace of an polynomial of characteristic 2 Source: Quadratic Equations in Finite Fields of
+	// Characteristic 2 Klaus Pommerening May 2000 – english version February 2012, Page 2</p>
+	private static DualisticElement<BigInteger> traceGF2m(PolynomialElement x, ECPolynomialField ec) {
 		int deg = ec.getFiniteField().getDegree();
 		PolynomialElement trace = x;
 		PolynomialElement tmp = x;
@@ -262,9 +191,68 @@ public class ECPolynomialField
 			tmp = tmp.square();
 			trace = trace.add(tmp);
 		}
+		return trace.getValue().getCoefficient(0);
+	}
 
-		DualisticElement<BigInteger> trace_Dualistic = trace.getValue().getCoefficient(0);
-		return trace_Dualistic;
+	/**
+	 * Returns an elliptic curve over F2m y²+yx=x³+ax²+b if parameters are valid.
+	 * <p>
+	 * @param f        Finite field of type BinaryPolynomial
+	 * @param a        Element of f representing a in the curve equation
+	 * @param b        Element of f representing b in the curve equation
+	 * @param order    Order of the the used subgroup
+	 * @param coFactor Co-factor h*order= N -> total order of the group
+	 * @return
+	 */
+	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, BigInteger order, BigInteger coFactor) {
+		if (f == null || a == null || b == null || order == null || coFactor == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, f, a, b, order, coFactor);
+		}
+		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, order, coFactor);
+		if (newInstance.isValid()) {
+			return newInstance;
+		} else {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, order, coFactor);
+		}
+	}
+
+	/**
+	 * Returns an elliptic curve over Fp y²=x³+ax+b if parameters are valid.
+	 * <p>
+	 * @param f        Finite field of type ZModPrime
+	 * @param a        Element of F_p representing a in the curve equation
+	 * @param b        Element of F_p representing b in the curve equation
+	 * @param gx       x-coordinate of the generator
+	 * @param gy       y-coordinate of the generator
+	 * @param order    Order of the the used subgroup
+	 * @param coFactor Co-factor h*order= N -> total order of the group
+	 * @return
+	 */
+	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b,
+		   PolynomialElement gx, PolynomialElement gy, BigInteger order, BigInteger coFactor) {
+		if (f == null || a == null || b == null || gx == null || gy == null || order == null || coFactor == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, f, a, b, gx, gy, order, coFactor);
+		}
+		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, gx, gy, order, coFactor);
+		if (newInstance.isValid()) {
+			return newInstance;
+		} else {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, gx, gy, order, coFactor);
+		}
+	}
+
+	public static ECPolynomialField getInstance(final ECPolynomialFieldParameters parameters) {
+		if (parameters == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, parameters);
+		}
+		PolynomialField field = parameters.getFiniteField();
+		PolynomialElement a = parameters.getA();
+		PolynomialElement b = parameters.getB();
+		PolynomialElement gx = parameters.getGx();
+		PolynomialElement gy = parameters.getGy();
+		BigInteger order = parameters.getOrder();
+		BigInteger coFactor = parameters.getCoFactor();
+		return ECPolynomialField.getInstance(field, a, b, gx, gy, order, coFactor);
 	}
 
 }

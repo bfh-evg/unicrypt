@@ -57,13 +57,13 @@ public class ECZModElement
 
 	private static final long serialVersionUID = 4590767773320124829L;
 
-	protected ECZModElement(ECZModPrime ecGroup) {
-		super(ecGroup);
+	protected ECZModElement(ECZModPrime ec) {
+		super(ec);
 
 	}
 
-	protected ECZModElement(ECZModPrime ecGroup, Point<ZModElement> value) {
-		super(ecGroup, value);
+	protected ECZModElement(ECZModPrime ec, Point<ZModElement> value) {
+		super(ec, value);
 
 	}
 

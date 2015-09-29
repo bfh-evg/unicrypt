@@ -59,12 +59,12 @@ public class ECPolynomialElement
 
 	private static final long serialVersionUID = 1L;
 
-	protected ECPolynomialElement(ECPolynomialField ecGroup, Point<PolynomialElement> value) {
-		super(ecGroup, value);
+	protected ECPolynomialElement(ECPolynomialField ec, Point<PolynomialElement> value) {
+		super(ec, value);
 	}
 
-	protected ECPolynomialElement(ECPolynomialField ecGroup) {
-		super(ecGroup);
+	protected ECPolynomialElement(ECPolynomialField ec) {
+		super(ec);
 	}
 
 }

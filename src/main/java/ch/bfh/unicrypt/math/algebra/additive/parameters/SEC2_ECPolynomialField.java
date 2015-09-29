@@ -187,16 +187,16 @@ public enum SEC2_ECPolynomialField
 			  "03FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE661CE18FF55987308059B186823851EC7DD9CA1161DE93D5174D66E8382E9BB2FE84E47",
 			  "2");
 
-	private final String polynomial, a, b, gx, gy, order, h;
+	private final String polynomial, a, b, gx, gy, order, coFactor;
 
-	private SEC2_ECPolynomialField(String polynomial, String a, String b, String gx, String gy, String order, String h) {
+	private SEC2_ECPolynomialField(String polynomial, String a, String b, String gx, String gy, String order, String coFactor) {
 		this.polynomial = polynomial;
 		this.a = a;
 		this.b = b;
 		this.gx = gx;
 		this.gy = gy;
 		this.order = order;
-		this.h = h;
+		this.coFactor = coFactor;
 	}
 
 	private PolynomialElement getPolynomialFromString(String p) {
@@ -257,8 +257,8 @@ public enum SEC2_ECPolynomialField
 	}
 
 	@Override
-	public BigInteger getH() {
-		return new BigInteger(this.h, 16);
+	public BigInteger getCoFactor() {
+		return new BigInteger(this.coFactor, 16);
 	}
 
 	public static SEC2_ECPolynomialField getFromString(String s) {

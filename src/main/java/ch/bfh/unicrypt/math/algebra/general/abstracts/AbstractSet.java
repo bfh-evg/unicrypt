@@ -104,8 +104,11 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	// the class of the values used to represent elements of this set
 	private final Class<?> valueClass;
 
-	// various variables for storing information about the order of this set
-	private BigInteger order, lowerBound, upperBound, minimum;
+	// the order of this set
+	protected BigInteger order;
+
+	// other variables for storing information about the order of this set
+	private BigInteger lowerBound, upperBound, minimum;
 
 	// the default converters used to convert elements into BigInteger, String, and ByteArray
 	private Converter<V, BigInteger> bigIntegerConverter;

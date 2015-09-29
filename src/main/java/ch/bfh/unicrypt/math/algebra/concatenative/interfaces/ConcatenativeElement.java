@@ -120,7 +120,7 @@ public interface ConcatenativeElement<V>
 	public boolean isEmptyElement();
 
 	@Override
-	public ConcatenativeSemiGroup getSet();
+	public ConcatenativeSemiGroup<V> getSet();
 
 	@Override
 	public ConcatenativeElement<V> apply(Element element);

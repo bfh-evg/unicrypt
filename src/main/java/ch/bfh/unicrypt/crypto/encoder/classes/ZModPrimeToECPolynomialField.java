@@ -60,24 +60,21 @@ public class ZModPrimeToECPolynomialField
 	   extends AbstractEncoder<ZModPrime, ZModElement, ECPolynomialField, ECPolynomialElement>
 	   implements ProbabilisticEncoder {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
-	private final ZModPrime zMod;
-	private final ECPolynomialField ecPoly;
-	private int shift;
 
-	private ZModPrimeToECPolynomialField(ZModPrime zMod, ECPolynomialField ecPoly, int shift) {
-		super();
+	private final ZModPrime zMod;
+	private final ECPolynomialField ec;
+	private final int shift;
+
+	private ZModPrimeToECPolynomialField(ZModPrime zMod, ECPolynomialField ec, int shift) {
 		this.zMod = zMod;
-		this.ecPoly = ecPoly;
+		this.ec = ec;
 		this.shift = shift;
 	}
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return new ECF2mEncodingFunction(this.zMod, this.ecPoly, shift);
+		return new ECF2mEncodingFunction(this.zMod, this.ec, shift);
 	}
 
 	@Override
@@ -113,7 +110,7 @@ public class ZModPrimeToECPolynomialField
 			boolean firstOption = true;
 
 			ZModPrime zModPrime = this.getDomain();
-			ECPolynomialField ec = this.getCoDomain();
+			ECPolynomialField ecPolynimial = this.getCoDomain();
 
 			int msgSpace = zModPrime.getOrder().toString(2).length();
 			int msgBitLength = element.getValue().toString(2).length() + 2;
@@ -140,12 +137,12 @@ public class ZModPrimeToECPolynomialField
 			ZModElement zModElement = this.getDomain().getElement(e);
 
 			ZModToBinaryPolynomialField enc
-				   = ZModToBinaryPolynomialField.getInstance(zModPrime, ec.getFiniteField());
+				   = ZModToBinaryPolynomialField.getInstance(zModPrime, ecPolynimial.getFiniteField());
 			PolynomialElement x = enc.encode(zModElement);
 			ZModElement stepp = zModPrime.getElement(4);
 
 			int count = 0;
-			while (!ec.contains(x)) {
+			while (!ecPolynimial.contains(x)) {
 				if (count >= (1 << this.shift)) {
 					firstOption = false;
 				}
@@ -158,7 +155,7 @@ public class ZModPrimeToECPolynomialField
 			}
 
 			if (firstOption) {
-				ECPolynomialElement e1 = ec.getElement(x);
+				ECPolynomialElement e1 = ecPolynimial.getElement(x);
 				ECPolynomialElement e2 = e1.invert();
 				if (isBigger(e1.getY(), e2.getY())) {
 					return e1;
@@ -189,7 +186,7 @@ public class ZModPrimeToECPolynomialField
 				x = enc.encode(zModElement);
 
 				count = 0;
-				while (!ec.contains(x)) {
+				while (!ecPolynimial.contains(x)) {
 					if (count >= (1 << this.shift)) {
 						throw new UniCryptRuntimeException(ErrorCode.PROBABILISTIC_ENCODING_FAILURE, element, e);
 					}
@@ -200,7 +197,7 @@ public class ZModPrimeToECPolynomialField
 
 				}
 
-				ECPolynomialElement e1 = ec.getElement(x);
+				ECPolynomialElement e1 = ecPolynimial.getElement(x);
 				ECPolynomialElement e2 = e1.invert();
 				if (isBigger(e1.getY(), e2.getY())) {
 					return e2;

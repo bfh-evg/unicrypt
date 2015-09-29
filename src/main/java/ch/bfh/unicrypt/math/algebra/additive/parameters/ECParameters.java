@@ -47,26 +47,26 @@ import java.math.BigInteger;
 
 /**
  *
- * @param <E>
- * @param <D> x
+ * @param <F>
+ * @param <DE> x
  * <p>
  * @author C. Lutz
  * @author R. Haenni
  */
-public interface ECParameters<E extends FiniteField, D extends DualisticElement> {
+public interface ECParameters<F extends FiniteField, DE extends DualisticElement> {
 
-	public abstract E getFiniteField();
+	public abstract F getFiniteField();
 
-	public abstract D getA();
+	public abstract DE getA();
 
-	public abstract D getB();
+	public abstract DE getB();
 
-	public abstract D getGx();
+	public abstract DE getGx();
 
-	public abstract D getGy();
+	public abstract DE getGy();
 
 	public abstract BigInteger getOrder();
 
-	public abstract BigInteger getH();
+	public abstract BigInteger getCoFactor();
 
 }

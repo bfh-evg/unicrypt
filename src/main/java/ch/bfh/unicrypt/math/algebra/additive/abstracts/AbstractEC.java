@@ -80,11 +80,16 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	private static final long serialVersionUID = 1L;
 
+	// the underlying finite field
 	private final F finiteField;
+
+	// the two curve parameters
 	private final DE a, b;
-	private final EE defaultGenerator;
-	private final BigInteger order;
+
+	// the co-factor
 	private final BigInteger coFactor;
+
+	// the point of infinity
 	private final Point<DualisticElement<V>> infinityPoint = Point.<DualisticElement<V>>getInstance();
 
 	protected AbstractEC(F finiteField, DE a, DE b, DE gx, DE gy, BigInteger order, BigInteger coFactor) {
@@ -148,12 +153,12 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	public ZModPrime getZModOrder() {
-		return ZModPrime.getInstance(this.getOrder());
+		return ZModPrime.getInstance(this.order);
 	}
 
 	@Override
 	public ZStarModPrime getZStarModOrder() {
-		return ZStarModPrime.getInstance(this.getOrder());
+		return ZStarModPrime.getInstance(this.order);
 	}
 
 	@Override
@@ -165,33 +170,33 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 	}
 
 	@Override
-	public final boolean contains(DE xValue) {
-		if (xValue == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, xValue);
+	public final boolean contains(DE x) {
+		if (x == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, x);
 		}
-		if (!this.getFiniteField().contains(xValue)) {
+		if (!this.getFiniteField().contains(x)) {
 			return false;
 		}
-		return this.abstractContains(xValue);
+		return this.abstractContains(x);
 	}
 
 	@Override
-	public final boolean contains(DE xValue, DE yValue) {
-		if (xValue == null || yValue == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, xValue, yValue);
+	public final boolean contains(DE x, DE y) {
+		if (x == null || y == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, x, y);
 		}
-		if (!this.getFiniteField().contains(xValue) || !this.getFiniteField().contains(yValue)) {
+		if (!this.getFiniteField().contains(x) || !this.getFiniteField().contains(y)) {
 			return false;
 		}
-		return this.abstractContains((DE) xValue, (DE) yValue);
+		return this.abstractContains(x, y);
 	}
 
 	@Override
-	public final EE getElement(DE xValue, DE yValue) {
-		if (!this.contains(xValue, yValue)) {
-			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, xValue, yValue);
+	public final EE getElement(DE x, DE y) {
+		if (!this.contains(x, y)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, x, y);
 		}
-		return this.abstractGetElement(Point.getInstance((DE) xValue, (DE) yValue));
+		return this.abstractGetElement(Point.getInstance(x, y));
 	}
 
 	@Override
@@ -231,9 +236,9 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 				}
 				BigInteger[] result = MathUtil.unpair(value.subtract(MathUtil.ONE));
 				try {
-					DualisticElement<V> xValue = getFiniteField().getElementFrom(result[0]);
-					DualisticElement<V> yValue = getFiniteField().getElementFrom(result[1]);
-					return Point.getInstance((DE) xValue, (DE) yValue);
+					DualisticElement<V> x = getFiniteField().getElementFrom(result[0]);
+					DualisticElement<V> y = getFiniteField().getElementFrom(result[1]);
+					return Point.getInstance((DE) x, (DE) y);
 				} catch (UniCryptException ex) {
 					throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONVERSION_FAILURE, this, value, result);
 				}
@@ -248,7 +253,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	protected boolean abstractIsGenerator(EE element) {
-		return MathUtil.isPrime(this.getOrder()) && this.selfApply(element, this.getOrder()).isZero();
+		return MathUtil.isPrime(this.order) && this.selfApply(element, this.order).isZero();
 	}
 
 	@Override
@@ -319,11 +324,11 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 		return this.getA().getValue() + "," + this.getB().getValue();
 	}
 
-	protected abstract DE abstractGetY(DE xValue);
+	protected abstract boolean abstractContains(DE x);
 
-	protected abstract boolean abstractContains(DE xValue);
+	protected abstract boolean abstractContains(DE x, DE y);
 
-	protected abstract boolean abstractContains(DE xValue, DE yValue);
+	protected abstract DE abstractGetY(DE x);
 
 	protected abstract DE abstractInvertY(DE x, DE y);
 

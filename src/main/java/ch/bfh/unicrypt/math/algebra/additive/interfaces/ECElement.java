@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
+ * This interface represents an element of an EC group with addition as binary operation. No functionality is added.
  * Some return types are updated.
  * <p>
  * @param <V>  The generic type of the values stored in the elements of the underlying finite field
@@ -54,55 +55,53 @@ import java.math.BigInteger;
  * <p>
  * @author C. Lutz
  * @author R. Haenni
+ * @see EC
  */
 public interface ECElement<V, DE extends DualisticElement<V>>
 	   extends AdditiveElement<Point<DE>> {
 
 	/**
-	 * Additional convenience getter method to handle to point of infinity
+	 * Returns the x-coordinate of the element. Throws an exception if the element is the identity element (point of
+	 * infinity) of the elliptic curve.
 	 * <p>
-	 * @return
+	 * @return The x-coordinate
 	 */
 	public DE getY();
 
 	/**
-	 * Additional convenience getter method to handle to point of infinity
+	 * Returns the y-coordinate of the element. Throws an exception if the element is the identity element (point of
+	 * infinity) of the elliptic curve.
 	 * <p>
-	 * @return
+	 * @return The y-coordinate
 	 */
 	public DE getX();
 
-	/**
-	 */
+	@Override
 	public ECElement<V, DE> add(Element element);
 
-	/**
-	 */
+	@Override
 	public ECElement<V, DE> times(BigInteger factor);
 
-	/**
-	 */
+	@Override
 	public ECElement<V, DE> times(Element<BigInteger> factor);
 
-	/**
-	 */
+	@Override
 	public ECElement<V, DE> times(long factor);
 
-	/**
-	 */
+	@Override
 	public ECElement<V, DE> timesTwo();
 
-	/**
-	 */
+	@Override
 	public boolean isZero();
 
-	/**
-	 */
+	@Override
 	public ECElement<V, DE> negate();
 
-	/**
-	 */
+	@Override
 	public ECElement<V, DE> subtract(Element element);
+
+	@Override
+	public EC<V, DE> getSet();
 
 	@Override
 	public ECElement<V, DE> apply(Element element);

@@ -140,9 +140,6 @@ public interface AdditiveElement<V>
 	public AdditiveElement<V> apply(Element element);
 
 	@Override
-	public AdditiveElement<V> applyInverse(Element element);
-
-	@Override
 	public AdditiveElement<V> selfApply(BigInteger factor);
 
 	@Override
@@ -156,5 +153,8 @@ public interface AdditiveElement<V>
 
 	@Override
 	public AdditiveElement<V> invert();
+
+	@Override
+	public AdditiveElement<V> applyInverse(Element element);
 
 }

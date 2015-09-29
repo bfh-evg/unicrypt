@@ -65,13 +65,11 @@ public class ZModPrimeToECZModPrime
 	   extends AbstractEncoder<ZModPrime, ZModElement, ECZModPrime, ECZModElement>
 	   implements ProbabilisticEncoder {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
-	protected int shift;
+
 	private final ECZModPrime ec;
 	private final ZModPrime zModPrime;
+	protected final int shift;
 
 	protected ZModPrimeToECZModPrime(ECZModPrime ec, int shift) {
 		this.ec = ec;
@@ -86,7 +84,7 @@ public class ZModPrimeToECZModPrime
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return new ECDecodingFunction(ec, this.zModPrime, this.shift);
+		return new ECDecodingFunction(this.ec, this.zModPrime, this.shift);
 	}
 
 	public static ZModPrimeToECZModPrime getInstance(final ECZModPrime ec, int shift) {

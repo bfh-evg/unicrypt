@@ -64,16 +64,14 @@ public class AbstractECElement<V, DE extends DualisticElement<V>, EE extends ECE
 
 	private static final long serialVersionUID = 1L;
 
-	// flag the distinguish the point of infinity from normal curve points
+	// flag to distinguish the point of infinity from normal curve points
 	private final boolean infinity;
 
-	// the main constructor
 	protected AbstractECElement(AbstractSet<EE, Point<DE>> ecGroup, Point<DE> value) {
 		super(ecGroup, value);
 		this.infinity = false;
 	}
 
-	// special constructor is necessary for the additional point of infinity
 	protected AbstractECElement(AbstractSet<EE, Point<DE>> ecGroup) {
 		super(ecGroup, Point.<DE>getInstance());
 		this.infinity = true;

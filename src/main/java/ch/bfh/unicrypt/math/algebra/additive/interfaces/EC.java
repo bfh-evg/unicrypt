@@ -58,9 +58,10 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- * This interface represents an elliptic curve (EC) or a subgroup of an elliptic curve. Its set of points creates an
- * additive group so that adding two points creates another point on the curve. The points of the curve consist of an
- * x-value and an y-value, which are elements of the curve's underlying finite field. The EC group has prime order.
+ * This interface represents an elliptic curve (EC) or a subgroup of an elliptic curve. The set of points of the curve
+ * creates an additive group so that adding two points creates another point on the curve. The points of the curve
+ * consist of an x-value and an y-value, which are dualistic elements of the curve's underlying finite field. Each EC
+ * group has prime order.
  * <p>
  * The elliptic curve interface is implemented as a specialization of {@link AdditiveCyclicGroup} with additional
  * methods for dealing with the curve points, the curve's parameters, and the underlying finite field. Some return types
@@ -71,6 +72,7 @@ import java.math.BigInteger;
  * <p>
  * @author C. Lutz
  * @author R. Haenni
+ * @see ECElement
  */
 public interface EC<V, DE extends DualisticElement<V>>
 	   extends AdditiveCyclicGroup<Point<DE>> {
@@ -107,20 +109,28 @@ public interface EC<V, DE extends DualisticElement<V>>
 	/**
 	 * Checks if this elliptic curve contains a point for the given x-coordinate.
 	 * <p>
-	 * @param xValue The given x-coordinate
-	 * @return {@code true} if this elliptic contains a point for the given x-coordinate, {@code false} otherwise
+	 * @param x The given x-coordinate
+	 * @return {@code true} if the elliptic contains a point for the given x-coordinate, {@code false} otherwise
 	 */
-	public boolean contains(DE xValue);
+	public boolean contains(DE x);
 
 	/**
 	 * Checks if this elliptic curve contains a point for the given x- and y-coordinates.
 	 * <p>
-	 * @param xValue The given x-coordinate
-	 * @param yValue The given y-coordinate
-	 * @return {@code true} if this elliptic contains a point for the given x- and y-coordinates, {@code false}
-	 *         otherwise
+	 * @param x The given x-coordinate
+	 * @param y The given y-coordinate
+	 * @return {@code true} if the elliptic contains a point for the given x- and y-coordinates, {@code false} otherwise
 	 */
-	public boolean contains(DE xValue, DE yValue);
+	public boolean contains(DE x, DE y);
+
+	/**
+	 * Returns one of the two points on the elliptic curve that corresponds to the given x-coordinate. Which of the two
+	 * points is selected is unspecified.
+	 * <p>
+	 * @param x The given x-coordinate
+	 * @return One of the two points that corresponds to the given x-coordinate
+	 */
+	public ECElement<V, DE> getElement(DE x);
 
 	/**
 	 * Returns the point on the elliptic curve that corresponds to the given x- and y-coordinates.
@@ -130,14 +140,6 @@ public interface EC<V, DE extends DualisticElement<V>>
 	 * @return The point that corresponds to the given x- and y-coordinates
 	 */
 	public ECElement<V, DE> getElement(DE x, DE y);
-
-	/**
-	 * Return the two possible y-coordinates for a given valid x-coordinate
-	 * <p>
-	 * @param x The given x-coordinate
-	 * @return The two possible y-coordinates
-	 */
-	public ECElement<V, DE> getElement(DE x);
 
 	@Override
 	public ECElement<V, DE> add(Element element1, Element element2);

@@ -66,20 +66,21 @@ public class ZModPrimeToEC
 
 	private final ZModPrime zModPrime;
 	private final EC ec;
-	private AbstractEncoder encoder;
 	private final int shift;
+	private final AbstractEncoder encoder;
 
 	protected ZModPrimeToEC(ZModPrime zModPrime, EC ec, int shift) {
-		super();
 		this.zModPrime = zModPrime;
 		this.ec = ec;
 		this.shift = shift;
 
 		if (ECPolynomialField.class.isInstance(ec)) {
 			ZMod zmod = ZMod.getInstance(ec.getOrder());
-			encoder = ZModToBinaryPolynomialField.getInstance(zmod, (PolynomialField) ec.getFiniteField());
+			this.encoder = ZModToBinaryPolynomialField.getInstance(zmod, (PolynomialField) ec.getFiniteField());
 		} else if (ECZModPrime.class.isInstance(ec)) {
-			encoder = ConvertEncoder.getInstance(ec.getFiniteField(), ec.getFiniteField());
+			this.encoder = ConvertEncoder.getInstance(ec.getFiniteField(), ec.getFiniteField());
+		} else {
+			throw new UniCryptRuntimeException(ErrorCode.OBJECT_NOT_FOUND, ec);
 		}
 	}
 

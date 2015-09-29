@@ -128,7 +128,7 @@ public enum SEC2_ECZModParameters
 			  "1fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa51868783bf2f966b7fcc0148f709a5d03bb5c9b8899c47aebb6fb71e91386409",
 			  "1");
 
-	private final String p, a, b, gx, gy, order, h;
+	private final String p, a, b, gx, gy, order, coFactor;
 
 	/**
 	 * Parameters of curve y²=x³+ax+b mod p
@@ -136,20 +136,19 @@ public enum SEC2_ECZModParameters
 	 * @param p
 	 * @param a
 	 * @param b
-	 * @param gx    x-coordinate of the generator
-	 * @param gy    y-coordinate of the generator
-	 * @param order Grouporder of the generator
-	 * @param h     Co-factor h*order= total order of the curve
+	 * @param gx       x-coordinate of the generator
+	 * @param gy       y-coordinate of the generator
+	 * @param order    Group order of the generator
+	 * @param coFactor Co-factor h*order= total order of the curve
 	 */
-	private SEC2_ECZModParameters(String p, String a, String b, String gx, String gy,
-		   String order, String h) {
+	private SEC2_ECZModParameters(String p, String a, String b, String gx, String gy, String order, String coFactor) {
 		this.p = p;
 		this.a = a;
 		this.b = b;
 		this.gx = gx;
 		this.gy = gy;
 		this.order = order;
-		this.h = h;
+		this.coFactor = coFactor;
 	}
 
 	@Override
@@ -188,8 +187,8 @@ public enum SEC2_ECZModParameters
 	}
 
 	@Override
-	public BigInteger getH() {
-		return new BigInteger(this.h, 16);
+	public BigInteger getCoFactor() {
+		return new BigInteger(this.coFactor, 16);
 	}
 
 	public static SEC2_ECZModParameters getFromString(String s) {

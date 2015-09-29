@@ -62,14 +62,12 @@ public class ECZModPrime
 
 	private static final long serialVersionUID = -5442792676496187516L;
 
-	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy,
-		   BigInteger givenOrder, BigInteger coFactor) {
-		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
+	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger order, BigInteger coFactor) {
+		super(finiteField, a, b, gx, gy, order, coFactor);
 	}
 
-	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, BigInteger givenOrder,
-		   BigInteger coFactor) {
-		super(finiteField, a, b, givenOrder, coFactor);
+	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, BigInteger order, BigInteger coFactor) {
+		super(finiteField, a, b, order, coFactor);
 	}
 
 	@Override
@@ -92,12 +90,6 @@ public class ECZModPrime
 	@Override
 	protected ECZModElement abstractGetElement(Point<ZModElement> value) {
 		return new ECZModElement(this, value);
-	}
-
-	@Override
-	protected ZModElement abstractGetY(ZModElement x) {
-		BigInteger ySquare = x.power(3).add(this.getA().multiply(x)).add(this.getB()).getValue();
-		return this.getFiniteField().getElement(MathUtil.sqrtModPrime(ySquare, this.getFiniteField().getModulus()));
 	}
 
 	@Override
@@ -136,43 +128,16 @@ public class ECZModPrime
 	}
 
 	@Override
+	protected ZModElement abstractGetY(ZModElement x) {
+		BigInteger ySquare = x.power(3).add(this.getA().multiply(x)).add(this.getB()).getValue();
+		return this.getFiniteField().getElement(MathUtil.sqrtModPrime(ySquare, this.getFiniteField().getModulus()));
+	}
+
+	@Override
 	protected ZModElement abstractInvertY(ZModElement x, ZModElement y) {
 		return y.invert();
 	}
 
-//	@Override
-//	protected Sequence<ECZModElement> abstractGetRandomElementsWithoutGenerator(RandomByteSequence randomByteSequence) {
-//		// an additional random bit is needed to decide between the two possible y-values for a given x-value
-//		// for this, the upper bound of the random bigInteger is multiplied by 2
-//		final BigInteger p = this.getFiniteField().getModulus();
-//		return randomByteSequence
-//			   .getRandomBigIntegerSequence(this.getFiniteField().getOrder().subtract(MathUtil.ONE).multiply(MathUtil.TWO))
-//			   .filter(new Predicate<BigInteger>() {
-//
-//				   @Override
-//				   public boolean test(BigInteger xTimesTwo) {
-//					   BigInteger x = xTimesTwo.divide(MathUtil.TWO);
-//					   BigInteger y = x.pow(3).add(getA().getValue().multiply(x)).add(getB().getValue());
-//					   return MathUtil.hasSqrtModPrime(y, p);
-//				   }
-//
-//			   })
-//			   .map(new Mapping<BigInteger, ECZModElement>() {
-//
-//				   @Override
-//				   public ECZModElement apply(BigInteger xTimesTwo) {
-//					   BigInteger x = xTimesTwo.divide(MathUtil.TWO);
-//					   BigInteger y = MathUtil.sqrtModPrime(x.pow(3).add(getA().getValue().multiply(x)).add(getB().getValue()), p);
-//					   // if last bit is true return (x, (p-y)), otherwise (x,y)
-//					   if (xTimesTwo.mod(MathUtil.TWO).equals(MathUtil.ONE)) {
-//						   y = p.subtract(y);
-//					   }
-//					   return abstractGetElement(Point.getInstance(getFiniteField().getElement(x), getFiniteField().getElement(y)));
-//				   }
-//
-//			   });
-//
-//	}
 	// Checks curve parameters for validity according SEC1: Elliptic Curve Cryptography Ver. 1.0 page 18
 	private boolean isValid() {
 		boolean c11, c21, c22, c23, c24, c3, c4, c5, c61, c62;
@@ -214,57 +179,62 @@ public class ECZModPrime
 	/**
 	 * Returns an elliptic curve over Fp y²=x³+ax+b
 	 * <p>
-	 * @param f          Finite field of type ZModPrime
-	 * @param a          Element of F_p representing a in the curve equation
-	 * @param b          Element of F_p representing b in the curve equation
-	 * @param givenOrder Order of the the used subgroup
-	 * @param coFactor   Co-factor h*order= N -> total order of the group
+	 * @param f        Finite field of type ZModPrime
+	 * @param a        Element of F_p representing a in the curve equation
+	 * @param b        Element of F_p representing b in the curve equation
+	 * @param order    Order of the the used subgroup
+	 * @param coFactor Co-factor h*order= N -> total order of the group
 	 * @return
 	 */
-	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, BigInteger givenOrder, BigInteger coFactor) {
-		ECZModPrime newInstance = new ECZModPrime(f, a, b, givenOrder, coFactor);
+	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, BigInteger order, BigInteger coFactor) {
+		if (f == null || a == null || b == null || order == null || coFactor == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, f, a, b, order, coFactor);
+		}
+		ECZModPrime newInstance = new ECZModPrime(f, a, b, order, coFactor);
 		if (newInstance.isValid()) {
 			return newInstance;
 		} else {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, givenOrder, coFactor);
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, order, coFactor);
 		}
 	}
 
 	/**
 	 * Returns an elliptic curve over Fp y²=x³+ax+b if parameters are valid.
 	 * <p>
-	 * @param f          Finite field of type ZModPrime
-	 * @param a          Element of F_p representing a in the curve equation
-	 * @param b          Element of F_p representing b in the curve equation
-	 * @param gx         x-coordinate of the generator
-	 * @param gy         y-coordinate of the generator
-	 * @param givenOrder Order of the the used subgroup
-	 * @param coFactor   Co-factor h*order= N -> total order of the group
+	 * @param f        Finite field of type ZModPrime
+	 * @param a        Element of F_p representing a in the curve equation
+	 * @param b        Element of F_p representing b in the curve equation
+	 * @param gx       x-coordinate of the generator
+	 * @param gy       y-coordinate of the generator
+	 * @param order    Order of the the used subgroup
+	 * @param coFactor Co-factor h*order= N -> total order of the group
 	 * @return
 	 */
-	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger givenOrder, BigInteger coFactor) {
-		ECZModPrime newInstance = new ECZModPrime(f, a, b, gx, gy, givenOrder, coFactor);
+	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger order, BigInteger coFactor) {
+		if (f == null || a == null || b == null || gx == null || gy == null || order == null || coFactor == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, f, a, b, gx, gy, order, coFactor);
+		}
+		ECZModPrime newInstance = new ECZModPrime(f, a, b, gx, gy, order, coFactor);
 		if (newInstance.isValid()) {
 			return newInstance;
 		} else {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, gx, gy, givenOrder, coFactor);
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, gx, gy, order, coFactor);
 		}
 	}
 
-	public static ECZModPrime getInstance(final ECZModParameters params) {
-		ZModPrime field;
-		ZModElement a, b, gx, gy;
-		BigInteger order, h;
+	public static ECZModPrime getInstance(final ECZModParameters parameters) {
+		if (parameters == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, parameters);
+		}
+		ZModPrime field = parameters.getFiniteField();
+		ZModElement a = parameters.getA();
+		ZModElement b = parameters.getB();
+		ZModElement gx = parameters.getGx();
+		ZModElement gy = parameters.getGy();
+		BigInteger order = parameters.getOrder();
+		BigInteger coFactor = parameters.getCoFactor();
 
-		field = params.getFiniteField();
-		a = params.getA();
-		b = params.getB();
-		gx = params.getGx();
-		gy = params.getGy();
-		order = params.getOrder();
-		h = params.getH();
-
-		return ECZModPrime.getInstance(field, a, b, gx, gy, order, h);
+		return ECZModPrime.getInstance(field, a, b, gx, gy, order, coFactor);
 	}
 
 }
