@@ -321,7 +321,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	protected String defaultToStringContent() {
-		return this.getA().getValue() + "," + this.getB().getValue();
+		return this.a.getValue() + "," + this.b.getValue();
 	}
 
 	protected abstract boolean abstractContains(DE x);

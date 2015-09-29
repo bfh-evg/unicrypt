@@ -52,13 +52,14 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 
 /**
- * "SEC 2: Recommended Elliptic Curve Domain Parameters", Version 2.0, Certicom Research, 2010
+ * The standard EC groups for curves y²+xy=x³+ax²+b as defined in "SEC 2: Recommended Elliptic Curve Domain Parameters",
+ * Version 2.0, Certicom Research, 2010.
  * <p>
  * @author C. Lutz
  * @author R. Haenni
  */
-public enum SEC2_ECPolynomialField
-	   implements ECPolynomialFieldParameters {
+public enum SEC2_PolynomialField
+	   implements ECParameters<PolynomialField, PolynomialElement> {
 
 	sect113r1("20000000000000000000000000201",
 			  "003088250CA6E7C7FE649CE85820F7",
@@ -187,10 +188,11 @@ public enum SEC2_ECPolynomialField
 			  "03FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE661CE18FF55987308059B186823851EC7DD9CA1161DE93D5174D66E8382E9BB2FE84E47",
 			  "2");
 
-	private final String polynomial, a, b, gx, gy, order, coFactor;
+	private final String irreduciblePolynomial, a, b, gx, gy, order, coFactor;
 
-	private SEC2_ECPolynomialField(String polynomial, String a, String b, String gx, String gy, String order, String coFactor) {
-		this.polynomial = polynomial;
+	// Parameters of the curve y²+xy=x³+ax²+b
+	private SEC2_PolynomialField(String irreduciblePolynomial, String a, String b, String gx, String gy, String order, String coFactor) {
+		this.irreduciblePolynomial = irreduciblePolynomial;
 		this.a = a;
 		this.b = b;
 		this.gx = gx;
@@ -199,7 +201,7 @@ public enum SEC2_ECPolynomialField
 		this.coFactor = coFactor;
 	}
 
-	private PolynomialElement getPolynomialFromString(String p) {
+	private PolynomialElement getPolynomial(String p) {
 		BigInteger bitString = new BigInteger(p, 16);
 
 		// Read bits and create a BigInteger ArrayList
@@ -209,46 +211,41 @@ public enum SEC2_ECPolynomialField
 		}
 
 		// Convert ArrayList BigInteger array and get element
-		BigInteger[] coeffs = {};
-		coeffs = arrayBigInteger.toArray(coeffs);
-		PolynomialElement irreduciblePolynom;
+		BigInteger[] coefficients = {};
+		coefficients = arrayBigInteger.toArray(coefficients);
+		PolynomialElement polynomial;
 		try {
-			irreduciblePolynom = PolynomialRing.getInstance(ZModTwo.getInstance()).getElementFrom(coeffs);
+			polynomial = PolynomialRing.getInstance(ZModTwo.getInstance()).getElementFrom(coefficients);
 		} catch (UniCryptException exception) {
-			throw new UniCryptRuntimeException(ErrorCode.IMPOSSIBLE_STATE, exception, (Object[]) coeffs);
+			throw new UniCryptRuntimeException(ErrorCode.IMPOSSIBLE_STATE, exception, (Object[]) coefficients);
 		}
-		return irreduciblePolynom;
+		return polynomial;
 
-	}
-
-	public PolynomialElement getIrreduciblePolynomial() {
-		return getPolynomialFromString(this.polynomial);
 	}
 
 	@Override
 	public PolynomialField getFiniteField() {
-		PolynomialElement irreduciblePolynomialElement = this.getPolynomialFromString(this.polynomial);
-		return PolynomialField.getInstance(ZModTwo.getInstance(), irreduciblePolynomialElement);
+		return PolynomialField.getInstance(ZModTwo.getInstance(), this.getPolynomial(this.irreduciblePolynomial));
 	}
 
 	@Override
 	public PolynomialElement getA() {
-		return getFiniteField().getElement(this.getPolynomialFromString(this.a).getValue());
+		return getFiniteField().getElement(this.getPolynomial(this.a).getValue());
 	}
 
 	@Override
 	public PolynomialElement getB() {
-		return getFiniteField().getElement(this.getPolynomialFromString(this.b).getValue());
+		return getFiniteField().getElement(this.getPolynomial(this.b).getValue());
 	}
 
 	@Override
 	public PolynomialElement getGx() {
-		return getFiniteField().getElement(this.getPolynomialFromString(this.gx).getValue());
+		return getFiniteField().getElement(this.getPolynomial(this.gx).getValue());
 	}
 
 	@Override
 	public PolynomialElement getGy() {
-		return getFiniteField().getElement(this.getPolynomialFromString(this.gy).getValue());
+		return getFiniteField().getElement(this.getPolynomial(this.gy).getValue());
 	}
 
 	@Override
@@ -261,13 +258,21 @@ public enum SEC2_ECPolynomialField
 		return new BigInteger(this.coFactor, 16);
 	}
 
-	public static SEC2_ECPolynomialField getFromString(String s) {
-		for (SEC2_ECPolynomialField parameter : SEC2_ECPolynomialField.values()) {
-			if (parameter.name().equals(s)) {
-				return parameter;
-			}
+	/**
+	 * Returns the EC parameters for a given name.
+	 * <p>
+	 * @param name The name of the parameters
+	 * @return The EC parameters
+	 */
+	public static SEC2_PolynomialField getInstance(String name) {
+		if (name == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, name);
 		}
-		throw new UniCryptRuntimeException(ErrorCode.OBJECT_NOT_FOUND, s);
+		try {
+			return SEC2_PolynomialField.valueOf(name);
+		} catch (Exception exception) {
+			throw new UniCryptRuntimeException(ErrorCode.OBJECT_NOT_FOUND, exception, name);
+		}
 	}
 
 }

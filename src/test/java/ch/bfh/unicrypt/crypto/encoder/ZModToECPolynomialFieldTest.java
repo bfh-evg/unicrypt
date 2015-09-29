@@ -13,13 +13,13 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.SEC2_ECPolynomialField;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.SEC2_PolynomialField;
 
 public class ZModToECPolynomialFieldTest {
 
 	@Test
 	public void encodeDecodeTest() throws Exception {
-		ECPolynomialField ec=ECPolynomialField.getInstance(SEC2_ECPolynomialField.sect113r1);
+		ECPolynomialField ec=ECPolynomialField.getInstance(SEC2_PolynomialField.sect113r1);
 		ZModPrime zmod=ec.getZModOrder();
 		Encoder enc=ZModPrimeToECPolynomialField.getInstance(zmod, ec, 15);
 		

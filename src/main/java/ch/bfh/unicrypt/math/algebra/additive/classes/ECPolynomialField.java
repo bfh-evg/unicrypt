@@ -47,14 +47,14 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.ECPolynomialFieldParameters;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.ECParameters;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import java.math.BigInteger;
 
 /**
- *
+ * y²+xy=x³+ax²+b
  * <p>
  * @author C. Lutz
  * @author R. Haenni
@@ -81,6 +81,7 @@ public class ECPolynomialField
 
 	@Override
 	protected boolean abstractContains(PolynomialElement x, PolynomialElement y) {
+		// y²+xy=x³+ax²+b <=> x³+ax²+b-(y²+xy)=0
 		return x.power(3).add(x.power(2).multiply(getA())).add(getB()).subtract(y.power(2).add(x.multiply(y))).isZero();
 	}
 
@@ -241,7 +242,7 @@ public class ECPolynomialField
 		}
 	}
 
-	public static ECPolynomialField getInstance(final ECPolynomialFieldParameters parameters) {
+	public static ECPolynomialField getInstance(final ECParameters<PolynomialField, PolynomialElement> parameters) {
 		if (parameters == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, parameters);
 		}

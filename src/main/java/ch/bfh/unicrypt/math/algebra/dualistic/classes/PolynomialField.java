@@ -194,8 +194,8 @@ public class PolynomialField
 	}
 
 	/**
-	 * Computes a solution for the quadratic equation z²+z=b for any polynomial basis. Source: AMERICAN NATIONAL
-	 * STANDARD X9.62 D.1.6
+	 * Computes a solution for the quadratic equation z²+z=b for any polynomial basis (source: American National
+	 * Standard X9.62 D.1.6)
 	 * <p>
 	 * @param b
 	 * @return PolynomialElement z which is a solution for the quadratic equation z²+z=b

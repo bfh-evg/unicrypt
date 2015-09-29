@@ -46,27 +46,65 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import java.math.BigInteger;
 
 /**
- *
- * @param <F>
- * @param <DE> x
+ * This interface defines the capabilities of the helper classes dealing with the parameters of various elliptic curve
+ * standards. The parameters include the generator of the subgroup.
+ * <p>
+ * @param <F>  The generic type of the underlying finite field
+ * @param <DE> The generic type of the dualistic elements of the underlying finite field
  * <p>
  * @author C. Lutz
  * @author R. Haenni
  */
 public interface ECParameters<F extends FiniteField, DE extends DualisticElement> {
 
-	public abstract F getFiniteField();
+	/**
+	 * Returns the underlying finite field of the elliptic curve.
+	 * <p>
+	 * @return The finite field of the elliptic curve
+	 */
+	public F getFiniteField();
 
-	public abstract DE getA();
+	/**
+	 * Returns the first coefficient of the elliptic curve (usually denoted by {@code a}).
+	 * <p>
+	 * @return The first coefficient {@code a}
+	 */
+	public DE getA();
 
-	public abstract DE getB();
+	/**
+	 * Returns the second coefficient of the elliptic curve (usually denoted by {@code b}).
+	 * <p>
+	 * @return The second coefficient {@code b}
+	 */
+	public DE getB();
 
-	public abstract DE getGx();
+	/**
+	 * Returns the x-coordinate of the default generator.
+	 * <p>
+	 * @return The x-coordinate of the default generator
+	 */
+	public DE getGx();
 
-	public abstract DE getGy();
+	/**
+	 * Returns the y-coordinate of the default generator.
+	 * <p>
+	 * @return The y-coordinate of the default generator
+	 */
+	public DE getGy();
 
-	public abstract BigInteger getOrder();
+	/**
+	 * Returns the order of the EC group.
+	 * <p>
+	 * @return The group order
+	 */
+	public BigInteger getOrder();
 
-	public abstract BigInteger getCoFactor();
+	/**
+	 * Returns the cofactor of the EC group. This is the fraction of the total number of points on the curve and the
+	 * number of points in the actual subgroup.
+	 * <p>
+	 * @return The cofactor of the EC group
+	 */
+	public BigInteger getCoFactor();
 
 }

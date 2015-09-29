@@ -43,19 +43,19 @@ package ch.bfh.unicrypt.math.algebra.additive.parameters;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
-import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import java.math.BigInteger;
 
 /**
- * "SEC 2: Recommended Elliptic Curve Domain Parameters", Version 2.0, Certicom Research, 2010
+ * The standard EC groups for curves y²=x³+ax+b as defined in "SEC 2: Recommended Elliptic Curve Domain Parameters",
+ * Version 2.0, Certicom Research, 2010.
  * <p>
  * @author C. Lutz
  * @author R. Haenni
  */
-public enum SEC2_ECZModParameters
-	   implements ECZModParameters {
+public enum SEC2_ZModPrime
+	   implements ECParameters<ZModPrime, ZModElement> {
 
 	secp112r1("db7c2abf62e35e668076bead208b",
 			  "db7c2abf62e35e668076bead2088",
@@ -128,21 +128,11 @@ public enum SEC2_ECZModParameters
 			  "1fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa51868783bf2f966b7fcc0148f709a5d03bb5c9b8899c47aebb6fb71e91386409",
 			  "1");
 
-	private final String p, a, b, gx, gy, order, coFactor;
+	private final String modulus, a, b, gx, gy, order, coFactor;
 
-	/**
-	 * Parameters of curve y²=x³+ax+b mod p
-	 * <p>
-	 * @param p
-	 * @param a
-	 * @param b
-	 * @param gx       x-coordinate of the generator
-	 * @param gy       y-coordinate of the generator
-	 * @param order    Group order of the generator
-	 * @param coFactor Co-factor h*order= total order of the curve
-	 */
-	private SEC2_ECZModParameters(String p, String a, String b, String gx, String gy, String order, String coFactor) {
-		this.p = p;
+	// Parameters of the curve y²=x³+ax+b
+	private SEC2_ZModPrime(String modulus, String a, String b, String gx, String gy, String order, String coFactor) {
+		this.modulus = modulus;
 		this.a = a;
 		this.b = b;
 		this.gx = gx;
@@ -153,12 +143,7 @@ public enum SEC2_ECZModParameters
 
 	@Override
 	public ZModPrime getFiniteField() {
-		return ZModPrime.getInstance(this.getP());
-	}
-
-	@Override
-	public Prime getP() {
-		return Prime.getInstance(new BigInteger(p, 16));
+		return ZModPrime.getInstance(new BigInteger(this.modulus, 16));
 	}
 
 	@Override
@@ -191,13 +176,21 @@ public enum SEC2_ECZModParameters
 		return new BigInteger(this.coFactor, 16);
 	}
 
-	public static SEC2_ECZModParameters getFromString(String s) {
-		for (SEC2_ECZModParameters parameter : SEC2_ECZModParameters.values()) {
-			if (parameter.name().equals(s)) {
-				return parameter;
-			}
+	/**
+	 * Returns the EC parameters for a given name.
+	 * <p>
+	 * @param name The name of the parameters
+	 * @return The EC parameters
+	 */
+	public static SEC2_ZModPrime getInstance(String name) {
+		if (name == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, name);
 		}
-		throw new UniCryptRuntimeException(ErrorCode.OBJECT_NOT_FOUND, s);
+		try {
+			return SEC2_ZModPrime.valueOf(name);
+		} catch (Exception exception) {
+			throw new UniCryptRuntimeException(ErrorCode.OBJECT_NOT_FOUND, exception, name);
+		}
 	}
 
 }

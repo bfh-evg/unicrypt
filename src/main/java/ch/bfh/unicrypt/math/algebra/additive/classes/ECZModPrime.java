@@ -46,13 +46,13 @@ import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.ECZModParameters;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.ECParameters;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import java.math.BigInteger;
 
 /**
- *
+ * y²=x³+ax+b
  * <p>
  * @author C. Lutz
  * @author R. Haenni
@@ -84,6 +84,7 @@ public class ECZModPrime
 
 	@Override
 	protected boolean abstractContains(ZModElement x, ZModElement y) {
+		// y²=x³+ax+b <=> x³+ax+b-y²=0
 		return x.power(3).add(x.multiply(this.getA())).add(this.getB()).subtract(y.square()).isZero();
 	}
 
@@ -222,7 +223,7 @@ public class ECZModPrime
 		}
 	}
 
-	public static ECZModPrime getInstance(final ECZModParameters parameters) {
+	public static ECZModPrime getInstance(final ECParameters<ZModPrime, ZModElement> parameters) {
 		if (parameters == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, parameters);
 		}
