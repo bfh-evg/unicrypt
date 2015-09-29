@@ -49,8 +49,8 @@ import java.math.BigInteger;
 /**
  * Some return types are updated.
  * <p>
- * @param <V>
- * @param <DE>
+ * @param <V>  The generic type of the values stored in the elements of the underlying finite field
+ * @param <DE> The generic type of the dualistic elements of the underlying finite field
  * <p>
  * @author C. Lutz
  * @author R. Haenni
@@ -108,13 +108,13 @@ public interface ECElement<V, DE extends DualisticElement<V>>
 	public ECElement<V, DE> apply(Element element);
 
 	@Override
+	public ECElement<V, DE> selfApply(long factor);
+
+	@Override
 	public ECElement<V, DE> selfApply(BigInteger factor);
 
 	@Override
 	public ECElement<V, DE> selfApply(Element<BigInteger> factor);
-
-	@Override
-	public ECElement<V, DE> selfApply(long factor);
 
 	@Override
 	public ECElement<V, DE> selfApply();

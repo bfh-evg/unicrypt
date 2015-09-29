@@ -224,6 +224,9 @@ public interface ConcatenativeSemiGroup<V>
 	public Sequence<? extends ConcatenativeElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
 
 	@Override
+	public Sequence<? extends ConcatenativeElement<V>> getElements();
+
+	@Override
 	public ConcatenativeElement<V> apply(Element element1, Element element2);
 
 	@Override

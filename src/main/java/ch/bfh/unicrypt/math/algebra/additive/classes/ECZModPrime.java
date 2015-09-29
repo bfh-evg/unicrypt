@@ -45,10 +45,6 @@ import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Point;
-import ch.bfh.unicrypt.helper.random.RandomByteSequence;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.additive.parameters.ECZModParameters;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -90,9 +86,7 @@ public class ECZModPrime
 
 	@Override
 	protected boolean abstractContains(ZModElement x, ZModElement y) {
-		ZModElement left = y.square();
-		ZModElement right = x.power(3).add(x.multiply(this.getA())).add(this.getB());
-		return left.isEquivalent(right);
+		return x.power(3).add(x.multiply(this.getA())).add(this.getB()).subtract(y.square()).isZero();
 	}
 
 	@Override
@@ -101,14 +95,9 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECZModElement[] abstractGetY(ZModElement xValue) {
-		ZModElement y1 = xValue.power(3).add(this.getA().multiply(xValue)).add(this.getB());
-		ZModElement y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y1.getValue(),
-																			   this.getFiniteField().getModulus()));
-		ECZModElement e1 = this.getElement(xValue, y);
-		ECZModElement e2 = e1.invert();
-		ECZModElement[] e = {e1, e2};
-		return e;
+	protected ZModElement abstractGetY(ZModElement x) {
+		BigInteger ySquare = x.power(3).add(this.getA().multiply(x)).add(this.getB()).getValue();
+		return this.getFiniteField().getElement(MathUtil.sqrtModPrime(ySquare, this.getFiniteField().getModulus()));
 	}
 
 	@Override
@@ -147,47 +136,43 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECZModElement abstractInvert(ECZModElement element) {
-		if (element.isZero()) {
-			return this.getZeroElement();
-		}
-		return this.abstractGetElement(Point.getInstance(element.getX(), element.getY().invert()));
+	protected ZModElement abstractInvertY(ZModElement x, ZModElement y) {
+		return y.invert();
 	}
 
-	@Override
-	protected Sequence<ECZModElement> abstractGetRandomElementsWithoutGenerator(RandomByteSequence randomByteSequence) {
-		// an additional random bit is needed to decide between the two possible y-values for a given x-value
-		// for this, the upper bound of the random bigInteger is multiplied by 2
-		final BigInteger p = this.getFiniteField().getModulus();
-		return randomByteSequence
-			   .getRandomBigIntegerSequence(this.getFiniteField().getOrder().subtract(MathUtil.ONE).multiply(MathUtil.TWO))
-			   .filter(new Predicate<BigInteger>() {
-
-				   @Override
-				   public boolean test(BigInteger xTimesTwo) {
-					   BigInteger x = xTimesTwo.divide(MathUtil.TWO);
-					   BigInteger y = x.pow(3).add(getA().getValue().multiply(x)).add(getB().getValue());
-					   return MathUtil.hasSqrtModPrime(y, p);
-				   }
-
-			   })
-			   .map(new Mapping<BigInteger, ECZModElement>() {
-
-				   @Override
-				   public ECZModElement apply(BigInteger xTimesTwo) {
-					   BigInteger x = xTimesTwo.divide(MathUtil.TWO);
-					   BigInteger y = MathUtil.sqrtModPrime(x.pow(3).add(getA().getValue().multiply(x)).add(getB().getValue()), p);
-					   // if last bit is true return (x, (p-y)), otherwise (x,y)
-					   if (xTimesTwo.mod(MathUtil.TWO).equals(MathUtil.ONE)) {
-						   y = p.subtract(y);
-					   }
-					   return abstractGetElement(Point.getInstance(getFiniteField().getElement(x), getFiniteField().getElement(y)));
-				   }
-
-			   });
-
-	}
-
+//	@Override
+//	protected Sequence<ECZModElement> abstractGetRandomElementsWithoutGenerator(RandomByteSequence randomByteSequence) {
+//		// an additional random bit is needed to decide between the two possible y-values for a given x-value
+//		// for this, the upper bound of the random bigInteger is multiplied by 2
+//		final BigInteger p = this.getFiniteField().getModulus();
+//		return randomByteSequence
+//			   .getRandomBigIntegerSequence(this.getFiniteField().getOrder().subtract(MathUtil.ONE).multiply(MathUtil.TWO))
+//			   .filter(new Predicate<BigInteger>() {
+//
+//				   @Override
+//				   public boolean test(BigInteger xTimesTwo) {
+//					   BigInteger x = xTimesTwo.divide(MathUtil.TWO);
+//					   BigInteger y = x.pow(3).add(getA().getValue().multiply(x)).add(getB().getValue());
+//					   return MathUtil.hasSqrtModPrime(y, p);
+//				   }
+//
+//			   })
+//			   .map(new Mapping<BigInteger, ECZModElement>() {
+//
+//				   @Override
+//				   public ECZModElement apply(BigInteger xTimesTwo) {
+//					   BigInteger x = xTimesTwo.divide(MathUtil.TWO);
+//					   BigInteger y = MathUtil.sqrtModPrime(x.pow(3).add(getA().getValue().multiply(x)).add(getB().getValue()), p);
+//					   // if last bit is true return (x, (p-y)), otherwise (x,y)
+//					   if (xTimesTwo.mod(MathUtil.TWO).equals(MathUtil.ONE)) {
+//						   y = p.subtract(y);
+//					   }
+//					   return abstractGetElement(Point.getInstance(getFiniteField().getElement(x), getFiniteField().getElement(y)));
+//				   }
+//
+//			   });
+//
+//	}
 	// Checks curve parameters for validity according SEC1: Elliptic Curve Cryptography Ver. 1.0 page 18
 	private boolean isValid() {
 		boolean c11, c21, c22, c23, c24, c3, c4, c5, c61, c62;

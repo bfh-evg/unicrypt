@@ -315,6 +315,14 @@ public interface Set<V> {
 	public Sequence<? extends Element<V>> getRandomElements(RandomByteSequence randomByteSequence);
 
 	/**
+	 * Returns the sequence of all elements from this set. The size of the sequence may be infinite. The order in which
+	 * the elements appear in the sequence is unspecified.
+	 * <p>
+	 * @return The sequence of all elements
+	 */
+	public Sequence<? extends Element<V>> getElements();
+
+	/**
 	 * Checks if two sets are mathematically equivalent. In most cases, this is equivalent to testing two sets for
 	 * equality using {@link Set#equals(Object)}, but some mathematically equivalent sets are instances of different
 	 * classes and therefore are not passing the standard Java equality test. Calling this method is the recommended way
@@ -324,14 +332,6 @@ public interface Set<V> {
 	 * @return {@code true}, if the two sets are mathematically equivalent, {@code false} otherwise
 	 */
 	public boolean isEquivalent(Set<?> set);
-
-	/**
-	 * Returns the sequence of all elements from this set. The size of the sequence may be infinite. The order in which
-	 * the elements appear in the sequence is unspecified.
-	 * <p>
-	 * @return The sequence of all elements
-	 */
-	public Sequence<? extends Element<V>> getElements();
 
 	/**
 	 * Returns the class of the values representing the elements of this set.

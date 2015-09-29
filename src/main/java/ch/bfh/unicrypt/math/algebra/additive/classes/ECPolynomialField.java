@@ -46,13 +46,10 @@ import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.math.Polynomial;
-import ch.bfh.unicrypt.helper.random.RandomByteSequence;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.additive.parameters.ECPolynomialFieldParameters;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import java.math.BigInteger;
 
@@ -67,47 +64,38 @@ public class ECPolynomialField
 
 	private static final long serialVersionUID = 1L;
 
-	protected ECPolynomialField(PolynomialField finiteField, PolynomialElement a,
-		   PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
-		   BigInteger givenOrder, BigInteger coFactor) {
-		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
+	protected ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
+		   BigInteger order, BigInteger coFactor) {
+		super(finiteField, a, b, gx, gy, order, coFactor);
 	}
 
-	protected ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b,
-		   BigInteger givenOrder, BigInteger coFactor) {
-		super(finiteField, a, b, givenOrder, coFactor);
+	protected ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b, BigInteger order, BigInteger coFactor) {
+		super(finiteField, a, b, order, coFactor);
 	}
 
 	@Override
 	protected boolean abstractContains(PolynomialElement x) {
 		// True only if trace(x+a+b/x^2)=0 (Klaus Pommerening: "Quadratic Equations in Finite Fields of Characteristic 2")
-		DualisticElement<BigInteger> trace = traceGF2m(x.add(this.getA()).add(this.getB().divide(x.square())), this);
-		return trace.isEquivalent(ZModTwo.ZERO);
+		return ECPolynomialField.traceGF2m(x.add(this.getA()).add(this.getB().divide(x.square())), this).isZero();
 	}
 
 	@Override
 	protected boolean abstractContains(PolynomialElement x, PolynomialElement y) {
-		PolynomialElement left = y.power(2).add(x.multiply(y));
-		PolynomialElement right = x.power(3).add(x.power(2).multiply(getA())).add(getB());
-		return left.isEquivalent(right);
+		return x.power(3).add(x.power(2).multiply(getA())).add(getB()).subtract(y.power(2).add(x.multiply(y))).isZero();
 	}
 
 	@Override
-	protected ECPolynomialElement abstractGetElement(
-		   Point<PolynomialElement> value) {
+	protected ECPolynomialElement abstractGetElement(Point<PolynomialElement> value) {
 		return new ECPolynomialElement(this, value);
 	}
 
 	@Override
-	protected ECPolynomialElement[] abstractGetY(PolynomialElement x) {
+	protected PolynomialElement abstractGetY(PolynomialElement x) {
 		// described in "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)" p.172
 		PolynomialElement t = x.add(this.getA()).add(this.getB().divide(x.square()));
 		PolynomialElement l = this.getFiniteField().solveQuadradicEquation(t);
 
-		ECPolynomialElement y1 = this.getElement(x, l.add(l.getSet().getOneElement()).multiply(x));
-		ECPolynomialElement y2 = y1.invert();
-		ECPolynomialElement[] y = {y1, y2};
-		return y;
+		return l.add(l.getSet().getOneElement()).multiply(x);
 	}
 
 	@Override
@@ -145,24 +133,12 @@ public class ECPolynomialField
 	}
 
 	@Override
-	protected ECPolynomialElement abstractInvert(ECPolynomialElement element) {
-		if (element.isZero()) {
-			return this.getZeroElement();
-		}
-		return this.abstractGetElement(Point.getInstance(element.getX(), element.getY().add(element.getX())));
+	protected PolynomialElement abstractInvertY(PolynomialElement x, PolynomialElement y) {
+		return y.add(x);
 	}
 
-	@Override
-	protected Sequence<ECPolynomialElement> abstractGetRandomElementsWithoutGenerator(RandomByteSequence randomByteSequence) {
-		throw new UniCryptRuntimeException(ErrorCode.NOT_YET_IMPLEMENTED, this);
-	}
-
-	/**
-	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 21
-	 * <p>
-	 * @return True if curve parameters are valid
-	 */
-	public boolean isValid() {
+	// Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 21
+	private boolean isValid() {
 		boolean c1, c2, c3, c4, c5, c6, c7, c8;
 		int m = this.getFiniteField().getDegree();
 

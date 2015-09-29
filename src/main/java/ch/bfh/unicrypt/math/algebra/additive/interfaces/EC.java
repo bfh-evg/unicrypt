@@ -58,183 +58,193 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- * This interface represents an elliptic curve. Its set of points creates an additive group so that adding two points
- * creates another point. Some return types are updated.
+ * This interface represents an elliptic curve (EC) or a subgroup of an elliptic curve. Its set of points creates an
+ * additive group so that adding two points creates another point on the curve. The points of the curve consist of an
+ * x-value and an y-value, which are elements of the curve's underlying finite field. The EC group has prime order.
  * <p>
- * @param <V> Generic type of values stored in the elements of the elliptic curve
- * @param <E> xxx
+ * The elliptic curve interface is implemented as a specialization of {@link AdditiveCyclicGroup} with additional
+ * methods for dealing with the curve points, the curve's parameters, and the underlying finite field. Some return types
+ * are adjusted.
+ * <p>
+ * @param <V>  The generic type of the values stored in the elements of the underlying finite field
+ * @param <DE> The generic type of the dualistic elements of the underlying finite field
  * <p>
  * @author C. Lutz
  * @author R. Haenni
  */
-public interface EC<V, E extends DualisticElement<V>>
-	   extends AdditiveCyclicGroup<Point<E>> {
+public interface EC<V, DE extends DualisticElement<V>>
+	   extends AdditiveCyclicGroup<Point<DE>> {
 
 	/**
-	 * Returns the finite Field of this elliptic curve
+	 * Returns the underlying finite field of this elliptic curve.
 	 * <p>
 	 * @return The finite field of this elliptic curve
 	 */
 	public FiniteField<V> getFiniteField();
 
 	/**
-	 * Returns the coefficient a of this elliptic curve.
+	 * Returns the first coefficient of this elliptic curve (usually denoted by {@code a}).
 	 * <p>
-	 * @return The coefficient a
+	 * @return The first coefficient {@code a}
 	 */
-	public E getA();
+	public DE getA();
 
 	/**
-	 * Returns the coefficient b of this elliptic curve.
+	 * Returns the first coefficient of this elliptic curve (usually denoted by {@code b}).
 	 * <p>
-	 * @return The coefficient b
+	 * @return The second coefficient {@code b}
 	 */
-	public E getB();
+	public DE getB();
 
 	/**
-	 * Returns the cofactor of this elliptic curve.
+	 * Returns the cofactor of this EC group. This is the fraction of the total number of points on the curve and the
+	 * number of points in the actual subgroup.
 	 * <p>
-	 * @return The cofactor
+	 * @return The cofactor of this EC group
 	 */
 	public BigInteger getCoFactor();
 
 	/**
-	 * Returns {@code true} if this elliptic curve lies on the given x coordinate.
+	 * Checks if this elliptic curve contains a point for the given x-coordinate.
 	 * <p>
-	 * @param xValue The given x value
-	 * @return {@code true} if this elliptic curve lies on the given x coordinate
+	 * @param xValue The given x-coordinate
+	 * @return {@code true} if this elliptic contains a point for the given x-coordinate, {@code false} otherwise
 	 */
-	public boolean contains(E xValue);
+	public boolean contains(DE xValue);
 
 	/**
-	 * Returns {@code true} if the given x and y value are the coordinates for a point on this elliptic curve.
+	 * Checks if this elliptic curve contains a point for the given x- and y-coordinates.
 	 * <p>
-	 * @param xValue The given xValue
-	 * @param yValue The given yValue
-	 * @return {@code true} if xValue and yValue form a point on this elliptic curve.
+	 * @param xValue The given x-coordinate
+	 * @param yValue The given y-coordinate
+	 * @return {@code true} if this elliptic contains a point for the given x- and y-coordinates, {@code false}
+	 *         otherwise
 	 */
-	public boolean contains(E xValue, E yValue);
+	public boolean contains(DE xValue, DE yValue);
 
 	/**
-	 * Returns the corresponding point for a given x and y value.
+	 * Returns the point on the elliptic curve that corresponds to the given x- and y-coordinates.
 	 * <p>
-	 * @param xValue The given xValue
-	 * @param yValue The given yValue
-	 * @return The corresponding point for a given x and y value
+	 * @param x The given x-coordinate
+	 * @param y The given y-coordinate
+	 * @return The point that corresponds to the given x- and y-coordinates
 	 */
-	public ECElement<V, E> getElement(E xValue, E yValue);
+	public ECElement<V, DE> getElement(DE x, DE y);
 
 	/**
 	 * Return the two possible y-coordinates for a given valid x-coordinate
 	 * <p>
-	 * @param xValue x-coordinate of point
-	 * @return
+	 * @param x The given x-coordinate
+	 * @return The two possible y-coordinates
 	 */
-	public ECElement<V, E>[] getY(E xValue);
+	public ECElement<V, DE> getElement(DE x);
 
 	@Override
-	public ECElement<V, E> add(Element element1, Element element2);
+	public ECElement<V, DE> add(Element element1, Element element2);
 
 	@Override
-	public ECElement<V, E> add(Element... elements);
+	public ECElement<V, DE> add(Element... elements);
 
 	@Override
-	public ECElement<V, E> add(ImmutableArray<Element> elements);
+	public ECElement<V, DE> add(ImmutableArray<Element> elements);
 
 	@Override
-	public ECElement<V, E> add(Sequence<Element> elements);
+	public ECElement<V, DE> add(Sequence<Element> elements);
 
 	@Override
-	public ECElement<V, E> times(Element element, long factor);
+	public ECElement<V, DE> times(Element element, long factor);
 
 	@Override
-	public ECElement<V, E> times(Element element, BigInteger factor);
+	public ECElement<V, DE> times(Element element, BigInteger factor);
 
 	@Override
-	public ECElement<V, E> times(Element element, Element<BigInteger> factor);
+	public ECElement<V, DE> times(Element element, Element<BigInteger> factor);
 
 	@Override
-	public ECElement<V, E> timesTwo(Element element);
+	public ECElement<V, DE> timesTwo(Element element);
 
 	@Override
-	public <W> ECElement<V, E> getElementFrom(W value, Converter<Point<E>, W> converter) throws UniCryptException;
+	public <W> ECElement<V, DE> getElementFrom(W value, Converter<Point<DE>, W> converter) throws UniCryptException;
 
 	@Override
-	public <W> ECElement<V, E> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
+	public <W> ECElement<V, DE> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
 
 	@Override
-	public <W, X> ECElement<V, E> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
+	public <W, X> ECElement<V, DE> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
 
 	@Override
-	public <W> ECElement<V, E> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
+	public <W> ECElement<V, DE> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
 
 	@Override
-	public ECElement<V, E> getElementFrom(long integer) throws UniCryptException;
+	public ECElement<V, DE> getElementFrom(long integer) throws UniCryptException;
 
 	@Override
-	public ECElement<V, E> getElementFrom(BigInteger bigInteger) throws UniCryptException;
+	public ECElement<V, DE> getElementFrom(BigInteger bigInteger) throws UniCryptException;
 
 	@Override
-	public ECElement<V, E> getElementFrom(ByteArray byteArray) throws UniCryptException;
+	public ECElement<V, DE> getElementFrom(ByteArray byteArray) throws UniCryptException;
 
 	@Override
-	public ECElement<V, E> getElementFrom(String string) throws UniCryptException;
+	public ECElement<V, DE> getElementFrom(String string) throws UniCryptException;
 
 	@Override
-	public ECElement<V, E> getRandomElement();
+	public ECElement<V, DE> getRandomElement();
 
 	@Override
-	public ECElement<V, E> getRandomElement(RandomByteSequence randomByteSequence);
+	public ECElement<V, DE> getRandomElement(RandomByteSequence randomByteSequence);
 
 	@Override
-	public Sequence<? extends ECElement<V, E>> getRandomElements();
+	public Sequence<? extends ECElement<V, DE>> getRandomElements();
 
 	@Override
-	public Sequence<? extends ECElement<V, E>> getRandomElements(RandomByteSequence randomByteSequence);
+	public Sequence<? extends ECElement<V, DE>> getRandomElements(RandomByteSequence randomByteSequence);
 
 	@Override
-	public ECElement<V, E> apply(Element element1, Element element2);
+	public Sequence<? extends ECElement<V, DE>> getElements();
 
 	@Override
-	public ECElement<V, E> apply(Element... elements);
+	public ECElement<V, DE> apply(Element element1, Element element2);
 
 	@Override
-	public ECElement<V, E> apply(ImmutableArray<Element> elements);
+	public ECElement<V, DE> apply(Element... elements);
 
 	@Override
-	public ECElement<V, E> apply(Sequence<Element> elements);
+	public ECElement<V, DE> apply(ImmutableArray<Element> elements);
 
 	@Override
-	public ECElement<V, E> selfApply(Element element, BigInteger factor);
+	public ECElement<V, DE> apply(Sequence<Element> elements);
 
 	@Override
-	public ECElement<V, E> selfApply(Element element, Element<BigInteger> factor);
+	public ECElement<V, DE> selfApply(Element element, long factor);
 
 	@Override
-	public ECElement<V, E> selfApply(Element element, long factor);
+	public ECElement<V, DE> selfApply(Element element, BigInteger factor);
 
 	@Override
-	public ECElement<V, E> selfApply(Element element);
+	public ECElement<V, DE> selfApply(Element element, Element<BigInteger> factor);
 
 	@Override
-	public ECElement<V, E> multiSelfApply(Element[] elements, BigInteger[] factors);
+	public ECElement<V, DE> selfApply(Element element);
 
 	@Override
-	public ECElement<V, E> getIdentityElement();
+	public ECElement<V, DE> multiSelfApply(Element[] elements, BigInteger[] factors);
 
 	@Override
-	public ECElement<V, E> invert(Element element);
+	public ECElement<V, DE> getIdentityElement();
 
 	@Override
-	public ECElement<V, E> applyInverse(Element element1, Element element2);
+	public ECElement<V, DE> invert(Element element);
 
 	@Override
-	public ECElement<V, E> getDefaultGenerator();
+	public ECElement<V, DE> applyInverse(Element element1, Element element2);
 
 	@Override
-	public Sequence<? extends ECElement<V, E>> getIndependentGenerators();
+	public ECElement<V, DE> getDefaultGenerator();
 
 	@Override
-	public Sequence<? extends ECElement<V, E>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
+	public Sequence<? extends ECElement<V, DE>> getIndependentGenerators();
+
+	@Override
+	public Sequence<? extends ECElement<V, DE>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
 
 }

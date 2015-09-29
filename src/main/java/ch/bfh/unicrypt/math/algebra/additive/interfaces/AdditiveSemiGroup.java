@@ -201,6 +201,9 @@ public interface AdditiveSemiGroup<V>
 	public Sequence<? extends AdditiveElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
 
 	@Override
+	public Sequence<? extends AdditiveElement<V>> getElements();
+
+	@Override
 	public AdditiveElement<V> apply(Element element1, Element element2);
 
 	@Override

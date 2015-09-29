@@ -201,6 +201,9 @@ public interface MultiplicativeSemiGroup<V>
 	public Sequence<? extends MultiplicativeElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
 
 	@Override
+	public Sequence<? extends MultiplicativeElement<V>> getElements();
+
+	@Override
 	public MultiplicativeElement<V> apply(Element element1, Element element2);
 
 	@Override

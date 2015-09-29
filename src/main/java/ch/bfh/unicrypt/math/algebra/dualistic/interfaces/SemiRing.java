@@ -118,6 +118,9 @@ public interface SemiRing<V>
 	public Sequence<? extends DualisticElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
 
 	@Override
+	public Sequence<? extends DualisticElement<V>> getElements();
+
+	@Override
 	public DualisticElement<V> apply(Element element1, Element element2);
 
 	@Override

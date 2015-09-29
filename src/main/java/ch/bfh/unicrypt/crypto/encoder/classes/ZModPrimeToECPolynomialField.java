@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
-import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
-import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
+import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
@@ -158,14 +158,12 @@ public class ZModPrimeToECPolynomialField
 			}
 
 			if (firstOption) {
-				ECPolynomialElement[] y = ec.getY(x);
-				PolynomialElement y1 = y[0].getY();
-				PolynomialElement y2 = y[1].getY();
-				if (isBigger(y1, y2)) {
-					return y[0];
-
+				ECPolynomialElement e1 = ec.getElement(x);
+				ECPolynomialElement e2 = e1.invert();
+				if (isBigger(e1.getY(), e2.getY())) {
+					return e1;
 				}
-				return y[1];
+				return e2;
 			} else {
 
 				zModElement = element.invert();
@@ -202,14 +200,12 @@ public class ZModPrimeToECPolynomialField
 
 				}
 
-				ECPolynomialElement[] y = ec.getY(x);
-				PolynomialElement y1 = y[0].getY();
-				PolynomialElement y2 = y[1].getY();
-
-				if (isBigger(y1, y2)) {
-					return y[1];
+				ECPolynomialElement e1 = ec.getElement(x);
+				ECPolynomialElement e2 = e1.invert();
+				if (isBigger(e1.getY(), e2.getY())) {
+					return e2;
 				}
-				return y[0];
+				return e1;
 			}
 
 		}

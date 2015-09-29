@@ -51,6 +51,7 @@ import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -65,53 +66,64 @@ import java.math.BigInteger;
  * This abstract class provides a basis implementation for objects of type {@link EC}. Many of the EC particularities
  * are pre-implemented.
  * <p>
- * @param <F>  Generic type of the {@link FiniteField} of this elliptic curve
- * @param <V>  Generic type of values stored in the elements of this elliptic curve
- * @param <D>
- * @param <EE> x
+ * @param <F>  The generic type of the underlying finite field
+ * @param <V>  The generic type of the values stored in the elements of the underlying finite field
+ * @param <DE> The generic type of the dualistic elements of the underlying finite field
+ * @param <EE> The generic type of the elliptic curve elements
  * <p>
  * @author C. Lutz
  * @author R. Haenni
  */
-public abstract class AbstractEC<F extends FiniteField<V>, V, D extends DualisticElement<V>, EE extends ECElement<V, D>>
-	   extends AbstractAdditiveCyclicGroup<EE, Point<D>>
-	   implements EC<V, D> {
+public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends DualisticElement<V>, EE extends ECElement<V, DE>>
+	   extends AbstractAdditiveCyclicGroup<EE, Point<DE>>
+	   implements EC<V, DE> {
 
 	private static final long serialVersionUID = 1L;
 
 	private final F finiteField;
-	private final D a, b;
-	private final EE givenGenerator;
-	private final BigInteger givenOrder, coFactor;
+	private final DE a, b;
+	private final EE defaultGenerator;
+	private final BigInteger order;
+	private final BigInteger coFactor;
 	private final Point<DualisticElement<V>> infinityPoint = Point.<DualisticElement<V>>getInstance();
 
-	protected AbstractEC(F finiteField, D a, D b, D gx, D gy, BigInteger givenOrder, BigInteger coFactor) {
+	protected AbstractEC(F finiteField, DE a, DE b, DE gx, DE gy, BigInteger order, BigInteger coFactor) {
 		super(Point.class);
 		this.finiteField = finiteField;
 		this.a = a;
 		this.b = b;
-		this.givenOrder = givenOrder;
+		this.order = order;
 		this.coFactor = coFactor;
-		this.givenGenerator = this.getElement(gx, gy);
+		this.defaultGenerator = this.getElement(gx, gy);
 	}
 
-	protected AbstractEC(F finitefield, D a, D b, BigInteger givenOrder, BigInteger coFactor) {
+	protected AbstractEC(F finitefield, DE a, DE b, BigInteger order, BigInteger coFactor) {
 		super(Pair.class);
 		this.finiteField = finitefield;
 		this.a = a;
 		this.b = b;
-		this.givenOrder = givenOrder;
+		this.order = order;
 		this.coFactor = coFactor;
-		this.givenGenerator = this.computeGenerator();
+		this.defaultGenerator = this.computeGenerator();
 	}
 
 	// helper method to compute a default generator
 	private EE computeGenerator() {
-		EE element = this.selfApply(this.getRandomElement(), this.getCoFactor());
-		while (!this.isGenerator(element)) {
-			element = this.getRandomElement();
-		}
-		return element;
+		return this.finiteField.getElements().filter(new Predicate<DualisticElement<V>>() {
+
+			@Override
+			public boolean test(DualisticElement<V> value) {
+				return contains(value);
+			}
+
+		}).map(new Mapping<DualisticElement<V>, EE>() {
+
+			@Override
+			public EE apply(DualisticElement<V> x) {
+				return getElement((DE) x);
+			}
+
+		}).get();
 	}
 
 	@Override
@@ -120,12 +132,12 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 	}
 
 	@Override
-	public final D getB() {
+	public final DE getB() {
 		return this.b;
 	}
 
 	@Override
-	public final D getA() {
+	public final DE getA() {
 		return this.a;
 	}
 
@@ -145,15 +157,15 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 	}
 
 	@Override
-	public EE[] getY(D xValue) {
-		if (!this.contains(xValue)) {
-			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, xValue);
+	public EE getElement(DE x) {
+		if (!this.contains(x)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, x);
 		}
-		return this.abstractGetY(xValue);
+		return this.getElement(Point.getInstance(x, this.abstractGetY(x)));
 	}
 
 	@Override
-	public final boolean contains(D xValue) {
+	public final boolean contains(DE xValue) {
 		if (xValue == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, xValue);
 		}
@@ -164,40 +176,48 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 	}
 
 	@Override
-	public final boolean contains(D xValue, D yValue) {
+	public final boolean contains(DE xValue, DE yValue) {
 		if (xValue == null || yValue == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, xValue, yValue);
 		}
 		if (!this.getFiniteField().contains(xValue) || !this.getFiniteField().contains(yValue)) {
 			return false;
 		}
-		return this.abstractContains((D) xValue, (D) yValue);
+		return this.abstractContains((DE) xValue, (DE) yValue);
 	}
 
 	@Override
-	public final EE getElement(D xValue, D yValue) {
+	public final EE getElement(DE xValue, DE yValue) {
 		if (!this.contains(xValue, yValue)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, xValue, yValue);
 		}
-		return this.abstractGetElement(Point.getInstance((D) xValue, (D) yValue));
+		return this.abstractGetElement(Point.getInstance((DE) xValue, (DE) yValue));
 	}
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return this.givenOrder;
+		return this.order;
 	}
 
 	@Override
-	protected boolean abstractContains(Point<D> value) {
+	protected final boolean abstractContains(Point<DE> value) {
 		return this.abstractContains(value.getX(), value.getY());
 	}
 
 	@Override
-	protected Converter<Point<D>, BigInteger> abstractGetBigIntegerConverter() {
-		return new AbstractBigIntegerConverter<Point<D>>(null) { // class parameter not needed
+	protected final EE abstractInvert(EE element) {
+		if (element.isZero()) {
+			return this.getZeroElement();
+		}
+		return this.abstractGetElement(Point.getInstance(element.getX(), this.abstractInvertY(element.getX(), element.getY())));
+	}
+
+	@Override
+	protected Converter<Point<DE>, BigInteger> abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<Point<DE>>(null) { // class parameter not needed
 
 			@Override
-			protected BigInteger abstractConvert(Point<D> point) {
+			protected BigInteger abstractConvert(Point<DE> point) {
 				if (point.equals(infinityPoint)) {
 					return MathUtil.ZERO;
 				}
@@ -205,7 +225,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 			}
 
 			@Override
-			protected Point<D> abstractReconvert(BigInteger value) {
+			protected Point<DE> abstractReconvert(BigInteger value) {
 				if (value.equals(MathUtil.ZERO)) {
 					return getZeroElement().getValue();
 				}
@@ -213,7 +233,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 				try {
 					DualisticElement<V> xValue = getFiniteField().getElementFrom(result[0]);
 					DualisticElement<V> yValue = getFiniteField().getElementFrom(result[1]);
-					return Point.getInstance((D) xValue, (D) yValue);
+					return Point.getInstance((DE) xValue, (DE) yValue);
 				} catch (UniCryptException ex) {
 					throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONVERSION_FAILURE, this, value, result);
 				}
@@ -223,7 +243,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 
 	@Override
 	protected EE abstractGetDefaultGenerator() {
-		return this.givenGenerator;
+		return this.defaultGenerator;
 	}
 
 	@Override
@@ -233,23 +253,19 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 
 	@Override
 	protected Sequence<EE> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		if (this.getDefaultGenerator() != null) {
-			return randomByteSequence.getRandomBigIntegerSequence(this.getFiniteField().getOrder().subtract(MathUtil.ONE)).map(new Mapping<BigInteger, EE>() {
+		return randomByteSequence.getRandomBigIntegerSequence(this.getFiniteField().getOrder().subtract(MathUtil.ONE)).map(new Mapping<BigInteger, EE>() {
 
-				@Override
-				public EE apply(BigInteger value) {
-					return selfApply(getDefaultGenerator(), value);
-				}
+			@Override
+			public EE apply(BigInteger value) {
+				return selfApply(getDefaultGenerator(), value);
+			}
 
-			});
-		} else {
-			return this.abstractGetRandomElementsWithoutGenerator(randomByteSequence);
-		}
+		});
 	}
 
 	@Override
 	protected boolean abstractEquals(Set set) {
-		AbstractEC<F, V, D, EE> other = (AbstractEC<F, V, D, EE>) set;
+		AbstractEC<F, V, DE, EE> other = (AbstractEC<F, V, DE, EE>) set;
 		if (!this.finiteField.isEquivalent(other.finiteField)) {
 			return false;
 		}
@@ -259,13 +275,13 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 		if (!this.b.equals(other.b)) {
 			return false;
 		}
-		if (!this.givenOrder.equals(other.givenOrder)) {
+		if (!this.order.equals(other.order)) {
 			return false;
 		}
 		if (!this.coFactor.equals(other.coFactor)) {
 			return false;
 		}
-		return this.givenGenerator.equals(other.givenGenerator);
+		return this.defaultGenerator.equals(other.defaultGenerator);
 	}
 
 	@Override
@@ -274,15 +290,15 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 		hash = 47 * hash + this.finiteField.hashCode();
 		hash = 47 * hash + this.a.hashCode();
 		hash = 47 * hash + this.b.hashCode();
-		hash = 47 * hash + this.givenOrder.hashCode();
+		hash = 47 * hash + this.order.hashCode();
 		hash = 47 * hash + this.coFactor.hashCode();
-		hash = 47 * hash + this.givenGenerator.hashCode();
+		hash = 47 * hash + this.defaultGenerator.hashCode();
 		return hash;
 	}
 
 	@Override
 	protected boolean defaultIsEquivalent(Set set) {
-		AbstractEC<F, V, D, EE> other = (AbstractEC<F, V, D, EE>) set;
+		AbstractEC<F, V, DE, EE> other = (AbstractEC<F, V, DE, EE>) set;
 		if (!this.finiteField.isEquivalent(other.finiteField)) {
 			return false;
 		}
@@ -292,7 +308,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 		if (!this.b.isEquivalent(other.b)) {
 			return false;
 		}
-		if (!this.givenOrder.equals(other.givenOrder)) {
+		if (!this.order.equals(other.order)) {
 			return false;
 		}
 		return this.coFactor.equals(other.coFactor);
@@ -303,13 +319,12 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 		return this.getA().getValue() + "," + this.getB().getValue();
 	}
 
-	protected abstract EE[] abstractGetY(D xValue);
+	protected abstract DE abstractGetY(DE xValue);
 
-	protected abstract boolean abstractContains(D xValue);
+	protected abstract boolean abstractContains(DE xValue);
 
-	protected abstract boolean abstractContains(D xValue, D yValue);
+	protected abstract boolean abstractContains(DE xValue, DE yValue);
 
-	// Returns a random element without knowing a generator of the group.
-	protected abstract Sequence<EE> abstractGetRandomElementsWithoutGenerator(RandomByteSequence randomByteSequence);
+	protected abstract DE abstractInvertY(DE x, DE y);
 
 }
