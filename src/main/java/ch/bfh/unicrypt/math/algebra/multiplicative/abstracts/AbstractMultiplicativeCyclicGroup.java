@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import java.math.BigInteger;
 
 /**
- * This abstract class provides a basis implementation for objects of type {@link MultipicativeCyclicGroup}.
+ * This abstract class provides a basis implementation for objects of type {@link MultiplicativeCyclicGroup}.
  * <p>
  * @param <E> The generic type of the elements of this cyclic group
  * @param <V> The generic type of the values stored in the elements of this cyclic group

@@ -41,25 +41,22 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
 
 /**
  * This abstract class contains default implementations for most methods of type {@link Function}. For most classes
  * implementing {@link Function}, it is sufficient to inherit from {@link AbstractFunction} and to implement the single
- * abstract method {@link abstractApply(Element element, Random random)}.
+ * abstract method {@link #abstractApply(Element, RandomByteSequence) }.
  * <p>
- * <p/>
  * @param <F>
  * @param <D>
  * @param <DE>
@@ -168,10 +165,6 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 		return this.getDomain() + " => " + this.getCoDomain();
 	}
 
-	//
-	// The following protected methods are default implementations for sets.
-	// They may need to be changed in certain sub-classes.
-	//
 	protected boolean defaultIsCompound() {
 		return false;
 	}
@@ -180,23 +173,8 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 		return true;
 	}
 
-	//
-	// The following protected abstract method must be implemented in every direct
-	// sub-class
-	//
-	/**
-	 * This abstract method is the main method to implement in each sub-class of {@link AbstractFunction}. The validity
-	 * of the two parameters has already been tested.
-	 * <p>
-	 * <p/>
-	 * @see apply(Element, Random)
-	 * @see Group#apply(Element[])
-	 * @see Element#apply(Element)
-	 * <p>
-	 * @param element            The given input element
-	 * @param randomByteSequence Either {@code null} or a given random generator
-	 * @return The resulting output element
-	 */
+	// this abstract method is the main method to implement in each sub-class
+	// the validity of the two parameters has already been tested.
 	protected abstract CE abstractApply(DE element, RandomByteSequence randomByteSequence);
 
 }

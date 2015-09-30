@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.factorization.Prime;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
@@ -64,6 +65,20 @@ public class ZModPrime
 
 	protected ZModPrime(Prime prime) {
 		super(prime.getValue());
+	}
+
+	public ZModElement getSquareRoot(ZModElement element) {
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		return this.getElement(MathUtil.sqrtModPrime(element.getValue(), this.getModulus()));
+	}
+
+	public boolean hasSquareRoot(ZModElement element) {
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		return element.power(this.modulus.subtract(MathUtil.ONE).divide(MathUtil.TWO)).isOne();
 	}
 
 	@Override

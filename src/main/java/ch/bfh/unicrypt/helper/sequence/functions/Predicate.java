@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.sequence.functions;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
  * Classes implementing this interface provide a single method for checking if a predicate holds for a given value. The

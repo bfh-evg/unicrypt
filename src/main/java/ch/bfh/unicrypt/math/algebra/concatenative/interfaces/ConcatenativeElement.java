@@ -74,7 +74,7 @@ public interface ConcatenativeElement<V>
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply(long)}. It applies the concatenation operation multiple
-	 * times to this element. This is a convenient method for {@link ConcatenativeElement#times(BigInteger)}.
+	 * times to this element. This is a convenient method for {@link ConcatenativeElement#selfConcatenate(BigInteger)}.
 	 * <p>
 	 * @param amount The given amount
 	 * @return The result of applying concatenation multiple times to this element

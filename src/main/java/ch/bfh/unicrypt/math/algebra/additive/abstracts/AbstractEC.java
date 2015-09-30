@@ -57,7 +57,6 @@ import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
-import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import java.math.BigInteger;
@@ -86,6 +85,9 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 	// the two curve parameters
 	private final DE a, b;
 
+	// the two coordinates of the given generator
+	private final DE gx, gy;
+
 	// the co-factor
 	private final BigInteger coFactor;
 
@@ -97,19 +99,10 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 		this.finiteField = finiteField;
 		this.a = a;
 		this.b = b;
+		this.gx = gx;
+		this.gy = gy;
 		this.order = order;
 		this.coFactor = coFactor;
-		this.defaultGenerator = this.getElement(gx, gy);
-	}
-
-	protected AbstractEC(F finitefield, DE a, DE b, BigInteger order, BigInteger coFactor) {
-		super(Pair.class);
-		this.finiteField = finitefield;
-		this.a = a;
-		this.b = b;
-		this.order = order;
-		this.coFactor = coFactor;
-		this.defaultGenerator = this.computeGenerator();
 	}
 
 	// helper method to compute a default generator
@@ -171,9 +164,6 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	public final boolean contains(DE x) {
-		if (x == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, x);
-		}
 		if (!this.getFiniteField().contains(x)) {
 			return false;
 		}
@@ -182,9 +172,6 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	public final boolean contains(DE x, DE y) {
-		if (x == null || y == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, x, y);
-		}
 		if (!this.getFiniteField().contains(x) || !this.getFiniteField().contains(y)) {
 			return false;
 		}
@@ -206,13 +193,16 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	protected final boolean abstractContains(Point<DE> value) {
+		if (value.equals(this.infinityPoint)) {
+			return true;
+		}
 		return this.abstractContains(value.getX(), value.getY());
 	}
 
 	@Override
 	protected final EE abstractInvert(EE element) {
 		if (element.isZero()) {
-			return this.getZeroElement();
+			return element;
 		}
 		return this.abstractGetElement(Point.getInstance(element.getX(), this.abstractInvertY(element.getX(), element.getY())));
 	}
@@ -248,17 +238,18 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	protected EE abstractGetDefaultGenerator() {
-		return this.defaultGenerator;
+		return this.getElement(this.gx, this.gy);
+
 	}
 
 	@Override
 	protected boolean abstractIsGenerator(EE element) {
-		return MathUtil.isPrime(this.order) && this.selfApply(element, this.order).isZero();
+		return !element.isZero();
 	}
 
 	@Override
 	protected Sequence<EE> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomBigIntegerSequence(this.getFiniteField().getOrder().subtract(MathUtil.ONE)).map(new Mapping<BigInteger, EE>() {
+		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE)).map(new Mapping<BigInteger, EE>() {
 
 			@Override
 			public EE apply(BigInteger value) {
@@ -274,10 +265,10 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 		if (!this.finiteField.isEquivalent(other.finiteField)) {
 			return false;
 		}
-		if (!this.a.equals(other.a)) {
+		if (!this.a.isEquivalent(other.a)) {
 			return false;
 		}
-		if (!this.b.equals(other.b)) {
+		if (!this.b.isEquivalent(other.b)) {
 			return false;
 		}
 		if (!this.order.equals(other.order)) {
@@ -286,7 +277,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 		if (!this.coFactor.equals(other.coFactor)) {
 			return false;
 		}
-		return this.defaultGenerator.equals(other.defaultGenerator);
+		return this.gx.isEquivalent(other.gx) && this.gy.isEquivalent(other.gy);
 	}
 
 	@Override
@@ -297,7 +288,8 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 		hash = 47 * hash + this.b.hashCode();
 		hash = 47 * hash + this.order.hashCode();
 		hash = 47 * hash + this.coFactor.hashCode();
-		hash = 47 * hash + this.defaultGenerator.hashCode();
+		hash = 47 * hash + this.gx.hashCode();
+		hash = 47 * hash + this.gy.hashCode();
 		return hash;
 	}
 

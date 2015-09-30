@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.random.deterministic;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.random.RandomByteArraySequenceIterator;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
 
 /**
  * This class is a counter mode (CTR) implementation of a deterministic random bit generator. The given hash algorithm

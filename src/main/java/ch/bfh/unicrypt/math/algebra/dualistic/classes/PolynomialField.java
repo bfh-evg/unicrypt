@@ -145,7 +145,7 @@ public class PolynomialField
 		} else {
 			result = ring.getElementUnchecked(multiplyNonBinary(polynomial1, polynomial2));
 		}
-		return this.getElement(this.mod(result).getValue());
+		return this.getElement(this.modulo(result).getValue());
 	}
 
 	@Override
@@ -176,16 +176,8 @@ public class PolynomialField
 
 	}
 
-	/**
-	 * Mod. g(x) mod irreduciblePolynomial = h(x)
-	 * <p>
-	 * Z_p must be a field.
-	 * <p>
-	 * <p>
-	 * @param g g(x) in Z_p[x]
-	 * @return h(x) in Z_p[x]
-	 */
-	private PolynomialElement mod(PolynomialElement g) {
+	// g(x) mod this = h(x)
+	private PolynomialElement modulo(PolynomialElement g) {
 		if (g.getValue().getDegree() < this.getDegree()) {
 			return g;
 		}
@@ -253,7 +245,6 @@ public class PolynomialField
 			}
 
 		}
-
 		return true;
 	}
 

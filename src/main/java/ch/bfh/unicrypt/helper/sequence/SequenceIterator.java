@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
@@ -141,21 +141,21 @@ public abstract class SequenceIterator<V>
 	 * Returns the next value from the iterator. This method is only called when if {@link SequenceIterator#hasNext()}
 	 * returns {@code true}.
 	 * <p>
-	 * @return
+	 * @return The next value
 	 */
 	protected abstract V abstractNext();
 
 	/**
-	 * This method is called before processing each call to {@link next()}, {@link next(int)}, {@link skip(int)}, or
-	 * {@link find(Predicate)}. The default behavior is to do nothing. It can be overridden to change the state of the
+	 * This method is called before processing each call to {@link #next()}, {@link #next(int)}, {@link #skip(int)}, or
+	 * {@link #find(Predicate)}. The default behavior is to do nothing. It can be overridden to change the state of the
 	 * iterator.
 	 */
 	protected void updateBefore() {
 	}
 
 	/**
-	 * This method is called after processing each call to {@link next()}, {@link next(int)}, {@link skip(int)}, or
-	 * {@link find(Predicate)}. The default behavior is to do nothing. It can be overridden to change the state of the
+	 * This method is called after processing each call to {@link #next()}, {@link #next(int)}, {@link #skip(int)}, or
+	 * {@link #find(Predicate)}. The default behavior is to do nothing. It can be overridden to change the state of the
 	 * iterator.
 	 */
 	protected void updateAfter() {

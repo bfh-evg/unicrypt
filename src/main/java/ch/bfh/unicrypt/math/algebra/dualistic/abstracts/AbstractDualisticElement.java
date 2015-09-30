@@ -54,11 +54,11 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link DualisticElement}.
  * <p>
- * @param <S> Generic type of the {@link Semiring} of this element
- * @param <E> Generic type of this element
- * @param <V> Generic type of value stored in this element
+ * @param <S> The generic type of the {@link SemiRing} of this element
+ * @param <E> The generic type of this element
+ * @param <V> The generic type of the value stored in this element
  * <p>
- * @author
+ * @author R. Haenni
  */
 public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends DualisticElement<V>, V>
 	   extends AbstractAdditiveElement<S, E, V>

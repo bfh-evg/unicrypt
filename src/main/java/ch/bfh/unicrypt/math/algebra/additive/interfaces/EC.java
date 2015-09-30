@@ -58,10 +58,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- * This interface represents an elliptic curve (EC) or a subgroup of an elliptic curve. The set of points of the curve
+ * This interface represents an subgroup of an elliptic curve (EC) of prime order. The set of points of the curve
  * creates an additive group so that adding two points creates another point on the curve. The points of the curve
- * consist of an x-value and an y-value, which are dualistic elements of the curve's underlying finite field. Each EC
- * group has prime order.
+ * consist of an x-value and an y-value, which are elements of the curve's underlying finite field.
  * <p>
  * The elliptic curve interface is implemented as a specialization of {@link AdditiveCyclicGroup} with additional
  * methods for dealing with the curve points, the curve's parameters, and the underlying finite field. Some return types

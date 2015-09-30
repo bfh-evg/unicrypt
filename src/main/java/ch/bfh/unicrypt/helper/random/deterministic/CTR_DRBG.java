@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteArraySequenceIterator;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
 import java.math.BigInteger;
 
 /**

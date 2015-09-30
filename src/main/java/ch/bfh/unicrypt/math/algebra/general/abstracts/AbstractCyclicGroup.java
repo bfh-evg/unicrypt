@@ -69,7 +69,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 
 	private static final long serialVersionUID = 1L;
 
-	protected E defaultGenerator;
+	private E defaultGenerator;
 
 	protected AbstractCyclicGroup(Class<?> valueClass) {
 		super(valueClass);

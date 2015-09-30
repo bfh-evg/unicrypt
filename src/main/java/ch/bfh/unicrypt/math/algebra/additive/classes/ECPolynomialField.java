@@ -69,10 +69,6 @@ public class ECPolynomialField
 		super(finiteField, a, b, gx, gy, order, coFactor);
 	}
 
-	protected ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b, BigInteger order, BigInteger coFactor) {
-		super(finiteField, a, b, order, coFactor);
-	}
-
 	@Override
 	protected boolean abstractContains(PolynomialElement x) {
 		// True only if trace(x+a+b/x^2)=0 (Klaus Pommerening: "Quadratic Equations in Finite Fields of Characteristic 2")
@@ -193,28 +189,6 @@ public class ECPolynomialField
 			trace = trace.add(tmp);
 		}
 		return trace.getValue().getCoefficient(0);
-	}
-
-	/**
-	 * Returns an elliptic curve over F2m y²+yx=x³+ax²+b if parameters are valid.
-	 * <p>
-	 * @param f        Finite field of type BinaryPolynomial
-	 * @param a        Element of f representing a in the curve equation
-	 * @param b        Element of f representing b in the curve equation
-	 * @param order    Order of the the used subgroup
-	 * @param coFactor Co-factor h*order= N -> total order of the group
-	 * @return
-	 */
-	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, BigInteger order, BigInteger coFactor) {
-		if (f == null || a == null || b == null || order == null || coFactor == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, f, a, b, order, coFactor);
-		}
-		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, order, coFactor);
-		if (newInstance.isValid()) {
-			return newInstance;
-		} else {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, order, coFactor);
-		}
 	}
 
 	/**

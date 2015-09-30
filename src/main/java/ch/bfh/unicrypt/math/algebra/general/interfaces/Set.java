@@ -263,7 +263,7 @@ public interface Set<V> {
 
 	/**
 	 * Checks if a given value represents an element of this set. If this is the case, the value can be used to
-	 * construct the element using {@link getElement(Object)}.
+	 * construct the element using {@link #getElement(Object)}.
 	 * <p>
 	 * @param value The given value
 	 * @return {@code true}, if the value represents an element of this set, {@code false} otherwise getElement(Object)
@@ -324,7 +324,7 @@ public interface Set<V> {
 
 	/**
 	 * Checks if two sets are mathematically equivalent. In most cases, this is equivalent to testing two sets for
-	 * equality using {@link Set#equals(Object)}, but some mathematically equivalent sets are instances of different
+	 * equality using {@link Object#equals(Object)}, but some mathematically equivalent sets are instances of different
 	 * classes and therefore are not passing the standard Java equality test. Calling this method is the recommended way
 	 * of checking the equality of two sets.
 	 * <p>

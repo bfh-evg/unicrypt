@@ -94,7 +94,7 @@ public class DenseArray<V>
 
 	/**
 	 * Creates a new dense array from a given Java collection. The values in the collection are copied for internal
-	 * storage. Null values are eliminated and the total length is restricted to {@link Integer.MAX_VALUE}.
+	 * storage. Null values are eliminated and the total length is restricted to {@link Integer#MAX_VALUE}.
 	 * <p>
 	 * @param <V>    The generic type of the new array
 	 * @param values The Java array of values
@@ -106,7 +106,7 @@ public class DenseArray<V>
 
 	/**
 	 * Creates a new dense array from a given finite sequence of values. The sequence is transformed into a Java array
-	 * for internal storage. Null values are eliminated and the total length is restricted to {@link Integer.MAX_VALUE}.
+	 * for internal storage. Null values are eliminated and the total length is restricted to {@link Integer#MAX_VALUE}.
 	 * <p>
 	 * @param <V>    The generic type of the new array
 	 * @param values The given sequence of values
@@ -127,8 +127,8 @@ public class DenseArray<V>
 
 	/**
 	 * Creates a new dense array of a given length. All its values are identical to the given value. This method is
-	 * similar to {@link SparseArray#getInstance(java.lang.Object, int)}, except that a dense array is created instead
-	 * of a sparse array.
+	 * similar to {@link SparseArray#getInstance(Object, int)}, except that a dense array is created instead of a sparse
+	 * array.
 	 * <p>
 	 * @param <V>       The generic type of the new array
 	 * @param fillValue The value included in the new array

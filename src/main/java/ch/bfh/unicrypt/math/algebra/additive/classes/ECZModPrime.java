@@ -66,18 +66,11 @@ public class ECZModPrime
 		super(finiteField, a, b, gx, gy, order, coFactor);
 	}
 
-	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, BigInteger order, BigInteger coFactor) {
-		super(finiteField, a, b, order, coFactor);
-	}
-
 	@Override
 	public boolean abstractContains(ZModElement x) {
-		BigInteger p = this.getFiniteField().getModulus();
-		ZModElement right = x.power(3).add(getA().multiply(x)).add(getB());
-		if (MathUtil.hasSqrtModPrime(right.getValue(), p)) {
-			BigInteger y1 = MathUtil.sqrtModPrime(right.getValue(), p);
-			ZModElement y = this.getFiniteField().getElement(y1);
-			return this.abstractContains(x, y);
+		ZModElement ySquare = x.power(3).add(x.multiply(this.getA())).add(this.getB());
+		if (MathUtil.hasSqrtModPrime(ySquare.getValue(), this.getFiniteField().getModulus())) {
+			return this.abstractContains(x, this.getFiniteField().getSquareRoot(ySquare));
 		}
 		return false;
 	}
@@ -130,8 +123,9 @@ public class ECZModPrime
 
 	@Override
 	protected ZModElement abstractGetY(ZModElement x) {
-		BigInteger ySquare = x.power(3).add(this.getA().multiply(x)).add(this.getB()).getValue();
-		return this.getFiniteField().getElement(MathUtil.sqrtModPrime(ySquare, this.getFiniteField().getModulus()));
+		// y²=x³+ax+b <=> x³+ax+b-y²=0
+		ZModElement ySquare = x.power(3).add(this.getA().multiply(x)).add(this.getB());
+		return this.getFiniteField().getSquareRoot(ySquare);
 	}
 
 	@Override
@@ -141,28 +135,25 @@ public class ECZModPrime
 
 	// Checks curve parameters for validity according SEC1: Elliptic Curve Cryptography Ver. 1.0 page 18
 	private boolean isValid() {
-		boolean c11, c21, c22, c23, c24, c3, c4, c5, c61, c62;
-
 		ZModElement i4 = getFiniteField().getElement(4);
 		ZModElement i27 = getFiniteField().getElement(27);
 		BigInteger p = this.getFiniteField().getModulus();
 
-		c11 = MathUtil.arePrime(p);
-		c21 = this.getFiniteField().contains(this.getA());
-		c22 = this.getFiniteField().contains(this.getB());
-		c23 = this.getFiniteField().contains(this.getDefaultGenerator().getValue().getX());
-		c24 = this.getFiniteField().contains(this.getDefaultGenerator().getValue().getY());
-		c3 = !getA().power(3).multiply(i4).add(i27.multiply(getB().square())).isZero();
-		c4 = 0 >= getCoFactor().compareTo(new BigInteger("4"));
-		c5 = this.selfApply(this.getDefaultGenerator(), getOrder()).isEquivalent(this.getZeroElement());
-		c61 = true;
+		boolean c1 = MathUtil.isPrime(p);
+		boolean c2 = this.getFiniteField().contains(this.getA())
+			   && this.getFiniteField().contains(this.getB())
+			   && this.getFiniteField().contains(this.getDefaultGenerator().getValue().getX())
+			   && this.getFiniteField().contains(this.getDefaultGenerator().getValue().getY());
+		boolean c3 = !getA().power(3).multiply(i4).add(getB().square().multiply(i27)).isZero();
+		boolean c4 = 0 >= getCoFactor().compareTo(new BigInteger("4"));
+		boolean c5 = this.selfApply(this.getDefaultGenerator(), getOrder()).isEquivalent(this.getZeroElement());
+		boolean c6 = !getOrder().equals(this.getFiniteField().getModulus());
 		for (BigInteger i = MathUtil.ONE; i.compareTo(new BigInteger("100")) < 0; i = i.add(MathUtil.ONE)) {
 			if (p.modPow(i, getOrder()).equals(MathUtil.ONE)) {
-				c61 = false;
+				c6 = false;
 			}
 		}
-		c62 = !getOrder().equals(this.getFiniteField().getModulus());
-		return c11 && c21 && c22 && c23 && c24 && c3 && c4 && c5 && c61 && c62;
+		return c1 && c2 && c3 && c4 && c5 && c6;
 	}
 
 	// Implements selfApply to check if a ECZmodElement is a valid generator
@@ -175,28 +166,6 @@ public class ECZModPrime
 			}
 		}
 		return result;
-	}
-
-	/**
-	 * Returns an elliptic curve over Fp y²=x³+ax+b
-	 * <p>
-	 * @param f        Finite field of type ZModPrime
-	 * @param a        Element of F_p representing a in the curve equation
-	 * @param b        Element of F_p representing b in the curve equation
-	 * @param order    Order of the the used subgroup
-	 * @param coFactor Co-factor h*order= N -> total order of the group
-	 * @return
-	 */
-	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, BigInteger order, BigInteger coFactor) {
-		if (f == null || a == null || b == null || order == null || coFactor == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, f, a, b, order, coFactor);
-		}
-		ECZModPrime newInstance = new ECZModPrime(f, a, b, order, coFactor);
-		if (newInstance.isValid()) {
-			return newInstance;
-		} else {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, order, coFactor);
-		}
 	}
 
 	/**

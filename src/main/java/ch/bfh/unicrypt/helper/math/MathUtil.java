@@ -555,8 +555,7 @@ public final class MathUtil {
 		BigInteger q = p.subtract(ONE).divide(TWO);
 
 		// finding q
-		while (q.mod(TWO)
-			   .equals(ZERO)) {
+		while (q.mod(TWO).equals(ZERO)) {
 			q = q.divide(TWO);
 			s = s.add(ONE);
 		}

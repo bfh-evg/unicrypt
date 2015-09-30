@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
@@ -183,7 +183,7 @@ public abstract class Sequence<V>
 
 	/**
 	 * Creates a new dense array from a given finite sequence of values. Null values are eliminated and the total length
-	 * is restricted to {@link Integer.MAX_VALUE}.
+	 * is restricted to {@link Integer#MAX_VALUE}.
 	 * <p>
 	 * @return The new dense array
 	 */
