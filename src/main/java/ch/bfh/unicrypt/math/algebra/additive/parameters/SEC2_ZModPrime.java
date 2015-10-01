@@ -149,7 +149,6 @@ public enum SEC2_ZModPrime
 	private final int securityLevel;
 	private final String modulus, a, b, gx, gy, order, coFactor;
 
-	// Parameters of the curve y²=x³+ax+b
 	private SEC2_ZModPrime(int securityLevel, String modulus, String a, String b, String gx, String gy, String order, String coFactor) {
 		this.securityLevel = securityLevel;
 		this.modulus = modulus;

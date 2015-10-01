@@ -186,7 +186,6 @@ public enum SEC2_PolynomialField
 	private final int securityLevel;
 	private final String irreduciblePolynomial, a, b, gx, gy, order, coFactor;
 
-	// Parameters of the curve y²+xy=x³+ax²+b
 	private SEC2_PolynomialField(int securityLevel, String irreduciblePolynomial, String a, String b, String gx, String gy, String order, String coFactor) {
 		this.securityLevel = securityLevel;
 		this.irreduciblePolynomial = irreduciblePolynomial;

@@ -162,6 +162,7 @@ public class ECPolynomialField
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, polynomialField, a, b, gx, gy, order, coFactor);
 		}
 		int degree = polynomialField.getDegree();
+		BigInteger fieldOrder = polynomialField.getOrder();
 		// Test1
 		if (2 * securityLevel >= degree) {
 			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, securityLevel, degree);
@@ -191,7 +192,10 @@ public class ECPolynomialField
 		if (coFactor.compareTo(MathUtil.powerOfTwo(securityLevel / 8)) > 0) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
 		}
-		// Test7b: TODO
+		// Test7b
+		if (!MathUtil.sqrt(fieldOrder.multiply(MathUtil.FOUR)).add(fieldOrder).add(MathUtil.ONE).divide(order).equals(coFactor)) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, fieldOrder, order, coFactor);
+		}
 		// Test8: done elsewhere
 
 		// Test9a
@@ -201,7 +205,7 @@ public class ECPolynomialField
 			}
 		}
 		// Test9b
-		if (order.multiply(coFactor).equals(MathUtil.powerOfTwo(degree))) {
+		if (order.multiply(coFactor).equals(fieldOrder)) {
 			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, order, coFactor, degree);
 		}
 		return new ECPolynomialField(polynomialField, a, b, gx, gy, order, coFactor);
