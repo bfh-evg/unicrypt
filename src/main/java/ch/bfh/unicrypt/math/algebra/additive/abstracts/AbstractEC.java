@@ -200,11 +200,25 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 	}
 
 	@Override
+	protected final EE abstractApply(EE element1, EE element2) {
+		if (element1.isZero()) {
+			return element2;
+		}
+		if (element2.isZero()) {
+			return element1;
+		}
+		if (element1.isEquivalent(element2.negate())) {
+			return this.getZeroElement();
+		}
+		return this.abstractAdd(element1.getX(), element1.getY(), element2.getX(), element2.getY());
+	}
+
+	@Override
 	protected final EE abstractInvert(EE element) {
 		if (element.isZero()) {
 			return element;
 		}
-		return this.abstractGetElement(Point.getInstance(element.getX(), this.abstractInvertY(element.getX(), element.getY())));
+		return this.abstractNegate(element.getX(), element.getY());
 	}
 
 	@Override
@@ -322,6 +336,8 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	protected abstract DE abstractGetY(DE x);
 
-	protected abstract DE abstractInvertY(DE x, DE y);
+	protected abstract EE abstractAdd(DE x1, DE y1, DE x2, DE y2);
+
+	protected abstract EE abstractNegate(DE x, DE y);
 
 }

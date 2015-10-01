@@ -55,11 +55,10 @@ import java.math.BigInteger;
 public class ECZModElement
 	   extends AbstractECElement<BigInteger, ZModElement, ECZModElement> {
 
-	private static final long serialVersionUID = 4590767773320124829L;
+	private static final long serialVersionUID = 1L;
 
 	protected ECZModElement(ECZModPrime ec) {
 		super(ec);
-
 	}
 
 	protected ECZModElement(ECZModPrime ec, Point<ZModElement> value) {

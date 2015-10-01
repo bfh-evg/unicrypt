@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Point;
+import ch.bfh.unicrypt.helper.sequence.BigIntegerSequence;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.additive.parameters.ECParameters;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -68,17 +69,16 @@ public class ECZModPrime
 
 	@Override
 	public boolean abstractContains(ZModElement x) {
-		ZModElement ySquare = x.power(3).add(x.multiply(this.getA())).add(this.getB());
-		if (MathUtil.hasSqrtModPrime(ySquare.getValue(), this.getFiniteField().getModulus())) {
-			return this.abstractContains(x, this.getFiniteField().getSquareRoot(ySquare));
-		}
-		return false;
+		ZModElement ySquare = x.power(3).add(this.getA().multiply(x)).add(this.getB());
+		return this.getFiniteField().hasSquareRoot(ySquare);
+		//TODO: test for subgroup membership missing
 	}
 
 	@Override
 	protected boolean abstractContains(ZModElement x, ZModElement y) {
 		// y²=x³+ax+b <=> x³+ax+b-y²=0
-		return x.power(3).add(x.multiply(this.getA())).add(this.getB()).subtract(y.square()).isZero();
+		return x.power(3).add(this.getA().multiply(x)).add(this.getB()).subtract(y.square()).isZero();
+		//TODO: test for subgroup membership missing
 	}
 
 	@Override
@@ -92,33 +92,26 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECZModElement abstractApply(ECZModElement element1, ECZModElement element2) {
-		if (element1.isZero()) {
-			return element2;
-		}
-		if (element2.isZero()) {
-			return element1;
-		}
-		if (element1.isEquivalent(element2.invert())) {
-			return this.getZeroElement();
-		}
-		ZModElement s, rx, ry;
-		ZModElement px = element1.getX();
-		ZModElement py = element1.getY();
-		ZModElement qx = element2.getX();
-		ZModElement qy = element2.getY();
-		if (element1.isEquivalent(element2)) {
-			ZModElement three = this.getFiniteField().getElement(3);
-			ZModElement two = this.getFiniteField().getElement(2);
-			s = ((px.square().multiply(three)).apply(this.getA())).divide(py.multiply(two));
-			rx = s.square().apply(px.multiply(two).invert());
-			ry = s.multiply(px.subtract(rx)).apply(py.invert());
+	protected ECZModElement abstractAdd(ZModElement x1, ZModElement y1, ZModElement x2, ZModElement y2) {
+		// "SEC 1: Elliptic Curve Cryptography", Version 2.0, 2009 (Section 2.2.1, page 7)
+		ZModElement lambda;
+		if (x1.isEquivalent(x2)) { // testing only the x-coordinates is sufficient
+			// λ=(3x1²+a)/2y2
+			lambda = x1.square().times(3).add(this.getA()).divide(y1.times(2));
 		} else {
-			s = py.apply(qy.invert()).divide(px.apply(qx.invert()));
-			rx = (s.square().apply(px.invert()).apply(qx.invert()));
-			ry = py.invert().add(s.multiply(px.apply(rx.invert())));
+			// λ=(y2-y1)/(x2-x1)
+			lambda = y2.subtract(y1).divide(x2.subtract(x1));
 		}
-		return this.abstractGetElement(Point.getInstance(rx, ry));
+		// x=λ²-x1-x2 ￼￼￼
+		ZModElement x = lambda.square().subtract(x1).subtract(x2);
+		// y=λ(x1-x)-y1
+		ZModElement y = lambda.multiply(x1.subtract(x)).subtract(y1);
+		return this.abstractGetElement(Point.getInstance(x, y));
+	}
+
+	@Override
+	protected ECZModElement abstractNegate(ZModElement x, ZModElement y) {
+		return this.abstractGetElement(Point.getInstance(x, y.negate()));
 	}
 
 	@Override
@@ -128,74 +121,75 @@ public class ECZModPrime
 		return this.getFiniteField().getSquareRoot(ySquare);
 	}
 
-	@Override
-	protected ZModElement abstractInvertY(ZModElement x, ZModElement y) {
-		return y.invert();
-	}
-
-	// Checks curve parameters for validity according SEC1: Elliptic Curve Cryptography Ver. 1.0 page 18
-	private boolean isValid() {
-		ZModElement i4 = getFiniteField().getElement(4);
-		ZModElement i27 = getFiniteField().getElement(27);
-		BigInteger p = this.getFiniteField().getModulus();
-
-		boolean c1 = MathUtil.isPrime(p);
-		boolean c2 = this.getFiniteField().contains(this.getA())
-			   && this.getFiniteField().contains(this.getB())
-			   && this.getFiniteField().contains(this.getDefaultGenerator().getValue().getX())
-			   && this.getFiniteField().contains(this.getDefaultGenerator().getValue().getY());
-		boolean c3 = !getA().power(3).multiply(i4).add(getB().square().multiply(i27)).isZero();
-		boolean c4 = 0 >= getCoFactor().compareTo(new BigInteger("4"));
-		boolean c5 = this.selfApply(this.getDefaultGenerator(), getOrder()).isEquivalent(this.getZeroElement());
-		boolean c6 = !getOrder().equals(this.getFiniteField().getModulus());
-		for (BigInteger i = MathUtil.ONE; i.compareTo(new BigInteger("100")) < 0; i = i.add(MathUtil.ONE)) {
-			if (p.modPow(i, getOrder()).equals(MathUtil.ONE)) {
-				c6 = false;
-			}
-		}
-		return c1 && c2 && c3 && c4 && c5 && c6;
-	}
-
-	// Implements selfApply to check if a ECZmodElement is a valid generator
-	private ECZModElement selfApply(ECZModElement element, BigInteger posFactor) {
-		ECZModElement result = element;
-		for (int i = posFactor.bitLength() - 2; i >= 0; i--) {
-			result = result.add(result);
-			if (posFactor.testBit(i)) {
-				result = result.add(element);
-			}
-		}
-		return result;
-	}
-
 	/**
-	 * Returns an elliptic curve over Fp y²=x³+ax+b if parameters are valid.
+	 * Returns a subgroup of an elliptic curve E(F_p):y²=x³+ax+b over a prime field F_p. Checking the curve parameters
+	 * is done according to "SEC1: Elliptic Curve Cryptography", Version 2.0, 2009 (Section 3.1.1.2.1, page 17-18).
 	 * <p>
-	 * @param f        Finite field of type ZModPrime
-	 * @param a        Element of F_p representing a in the curve equation
-	 * @param b        Element of F_p representing b in the curve equation
-	 * @param gx       x-coordinate of the generator
-	 * @param gy       y-coordinate of the generator
-	 * @param order    Order of the the used subgroup
-	 * @param coFactor Co-factor h*order= N -> total order of the group
-	 * @return
+	 * @param securityLevel Security level
+	 * @param primeField    Prime field F_p of type {@link ZModPrime}
+	 * @param a             Element of F_p representing the coefficient {@code a} in the curve equation
+	 * @param b             Element of F_p representing the coefficient {@code b} in the curve equation
+	 * @param gx            x-coordinate of the generator
+	 * @param gy            y-coordinate of the generator
+	 * @param order         Order of the the subgroup
+	 * @param coFactor      Co-factor of the subgroup
+	 * @return The resulting subgroup of the elliptic curve
 	 */
-	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger order, BigInteger coFactor) {
-		if (f == null || a == null || b == null || gx == null || gy == null || order == null || coFactor == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, f, a, b, gx, gy, order, coFactor);
+	public static ECZModPrime getInstance(int securityLevel, ZModPrime primeField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger order, BigInteger coFactor) {
+		if (primeField == null || a == null || b == null || gx == null || gy == null || order == null || coFactor == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primeField, a, b, gx, gy, order, coFactor);
 		}
-		ECZModPrime newInstance = new ECZModPrime(f, a, b, gx, gy, order, coFactor);
-		if (newInstance.isValid()) {
-			return newInstance;
-		} else {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, f, a, b, gx, gy, order, coFactor);
+		BigInteger modulus = primeField.getModulus();
+		// Test1
+		if (2 * securityLevel > modulus.bitLength()) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, securityLevel, modulus);
 		}
+		// Test2a
+		if (!primeField.contains(a) || !primeField.contains(b)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, primeField, a, b);
+		}
+		// Test2b
+		if (!primeField.contains(gx) || !primeField.contains(gy)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, primeField, gx, gy);
+		}
+		// Test3
+		ZModElement e4 = primeField.getElement(4);
+		ZModElement e27 = primeField.getElement(27);
+		if (a.power(3).multiply(e4).add(b.square().multiply(e27)).isZero()) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, a, b);
+		}
+		// Test4
+		if (!gx.power(3).add(a.multiply(gx)).add(b).subtract(gy.square()).isZero()) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, a, b, gx, gy);
+		}
+		// Test5
+		if (!MathUtil.isPrime(order)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
+		}
+		// Test6a
+		if (coFactor.compareTo(MathUtil.powerOfTwo(securityLevel / 8)) > 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
+		}
+		// Test6b: TODO
+		// Test7: done elsewhere
+		// Test8a
+		for (BigInteger i : BigIntegerSequence.getInstance(1, 99)) {
+			if (modulus.modPow(i, order).equals(MathUtil.ONE)) {
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, order);
+			}
+		}
+		// Test8b
+		if (modulus.equals(order)) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, order);
+		}
+		return new ECZModPrime(primeField, a, b, gx, gy, order, coFactor);
 	}
 
 	public static ECZModPrime getInstance(final ECParameters<ZModPrime, ZModElement> parameters) {
 		if (parameters == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, parameters);
 		}
+		int securityLevel = parameters.getSecurityLevel();
 		ZModPrime field = parameters.getFiniteField();
 		ZModElement a = parameters.getA();
 		ZModElement b = parameters.getB();
@@ -204,7 +198,7 @@ public class ECZModPrime
 		BigInteger order = parameters.getOrder();
 		BigInteger coFactor = parameters.getCoFactor();
 
-		return ECZModPrime.getInstance(field, a, b, gx, gy, order, coFactor);
+		return ECZModPrime.getInstance(securityLevel, field, a, b, gx, gy, order, coFactor);
 	}
 
 }

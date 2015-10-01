@@ -203,14 +203,9 @@ public class GStarMod
 		return this.abstractGetElement(element.getValue().modInverse(this.modulus));
 	}
 
-	/**
-	 * See http://en.wikipedia.org/wiki/Schnorr_group
-	 * <p>
-	 * <p/>
-	 * @return
-	 */
 	@Override
 	protected GStarModElement abstractGetDefaultGenerator() {
+		// see http://en.wikipedia.org/wiki/Schnorr_group
 		BigInteger alpha = MathUtil.ZERO;
 		GStarModElement element;
 		do {

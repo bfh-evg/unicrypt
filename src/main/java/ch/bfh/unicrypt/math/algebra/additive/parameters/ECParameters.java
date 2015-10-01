@@ -58,6 +58,13 @@ import java.math.BigInteger;
 public interface ECParameters<F extends FiniteField, DE extends DualisticElement> {
 
 	/**
+	 * Returns the desired security level (usually a value in {80, 112, 128, 192, 256}).
+	 * <p>
+	 * @return The desired security level
+	 */
+	public int getSecurityLevel();
+
+	/**
 	 * Returns the underlying finite field of the elliptic curve.
 	 * <p>
 	 * @return The finite field of the elliptic curve
