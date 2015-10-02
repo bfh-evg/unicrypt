@@ -147,16 +147,16 @@ public enum SEC2_ZModPrime
 			  "1");
 
 	private final int securityLevel;
-	private final String modulus, a, b, gx, gy, order, coFactor;
+	private final String modulus, a, b, gx, gy, subGroupOrder, coFactor;
 
-	private SEC2_ZModPrime(int securityLevel, String modulus, String a, String b, String gx, String gy, String order, String coFactor) {
+	private SEC2_ZModPrime(int securityLevel, String modulus, String a, String b, String gx, String gy, String subGroupOrder, String coFactor) {
 		this.securityLevel = securityLevel;
 		this.modulus = modulus;
 		this.a = a;
 		this.b = b;
 		this.gx = gx;
 		this.gy = gy;
-		this.order = order;
+		this.subGroupOrder = subGroupOrder;
 		this.coFactor = coFactor;
 	}
 
@@ -191,8 +191,8 @@ public enum SEC2_ZModPrime
 	}
 
 	@Override
-	public final BigInteger getOrder() {
-		return new BigInteger(this.order, 16);
+	public final BigInteger getSubGroupOrder() {
+		return new BigInteger(this.subGroupOrder, 16);
 	}
 
 	@Override

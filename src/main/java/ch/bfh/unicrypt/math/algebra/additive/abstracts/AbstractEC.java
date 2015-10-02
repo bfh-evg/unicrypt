@@ -51,7 +51,6 @@ import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -88,40 +87,24 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 	// the two coordinates of the given generator
 	private final DE gx, gy;
 
+	// the order of the generator/subgroup
+	private final BigInteger subGroupOrder;
+
 	// the co-factor
 	private final BigInteger coFactor;
 
 	// the point of infinity
 	private final Point<DualisticElement<V>> infinityPoint = Point.<DualisticElement<V>>getInstance();
 
-	protected AbstractEC(F finiteField, DE a, DE b, DE gx, DE gy, BigInteger order, BigInteger coFactor) {
+	protected AbstractEC(F finiteField, DE a, DE b, DE gx, DE gy, BigInteger subGroupOrder, BigInteger coFactor) {
 		super(Point.class);
 		this.finiteField = finiteField;
 		this.a = a;
 		this.b = b;
 		this.gx = gx;
 		this.gy = gy;
-		this.order = order;
+		this.subGroupOrder = subGroupOrder;
 		this.coFactor = coFactor;
-	}
-
-	// helper method to compute a default generator
-	private EE computeGenerator() {
-		return this.finiteField.getElements().filter(new Predicate<DualisticElement<V>>() {
-
-			@Override
-			public boolean test(DualisticElement<V> value) {
-				return contains(value);
-			}
-
-		}).map(new Mapping<DualisticElement<V>, EE>() {
-
-			@Override
-			public EE apply(DualisticElement<V> x) {
-				return getElement((DE) x);
-			}
-
-		}).get();
 	}
 
 	@Override
@@ -146,12 +129,12 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	public ZModPrime getZModOrder() {
-		return ZModPrime.getInstance(this.order);
+		return ZModPrime.getInstance(this.subGroupOrder);
 	}
 
 	@Override
 	public ZStarModPrime getZStarModOrder() {
-		return ZStarModPrime.getInstance(this.order);
+		return ZStarModPrime.getInstance(this.subGroupOrder);
 	}
 
 	@Override
@@ -188,7 +171,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return this.order;
+		return this.subGroupOrder;
 	}
 
 	@Override
@@ -252,8 +235,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	protected EE abstractGetDefaultGenerator() {
-		return this.getElement(this.gx, this.gy);
-
+		return this.abstractGetElement(Point.getInstance(this.gx, this.gy));
 	}
 
 	@Override
@@ -285,7 +267,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 		if (!this.b.isEquivalent(other.b)) {
 			return false;
 		}
-		if (!this.order.equals(other.order)) {
+		if (!this.subGroupOrder.equals(other.subGroupOrder)) {
 			return false;
 		}
 		if (!this.coFactor.equals(other.coFactor)) {
@@ -300,7 +282,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 		hash = 47 * hash + this.finiteField.hashCode();
 		hash = 47 * hash + this.a.hashCode();
 		hash = 47 * hash + this.b.hashCode();
-		hash = 47 * hash + this.order.hashCode();
+		hash = 47 * hash + this.subGroupOrder.hashCode();
 		hash = 47 * hash + this.coFactor.hashCode();
 		hash = 47 * hash + this.gx.hashCode();
 		hash = 47 * hash + this.gy.hashCode();
@@ -319,7 +301,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 		if (!this.b.isEquivalent(other.b)) {
 			return false;
 		}
-		if (!this.order.equals(other.order)) {
+		if (!this.subGroupOrder.equals(other.subGroupOrder)) {
 			return false;
 		}
 		return this.coFactor.equals(other.coFactor);

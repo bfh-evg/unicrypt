@@ -184,16 +184,16 @@ public enum SEC2_PolynomialField
 			  "2");
 
 	private final int securityLevel;
-	private final String irreduciblePolynomial, a, b, gx, gy, order, coFactor;
+	private final String irreduciblePolynomial, a, b, gx, gy, subGroupOrder, coFactor;
 
-	private SEC2_PolynomialField(int securityLevel, String irreduciblePolynomial, String a, String b, String gx, String gy, String order, String coFactor) {
+	private SEC2_PolynomialField(int securityLevel, String irreduciblePolynomial, String a, String b, String gx, String gy, String subGroupOrder, String coFactor) {
 		this.securityLevel = securityLevel;
 		this.irreduciblePolynomial = irreduciblePolynomial;
 		this.a = a;
 		this.b = b;
 		this.gx = gx;
 		this.gy = gy;
-		this.order = order;
+		this.subGroupOrder = subGroupOrder;
 		this.coFactor = coFactor;
 	}
 
@@ -228,8 +228,8 @@ public enum SEC2_PolynomialField
 	}
 
 	@Override
-	public BigInteger getOrder() {
-		return new BigInteger(this.order, 16);
+	public BigInteger getSubGroupOrder() {
+		return new BigInteger(this.subGroupOrder, 16);
 	}
 
 	@Override

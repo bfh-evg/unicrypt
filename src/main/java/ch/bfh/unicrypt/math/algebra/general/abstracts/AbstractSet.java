@@ -105,7 +105,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	private final Class<?> valueClass;
 
 	// the order of this set
-	protected BigInteger order;
+	private BigInteger order;
 
 	// other variables for storing information about the order of this set
 	private BigInteger lowerBound, upperBound, minimum;

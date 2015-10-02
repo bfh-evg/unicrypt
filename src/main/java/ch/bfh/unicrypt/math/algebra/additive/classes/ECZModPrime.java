@@ -63,8 +63,8 @@ public class ECZModPrime
 
 	private static final long serialVersionUID = -5442792676496187516L;
 
-	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger order, BigInteger coFactor) {
-		super(finiteField, a, b, gx, gy, order, coFactor);
+	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger subGroupOrder, BigInteger coFactor) {
+		super(finiteField, a, b, gx, gy, subGroupOrder, coFactor);
 	}
 
 	@Override
@@ -131,13 +131,13 @@ public class ECZModPrime
 	 * @param b             Element of F_p representing the coefficient {@code b} in the curve equation
 	 * @param gx            x-coordinate of the generator
 	 * @param gy            y-coordinate of the generator
-	 * @param order         Order of the the subgroup
+	 * @param subGroupOrder Order of the the subgroup
 	 * @param coFactor      Co-factor of the subgroup
 	 * @return The resulting subgroup of the elliptic curve
 	 */
-	public static ECZModPrime getInstance(int securityLevel, ZModPrime primeField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger order, BigInteger coFactor) {
-		if (primeField == null || a == null || b == null || gx == null || gy == null || order == null || coFactor == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primeField, a, b, gx, gy, order, coFactor);
+	public static ECZModPrime getInstance(int securityLevel, ZModPrime primeField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger subGroupOrder, BigInteger coFactor) {
+		if (primeField == null || a == null || b == null || gx == null || gy == null || subGroupOrder == null || coFactor == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primeField, a, b, gx, gy, subGroupOrder, coFactor);
 		}
 		BigInteger modulus = primeField.getModulus();
 		// Test1
@@ -163,7 +163,7 @@ public class ECZModPrime
 			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, a, b, gx, gy);
 		}
 		// Test5
-		if (!MathUtil.isPrime(order)) {
+		if (!MathUtil.isPrime(subGroupOrder)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
 		}
 		// Test6a
@@ -171,21 +171,26 @@ public class ECZModPrime
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
 		}
 		// Test6b
-		if (!MathUtil.sqrt(modulus.multiply(MathUtil.FOUR)).add(modulus).add(MathUtil.ONE).divide(order).equals(coFactor)) {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, order, coFactor);
+		if (!MathUtil.sqrt(modulus.multiply(MathUtil.FOUR)).add(modulus).add(MathUtil.ONE).divide(subGroupOrder).equals(coFactor)) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, subGroupOrder, coFactor);
 		}
-		// Test7: done elsewhere
 		// Test8a
 		for (BigInteger i : BigIntegerSequence.getInstance(1, 99)) {
-			if (modulus.modPow(i, order).equals(MathUtil.ONE)) {
-				throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, order);
+			if (modulus.modPow(i, subGroupOrder).equals(MathUtil.ONE)) {
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, subGroupOrder);
 			}
 		}
 		// Test8b
-		if (modulus.equals(order)) {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, order);
+		if (modulus.equals(subGroupOrder)) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, subGroupOrder);
 		}
-		return new ECZModPrime(primeField, a, b, gx, gy, order, coFactor);
+		ECZModPrime instance = new ECZModPrime(primeField, a, b, gx, gy, subGroupOrder, coFactor);
+		ECZModElement generator = instance.getDefaultGenerator();
+		// Test7
+		if (!generator.times(subGroupOrder).isZero()) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, generator, subGroupOrder);
+		}
+		return instance;
 	}
 
 	public static ECZModPrime getInstance(final ECParameters<ZModPrime, ZModElement> parameters) {
@@ -198,10 +203,10 @@ public class ECZModPrime
 		ZModElement b = parameters.getB();
 		ZModElement gx = parameters.getGx();
 		ZModElement gy = parameters.getGy();
-		BigInteger order = parameters.getOrder();
+		BigInteger subGroupOrder = parameters.getSubGroupOrder();
 		BigInteger coFactor = parameters.getCoFactor();
 
-		return ECZModPrime.getInstance(securityLevel, field, a, b, gx, gy, order, coFactor);
+		return ECZModPrime.getInstance(securityLevel, field, a, b, gx, gy, subGroupOrder, coFactor);
 	}
 
 }

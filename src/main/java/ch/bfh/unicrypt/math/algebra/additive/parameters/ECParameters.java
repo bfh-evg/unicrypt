@@ -100,11 +100,11 @@ public interface ECParameters<F extends FiniteField, DE extends DualisticElement
 	public DE getGy();
 
 	/**
-	 * Returns the order of the EC group.
+	 * Returns the order of the EC subgroup.
 	 * <p>
-	 * @return The group order
+	 * @return The subgroup order
 	 */
-	public BigInteger getOrder();
+	public BigInteger getSubGroupOrder();
 
 	/**
 	 * Returns the cofactor of the EC group. This is the fraction of the total number of points on the curve and the
