@@ -88,7 +88,7 @@ public class PolynomialRing
 		for (Integer i : polynomial.getCoefficientIndices()) {
 			coefficientMap.put(i, polynomial.getCoefficient(i).negate());
 		}
-		return this.getElementUnchecked(coefficientMap);
+		return this.abstractGetElement(coefficientMap);
 	}
 
 	@Override
@@ -234,7 +234,7 @@ public class PolynomialRing
 			int i = r.getValue().getDegree() - h.getValue().getDegree();
 			HashMap map = new HashMap(1);
 			map.put(i, c);
-			t = ring.getElementUnchecked(map);
+			t = ring.abstractGetElement(map);
 			q = t.add(q);
 			r = r.subtract(t.multiply(h));
 		}
@@ -280,16 +280,7 @@ public class PolynomialRing
 		return this.findIrreduciblePolynomial(degree, HybridRandomByteSequence.getInstance());
 	}
 
-	/**
-	 * Finds irreducible polynomial.
-	 * <p>
-	 * See Algorithm 4.70 Generating a random monic irreducible polynomial over Z_p<br>
-	 * See Fact 4.75
-	 * <p>
-	 * @param degree
-	 * @param randomByteSequence
-	 * @return f(x) in Z_p[x] irreducible over Z_p
-	 */
+	// See Algorithm 4.70 Generating a random monic irreducible polynomial over Z_p, see Fact 4.75
 	// TODO Generalize to getRandomElements by replacing HybridRandomByteSequence by RandomByteSequence
 	public PolynomialElement findIrreduciblePolynomial(int degree, HybridRandomByteSequence randomByteSequence) {
 		if (!this.getSemiRing().isField()) {
@@ -309,16 +300,8 @@ public class PolynomialRing
 		return f;
 	}
 
-	/**
-	 * Returns g(x)^k mod f(x) where g(x), f(x) in Z_p[x].
-	 * <p>
-	 * See Algorithm 2.227 Repeated square-and-multiply algorithm for exponentiation
-	 * <p>
-	 * @param g
-	 * @param k
-	 * @param f
-	 * @return
-	 */
+	// Returns g(x)^k mod f(x) where g(x), f(x) in Z_p[x].
+	// See Algorithm 2.227 Repeated square-and-multiply algorithm for exponentiation
 	private PolynomialElement squareAndMultiply(PolynomialElement g, BigInteger k, PolynomialElement f) {
 		if (k.signum() < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, k);

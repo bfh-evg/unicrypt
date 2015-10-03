@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.math;
 
-import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.array.classes.SparseArray;
@@ -316,7 +316,6 @@ public class Polynomial<C>
 	@Override
 	protected String defaultToStringContent() {
 		String result = "f(x)=";
-
 		String separator = "";
 		Sequence<Integer> indices = this.getCoefficientIndices();
 		if (indices.isEmpty()) {
@@ -340,8 +339,11 @@ public class Polynomial<C>
 	}
 
 	private String coefficientToString(C coefficient) {
-		if (coefficient instanceof Boolean) {
-			return coefficient == this.zeroCoefficient ? "0" : "1";
+		if (coefficient.equals(this.zeroCoefficient)) {
+			return "0";
+		}
+		if (coefficient.equals(this.oneCoefficient)) {
+			return "1";
 		}
 		return coefficient.toString();
 	}

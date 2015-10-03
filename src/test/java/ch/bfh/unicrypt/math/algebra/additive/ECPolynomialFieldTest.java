@@ -3,7 +3,7 @@ package ch.bfh.unicrypt.math.algebra.additive;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.SEC2_PolynomialField;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.ECPolynomialFieldParameters;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import static org.junit.Assert.assertEquals;
@@ -15,7 +15,7 @@ public class ECPolynomialFieldTest {
 
 	@Test
 	public void ContainsXTest() throws Exception {
-		ECPolynomialField ec = ECPolynomialField.getInstance(SEC2_PolynomialField.sect113r1);
+		ECPolynomialField ec = ECPolynomialField.getInstance(ECPolynomialFieldParameters.SECT113r1);
 		PolynomialField field = ec.getFiniteField();
 		BitArray b1 = BitArray.getInstance("11000101110100100111011000101001101111101000111111100000101000001101010011110101100000001010110011001111000101");
 		BitArray b2 = BitArray.getInstance("0011111110011101111100101000100000001000011111010001100011110110001101101100010110110010000010010011001100010011");
@@ -28,7 +28,7 @@ public class ECPolynomialFieldTest {
 
 	@Test
 	public void ContainsXYTest() throws Exception {
-		ECPolynomialField ec = ECPolynomialField.getInstance(SEC2_PolynomialField.sect113r1);
+		ECPolynomialField ec = ECPolynomialField.getInstance(ECPolynomialFieldParameters.SECT113r1);
 		PolynomialField field = ec.getFiniteField();
 		BitArray b1 = BitArray.getInstance("11000101110100100111011000101001101111101000111111100000101000001101010011110101100000001010110011001111000101");
 		BitArray b2 = BitArray.getInstance("0101111110011101111100101000100000001000011111010001100011110110001101101100010110110010000010010011001100010011");
@@ -42,7 +42,7 @@ public class ECPolynomialFieldTest {
 
 	@Test
 	public void addTest() throws Exception {
-		ECPolynomialField ec = ECPolynomialField.getInstance(SEC2_PolynomialField.sect113r1);
+		ECPolynomialField ec = ECPolynomialField.getInstance(ECPolynomialFieldParameters.SECT113r1);
 		PolynomialField field = ec.getFiniteField();
 		BitArray b1 = BitArray.getInstance("10001111101000111011110111101100110110111110001111011011000110011111100011111100000010111011001010011000001101101");
 		BitArray b2 = BitArray.getInstance("00001011001111001111100101000101010000111011001011000100100000011111110001110110000101111001011101010111101010111");
@@ -67,7 +67,7 @@ public class ECPolynomialFieldTest {
 
 	@Test
 	public void timesTest() throws Exception {
-		ECPolynomialField ec = ECPolynomialField.getInstance(SEC2_PolynomialField.sect113r1);
+		ECPolynomialField ec = ECPolynomialField.getInstance(ECPolynomialFieldParameters.SECT113r1);
 		PolynomialField field = ec.getFiniteField();
 		BitArray b1 = BitArray.getInstance("10001111101000111011110111101100110110111110001111011011000110011111100011111100000010111011001010011000001101101");
 		BitArray b2 = BitArray.getInstance("00001011001111001111100101000101010000111011001011000100100000011111110001110110000101111001011101010111101010111");
@@ -85,7 +85,7 @@ public class ECPolynomialFieldTest {
 
 	@Test
 	public void invertTest() throws Exception {
-		ECPolynomialField ec = ECPolynomialField.getInstance(SEC2_PolynomialField.sect113r1);
+		ECPolynomialField ec = ECPolynomialField.getInstance(ECPolynomialFieldParameters.SECT113r1);
 		PolynomialField field = ec.getFiniteField();
 		BitArray b1 = BitArray.getInstance("10001111101000111011110111101100110110111110001111011011000110011111100011111100000010111011001010011000001101101");
 		BitArray b2 = BitArray.getInstance("00001011001111001111100101000101010000111011001011000100100000011111110001110110000101111001011101010111101010111");

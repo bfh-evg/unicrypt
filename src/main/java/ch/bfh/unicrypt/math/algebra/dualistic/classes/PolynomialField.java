@@ -42,7 +42,11 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -101,6 +105,41 @@ public class PolynomialField
 	}
 
 	@Override
+	protected Converter<Polynomial<? extends DualisticElement<BigInteger>>, BigInteger> abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<Polynomial<? extends DualisticElement<BigInteger>>>(null) {
+
+			@Override
+			protected BigInteger abstractConvert(Polynomial<? extends DualisticElement<BigInteger>> polynomial) {
+				int degree = getDegree();
+				BigInteger[] values = new BigInteger[degree];
+				for (int i = 0; i < degree; i++) {
+					values[i] = polynomial.getCoefficient(i).convertToBigInteger();
+				}
+				return MathUtil.pair(values);
+			}
+
+			@Override
+			protected Polynomial<? extends DualisticElement<BigInteger>> abstractReconvert(BigInteger value) {
+				BigInteger[] bigIntegers = MathUtil.unpair(value, getDegree());
+				DualisticElement[] elements = new DualisticElement[bigIntegers.length];
+				int i = 0;
+				for (BigInteger bigInteger : bigIntegers) {
+					try {
+						elements[i] = getSemiRing().getElementFrom(bigInteger);
+					} catch (UniCryptException exception) {
+						throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, exception, value);
+					}
+					i++;
+				}
+				Polynomial<? extends DualisticElement<BigInteger>> polynomial
+					   = Polynomial.<DualisticElement<BigInteger>>getInstance(elements,
+																			  getSemiRing().getZeroElement(), getSemiRing().getOneElement());
+				return polynomial;
+			}
+		};
+	}
+
+	@Override
 	// TODO Generalize to getRandomElements by replacing HybridRandomByteSequence by RandomByteSequence
 	public PolynomialElement getRandomElement(int degree, HybridRandomByteSequence randomByteSequence) {
 		if (degree >= this.getDegree()) {
@@ -141,9 +180,9 @@ public class PolynomialField
 			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
 		PolynomialElement result;
 		if (this.isBinary()) {
-			result = ring.getElementUnchecked(multiplyBinary(polynomial1, polynomial2));
+			result = ring.abstractGetElement(multiplyBinary(polynomial1, polynomial2));
 		} else {
-			result = ring.getElementUnchecked(multiplyNonBinary(polynomial1, polynomial2));
+			result = ring.abstractGetElement(multiplyNonBinary(polynomial1, polynomial2));
 		}
 		return this.getElement(this.modulo(result).getValue());
 	}

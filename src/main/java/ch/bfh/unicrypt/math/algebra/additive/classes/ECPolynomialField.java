@@ -65,34 +65,49 @@ public class ECPolynomialField
 
 	private static final long serialVersionUID = 1L;
 
+	private BigInteger traceA;
+
 	protected ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy, BigInteger subGroupOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, subGroupOrder, coFactor);
+		this.traceA = this.trace(a);
 	}
 
 	@Override
+	// see Gadiel Seroussi, "Compact Representation of Elliptic Curve Points over F_2^n", 1998, p.3
+	// see Brian King, "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)", 2009, p.172
 	protected boolean abstractContains(PolynomialElement x) {
-		// true if trace(x+a+b/x²)=0
-		return this.trace(x.add(this.getA()).add(this.getB().divide(x.square()))).isZero();
-		//TODO: test for subgroup membership missing
-	}
-
-	// Returns the trace of an polynomial of characteristic (see Klaus Pommerening "Quadratic Equations
-	// in Finite Fields of Characteristic 2", 2000)
-	private DualisticElement<BigInteger> trace(PolynomialElement x) {
-		int deg = this.getFiniteField().getDegree();
-		PolynomialElement trace = x;
-		for (int i = 1; i < deg; i++) {
-			x = x.square();
-			trace = trace.add(x);
+		// false if trace(x+a+b/x²)≠0
+		if (!this.trace(x.add(this.getA()).add(this.getB().divide(x.square()))).equals(MathUtil.ZERO)) {
+			return false;
 		}
-		return trace.getValue().getCoefficient(0);
+		if (this.getCoFactor().intValue() == 2) {
+			// false if trace(x)≠trace(a)
+			if (!this.trace(x).equals(this.traceA)) {
+				return false;
+			}
+		}
+		if (this.getCoFactor().intValue() > 2) {
+			//TODO: test for subgroup membership missing
+		}
+		return true;
 	}
 
 	@Override
 	protected boolean abstractContains(PolynomialElement x, PolynomialElement y) {
 		// y²+xy=x³+ax²+b <=> x³+ax²+b-(y²+xy)=0
-		return x.power(3).add(this.getA().multiply(x.power(2))).add(this.getB()).subtract(y.power(2).add(x.multiply(y))).isZero();
-		//TODO: test for subgroup membership missing
+		if (!x.power(3).add(this.getA().multiply(x.power(2))).add(this.getB()).subtract(y.power(2).add(x.multiply(y))).isZero()) {
+			return false;
+		}
+		if (this.getCoFactor().intValue() == 2) {
+			// false if trace(x)≠trace(a)
+			if (!this.trace(x).equals(this.traceA)) {
+				return false;
+			}
+		}
+		if (this.getCoFactor().intValue() > 2) {
+			//TODO: test for subgroup membership missing
+		}
+		return true;
 	}
 
 	@Override
@@ -135,10 +150,20 @@ public class ECPolynomialField
 	@Override
 	protected PolynomialElement abstractGetY(PolynomialElement x) {
 		// described in "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)" p.172
-		PolynomialElement t = x.add(this.getA()).add(this.getB().divide(x.square()));
-		PolynomialElement l = this.getFiniteField().solveQuadradicEquation(t);
+		PolynomialElement lambda = this.getFiniteField().solveQuadradicEquation(x.add(this.getA()).add(this.getB().divide(x.square())));
+		return lambda.add(lambda.getSet().getOneElement()).multiply(x);
+	}
 
-		return l.add(l.getSet().getOneElement()).multiply(x);
+	// Returns the trace of a polynomial of characteristic 2 (see Klaus Pommerening "Quadratic Equations
+	// in Finite Fields of Characteristic 2", 2000)
+	private BigInteger trace(PolynomialElement x) {
+		int deg = this.getFiniteField().getDegree();
+		PolynomialElement trace = x;
+		for (int i = 1; i < deg; i++) {
+			x = x.square();
+			trace = trace.add(x);
+		}
+		return trace.getValue().getCoefficient(0).getValue();
 	}
 
 	/**
@@ -157,6 +182,11 @@ public class ECPolynomialField
 	 * @return The resulting subgroup of the elliptic curve
 	 */
 	public static ECPolynomialField getInstance(int securityLevel, PolynomialField polynomialField, PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy, BigInteger subGroupOrder, BigInteger coFactor) {
+		return ECPolynomialField.getInstance(securityLevel, polynomialField, a, b, gx, gy, subGroupOrder, coFactor, false);
+	}
+
+	// a private helper method to include the possibility of test parameters which do not pass all tests
+	private static ECPolynomialField getInstance(int securityLevel, PolynomialField polynomialField, PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy, BigInteger subGroupOrder, BigInteger coFactor, boolean isTest) {
 		if (polynomialField == null || a == null || b == null || gx == null || gy == null || subGroupOrder == null || coFactor == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, polynomialField, a, b, gx, gy, subGroupOrder, coFactor);
 		}
@@ -188,17 +218,21 @@ public class ECPolynomialField
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
 		}
 		// Test7a
-		if (coFactor.compareTo(MathUtil.powerOfTwo(securityLevel / 8)) > 0) {
-			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
+		if (!isTest) {
+			if (coFactor.compareTo(MathUtil.powerOfTwo(securityLevel / 8)) > 0) {
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
+			}
 		}
 		// Test7b
 		if (!MathUtil.sqrt(fieldOrder.multiply(MathUtil.FOUR)).add(fieldOrder).add(MathUtil.ONE).divide(subGroupOrder).equals(coFactor)) {
 			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, fieldOrder, subGroupOrder, coFactor);
 		}
 		// Test9a
-		for (BigInteger i : BigIntegerSequence.getInstance(1, 100 * degree - 1)) {
-			if (MathUtil.TWO.modPow(i, subGroupOrder).equals(MathUtil.ONE)) {
-				throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, subGroupOrder);
+		if (!isTest) {
+			for (BigInteger i : BigIntegerSequence.getInstance(1, 100 * degree - 1)) {
+				if (MathUtil.TWO.modPow(i, subGroupOrder).equals(MathUtil.ONE)) {
+					throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, i, subGroupOrder);
+				}
 			}
 		}
 		// Test9b
@@ -218,15 +252,17 @@ public class ECPolynomialField
 		if (parameters == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, parameters);
 		}
-		int securityLevel = parameters.getSecurityLevel();
-		PolynomialField polynomialField = parameters.getFiniteField();
-		PolynomialElement a = parameters.getA();
-		PolynomialElement b = parameters.getB();
-		PolynomialElement gx = parameters.getGx();
-		PolynomialElement gy = parameters.getGy();
-		BigInteger subGroupOrder = parameters.getSubGroupOrder();
-		BigInteger coFactor = parameters.getCoFactor();
-		return ECPolynomialField.getInstance(securityLevel, polynomialField, a, b, gx, gy, subGroupOrder, coFactor);
+		return ECPolynomialField.getInstance(
+			   parameters.getSecurityLevel(),
+			   parameters.getFiniteField(),
+			   parameters.getA(),
+			   parameters.getB(),
+			   parameters.getGx(),
+			   parameters.getGy(),
+			   parameters.getSubGroupOrder(),
+			   parameters.getCoFactor(),
+			   parameters.isTest()
+		);
 	}
 
 }

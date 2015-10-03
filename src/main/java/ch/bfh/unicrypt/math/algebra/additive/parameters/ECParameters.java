@@ -55,56 +55,92 @@ import java.math.BigInteger;
  * @author C. Lutz
  * @author R. Haenni
  */
-public interface ECParameters<F extends FiniteField, DE extends DualisticElement> {
+public abstract class ECParameters<F extends FiniteField, DE extends DualisticElement> {
+
+	protected final int securityLevel;
+	protected final F finiteField;
+	protected DE a, b, gx, gy;
+	protected final BigInteger subGroupOrder, coFactor;
+
+	protected ECParameters(int securityLevel, F finiteField, BigInteger subGroupOrder, BigInteger coFactor) {
+		this.securityLevel = securityLevel;
+		this.finiteField = finiteField;
+		this.subGroupOrder = subGroupOrder;
+		this.coFactor = coFactor;
+	}
+
+	protected void setCoefficient(DE a, DE b) {
+		this.a = a;
+		this.b = b;
+	}
+
+	protected void setGenerator(DE gx, DE gy) {
+		this.gx = gx;
+		this.gy = gy;
+	}
 
 	/**
 	 * Returns the desired security level (usually a value in {80, 112, 128, 192, 256}).
 	 * <p>
 	 * @return The desired security level
 	 */
-	public int getSecurityLevel();
+	public int getSecurityLevel() {
+		return this.securityLevel;
+	}
 
 	/**
 	 * Returns the underlying finite field of the elliptic curve.
 	 * <p>
 	 * @return The finite field of the elliptic curve
 	 */
-	public F getFiniteField();
+	public F getFiniteField() {
+		return this.finiteField;
+	}
 
 	/**
 	 * Returns the first coefficient of the elliptic curve (usually denoted by {@code a}).
 	 * <p>
 	 * @return The first coefficient {@code a}
 	 */
-	public DE getA();
+	public DE getA() {
+		return this.a;
+	}
 
 	/**
 	 * Returns the second coefficient of the elliptic curve (usually denoted by {@code b}).
 	 * <p>
 	 * @return The second coefficient {@code b}
 	 */
-	public DE getB();
+	public DE getB() {
+		return this.b;
+	}
 
 	/**
 	 * Returns the x-coordinate of the default generator.
 	 * <p>
 	 * @return The x-coordinate of the default generator
 	 */
-	public DE getGx();
+	public DE getGx() {
+		return this.gx;
+	}
 
 	/**
 	 * Returns the y-coordinate of the default generator.
 	 * <p>
 	 * @return The y-coordinate of the default generator
 	 */
-	public DE getGy();
+	public DE getGy() {
+		return this.gy;
+	}
 
 	/**
 	 * Returns the order of the EC subgroup.
 	 * <p>
 	 * @return The subgroup order
 	 */
-	public BigInteger getSubGroupOrder();
+	public BigInteger getSubGroupOrder() {
+		return this.subGroupOrder;
+	}
 
 	/**
 	 * Returns the cofactor of the EC group. This is the fraction of the total number of points on the curve and the
@@ -112,6 +148,17 @@ public interface ECParameters<F extends FiniteField, DE extends DualisticElement
 	 * <p>
 	 * @return The cofactor of the EC group
 	 */
-	public BigInteger getCoFactor();
+	public BigInteger getCoFactor() {
+		return this.coFactor;
+	}
+
+	/**
+	 * Indicates whether the purpose of the parameters is for testing.
+	 * <p>
+	 * @return {@code true} if the parameters are for testing, {@code false} otherwise
+	 */
+	public boolean isTest() {
+		return this.securityLevel < 80;
+	}
 
 }

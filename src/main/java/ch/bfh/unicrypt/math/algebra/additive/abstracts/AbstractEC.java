@@ -146,6 +146,14 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 	}
 
 	@Override
+	public final EE getElement(DE x, DE y) {
+		if (!this.contains(x, y)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, x, y);
+		}
+		return this.abstractGetElement(Point.getInstance(x, y));
+	}
+
+	@Override
 	public final boolean contains(DE x) {
 		if (!this.getFiniteField().contains(x)) {
 			return false;
@@ -159,14 +167,6 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 			return false;
 		}
 		return this.abstractContains(x, y);
-	}
-
-	@Override
-	public final EE getElement(DE x, DE y) {
-		if (!this.contains(x, y)) {
-			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, x, y);
-		}
-		return this.abstractGetElement(Point.getInstance(x, y));
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package ch.bfh.unicrypt.math.algebra.additive;
 
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
-import ch.bfh.unicrypt.math.algebra.additive.parameters.SEC2_ZModPrime;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.ECZModPrimeParameters;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import java.math.BigInteger;
@@ -15,7 +15,7 @@ public class ECZModPrimeTest {
 
 	@Test
 	public void ContainsXTest() throws Exception {
-		ECZModPrime ec = ECZModPrime.getInstance(SEC2_ZModPrime.secp192r1);
+		ECZModPrime ec = ECZModPrime.getInstance(ECZModPrimeParameters.SECP192r1);
 		ZModPrime zmod = ec.getFiniteField();
 		ZModElement x = zmod.getElement(new BigInteger("6035619839542366037308058104925986617178040067348624113998"));
 		ZModElement falseX = zmod.getElement(new BigInteger("6035619839542366037308058104925986617178040067348624113997"));
@@ -26,7 +26,7 @@ public class ECZModPrimeTest {
 
 	@Test
 	public void ContainsXYTest() throws Exception {
-		ECZModPrime ec = ECZModPrime.getInstance(SEC2_ZModPrime.secp192r1);
+		ECZModPrime ec = ECZModPrime.getInstance(ECZModPrimeParameters.SECP192r1);
 		ZModPrime zmod = ec.getFiniteField();
 		ZModElement x1 = zmod.getElement(new BigInteger("5485061771863421489705328005527616201666672468700993602311"));
 		ZModElement y1 = zmod.getElement(new BigInteger("1420584749125414905060037760781943638553232619342051948120"));
@@ -41,7 +41,7 @@ public class ECZModPrimeTest {
 
 	@Test
 	public void addTest() throws Exception {
-		ECZModPrime ec = ECZModPrime.getInstance(SEC2_ZModPrime.secp192r1);
+		ECZModPrime ec = ECZModPrime.getInstance(ECZModPrimeParameters.SECP192r1);
 		ZModPrime zmod = ec.getFiniteField();
 		ZModElement x1 = zmod.getElement(new BigInteger("5485061771863421489705328005527616201666672468700993602311"));
 		ZModElement y1 = zmod.getElement(new BigInteger("1420584749125414905060037760781943638553232619342051948120"));
@@ -60,7 +60,7 @@ public class ECZModPrimeTest {
 
 	@Test
 	public void timesTest() throws Exception {
-		ECZModPrime ec = ECZModPrime.getInstance(SEC2_ZModPrime.secp192r1);
+		ECZModPrime ec = ECZModPrime.getInstance(ECZModPrimeParameters.SECP192r1);
 		ZModPrime zmod = ec.getFiniteField();
 		ZModElement x1 = zmod.getElement(new BigInteger("5485061771863421489705328005527616201666672468700993602311"));
 		ZModElement y1 = zmod.getElement(new BigInteger("1420584749125414905060037760781943638553232619342051948120"));
@@ -73,7 +73,7 @@ public class ECZModPrimeTest {
 
 	@Test
 	public void invertTest() throws Exception {
-		ECZModPrime ec = ECZModPrime.getInstance(SEC2_ZModPrime.secp192r1);
+		ECZModPrime ec = ECZModPrime.getInstance(ECZModPrimeParameters.SECP192r1);
 		ZModPrime zmod = ec.getFiniteField();
 		ZModElement x1 = zmod.getElement(new BigInteger("5485061771863421489705328005527616201666672468700993602311"));
 		ZModElement y1 = zmod.getElement(new BigInteger("1420584749125414905060037760781943638553232619342051948120"));

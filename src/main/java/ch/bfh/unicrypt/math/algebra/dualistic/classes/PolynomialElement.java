@@ -136,7 +136,7 @@ public class PolynomialElement
 				map.put(i, c.divide(element));
 			}
 		}
-		return this.getSet().getElementUnchecked(map);
+		return this.getSet().abstractGetElement(map);
 	}
 
 }
