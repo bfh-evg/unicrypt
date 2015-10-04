@@ -242,7 +242,7 @@ public class ECPolynomialField
 		ECPolynomialField instance = new ECPolynomialField(polynomialField, a, b, gx, gy, subGroupOrder, coFactor);
 		ECPolynomialElement generator = instance.getDefaultGenerator();
 		// Test8
-		if (!generator.times(subGroupOrder).isZero()) {
+		if (!instance.defaultSelfApplyAlgorithm(generator, subGroupOrder).isZero()) {
 			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, generator, subGroupOrder);
 		}
 		return instance;

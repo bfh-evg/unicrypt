@@ -72,35 +72,31 @@ public class ZModPrimeToECPolynomialField
 		this.shift = shift;
 	}
 
-	@Override
-	protected Function abstractGetEncodingFunction() {
-		return new ECF2mEncodingFunction(this.zMod, this.ec, shift);
-	}
-
-	@Override
-	protected Function abstractGetDecodingFunction() {
-		return new ECF2mDecodingFunction(this.getCoDomain(), this.getDomain(), shift);
-	}
-
-	public static ZModPrimeToECPolynomialField getInstance(final ZModPrime zMod, final ECPolynomialField ec,
-		   int shift) {
+	// shift testen!
+	public static ZModPrimeToECPolynomialField getInstance(final ZModPrime zMod, final ECPolynomialField ec, int shift) {
 		if (ec == null || zMod == null) {
 			throw new IllegalArgumentException();
 		}
 		return new ZModPrimeToECPolynomialField(zMod, ec, shift);
 	}
 
-	static class ECF2mEncodingFunction
-		   extends
-		   AbstractFunction<ECF2mEncodingFunction, ZModPrime, ZModElement, ECPolynomialField, ECPolynomialElement> {
+	@Override
+	protected Function abstractGetEncodingFunction() {
+		return new EncodingFunction(this.zMod, this.ec, shift);
+	}
 
-		/**
-		 *
-		 */
+	@Override
+	protected Function abstractGetDecodingFunction() {
+		return new DecodingFunction(this.getCoDomain(), this.getDomain(), shift);
+	}
+
+	private static class EncodingFunction
+		   extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, ECPolynomialField, ECPolynomialElement> {
+
 		private static final long serialVersionUID = 1L;
 		private int shift;
 
-		protected ECF2mEncodingFunction(ZModPrime domain, ECPolynomialField coDomain, int shift) {
+		protected EncodingFunction(ZModPrime domain, ECPolynomialField coDomain, int shift) {
 			super(domain, coDomain);
 			this.shift = shift;
 		}
@@ -209,17 +205,12 @@ public class ZModPrimeToECPolynomialField
 
 	}
 
-	static class ECF2mDecodingFunction
-		   extends
-		   AbstractFunction<ECF2mDecodingFunction, ECPolynomialField, ECPolynomialElement, ZModPrime, ZModElement> {
+	private static class DecodingFunction
+		   extends AbstractFunction<DecodingFunction, ECPolynomialField, ECPolynomialElement, ZModPrime, ZModElement> {
 
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
 		private int shift;
 
-		public ECF2mDecodingFunction(ECPolynomialField domain, ZModPrime coDomain, int shift) {
+		public DecodingFunction(ECPolynomialField domain, ZModPrime coDomain, int shift) {
 			super(domain, coDomain);
 			this.shift = shift;
 		}
@@ -261,17 +252,11 @@ public class ZModPrimeToECPolynomialField
 
 	}
 
-	/**
-	 * Compares the two polynomial elements and return the element with the most significant coefficient not in common.
-	 * <p>
-	 * @param y1
-	 * @param y2
-	 * @return
-	 */
-	public static PolynomialElement getBiggerY(PolynomialElement y1, PolynomialElement y2) {
-		int deg = y1.add(y2).getValue().getDegree();
-		BigInteger y1Coeff = y1.getValue().getCoefficient(deg).convertToBigInteger();
-		BigInteger y2Coeff = y2.getValue().getCoefficient(deg).convertToBigInteger();
+	// Compares the two polynomial elements and return the element with the most significant coefficient not in common.
+	private static PolynomialElement getBiggerY(PolynomialElement y1, PolynomialElement y2) {
+		int degree = y1.add(y2).getValue().getDegree();
+		BigInteger y1Coeff = y1.getValue().getCoefficient(degree).convertToBigInteger();
+		BigInteger y2Coeff = y2.getValue().getCoefficient(degree).convertToBigInteger();
 
 		if (y1Coeff.compareTo(y2Coeff) > 0) {
 			return y1;
@@ -279,14 +264,8 @@ public class ZModPrimeToECPolynomialField
 		return y2;
 	}
 
-	/**
-	 * Compares y1 and y2 and returns if y1 is bigger then y2 -> getBiggerY
-	 * <p>
-	 * @param y1
-	 * @param y2
-	 * @return
-	 */
-	public static boolean isBigger(PolynomialElement y1, PolynomialElement y2) {
+	// Compares y1 and y2 and returns if y1 is bigger then y2 -> getBiggerY
+	private static boolean isBigger(PolynomialElement y1, PolynomialElement y2) {
 		return y1.isEquivalent(getBiggerY(y1, y2));
 	}
 

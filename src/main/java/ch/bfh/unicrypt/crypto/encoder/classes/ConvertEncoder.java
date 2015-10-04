@@ -74,21 +74,6 @@ public class ConvertEncoder
 		this.coDomainConverter = coDomainConverter;
 	}
 
-	@Override
-	protected Function abstractGetEncodingFunction() {
-		return ConvertFunction.getInstance(this.domain, this.coDomain, this.domainConverter, this.coDomainConverter);
-	}
-
-	@Override
-	protected Function abstractGetDecodingFunction() {
-		return ConvertFunction.getInstance(this.coDomain, this.domain, this.coDomainConverter, this.domainConverter);
-	}
-
-	@Override
-	protected String defaultToStringContent() {
-		return this.domain.toString() + "," + this.coDomain.toString() + "," + this.domainConverter.toString() + "," + this.coDomainConverter.toString();
-	}
-
 	public static ConvertEncoder getInstance(Set domain, Set coDomain, Mode mode) {
 		if (domain == null || coDomain == null || mode == null) {
 			throw new IllegalArgumentException();
@@ -132,6 +117,21 @@ public class ConvertEncoder
 			throw new IllegalArgumentException();
 		}
 		return new ConvertEncoder(domain, coDomain, domainConverter, coDomainConverter);
+	}
+
+	@Override
+	protected Function abstractGetEncodingFunction() {
+		return ConvertFunction.getInstance(this.domain, this.coDomain, this.domainConverter, this.coDomainConverter);
+	}
+
+	@Override
+	protected Function abstractGetDecodingFunction() {
+		return ConvertFunction.getInstance(this.coDomain, this.domain, this.coDomainConverter, this.domainConverter);
+	}
+
+	@Override
+	protected String defaultToStringContent() {
+		return this.domain.toString() + "," + this.coDomain.toString() + "," + this.domainConverter.toString() + "," + this.coDomainConverter.toString();
 	}
 
 }

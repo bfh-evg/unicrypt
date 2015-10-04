@@ -63,10 +63,8 @@ import java.math.BigInteger;
 public class ZModToBinaryPolynomialField
 	   extends AbstractEncoder<ZMod, ZModElement, PolynomialField, PolynomialElement> {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -4567955434932946745L;
+
 	private final ZMod zMod;
 	private final PolynomialField binaryPolynomialField;
 	private final BitArrayToBigInteger bitToBigIntConverter;
@@ -94,13 +92,8 @@ public class ZModToBinaryPolynomialField
 		return new ZModToBinaryPolynomialField(zMod, binaryPolynomialField);
 	}
 
-	class EncodingFunction
+	private class EncodingFunction
 		   extends AbstractFunction<EncodingFunction, ZMod, ZModElement, PolynomialField, PolynomialElement> {
-
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = -4841419729018910939L;
 
 		protected EncodingFunction(final ZMod domain, final PolynomialField coDomain) {
 			super(domain, coDomain);
@@ -116,11 +109,6 @@ public class ZModToBinaryPolynomialField
 
 	class DecodingFunction
 		   extends AbstractFunction<DecodingFunction, PolynomialField, PolynomialElement, ZMod, ZModElement> {
-
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 8382498527678953467L;
 
 		protected DecodingFunction(final PolynomialField domain, final ZMod coDomain) {
 			super(domain, coDomain);

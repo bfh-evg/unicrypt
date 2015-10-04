@@ -77,16 +77,7 @@ public class ZModPrimeToECZModPrime
 		this.shift = shift;
 	}
 
-	@Override
-	protected Function abstractGetEncodingFunction() {
-		return new ECEncodingFunction(this.zModPrime, this.ec, this.shift);
-	}
-
-	@Override
-	protected Function abstractGetDecodingFunction() {
-		return new ECDecodingFunction(this.ec, this.zModPrime, this.shift);
-	}
-
+	// shift testen
 	public static ZModPrimeToECZModPrime getInstance(final ECZModPrime ec, int shift) {
 		if (ec == null) {
 			throw new IllegalArgumentException();
@@ -94,16 +85,22 @@ public class ZModPrimeToECZModPrime
 		return new ZModPrimeToECZModPrime(ec, shift);
 	}
 
-	static class ECEncodingFunction
-		   extends AbstractFunction<ECEncodingFunction, ZModPrime, ZModElement, ECZModPrime, ECZModElement> {
+	@Override
+	protected Function abstractGetEncodingFunction() {
+		return new EncodingFunction(this.zModPrime, this.ec, this.shift);
+	}
 
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
+	@Override
+	protected Function abstractGetDecodingFunction() {
+		return new DecodingFunction(this.ec, this.zModPrime, this.shift);
+	}
+
+	private static class EncodingFunction
+		   extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, ECZModPrime, ECZModElement> {
+
 		private int shift;
 
-		protected ECEncodingFunction(ZModPrime domain, ECZModPrime coDomain, int shift) {
+		protected EncodingFunction(ZModPrime domain, ECZModPrime coDomain, int shift) {
 			super(domain, coDomain);
 			this.shift = shift;
 		}
@@ -207,16 +204,12 @@ public class ZModPrimeToECZModPrime
 
 	}
 
-	static class ECDecodingFunction
-		   extends AbstractFunction<ECDecodingFunction, ECZModPrime, ECZModElement, ZMod, ZModElement> {
+	private static class DecodingFunction
+		   extends AbstractFunction<DecodingFunction, ECZModPrime, ECZModElement, ZMod, ZModElement> {
 
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
 		private int shift;
 
-		protected ECDecodingFunction(ECZModPrime domain, ZMod coDomain, int shift) {
+		protected DecodingFunction(ECZModPrime domain, ZMod coDomain, int shift) {
 			super(domain, coDomain);
 			this.shift = shift;
 		}
@@ -256,14 +249,8 @@ public class ZModPrimeToECZModPrime
 
 	}
 
-	/**
-	 * Compares the two polynomial elements and return the element with the most significant coefficient not in common.
-	 * <p>
-	 * @param y1
-	 * @param y2
-	 * @return
-	 */
-	public static ZModElement getBiggerY(ZModElement y1, ZModElement y2) {
+	// Compares the two polynomial elements and return the element with the most significant coefficient not in common.
+	private static ZModElement getBiggerY(ZModElement y1, ZModElement y2) {
 		int c = y1.getValue().compareTo(y2.getValue());
 
 		if (c == 1) {
@@ -273,14 +260,8 @@ public class ZModPrimeToECZModPrime
 		}
 	}
 
-	/**
-	 * Compares y1 and y2 and returns if y1 is bigger then y2 -> getBiggerY
-	 * <p>
-	 * @param y1
-	 * @param y2
-	 * @return
-	 */
-	public static boolean isBigger(ZModElement y1, ZModElement y2) {
+	// Compares y1 and y2 and returns if y1 is bigger then y2 -> getBiggerY
+	private static boolean isBigger(ZModElement y1, ZModElement y2) {
 		return y1.isEquivalent(getBiggerY(y1, y2));
 	}
 

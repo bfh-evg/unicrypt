@@ -207,7 +207,7 @@ public class ECZModPrime
 		ECZModPrime instance = new ECZModPrime(primeField, a, b, gx, gy, subGroupOrder, coFactor);
 		ECZModElement generator = instance.getDefaultGenerator();
 		// Test7
-		if (!generator.times(subGroupOrder).isZero()) {
+		if (!instance.defaultSelfApplyAlgorithm(generator, subGroupOrder).isZero()) {
 			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, generator, subGroupOrder);
 		}
 		return instance;

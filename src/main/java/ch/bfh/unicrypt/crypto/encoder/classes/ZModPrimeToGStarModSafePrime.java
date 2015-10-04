@@ -62,6 +62,13 @@ public class ZModPrimeToGStarModSafePrime
 		this.gStarModSafePrime = gStarModSafePrime;
 	}
 
+	public static ZModPrimeToGStarModSafePrime getInstance(GStarModSafePrime gStarModSafePrime) {
+		if (gStarModSafePrime == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ZModPrimeToGStarModSafePrime(gStarModSafePrime);
+	}
+
 	public GStarModSafePrime getGStarModSafePrime() {
 		return this.gStarModSafePrime;
 	}
@@ -76,14 +83,7 @@ public class ZModPrimeToGStarModSafePrime
 		return new DecodingFunction(this.gStarModSafePrime, this.gStarModSafePrime.getZModOrder());
 	}
 
-	public static ZModPrimeToGStarModSafePrime getInstance(GStarModSafePrime gStarModSafePrime) {
-		if (gStarModSafePrime == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ZModPrimeToGStarModSafePrime(gStarModSafePrime);
-	}
-
-	static class EncodingFunction
+	private static class EncodingFunction
 		   extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, GStarModSafePrime, GStarModElement> {
 
 		protected EncodingFunction(final ZModPrime domain, final GStarMod coDomain) {
@@ -102,7 +102,7 @@ public class ZModPrimeToGStarModSafePrime
 
 	}
 
-	static class DecodingFunction
+	private static class DecodingFunction
 		   extends AbstractFunction<DecodingFunction, GStarModSafePrime, GStarModElement, ZModPrime, ZModElement> {
 
 		protected DecodingFunction(final GStarMod domain, final ZModPrime coDomain) {

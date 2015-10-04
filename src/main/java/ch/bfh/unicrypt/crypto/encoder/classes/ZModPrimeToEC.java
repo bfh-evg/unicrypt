@@ -84,6 +84,14 @@ public class ZModPrimeToEC
 		}
 	}
 
+	// shift testen!
+	public static ZModPrimeToEC getInstance(ZModPrime zModPrime, EC ec, int shift) {
+		if (zModPrime == null || ec == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ZModPrimeToEC(zModPrime, ec, shift);
+	}
+
 	@Override
 	protected Function abstractGetEncodingFunction() {
 		return new EncodingFunction(this.zModPrime, this.ec, this.shift, encoder);
@@ -94,11 +102,7 @@ public class ZModPrimeToEC
 		return new DecodingFunction(ec, zModPrime, this.shift, encoder);
 	}
 
-	public static ZModPrimeToEC getInstance(ZModPrime zModPrime, EC ec, int shift) {
-		return new ZModPrimeToEC(zModPrime, ec, shift);
-	}
-
-	static class EncodingFunction
+	private static class EncodingFunction
 		   extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, EC, ECElement> {
 
 		private int shift;
@@ -212,7 +216,7 @@ public class ZModPrimeToEC
 
 	}
 
-	static class DecodingFunction
+	private static class DecodingFunction
 		   extends AbstractFunction<DecodingFunction, EC, ECElement, ZModPrime, ZModElement> {
 
 		private int shift;
@@ -259,11 +263,11 @@ public class ZModPrimeToEC
 
 	}
 
-	public static DualisticElement getBiggerY(DualisticElement y1, DualisticElement y2) {
+	private static DualisticElement getBiggerY(DualisticElement y1, DualisticElement y2) {
 		return y1;
 	}
 
-	public static boolean isBigger(DualisticElement y1, DualisticElement y2) {
+	private static boolean isBigger(DualisticElement y1, DualisticElement y2) {
 		return y1.isEquivalent(getBiggerY(y1, y2));
 	}
 
