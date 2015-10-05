@@ -55,8 +55,22 @@ import java.math.BigInteger;
 public class ECZModPrimeParameters
 	   extends ECParameters<ZModPrime, ZModElement> {
 
+	// ECZModElement[(0,5)]
+	// ECZModElement[(5,4)]
+	// ECZModElement[(10,8)]
+	// ECZModElement[(10,3)]
+	// ECZModElement[(5,7)]
+	// ECZModElement[(0,6)]
+	// ECZModElement[Infinity]
 	public static final ECZModPrimeParameters TEST11 = new ECZModPrimeParameters(2, 11, 4, 3, 0, 5, 7, 2);
 
+	// ECZModElement[(5,4)]
+	// ECZModElement[(17,20)]
+	// ECZModElement[(13,16)]
+	// ECZModElement[(13,7)]
+	// ECZModElement[(17,3)]
+	// ECZModElement[(5,19)]
+	// ECZModElement[Infinity]
 	public static final ECZModPrimeParameters TEST23 = new ECZModPrimeParameters(2, 23, 1, 1, 5, 4, 7, 4);
 
 	public static final ECZModPrimeParameters TEST29 = new ECZModPrimeParameters(2, 29, 4, 20, 13, 6, 37, 1);

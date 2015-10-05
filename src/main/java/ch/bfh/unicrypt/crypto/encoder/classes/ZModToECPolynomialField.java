@@ -47,69 +47,66 @@ import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModElement;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.math.BigInteger;
 
-/**
- *
- * @author Christian Lutz
- * <p>
- */
-public class ZModPrimeToECZModPrime
-	   extends AbstractEncoder<ZModPrime, ZModElement, ECZModPrime, ECZModElement>
+public class ZModToECPolynomialField
+	   extends AbstractEncoder<ZModPrime, ZModElement, ECPolynomialField, ECPolynomialElement>
 	   implements ProbabilisticEncoder {
 
 	private static final long serialVersionUID = 1L;
 
-	private final ECZModPrime ec;
-	private final ZModPrime zModPrime;
-	protected final int shift;
+	private final ZModPrime zMod;
+	private final ECPolynomialField ec;
+	private final int shift;
 
-	protected ZModPrimeToECZModPrime(ECZModPrime ec, int shift) {
+	private ZModToECPolynomialField(ZModPrime zMod, ECPolynomialField ec, int shift) {
+		this.zMod = zMod;
 		this.ec = ec;
-		this.zModPrime = ec.getFiniteField();
 		this.shift = shift;
 	}
 
-	// shift testen
-	public static ZModPrimeToECZModPrime getInstance(final ECZModPrime ec, int shift) {
-		if (ec == null) {
+	// shift testen!
+	public static ZModToECPolynomialField getInstance(final ZModPrime zMod, final ECPolynomialField ec, int shift) {
+		if (ec == null || zMod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ZModPrimeToECZModPrime(ec, shift);
+		return new ZModToECPolynomialField(zMod, ec, shift);
 	}
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return new EncodingFunction(this.zModPrime, this.ec, this.shift);
+		return new EncodingFunction(this.zMod, this.ec, shift);
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return new DecodingFunction(this.ec, this.zModPrime, this.shift);
+		return new DecodingFunction(this.getCoDomain(), this.getDomain(), shift);
 	}
 
 	private static class EncodingFunction
-		   extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, ECZModPrime, ECZModElement> {
+		   extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, ECPolynomialField, ECPolynomialElement> {
 
+		private static final long serialVersionUID = 1L;
 		private int shift;
 
-		protected EncodingFunction(ZModPrime domain, ECZModPrime coDomain, int shift) {
+		protected EncodingFunction(ZModPrime domain, ECPolynomialField coDomain, int shift) {
 			super(domain, coDomain);
 			this.shift = shift;
 		}
 
 		@Override
-		protected ECZModElement abstractApply(ZModElement element, RandomByteSequence randomByteSequence) {
+		protected ECPolynomialElement abstractApply(ZModElement element, RandomByteSequence randomByteSequence) {
 			boolean firstOption = true;
-			ZModPrime zModPrime = this.getCoDomain().getFiniteField();
-			ECZModPrime ecPrime = this.getCoDomain();
+
+			ZModPrime zModPrime = this.getDomain();
+			ECPolynomialField ecPolynimial = this.getCoDomain();
 
 			int msgSpace = zModPrime.getOrder().toString(2).length();
 			int msgBitLength = element.getValue().toString(2).length() + 2;
@@ -133,98 +130,105 @@ public class ZModPrimeToECZModPrime
 			e = e.shiftLeft(this.shift + 2);
 			e = e.add(c);
 
-			if (!zModPrime.contains(e)) {
-				throw new UniCryptRuntimeException(ErrorCode.PROBABILISTIC_ENCODING_FAILURE, element, e);
-			}
+			ZModElement zModElement = this.getDomain().getElement(e);
 
-			ZModElement x = zModPrime.getElement(e);
+			ZModToBinaryPolynomialField enc
+				   = ZModToBinaryPolynomialField.getInstance(zModPrime, ecPolynimial.getFiniteField());
+			PolynomialElement x = enc.encode(zModElement);
 			ZModElement stepp = zModPrime.getElement(4);
 
 			int count = 0;
-			while (!ecPrime.contains(x)) {
+			while (!ecPolynimial.contains(x)) {
 				if (count >= (1 << this.shift)) {
 					firstOption = false;
 				}
-				x = x.add(stepp);
+
+				zModElement = zModElement.add(stepp);
+
+				x = enc.encode(zModElement);
 				count++;
+
 			}
 
 			if (firstOption) {
-				ECZModElement e1 = ecPrime.getElement(x);
-				ECZModElement e2 = e1.invert();
+				ECPolynomialElement e1 = ecPolynimial.getElement(x);
+				ECPolynomialElement e2 = e1.invert();
 				if (isBigger(e1.getY(), e2.getY())) {
 					return e1;
 				}
 				return e2;
-			}
-
-			element = element.invert();
-			msgBitLength = element.getValue().toString(2).length();
-
-			if (msgSpace / 3 > msgBitLength) {
-				c = MathUtil.ZERO;
-				this.shift = msgSpace / 3 * 2;
-			} else if (msgSpace / 2 > msgBitLength) {
-				c = MathUtil.ONE;
-				this.shift = msgSpace / 2;
-			} else if (msgSpace / 3 * 2 > msgBitLength) {
-				c = new BigInteger("2");
-				this.shift = msgSpace / 3;
 			} else {
-				c = new BigInteger("3");
-			}
 
-			e = element.getValue();
-			e = e.shiftLeft(this.shift + 2);
-			e = e.add(c);
+				zModElement = element.invert();
+				msgBitLength = zModElement.getValue().toString(2).length();
 
-			if (!zModPrime.contains(e)) {
-				throw new UniCryptRuntimeException(ErrorCode.PROBABILISTIC_ENCODING_FAILURE, element, e);
-			}
-
-			x = zModPrime.getElement(e);
-
-			count = 0;
-			while (!ecPrime.contains(x)) {
-				if (count >= (1 << this.shift)) {
-					throw new UniCryptRuntimeException(ErrorCode.PROBABILISTIC_ENCODING_FAILURE, element, e, x);
+				if (msgSpace / 3 > msgBitLength) {
+					c = MathUtil.ZERO;
+					this.shift = msgSpace / 3 * 2;
+				} else if (msgSpace / 2 > msgBitLength) {
+					c = MathUtil.ONE;
+					this.shift = msgSpace / 2;
+				} else if (msgSpace / 3 * 2 > msgBitLength) {
+					c = new BigInteger("2");
+					this.shift = msgSpace / 3;
+				} else {
+					c = new BigInteger("3");
 				}
-				x = x.add(stepp);
-				count++;
-			}
 
-			ECZModElement e1 = ecPrime.getElement(x);
-			ECZModElement e2 = e1.invert();
-			if (isBigger(e1.getY(), e2.getY())) {
-				return e2;
+				e = zModElement.getValue();
+				e = e.shiftLeft(this.shift + 2);
+				e = e.add(c);
+
+				x = enc.encode(zModElement);
+
+				count = 0;
+				while (!ecPolynimial.contains(x)) {
+					if (count >= (1 << this.shift)) {
+						throw new UniCryptRuntimeException(ErrorCode.PROBABILISTIC_ENCODING_FAILURE, element, e);
+					}
+
+					zModElement = zModElement.add(stepp);
+					x = enc.encode(zModElement);
+					count++;
+
+				}
+
+				ECPolynomialElement e1 = ecPolynimial.getElement(x);
+				ECPolynomialElement e2 = e1.invert();
+				if (isBigger(e1.getY(), e2.getY())) {
+					return e2;
+				}
+				return e1;
 			}
-			return e1;
 
 		}
 
 	}
 
 	private static class DecodingFunction
-		   extends AbstractFunction<DecodingFunction, ECZModPrime, ECZModElement, ZMod, ZModElement> {
+		   extends AbstractFunction<DecodingFunction, ECPolynomialField, ECPolynomialElement, ZModPrime, ZModElement> {
 
 		private int shift;
 
-		protected DecodingFunction(ECZModPrime domain, ZMod coDomain, int shift) {
+		public DecodingFunction(ECPolynomialField domain, ZModPrime coDomain, int shift) {
 			super(domain, coDomain);
 			this.shift = shift;
 		}
 
 		@Override
-		protected ZModElement abstractApply(ECZModElement element, RandomByteSequence randomByteSequence) {
-			ECZModPrime ecPrime = this.getDomain();
-			ZModPrime zModPrime = this.getDomain().getFiniteField();
+		protected ZModElement abstractApply(ECPolynomialElement element, RandomByteSequence randomByteSequence) {
+
+			ZModPrime zModPrime = this.getCoDomain();
+			ECPolynomialField ec = this.getDomain();
 			int msgSpace = zModPrime.getOrder().toString(2).length();
+			ZModToBinaryPolynomialField enc
+				   = ZModToBinaryPolynomialField.getInstance(zModPrime, ec.getFiniteField());
 
-			ZModElement x = element.getX();
-			ZModElement y = element.getY();
-			ZModElement y1 = element.invert().getY();
+			PolynomialElement x = element.getX();
+			PolynomialElement y = element.getY();
+			PolynomialElement y1 = element.invert().getY();
 
-			BigInteger x1 = x.convertToBigInteger();
+			BigInteger x1 = enc.decode(x).convertToBigInteger();
 
 			BigInteger c = x1.subtract(x1.shiftRight(2).shiftLeft(2));
 
@@ -238,9 +242,8 @@ public class ZModPrimeToECZModPrime
 
 			x1 = x1.shiftRight(this.shift + 2);
 
-			if (y.isEquivalent(getBiggerY(y1, y))) {
+			if (y.isEquivalent(getBiggerY(y, y1))) {
 				return zModPrime.getElement(x1);
-
 			} else {
 				return zModPrime.getElement(x1).invert();
 			}
@@ -250,18 +253,19 @@ public class ZModPrimeToECZModPrime
 	}
 
 	// Compares the two polynomial elements and return the element with the most significant coefficient not in common.
-	private static ZModElement getBiggerY(ZModElement y1, ZModElement y2) {
-		int c = y1.getValue().compareTo(y2.getValue());
+	private static PolynomialElement getBiggerY(PolynomialElement y1, PolynomialElement y2) {
+		int degree = y1.add(y2).getValue().getDegree();
+		BigInteger y1Coeff = y1.getValue().getCoefficient(degree).convertToBigInteger();
+		BigInteger y2Coeff = y2.getValue().getCoefficient(degree).convertToBigInteger();
 
-		if (c == 1) {
+		if (y1Coeff.compareTo(y2Coeff) > 0) {
 			return y1;
-		} else {
-			return y2;
 		}
+		return y2;
 	}
 
 	// Compares y1 and y2 and returns if y1 is bigger then y2 -> getBiggerY
-	private static boolean isBigger(ZModElement y1, ZModElement y2) {
+	private static boolean isBigger(PolynomialElement y1, PolynomialElement y2) {
 		return y1.isEquivalent(getBiggerY(y1, y2));
 	}
 

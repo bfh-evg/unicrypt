@@ -205,7 +205,7 @@ public class ZMod
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
 		}
-		if (modulus.compareTo(MathUtil.TWO) < 0) {
+		if (modulus.compareTo(MathUtil.ONE) < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.SET_CONSTRUCTION_FAILURE, modulus);
 		}
 		ZMod instance = ZMod.instances.get(modulus);

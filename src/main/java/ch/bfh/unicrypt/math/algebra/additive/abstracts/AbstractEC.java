@@ -142,7 +142,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 		if (!this.contains(x)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, x);
 		}
-		return this.getElement(Point.getInstance(x, this.abstractGetY(x)));
+		return this.abstractGetElement(Point.getInstance(x, this.abstractGetY(x)));
 	}
 
 	@Override
@@ -309,7 +309,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	protected String defaultToStringContent() {
-		return this.a.getValue() + "," + this.b.getValue();
+		return this.finiteField.toString() + "," + this.a.getValue() + "," + this.b.getValue();
 	}
 
 	protected abstract boolean abstractContains(DE x);

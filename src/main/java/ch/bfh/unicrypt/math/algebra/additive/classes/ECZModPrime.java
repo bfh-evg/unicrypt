@@ -74,7 +74,10 @@ public class ECZModPrime
 			return false;
 		}
 		if (this.getCoFactor().intValue() > 1) {
-			//TODO: test for subgroup membership missing
+			ECZModElement element = this.abstractGetElement(Point.getInstance(x, this.abstractGetY(x)));
+			if (!this.defaultSelfApplyAlgorithm(element, this.getOrder()).isZero()) {
+				return false;
+			}
 		}
 		return true;
 	}
