@@ -124,7 +124,7 @@ public interface EC<V, DE extends DualisticElement<V>>
 
 	/**
 	 * Returns one of the two points on the elliptic curve that corresponds to the given x-coordinate. Which of the two
-	 * points is selected is unspecified.
+	 * points is selected is unspecified. Throws an exception if no such point exists.
 	 * <p>
 	 * @param x The given x-coordinate
 	 * @return One of the two points that corresponds to the given x-coordinate
@@ -132,7 +132,8 @@ public interface EC<V, DE extends DualisticElement<V>>
 	public ECElement<V, DE> getElement(DE x);
 
 	/**
-	 * Returns the point on the elliptic curve that corresponds to the given x- and y-coordinates.
+	 * Returns the point on the elliptic curve that corresponds to the given x- and y-coordinates. Throws an exception
+	 * if no such point exists.
 	 * <p>
 	 * @param x The given x-coordinate
 	 * @param y The given y-coordinate

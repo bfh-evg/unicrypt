@@ -76,13 +76,13 @@ public class ECPolynomialField
 	// see Gadiel Seroussi, "Compact Representation of Elliptic Curve Points over F_2^n", 1998, p.3
 	// see Brian King, "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)", 2009, p.172
 	protected boolean abstractContains(PolynomialElement x) {
-		// false if trace(x+a+b/x²)≠0
-		if (!this.trace(x.add(this.getA()).add(this.getB().divide(x.square()))).equals(MathUtil.ZERO)) {
+		// if x=0 then -(0,y)=(0,y) is possibly a point on the curve, but not on a prime order subgroup
+		if (x.isZero()) {
 			return false;
 		}
 		if (this.getCoFactor().intValue() == 2) {
-			// false if trace(x)≠trace(a)
-			if (!this.trace(x).equals(this.traceA)) {
+			// false if trace(x)≠trace(a) or trace(b/x²)≠0
+			if (!this.trace(x).equals(this.traceA) || !trace(this.getB().divide(x.square())).equals(MathUtil.ZERO)) {
 				return false;
 			}
 		}
@@ -94,6 +94,10 @@ public class ECPolynomialField
 
 	@Override
 	protected boolean abstractContains(PolynomialElement x, PolynomialElement y) {
+		// if x=0 then -(0,y)=(0,y) is possibly a point on the curve, but not on a prime order subgroup
+		if (x.isZero()) {
+			return false;
+		}
 		// y²+xy=x³+ax²+b <=> x³+ax²+b-(y²+xy)=0
 		if (!x.power(3).add(this.getA().multiply(x.power(2))).add(this.getB()).subtract(y.power(2).add(x.multiply(y))).isZero()) {
 			return false;
@@ -217,18 +221,16 @@ public class ECPolynomialField
 		if (!MathUtil.isPrime(subGroupOrder)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
 		}
-		// Test7a
 		if (!isTest) {
+			// Test7a
 			if (coFactor.compareTo(MathUtil.powerOfTwo(securityLevel / 8)) > 0) {
 				throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
 			}
-		}
-		// Test7b
-		if (!MathUtil.sqrt(fieldOrder.multiply(MathUtil.FOUR)).add(fieldOrder).add(MathUtil.ONE).divide(subGroupOrder).equals(coFactor)) {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, fieldOrder, subGroupOrder, coFactor);
-		}
-		// Test9a
-		if (!isTest) {
+			// Test7b
+			if (!MathUtil.sqrt(fieldOrder.multiply(MathUtil.FOUR)).add(fieldOrder).add(MathUtil.ONE).divide(subGroupOrder).equals(coFactor)) {
+				throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, fieldOrder, subGroupOrder, coFactor);
+			}
+			// Test9a
 			for (BigInteger i : BigIntegerSequence.getInstance(1, 100 * degree - 1)) {
 				if (MathUtil.TWO.modPow(i, subGroupOrder).equals(MathUtil.ONE)) {
 					throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, i, subGroupOrder);
@@ -243,7 +245,7 @@ public class ECPolynomialField
 		ECPolynomialElement generator = instance.getDefaultGenerator();
 		// Test8
 		if (!instance.defaultSelfApplyAlgorithm(generator, subGroupOrder).isZero()) {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, generator, subGroupOrder);
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, generator, subGroupOrder, instance.defaultSelfApplyAlgorithm(generator, subGroupOrder));
 		}
 		return instance;
 	}

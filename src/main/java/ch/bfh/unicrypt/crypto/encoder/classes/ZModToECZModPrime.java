@@ -67,6 +67,7 @@ public class ZModToECZModPrime
 	   implements ProbabilisticEncoder {
 
 	private static final long serialVersionUID = 1L;
+
 	private static final int DEFAULT_TRIALS = 64;
 
 	private final ECZModPrime ec;
@@ -76,14 +77,14 @@ public class ZModToECZModPrime
 	protected ZModToECZModPrime(ECZModPrime ec, int trials) {
 		this.ec = ec;
 		this.trials = trials;
-		this.domain = ZMod.getInstance(ec.getFiniteField().getModulus().divide(BigInteger.valueOf(trials)));
+		this.domain = ZMod.getInstance(ec.getFiniteField().getOrder().divide(BigInteger.valueOf(trials)));
 	}
 
-	public static ZModToECZModPrime getInstance(final ECZModPrime ec) {
+	public static ZModToECZModPrime getInstance(ECZModPrime ec) {
 		return ZModToECZModPrime.getInstance(ec, DEFAULT_TRIALS);
 	}
 
-	public static ZModToECZModPrime getInstance(final ECZModPrime ec, int trials) {
+	public static ZModToECZModPrime getInstance(ECZModPrime ec, int trials) {
 		if (ec == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, ec);
 		}
@@ -91,7 +92,7 @@ public class ZModToECZModPrime
 			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, trials);
 		}
 		// compute min to be compatible with small test curves
-		trials = BigInteger.valueOf(trials).min(ec.getFiniteField().getModulus()).intValue();
+		trials = BigInteger.valueOf(trials).min(ec.getFiniteField().getOrder()).intValue();
 		return new ZModToECZModPrime(ec, trials);
 	}
 
@@ -102,7 +103,7 @@ public class ZModToECZModPrime
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return new DecodingFunction(this.ec, this.ec.getFiniteField());
+		return new DecodingFunction(this.ec, this.domain);
 	}
 
 	private class EncodingFunction

@@ -61,7 +61,7 @@ import java.util.ArrayList;
 public class ECPolynomialFieldParameters
 	   extends ECParameters<PolynomialField, PolynomialElement> {
 
-	public static final ECPolynomialFieldParameters TEST11 = new ECPolynomialFieldParameters(2, "37", "1", "1", "18", "15", "11", "2");
+	public static final ECPolynomialFieldParameters TEST11 = new ECPolynomialFieldParameters(2, "37", "1", "1", "18", "15", 11, 2);
 
 	// only for testing
 	public static final ECPolynomialFieldParameters SECT113r1 = new ECPolynomialFieldParameters(
@@ -72,7 +72,7 @@ public class ECPolynomialFieldParameters
 		   "009D73616F35F4AB1407D73562C10F",
 		   "00A52830277958EE84D1315ED31886",
 		   "0100000000000000D9CCEC8A39E56F",
-		   "2");
+		   2);
 
 	public static final ECPolynomialFieldParameters SECT163k1 = new ECPolynomialFieldParameters(
 		   80,
@@ -82,7 +82,7 @@ public class ECPolynomialFieldParameters
 		   "02FE13C0537BBC11ACAA07D793DE4E6D5E5C94EEE8",
 		   "0289070FB05D38FF58321F2E800536D538CCDAA3D9",
 		   "04000000000000000000020108A2E0CC0D99F8A5EF",
-		   "2");
+		   2);
 
 	public static final ECPolynomialFieldParameters SECT163r1 = new ECPolynomialFieldParameters(
 		   80,
@@ -92,7 +92,7 @@ public class ECPolynomialFieldParameters
 		   "0369979697AB43897789566789567F787A7876A654",
 		   "00435EDB42EFAFB2989D51FEFCE3C80988F41FF883",
 		   "03FFFFFFFFFFFFFFFFFFFF48AAB689C29CA710279B",
-		   "2");
+		   2);
 
 	public static final ECPolynomialFieldParameters SECT163r2 = new ECPolynomialFieldParameters(
 		   80,
@@ -102,7 +102,7 @@ public class ECPolynomialFieldParameters
 		   "03F0EBA16286A2D57EA0991168D4994637E8343E36",
 		   "00D51FBC6C71A0094FA2CDD545B11C5C0C797324F1",
 		   "040000000000000000000292FE77E70C12A4234C33",
-		   "2");
+		   2);
 
 	public static final ECPolynomialFieldParameters SECT193r1 = new ECPolynomialFieldParameters(
 		   96,
@@ -112,7 +112,7 @@ public class ECPolynomialFieldParameters
 		   "01F481BC5F0FF84A74AD6CDF6FDEF4BF6179625372D8C0C5E1",
 		   "0025E399F2903712CCF3EA9E3A1AD17FB0B3201B6AF7CE1B05",
 		   "01000000000000000000000000C7F34A778F443ACC920EBA49",
-		   "2");
+		   2);
 
 	public static final ECPolynomialFieldParameters SECT193r2 = new ECPolynomialFieldParameters(
 		   96,
@@ -122,7 +122,7 @@ public class ECPolynomialFieldParameters
 		   "00D9B67D192E0367C803F39E1A7E82CA14A651350AAE617E8F",
 		   "01CE94335607C304AC29E7DEFBD9CA01F596F927224CDECF6C",
 		   "010000000000000000000000015AAB561B005413CCD4EE99D5",
-		   "2");
+		   2);
 
 	public static final ECPolynomialFieldParameters SECT233k1 = new ECPolynomialFieldParameters(
 		   112,
@@ -132,7 +132,7 @@ public class ECPolynomialFieldParameters
 		   "017232BA853A7E731AF129F22FF4149563A419C26BF50A4C9D6EEFAD6126",
 		   "01DB537DECE819B7F70F555A67C427A8CD9BF18AEB9B56E0C11056FAE6A3",
 		   "8000000000000000000000000000069D5BB915BCD46EFB1AD5F173ABDF",
-		   "4");
+		   4);
 
 	public static final ECPolynomialFieldParameters SECT233r1 = new ECPolynomialFieldParameters(
 		   112,
@@ -142,7 +142,7 @@ public class ECPolynomialFieldParameters
 		   "00FAC9DFCBAC8313BB2139F1BB755FEF65BC391F8B36F8F8EB7371FD558B",
 		   "01006A08A41903350678E58528BEBF8A0BEFF867A7CA36716F7E01F81052",
 		   "01000000000000000000000000000013E974E72F8A6922031D2603CFE0D7",
-		   "2");
+		   2);
 
 	public static final ECPolynomialFieldParameters SECT239k1 = new ECPolynomialFieldParameters(
 		   115,
@@ -152,7 +152,7 @@ public class ECPolynomialFieldParameters
 		   "29A0B6A887A983E9730988A68727A8B2D126C44CC2CC7B2A6555193035DC",
 		   "76310804F12E549BDB011C103089E73510ACB275FC312A5DC6B76553F0CA",
 		   "2000000000000000000000000000005A79FEC67CB6E91F1C1DA800E478A5",
-		   "4");
+		   4);
 
 	public static final ECPolynomialFieldParameters SECT283k1 = new ECPolynomialFieldParameters(
 		   128,
@@ -162,7 +162,7 @@ public class ECPolynomialFieldParameters
 		   "0503213F78CA44883F1A3B8162F188E553CD265F23C1567A16876913B0C2AC2458492836",
 		   "01CCDA380F1C9E318D90F95D07E5426FE87E45C0E8184698E45962364E34116177DD2259",
 		   "01FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE9AE2ED07577265DFF7F",
-		   "4");
+		   4);
 
 	public static final ECPolynomialFieldParameters SECT283r1 = new ECPolynomialFieldParameters(
 		   128,
@@ -172,7 +172,7 @@ public class ECPolynomialFieldParameters
 		   "05F939258DB7DD90E1934F8C70B0DFEC2EED25B8557EAC9C80E2E198F8CDBECD86B12053",
 		   "03676854FE24141CB98FE6D4B20D02B4516FF702350EDDB0826779C813F0DF45BE8112F4",
 		   "03FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEF90399660FC938A90165B042A7CEFADB30",
-		   "2");
+		   2);
 
 	public static final ECPolynomialFieldParameters SECT409k1 = new ECPolynomialFieldParameters(
 		   192,
@@ -182,7 +182,7 @@ public class ECPolynomialFieldParameters
 		   "0060F05F658F49C1AD3AB1890F7184210EFD0987E307C84C27ACCFB8F9F67CC2C460189EB5AAAA62EE222EB1B35540CFE9023746",
 		   "01E369050B7C4E42ACBA1DACBF04299C3460782F918EA427E6325165E9EA10E3DA5F6C42E9C55215AA9CA27A5863EC48D8E0286B",
 		   "7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE5F83B2D4EA20400EC4557D5ED3E3E7CA5B4B5C83B8E01E5FCF",
-		   "4");
+		   4);
 
 	public static final ECPolynomialFieldParameters SECT409r1 = new ECPolynomialFieldParameters(
 		   192,
@@ -192,7 +192,7 @@ public class ECPolynomialFieldParameters
 		   "015D4860D088DDB3496B0C6064756260441CDE4AF1771D4DB01FFE5B34E59703DC255A868A1180515603AEAB60794E54BB7996A7",
 		   "0061B1CFAB6BE5F32BBFA78324ED106A7636B9C5A7BD198D0158AA4F5488D08F38514F1FDF4B4F40D2181B3681C364BA0273C706",
 		   "010000000000000000000000000000000000000000000000000001E2AAD6A612F33307BE5FA47C3C9E052F838164CD37D9A21173",
-		   "2");
+		   2);
 
 	public static final ECPolynomialFieldParameters SECT571k1 = new ECPolynomialFieldParameters(
 		   256,
@@ -202,7 +202,7 @@ public class ECPolynomialFieldParameters
 		   "026EB7A859923FBC82189631F8103FE4AC9CA2970012D5D46024804801841CA44370958493B205E647DA304DB4CEB08CBBD1BA39494776FB988B47174DCA88C7E2945283A01C8972",
 		   "0349DC807F4FBF374F4AEADE3BCA95314DD58CEC9F307A54FFC61EFC006D8A2C9D4979C0AC44AEA74FBEBBB9F772AEDCB620B01A7BA7AF1B320430C8591984F601CD4C143EF1C7A3",
 		   "020000000000000000000000000000000000000000000000000000000000000000000000131850E1F19A63E4B391A8DB917F4138B630D84BE5D639381E91DEB45CFE778F637C1001",
-		   "4");
+		   4);
 
 	public static final ECPolynomialFieldParameters SECT571r1 = new ECPolynomialFieldParameters(
 		   256,
@@ -212,13 +212,17 @@ public class ECPolynomialFieldParameters
 		   "0303001D34B856296C16C0D40D3CD7750A93D1D2955FA80AA5F40FC8DB7B2ABDBDE53950F4C0D293CDD711A35B67FB1499AE60038614F1394ABFA3B4C850D927E1E7769C8EEC2D19",
 		   "037BF27342DA639B6DCCFFFEB73D69D78C6C27A6009CBBCA1980F8533921E8A684423E43BAB08A576291AF8F461BB2A8B3531D2F0485C19B16E2F1516E23DD3C1A4827AF1B8AC15B",
 		   "03FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE661CE18FF55987308059B186823851EC7DD9CA1161DE93D5174D66E8382E9BB2FE84E47",
-		   "2");
+		   2);
 
-	private ECPolynomialFieldParameters(int securityLevel, String irreduciblePolynomial, String a, String b, String gx, String gy, String subGroupOrder, String coFactor) {
+	private ECPolynomialFieldParameters(int securityLevel, String irreduciblePolynomial, String a, String b, String gx, String gy, int subGroupOrder, int coFactor) {
+		this(securityLevel, irreduciblePolynomial, a, b, gx, gy, Integer.toHexString(subGroupOrder), coFactor);
+	}
+
+	private ECPolynomialFieldParameters(int securityLevel, String irreduciblePolynomial, String a, String b, String gx, String gy, String subGroupOrder, int coFactor) {
 		super(securityLevel,
 			  PolynomialField.getInstance(ZModTwo.getInstance(), getPolynomial(irreduciblePolynomial)),
 			  new BigInteger(subGroupOrder, 16),
-			  new BigInteger(coFactor, 16)
+			  BigInteger.valueOf(coFactor)
 		);
 		this.setCoefficient(this.finiteField.getElement(getPolynomial(a).getValue()), this.finiteField.getElement(getPolynomial(b).getValue()));
 		this.setGenerator(this.finiteField.getElement(getPolynomial(gx).getValue()), this.finiteField.getElement(getPolynomial(gy).getValue()));
@@ -255,6 +259,9 @@ public class ECPolynomialFieldParameters
 //		PolynomialField field = ec.getFiniteField();
 //		int i = 0;
 //		for (PolynomialElement e1 : field.getElements()) {
+//			if (ec.contains(e1)) {
+//				System.out.println(" " + e1);
+//			}
 //			for (PolynomialElement e2 : field.getElements()) {
 //				if (ec.contains(e1, e2)) {
 //					System.out.println(" " + e1 + " " + e2);
