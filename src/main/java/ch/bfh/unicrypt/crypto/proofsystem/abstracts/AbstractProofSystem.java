@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.ProofSystem;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
@@ -60,6 +61,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  * @param <PE>  The proof element.
  */
 public abstract class AbstractProofSystem<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element, PS extends Set, PE extends Element>
+	   extends UniCrypt
 	   implements ProofSystem {
 
 	@Override

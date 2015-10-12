@@ -49,6 +49,7 @@ import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.sequence.BigIntegerSequence;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.additive.parameters.ECParameters;
+import static ch.bfh.unicrypt.math.algebra.additive.parameters.ECPolynomialFieldParameters.TEST11;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -65,7 +66,7 @@ public class ECPolynomialField
 
 	private static final long serialVersionUID = 1L;
 
-	private BigInteger traceA;
+	private final BigInteger traceA;
 
 	protected ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy, BigInteger subGroupOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, subGroupOrder, coFactor);
@@ -76,7 +77,7 @@ public class ECPolynomialField
 	// see Gadiel Seroussi, "Compact Representation of Elliptic Curve Points over F_2^n", 1998, p.3
 	// see Brian King, "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)", 2009, p.172
 	protected boolean abstractContains(PolynomialElement x) {
-		// if x=0 then -(0,y)=(0,y) is possibly a point on the curve, but not on a prime order subgroup
+		// if x=0, then -(0,y)=(0,y) is possibly a point on the curve, but not in the prime order subgroup
 		if (x.isZero()) {
 			return false;
 		}
@@ -94,7 +95,7 @@ public class ECPolynomialField
 
 	@Override
 	protected boolean abstractContains(PolynomialElement x, PolynomialElement y) {
-		// if x=0 then -(0,y)=(0,y) is possibly a point on the curve, but not on a prime order subgroup
+		// if x=0, then -(0,y)=(0,y) is possibly a point on the curve, but not in the prime order subgroup
 		if (x.isZero()) {
 			return false;
 		}
@@ -153,13 +154,14 @@ public class ECPolynomialField
 
 	@Override
 	protected PolynomialElement abstractGetY(PolynomialElement x) {
-		// described in "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)" p.172
-		PolynomialElement lambda = this.getFiniteField().solveQuadradicEquation(x.add(this.getA()).add(this.getB().divide(x.square())));
-		return lambda.add(lambda.getSet().getOneElement()).multiply(x);
+		// computes one of the two y-coordinates for x≠0
+		// see B. King, "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)" p.172
+		PolynomialElement lambda = this.halfTrace(x.add(this.getA()).add(this.getB().divide(x.square())));
+		return lambda.multiply(x);
 	}
 
-	// Returns the trace of a polynomial of characteristic 2 (see Klaus Pommerening "Quadratic Equations
-	// in Finite Fields of Characteristic 2", 2000)
+	// Returns the trace of a polynomial of characteristic 2
+	// see "IEEE Standard Specifications for Public-Key Cryptography, IEEE Std 1363-2000", 2000, A.4.5, p.89
 	private BigInteger trace(PolynomialElement x) {
 		int deg = this.getFiniteField().getDegree();
 		PolynomialElement trace = x;
@@ -168,6 +170,20 @@ public class ECPolynomialField
 			trace = trace.add(x);
 		}
 		return trace.getValue().getCoefficient(0).getValue();
+	}
+
+	// Returns the half-trace of a polynomial of characteristic 2 (only if the degree is odd)
+	// The result is a solution for the quadratic equation z²+z=x
+	// see "IEEE Standard Specifications for Public-Key Cryptography, IEEE Std 1363-2000", 2000, A.4.6, A.4.7, p.90
+	// see B. King, "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)", Section 2.2, p.170
+	private PolynomialElement halfTrace(PolynomialElement x) {
+		int deg = this.getFiniteField().getDegree();
+		PolynomialElement trace = x;
+		for (int i = 1; i <= (deg - 1) / 2; i++) {
+			x = x.square().square();
+			trace = trace.add(x);
+		}
+		return trace;
 	}
 
 	/**
@@ -265,6 +281,26 @@ public class ECPolynomialField
 			   parameters.getCoFactor(),
 			   parameters.isTest()
 		);
+	}
+
+	public static void main(String[] args) {
+
+		ECPolynomialField ec = ECPolynomialField.getInstance(TEST11);
+		for (ECPolynomialElement element : ec.getElements()) {
+			System.out.println(element);
+		}
+		PolynomialField field = ec.getFiniteField();
+		for (PolynomialElement x : field.getElements()) {
+			if (ec.contains(x)) {
+				System.out.println(ec.getElement(x));
+				System.out.println(ec.getElement(x).negate());
+			}
+			for (PolynomialElement y : field.getElements()) {
+				if (ec.contains(x, y)) {
+					System.out.println(ec.getElement(x, y));
+				}
+			}
+		}
 	}
 
 }

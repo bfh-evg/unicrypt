@@ -224,69 +224,6 @@ public class PolynomialField
 		return (PolynomialElement) longDiv.getSecond();
 	}
 
-	/**
-	 * Computes a solution for the quadratic equation z²+z=b for any polynomial basis (source: American National
-	 * Standard X9.62 D.1.6)
-	 * <p>
-	 * @param b
-	 * @return PolynomialElement z which is a solution for the quadratic equation z²+z=b
-	 */
-	public PolynomialElement solveQuadradicEquation(PolynomialElement b) {
-		PolynomialElement y = this.getZeroElement();
-		PolynomialElement z = this.getZeroElement();
-		while (y.isEquivalent(this.getZeroElement())) {
-
-			PolynomialElement r = this.getRandomElement(this.getDegree() - 1);
-			z = this.getZeroElement();
-			PolynomialElement w = b;
-			int m = this.getDegree();
-
-			for (int i = 1; i < m; i++) {
-				PolynomialElement w2 = w.square();
-				z = z.square().add(w2.multiply(r));
-				w = w2.add(b);
-			}
-
-			y = z.square().add(z);
-			if (!this.isZeroElement(w)) {
-				throw new UniCryptRuntimeException(ErrorCode.NO_SOLUTION, this, b, w);
-			}
-		}
-		return z;
-	}
-
-	/**
-	 * Test if there is a solution for the quadratic equation z²+z=b for any polynomial basis. Source: AMERICAN NATIONAL
-	 * STANDARD X9.62 D.1.6
-	 * <p>
-	 * @param b
-	 * @return true/false
-	 */
-	public boolean hasQuadradicEquationSolution(PolynomialElement b) {
-		PolynomialElement y = this.getZeroElement();
-		PolynomialElement z;
-
-		while (y.equals(this.getZeroElement())) {
-
-			PolynomialElement r = this.getRandomElement(this.getDegree() - 1);
-			z = this.getZeroElement();
-			PolynomialElement w = b;
-			int m = this.getDegree();
-
-			for (int i = 1; i <= m - 1; i++) {
-				z = z.square().add(w.square().multiply((r)));
-				w = w.square().add(b);
-			}
-
-			y = z.square().add(z);
-			if (!w.equals(this.getZeroElement())) {
-				return false;
-			}
-
-		}
-		return true;
-	}
-
 	public static <V> PolynomialField getInstance(PrimeField primeField, int degree) {
 		return getInstance(primeField, degree, HybridRandomByteSequence.getInstance());
 	}

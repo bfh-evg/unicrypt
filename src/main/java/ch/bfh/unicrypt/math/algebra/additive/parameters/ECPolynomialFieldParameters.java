@@ -250,23 +250,4 @@ public class ECPolynomialFieldParameters
 		return polynomial;
 	}
 
-//	public static void main(String[] args) {
-//
-//		for (ECPolynomialElement element : ECPolynomialField.getInstance(TEST11).getElements()) {
-//			System.out.println(element);
-//		}
-//		ECPolynomialField ec = ECPolynomialField.getInstance(TEST11);
-//		PolynomialField field = ec.getFiniteField();
-//		int i = 0;
-//		for (PolynomialElement e1 : field.getElements()) {
-//			if (ec.contains(e1)) {
-//				System.out.println(" " + e1);
-//			}
-//			for (PolynomialElement e2 : field.getElements()) {
-//				if (ec.contains(e1, e2)) {
-//					System.out.println(" " + e1 + " " + e2);
-//				}
-//			}
-//		}
-//	}
 }
