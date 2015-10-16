@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,17 +41,42 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveCyclicGroup;
+
 /**
- * This interface represents the mathematical concept of a prime field. A prime field is finite field of prime order
- * {@code p}. Therefore, the order of a prime field corresponds to its characteristic.
+ * This interface represents the mathematical concept of a ring, which is cyclic with respect to addition. Every element
+ * of the ring can therefore be written as a multiple of some generator. This interface is a specialization of
+ * {@link Ring} and {@link AdditiveCyclicGroup}. No functionality is added. Some return types are updated.
  * <p>
- * The prime order interface is implemented as a specialization of {@link FiniteField} and CyclicRing<V>. No
- * functionality is added.
- * <p>
- * @param <V> The generic type of the values representing the elements of a prime field
+ * @param <V> The generic type of the values representing the elements of a cyclic ring
  * <p>
  * @author R. Haenni
  */
-public interface PrimeField<V>
-	   extends FiniteField<V>, CyclicRing<V> {
+public interface CyclicRing<V>
+	   extends Ring<V>, AdditiveCyclicGroup<V> {
+
+	@Override
+	public DualisticElement<V> getDefaultGenerator();
+
+	@Override
+	public Sequence<? extends DualisticElement<V>> getIndependentGenerators();
+
+	@Override
+	public Sequence<? extends DualisticElement<V>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
+
+	@Override
+	public DualisticElement<V> getRandomGenerator();
+
+	@Override
+	public DualisticElement<V> getRandomGenerator(RandomByteSequence randomByteSequence);
+
+	@Override
+	public Sequence<? extends DualisticElement<V>> getRandomGenerators();
+
+	@Override
+	public Sequence<? extends DualisticElement<V>> getRandomGenerators(RandomByteSequence randomByteSequence);
+
 }

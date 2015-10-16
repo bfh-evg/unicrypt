@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,32 +39,34 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
+package ch.bfh.unicrypt.math.algebra.multiplicative;
 
 import ch.bfh.unicrypt.UniCryptException;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import java.math.BigInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
-public class Test {
+public class GStarModSafePrimeTest {
 
-	public static void main(String[] args) {
-
-		GStarModSafePrime group = GStarModSafePrime.getInstance(23);
-		for (Element e : group.getElements()) {
-			System.out.println(e.convertToBigInteger());
-			System.out.println(e.convertToString());
-			try {
-				System.out.println(group.getElementFrom(e.convertToBigInteger()));
-				System.out.println(group.getElementFrom(e.convertToString()));
-				System.out.println(group.getElementFrom(new BigInteger(e.convertToString())));
-			} catch (UniCryptException ex) {
-				Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+	@Test
+	public void testConversion() {
+		for (int prime : new int[]{5, 7, 11, 23}) {
+			GStarModSafePrime group = GStarModSafePrime.getInstance(prime);
+			for (GStarModElement e : group.getElements()) {
+				assertEquals(e, group.getElement(e.getValue()));
+				try {
+					assertEquals(e, group.getElementFrom(e.convertToBigInteger()));
+					assertEquals(e, group.getElementFrom(e.convertToString()));
+					assertEquals(e, group.getElementFrom(e.convertToByteArray()));
+				} catch (UniCryptException ex) {
+					fail();
+				}
 			}
 		}
 	}

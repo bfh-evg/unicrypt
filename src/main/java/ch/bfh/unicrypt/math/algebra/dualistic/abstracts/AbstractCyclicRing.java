@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.abstracts;
+package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
@@ -49,29 +49,28 @@ import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
- * This abstract class provides a base implementation for the interface {@link CyclicGroup}.
+ * This abstract class provides a basis implementation for objects of type {@link CyclicRing}. It inherits from
+ * {@link AbstractRing}. Some methods from {@link AbstractCyclicGroup} must be re-implemented.
  * <p>
- * @param <E> The generic type of elements of this cyclic group
- * @param <V> The generic type of values stored in the elements of this cyclic group
- * @see AbstractElement
+ * @param <E> The generic type of the elements of this cyclic ring
+ * @param <V> The generic type of values stored in the elements of this cyclic ring
  * <p>
  * @author R. Haenni
- * @author R. E. Koenig
- * @version 2.0
  */
-public abstract class AbstractCyclicGroup<E extends Element<V>, V>
-	   extends AbstractGroup<E, V>
-	   implements CyclicGroup<V> {
+public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
+	   extends AbstractRing<E, V>
+	   implements CyclicRing<V> {
 
 	private static final long serialVersionUID = 1L;
 
 	private E defaultGenerator;
 
-	protected AbstractCyclicGroup(Class<?> valueClass) {
+	protected AbstractCyclicRing(Class<?> valueClass) {
 		super(valueClass);
 	}
 
@@ -141,19 +140,19 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 
 	@Override
 	protected Sequence<E> defaultGetElements() {
-		final AbstractCyclicGroup<E, V> group = this;
+		final AbstractCyclicRing<E, V> ring = this;
 		return Sequence.getInstance(this.getDefaultGenerator(), new Mapping<E, E>() {
 
 			@Override
 			public E apply(E element) {
-				return group.apply(group.getDefaultGenerator(), element);
+				return ring.apply(ring.getDefaultGenerator(), element);
 			}
 
 		}).limit(new Predicate<E>() {
 
 			@Override
 			public boolean test(E element) {
-				return group.getIdentityElement().equals(element);
+				return ring.getIdentityElement().equals(element);
 			}
 
 		});

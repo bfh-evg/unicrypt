@@ -146,6 +146,7 @@ public class ZStarMod
 
 	@Override
 	protected Converter<BigInteger, BigInteger> abstractGetBigIntegerConverter() {
+		// for reasons of convenience, we start counting at 0
 		return BigIntegerToBigInteger.getInstance(0);
 	}
 
@@ -157,7 +158,7 @@ public class ZStarMod
 
 				   @Override
 				   public boolean test(BigInteger value) {
-					   return contains(value);
+					   return abstractContains(value);
 				   }
 
 			   })
@@ -226,7 +227,7 @@ public class ZStarMod
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, modulus);
 		}
 		if (MathUtil.isPrime(modulus)) {
-			return new ZStarMod(modulus, Factorization.getInstance(new BigInteger[]{modulus}));
+			return ZStarModPrime.getInstance(modulus);
 		}
 		return new ZStarMod(modulus);
 	}

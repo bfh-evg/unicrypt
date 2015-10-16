@@ -77,14 +77,14 @@ public class GStarMod
 	private static final long serialVersionUID = 1L;
 
 	private final BigInteger modulus;
-	private final SpecialFactorization moduloFactorization;
+	private final SpecialFactorization modulusFactorization;
 	private final Factorization orderFactorization;
 	private ZStarMod superGroup;
 
-	protected GStarMod(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
+	protected GStarMod(SpecialFactorization modulusFactorization, Factorization orderFactorization) {
 		super(BigInteger.class);
-		this.modulus = moduloFactorization.getValue();
-		this.moduloFactorization = moduloFactorization;
+		this.modulus = modulusFactorization.getValue();
+		this.modulusFactorization = modulusFactorization;
 		this.orderFactorization = orderFactorization;
 	}
 
@@ -105,8 +105,8 @@ public class GStarMod
 	 * <p/>
 	 * @return The prime factorization
 	 */
-	public final SpecialFactorization getModuloFactorization() {
-		return this.moduloFactorization;
+	public final SpecialFactorization getModulusFactorization() {
+		return this.modulusFactorization;
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class GStarMod
 
 	public final ZStarMod getZStarMod() {
 		if (this.superGroup == null) {
-			this.superGroup = ZStarMod.getInstance(this.getModuloFactorization());
+			this.superGroup = ZStarMod.getInstance(this.getModulusFactorization());
 		}
 		return this.superGroup;
 	}
@@ -217,8 +217,8 @@ public class GStarMod
 		return element;
 	}
 
-	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81 (the implemented)
-	// method is a mix between 4.80 and 4.81
+	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
+	// the implemented method is a mix between 4.80 and 4.81
 	// See also http://en.wikipedia.org/wiki/Schnorr_group
 	@Override
 	protected boolean abstractIsGenerator(GStarModElement element) {
@@ -248,14 +248,14 @@ public class GStarMod
 	 * This is the general static factory method for this class.
 	 * <p>
 	 * <p/>
-	 * @param moduloFactorization
+	 * @param modulusFactorization
 	 * @param orderFactorization
 	 * @return
 	 */
-	public static GStarMod getInstance(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
-		GStarMod group = new GStarMod(moduloFactorization, orderFactorization);
+	public static GStarMod getInstance(SpecialFactorization modulusFactorization, Factorization orderFactorization) {
+		GStarMod group = new GStarMod(modulusFactorization, orderFactorization);
 		if (!group.getOrder().mod(orderFactorization.getValue()).equals(MathUtil.ZERO)) {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, moduloFactorization, orderFactorization);
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulusFactorization, orderFactorization);
 		}
 		return group;
 	}

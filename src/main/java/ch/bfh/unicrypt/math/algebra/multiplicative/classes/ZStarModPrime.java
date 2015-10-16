@@ -74,6 +74,8 @@ public class ZStarModPrime
 
 	@Override
 	public ZStarModElement getDefaultGenerator() {
+		// finding a generator requires the factorization of p-1
+		// given the factorization of p-1, finding the generator is still difficuclt
 		throw new UniCryptRuntimeException(ErrorCode.NOT_YET_IMPLEMENTED, this);
 	}
 

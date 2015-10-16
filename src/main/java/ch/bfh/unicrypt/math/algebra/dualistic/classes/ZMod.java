@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractRing;
+import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
@@ -69,7 +69,7 @@ import java.util.Map;
  * @version 2.0
  */
 public class ZMod
-	   extends AbstractRing<ZModElement, BigInteger> {
+	   extends AbstractCyclicRing<ZModElement, BigInteger> {
 
 	private static final long serialVersionUID = 1L;
 	private static final Map<BigInteger, ZMod> instances = new HashMap<>();
@@ -175,6 +175,21 @@ public class ZMod
 			}
 
 		});
+	}
+
+	@Override
+	protected ZModElement abstractGetDefaultGenerator() {
+		// mod is necessary to handle the trivial group Z_1
+		return this.abstractGetElement(MathUtil.ONE.mod(this.modulus));
+	}
+
+	@Override
+	protected boolean abstractIsGenerator(ZModElement element) {
+		// the second condition is necessary to handle the trivial group Z_1
+		if (this.modulus.equals(MathUtil.ONE) || this.modulus.equals(MathUtil.ONE)) {
+			return true;
+		}
+		return MathUtil.areRelativelyPrime(element.getValue(), this.modulus);
 	}
 
 	@Override

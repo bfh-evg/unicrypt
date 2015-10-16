@@ -49,7 +49,7 @@ import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractRing;
+import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 
@@ -66,7 +66,7 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class Z
-	   extends AbstractRing<ZElement, BigInteger> {
+	   extends AbstractCyclicRing<ZElement, BigInteger> {
 
 	private static final long serialVersionUID = 1L;
 	private static Z instance;
@@ -134,13 +134,23 @@ public class Z
 	}
 
 	@Override
+	protected Sequence<ZElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	}
+
+	@Override
 	protected Converter<BigInteger, BigInteger> abstractGetBigIntegerConverter() {
 		return BigIntegerToBigInteger.getInstance();
 	}
 
 	@Override
-	protected Sequence<ZElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	protected ZElement abstractGetDefaultGenerator() {
+		return this.abstractGetElement(MathUtil.ONE);
+	}
+
+	@Override
+	protected boolean abstractIsGenerator(final ZElement element) {
+		return element.getValue().abs().equals(MathUtil.ONE);
 	}
 
 	@Override

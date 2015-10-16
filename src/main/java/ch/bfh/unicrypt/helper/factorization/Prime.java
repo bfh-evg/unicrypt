@@ -104,6 +104,15 @@ public class Prime
 	}
 
 	/**
+	 * Checks if the prime number is a safe prime.
+	 * <p>
+	 * @return {@code true} if it is a safe prime, {@code false} otherwise
+	 */
+	public boolean isSafe() {
+		return MathUtil.isSafePrime(this.value);
+	}
+
+	/**
 	 * Returns the known prime factor of {@code p-1}, or {@code null} for {@code p=2}.
 	 * <p>
 	 * @return The prime factor

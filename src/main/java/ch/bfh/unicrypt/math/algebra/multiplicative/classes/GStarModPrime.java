@@ -60,8 +60,8 @@ public class GStarModPrime
 	private final static Map2D<Prime, Prime, GStarModPrime> instances = HashMap2D.getInstance();
 	private static final long serialVersionUID = 1L;
 
-	protected GStarModPrime(Prime modulus, Prime orderFactor) {
-		super(modulus, orderFactor);
+	protected GStarModPrime(Prime modulus, Prime order) {
+		super(modulus, order);
 	}
 
 	@Override
@@ -74,25 +74,25 @@ public class GStarModPrime
 		return ZStarModPrime.getInstance(this.getOrder());
 	}
 
-	public static GStarModPrime getInstance(final long modulus, long orderFactor) {
-		return GStarModPrime.getInstance(BigInteger.valueOf(modulus), BigInteger.valueOf(orderFactor));
+	public static GStarModPrime getInstance(final long modulus, long order) {
+		return GStarModPrime.getInstance(BigInteger.valueOf(modulus), BigInteger.valueOf(order));
 	}
 
-	public static GStarModPrime getInstance(final BigInteger modulus, BigInteger orderFactor) {
-		return GStarModPrime.getInstance(Prime.getInstance(modulus), Prime.getInstance(orderFactor));
+	public static GStarModPrime getInstance(final BigInteger modulus, BigInteger order) {
+		return GStarModPrime.getInstance(Prime.getInstance(modulus), Prime.getInstance(order));
 	}
 
-	public static GStarModPrime getInstance(Prime modulus, Prime orderFactor) {
-		if (modulus == null || orderFactor == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus, orderFactor);
+	public static GStarModPrime getInstance(Prime modulus, Prime order) {
+		if (modulus == null || order == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus, order);
 		}
-		if (!modulus.getValue().subtract(MathUtil.ONE).mod(orderFactor.getValue()).equals(MathUtil.ZERO)) {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, orderFactor);
+		if (!modulus.getValue().subtract(MathUtil.ONE).mod(order.getValue()).equals(MathUtil.ZERO)) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, order);
 		}
-		GStarModPrime instance = GStarModPrime.instances.get(modulus, orderFactor);
+		GStarModPrime instance = GStarModPrime.instances.get(modulus, order);
 		if (instance == null) {
-			instance = new GStarModPrime(modulus, orderFactor);
-			GStarModPrime.instances.put(modulus, orderFactor, instance);
+			instance = new GStarModPrime(modulus, order);
+			GStarModPrime.instances.put(modulus, order, instance);
 		}
 		return instance;
 	}

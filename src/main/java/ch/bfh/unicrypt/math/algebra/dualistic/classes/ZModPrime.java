@@ -101,10 +101,11 @@ public class ZModPrime
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
-		if (((ZModElement) element).isZero()) {
+		ZModElement zModElement = (ZModElement) element;
+		if (zModElement.isZero()) {
 			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this);
 		}
-		return this.abstractGetElement(((ZModElement) element).getValue().modInverse(this.modulus));
+		return this.abstractGetElement(zModElement.getValue().modInverse(this.modulus));
 	}
 
 	@Override
