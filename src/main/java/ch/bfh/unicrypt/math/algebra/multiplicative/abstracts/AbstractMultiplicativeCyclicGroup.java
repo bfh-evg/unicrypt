@@ -132,4 +132,24 @@ public abstract class AbstractMultiplicativeCyclicGroup<E extends Multiplicative
 		return this.applyInverse(element1, element2);
 	}
 
+	@Override
+	public final E nthRoot(Element element, long n) {
+		return this.invertSelfApply(element, n);
+	}
+
+	@Override
+	public final E nthRoot(Element element, Element<BigInteger> n) {
+		return this.invertSelfApply(element, n);
+	}
+
+	@Override
+	public final E nthRoot(Element element, BigInteger n) {
+		return this.invertSelfApply(element, n);
+	}
+
+	@Override
+	public final E squareRoot(Element element) {
+		return this.invertSelfApply(element);
+	}
+
 }

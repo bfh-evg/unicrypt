@@ -191,19 +191,8 @@ public class ProductSemiGroup
 	}
 
 	@Override
-	public final Tuple selfApply(Element element, BigInteger amount) {
-		if (amount == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
-		}
-		if (!this.contains(element)) {
-			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
-		}
-		Tuple tuple = (Tuple) element;
-		final Element[] results = new Element[this.getArity()];
-		for (int i : this.getAllIndices()) {
-			results[i] = tuple.getAt(i).selfApply(amount);
-		}
-		return this.abstractGetElement(DenseArray.getInstance(results));
+	public final Tuple selfApply(Element element, long amount) {
+		return this.selfApply(element, BigInteger.valueOf(amount));
 	}
 
 	@Override
@@ -215,8 +204,14 @@ public class ProductSemiGroup
 	}
 
 	@Override
-	public final Tuple selfApply(Element element, long amount) {
-		return this.selfApply(element, BigInteger.valueOf(amount));
+	public final Tuple selfApply(Element element, BigInteger amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		return this.defaultSelfApply((Tuple) element, amount);
 	}
 
 	@Override
@@ -253,6 +248,14 @@ public class ProductSemiGroup
 			}
 
 		});
+	}
+
+	protected Tuple defaultSelfApply(Tuple tuple, BigInteger amount) {
+		final Element[] results = new Element[this.getArity()];
+		for (int i : this.getAllIndices()) {
+			results[i] = tuple.getAt(i).selfApply(amount);
+		}
+		return this.abstractGetElement(DenseArray.getInstance(results));
 	}
 
 	protected Tuple defaultMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {

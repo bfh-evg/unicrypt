@@ -41,14 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
-import ch.bfh.unicrypt.ErrorCode;
-import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import java.math.BigInteger;
 
@@ -72,55 +68,63 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
 	}
 
 	@Override
-	public final E multiply(final Element element) {
-		return (E) this.getSet().multiply(this, element);
+	public final E multiply(final Element exponent) {
+		return this.apply(exponent);
 	}
 
 	@Override
 	public final E power(final long exponent) {
-		return (E) this.getSet().power(this, exponent);
-	}
-
-	@Override
-	public final E power(final BigInteger exponent) {
-		return (E) this.getSet().power(this, exponent);
+		return this.selfApply(exponent);
 	}
 
 	@Override
 	public final E power(final Element<BigInteger> exponent) {
-		return (E) this.getSet().power(this, exponent);
+		return this.selfApply(exponent);
+	}
+
+	@Override
+	public final E power(final BigInteger exponent) {
+		return this.selfApply(exponent);
 	}
 
 	@Override
 	public final E square() {
-		return (E) this.getSet().square(this);
+		return this.selfApply();
 	}
 
 	@Override
 	public boolean isOne() {
-		if (this.getSet().isMonoid()) {
-			MultiplicativeMonoid monoid = ((MultiplicativeMonoid) this.getSet());
-			return monoid.isOneElement(this);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		return this.isIdentity();
 	}
 
 	@Override
 	public final E oneOver() {
-		if (this.getSet().isGroup()) {
-			MultiplicativeGroup group = ((MultiplicativeGroup) this.getSet());
-			return (E) group.invert(this);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		return this.invert();
 	}
 
 	@Override
 	public final E divide(final Element element) {
-		if (this.getSet().isGroup()) {
-			MultiplicativeGroup group = ((MultiplicativeGroup) this.getSet());
-			return (E) group.divide(this, element);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		return this.applyInverse(element);
+	}
+
+	@Override
+	public final E nthRoot(long amount) {
+		return this.invertSelfApply(amount);
+	}
+
+	@Override
+	public final E nthRoot(BigInteger amount) {
+		return this.invertSelfApply(amount);
+	}
+
+	@Override
+	public final E nthRoot(Element<BigInteger> amount) {
+		return this.invertSelfApply(amount);
+	}
+
+	@Override
+	public final E squareRoot() {
+		return this.invertSelfApply();
 	}
 
 }

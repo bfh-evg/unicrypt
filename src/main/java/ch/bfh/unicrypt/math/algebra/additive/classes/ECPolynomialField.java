@@ -49,7 +49,6 @@ import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.sequence.BigIntegerSequence;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.additive.parameters.ECParameters;
-import static ch.bfh.unicrypt.math.algebra.additive.parameters.ECPolynomialFieldParameters.TEST11;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -283,24 +282,23 @@ public class ECPolynomialField
 		);
 	}
 
-	public static void main(String[] args) {
-
-		ECPolynomialField ec = ECPolynomialField.getInstance(TEST11);
-		for (ECPolynomialElement element : ec.getElements()) {
-			System.out.println(element);
-		}
-		PolynomialField field = ec.getFiniteField();
-		for (PolynomialElement x : field.getElements()) {
-			if (ec.contains(x)) {
-				System.out.println(ec.getElement(x));
-				System.out.println(ec.getElement(x).negate());
-			}
-			for (PolynomialElement y : field.getElements()) {
-				if (ec.contains(x, y)) {
-					System.out.println(ec.getElement(x, y));
-				}
-			}
-		}
-	}
-
+//	public static void main(String[] args) {
+//
+//		ECPolynomialField ec = ECPolynomialField.getInstance(TEST11);
+//		for (ECPolynomialElement element : ec.getElements()) {
+//			System.out.println(element);
+//		}
+//		PolynomialField field = ec.getFiniteField();
+//		for (PolynomialElement x : field.getElements()) {
+//			if (ec.contains(x)) {
+//				System.out.println(ec.getElement(x));
+//				System.out.println(ec.getElement(x).negate());
+//			}
+//			for (PolynomialElement y : field.getElements()) {
+//				if (ec.contains(x, y)) {
+//					System.out.println(ec.getElement(x, y));
+//				}
+//			}
+//		}
+//	}
 }

@@ -41,11 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.ErrorCode;
-import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
@@ -73,54 +69,57 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E 
 
 	@Override
 	public final E add(final Element element) {
-		return (E) this.getSet().add(this, element);
-	}
-
-	@Override
-	public final E times(final BigInteger factor) {
-		return (E) this.getSet().times(this, factor);
+		return this.apply(element);
 	}
 
 	@Override
 	public final E times(final Element<BigInteger> factor) {
-		return (E) this.getSet().times(this, factor);
+		return this.selfApply(factor);
 	}
 
 	@Override
 	public final E times(final long factor) {
-		return (E) this.getSet().times(this, factor);
+		return this.selfApply(factor);
+	}
+
+	@Override
+	public final E times(final BigInteger factor) {
+		return this.selfApply(factor);
 	}
 
 	@Override
 	public final E timesTwo() {
-		return (E) this.getSet().timesTwo(this);
+		return this.selfApply();
 	}
 
 	@Override
 	public boolean isZero() {
-		if (this.getSet().isMonoid()) {
-			AdditiveMonoid monoid = ((AdditiveMonoid) this.getSet());
-			return monoid.isZeroElement(this);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		return this.isIdentity();
 	}
 
 	@Override
 	public final E negate() {
-		if (this.getSet().isGroup()) {
-			AdditiveGroup group = ((AdditiveGroup) this.getSet());
-			return (E) group.invert(this);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		return this.invert();
 	}
 
 	@Override
 	public final E subtract(final Element element) {
-		if (this.getSet().isGroup()) {
-			AdditiveGroup group = ((AdditiveGroup) this.getSet());
-			return (E) group.subtract(this, element);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, element);
+		return this.applyInverse(element);
+	}
+
+	@Override
+	public final E divide(long divisor) {
+		return this.invertSelfApply(divisor);
+	}
+
+	@Override
+	public final E divide(BigInteger divisor) {
+		return this.invertSelfApply(divisor);
+	}
+
+	@Override
+	public final E halve() {
+		return this.invertSelfApply();
 	}
 
 }

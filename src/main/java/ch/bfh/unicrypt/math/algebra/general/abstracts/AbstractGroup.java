@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
@@ -82,8 +83,49 @@ public abstract class AbstractGroup<E extends Element<V>, V>
 	}
 
 	@Override
+	public final E invertSelfApply(Element element, long amount) {
+		return this.invertSelfApply(element, BigInteger.valueOf(amount));
+	}
+
+	@Override
+	public final E invertSelfApply(Element element, Element<BigInteger> amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+		}
+		return this.invertSelfApply(element, amount.getValue());
+	}
+
+	@Override
+	public final E invertSelfApply(Element element, BigInteger amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+		}
+		if (amount.signum() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, amount);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		if (!this.isFinite() || !this.hasKnownOrder()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		boolean positiveAmount = (amount.signum() > 0);
+		amount = amount.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		E result = this.defaultSelfApplyAlgorithm((E) element, amount);
+		if (positiveAmount) {
+			return result;
+		}
+		return this.invert(result);
+	}
+
+	@Override
+	public final E invertSelfApply(Element element) {
+		return this.invertSelfApply(element, MathUtil.TWO);
+	}
+
+	@Override
 	protected E defaultSelfApply(E element, BigInteger amount) {
-		boolean negAmount = (amount.signum() < 0);
+		boolean positiveAmount = (amount.signum() > 0);
 		amount = amount.abs();
 		if (this.isFinite() && this.hasKnownOrder()) {
 			amount = amount.mod(this.getOrder());
@@ -92,10 +134,10 @@ public abstract class AbstractGroup<E extends Element<V>, V>
 			return this.getIdentityElement();
 		}
 		E result = this.defaultSelfApplyAlgorithm(element, amount);
-		if (negAmount) {
-			return this.invert(result);
+		if (positiveAmount) {
+			return result;
 		}
-		return result;
+		return this.invert(result);
 	}
 
 	protected abstract E abstractInvert(E element);

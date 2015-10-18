@@ -293,6 +293,14 @@ public interface Element<V> {
 	 */
 	public Element<V> selfApply();
 
+	public Element<V> invertSelfApply(long amount);
+
+	public Element<V> invertSelfApply(BigInteger amount);
+
+	public Element<V> invertSelfApply(Element<BigInteger> amount);
+
+	public Element<V> invertSelfApply();
+
 	/**
 	 * This is a convenience method for {@link Monoid#isIdentityElement(Element)}. Checks if the element is the monoid's
 	 * identity element. Throws an exception if the method is called for an element not belonging to a monoid.

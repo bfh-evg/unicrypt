@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import java.math.BigInteger;
 
 /**
  * This interface provides the renaming of some methods for the case of a multiplicatively written commutative
@@ -78,10 +79,30 @@ public interface MultiplicativeGroup<V>
 	 */
 	public MultiplicativeElement<V> divide(Element element1, Element element2);
 
+	public MultiplicativeElement<V> nthRoot(Element element, long n);
+
+	public MultiplicativeElement<V> nthRoot(Element element, Element<BigInteger> n);
+
+	public MultiplicativeElement<V> nthRoot(Element element, BigInteger n);
+
+	public MultiplicativeElement<V> squareRoot(Element element);
+
 	@Override
 	public MultiplicativeElement<V> invert(Element element);
 
 	@Override
 	public MultiplicativeElement<V> applyInverse(Element element1, Element element2);
+
+	@Override
+	public MultiplicativeElement<V> invertSelfApply(Element element, long amount);
+
+	@Override
+	public MultiplicativeElement<V> invertSelfApply(Element element, Element<BigInteger> amount);
+
+	@Override
+	public MultiplicativeElement<V> invertSelfApply(Element element, BigInteger amount);
+
+	@Override
+	public MultiplicativeElement<V> invertSelfApply(Element element);
 
 }

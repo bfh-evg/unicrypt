@@ -239,10 +239,37 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	}
 
 	@Override
-	public final E invert() {
+	public final E invertSelfApply(long amount) {
 		if (this.set.isGroup()) {
 			Group group = ((Group) this.set);
-			return (E) group.invert(this);
+			return (E) group.invertSelfApply(this, amount);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	}
+
+	@Override
+	public final E invertSelfApply(BigInteger amount) {
+		if (this.set.isGroup()) {
+			Group group = ((Group) this.set);
+			return (E) group.invertSelfApply(this, amount);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	}
+
+	@Override
+	public final E invertSelfApply(Element<BigInteger> amount) {
+		if (this.set.isGroup()) {
+			Group group = ((Group) this.set);
+			return (E) group.invertSelfApply(this, amount);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	}
+
+	@Override
+	public final E invertSelfApply() {
+		if (this.set.isGroup()) {
+			Group group = ((Group) this.set);
+			return (E) group.invertSelfApply(this);
 		}
 		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
@@ -252,6 +279,15 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 		if (this.set.isMonoid()) {
 			Monoid monoid = ((Monoid) this.set);
 			return monoid.isIdentityElement(this);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	}
+
+	@Override
+	public final E invert() {
+		if (this.set.isGroup()) {
+			Group group = ((Group) this.set);
+			return (E) group.invert(this);
 		}
 		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}

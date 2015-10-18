@@ -105,6 +105,42 @@ public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends 
 	}
 
 	@Override
+	public final E nthRoot(long n) {
+		if (this.getSet().isField()) {
+			Field field = ((Field) this.getSet());
+			return (E) field.nthRoot(this, n);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, n);
+	}
+
+	@Override
+	public final E nthRoot(BigInteger n) {
+		if (this.getSet().isField()) {
+			Field field = ((Field) this.getSet());
+			return (E) field.nthRoot(this, n);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, n);
+	}
+
+	@Override
+	public final E nthRoot(Element<BigInteger> n) {
+		if (this.getSet().isField()) {
+			Field field = ((Field) this.getSet());
+			return (E) field.nthRoot(this, n);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, n);
+	}
+
+	@Override
+	public final E squareRoot() {
+		if (this.getSet().isField()) {
+			Field field = ((Field) this.getSet());
+			return (E) field.squareRoot(this);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	}
+
+	@Override
 	public final E oneOver() {
 		if (this.getSet().isField()) {
 			Field field = ((Field) this.getSet());

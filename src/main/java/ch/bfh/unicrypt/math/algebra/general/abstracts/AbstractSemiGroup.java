@@ -106,14 +106,8 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 	}
 
 	@Override
-	public final E selfApply(final Element element, final BigInteger amount) {
-		if (amount == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
-		}
-		if (!this.contains(element)) {
-			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
-		}
-		return this.defaultSelfApply((E) element, amount);
+	public final E selfApply(final Element element, final long amount) {
+		return this.selfApply(element, BigInteger.valueOf(amount));
 	}
 
 	@Override
@@ -125,8 +119,14 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 	}
 
 	@Override
-	public final E selfApply(final Element element, final long amount) {
-		return this.selfApply(element, BigInteger.valueOf(amount));
+	public final E selfApply(final Element element, final BigInteger amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		return this.defaultSelfApply((E) element, amount);
 	}
 
 	@Override

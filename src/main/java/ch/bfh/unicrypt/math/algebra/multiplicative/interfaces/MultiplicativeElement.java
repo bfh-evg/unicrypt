@@ -133,6 +133,14 @@ public interface MultiplicativeElement<V>
 	 */
 	public MultiplicativeElement<V> divide(Element element);
 
+	public MultiplicativeElement<V> nthRoot(long n);
+
+	public MultiplicativeElement<V> nthRoot(BigInteger n);
+
+	public MultiplicativeElement<V> nthRoot(Element<BigInteger> n);
+
+	public MultiplicativeElement<V> squareRoot();
+
 	@Override
 	public MultiplicativeSemiGroup<V> getSet();
 
@@ -150,6 +158,18 @@ public interface MultiplicativeElement<V>
 
 	@Override
 	public MultiplicativeElement<V> selfApply();
+
+	@Override
+	public MultiplicativeElement<V> invertSelfApply(long amount);
+
+	@Override
+	public MultiplicativeElement<V> invertSelfApply(BigInteger amount);
+
+	@Override
+	public MultiplicativeElement<V> invertSelfApply(Element<BigInteger> amount);
+
+	@Override
+	public MultiplicativeElement<V> invertSelfApply();
 
 	@Override
 	public MultiplicativeElement<V> invert();

@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import java.math.BigInteger;
 
 /**
  * This interface represents the mathematical concept of a ring. A ring is a semiring where the set together with
@@ -64,9 +65,18 @@ public interface Ring<V>
 	   extends SemiRing<V>, AdditiveGroup<V> {
 
 	@Override
+	public DualisticElement<V> negate(Element element);
+
+	@Override
 	public DualisticElement<V> subtract(Element element1, Element element2);
 
 	@Override
-	public DualisticElement<V> negate(Element element);
+	public DualisticElement<V> divide(Element element, long divisor);
+
+	@Override
+	public DualisticElement<V> divide(Element element, BigInteger divisor);
+
+	@Override
+	public DualisticElement<V> halve(Element element);
 
 }

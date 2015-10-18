@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -97,6 +98,47 @@ public class PolynomialRing
 	}
 
 	@Override
+	public final PolynomialElement invertSelfApply(Element element, long amount) {
+		return this.invertSelfApply(element, BigInteger.valueOf(amount));
+	}
+
+	@Override
+	public final PolynomialElement invertSelfApply(Element element, Element<BigInteger> amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+		}
+		return this.invertSelfApply(element, amount.getValue());
+	}
+
+	@Override
+	public final PolynomialElement invertSelfApply(Element element, BigInteger amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+		}
+		if (amount.signum() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, amount);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		if (!this.isFinite() || !this.hasKnownOrder()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		boolean positiveAmount = (amount.signum() > 0);
+		amount = amount.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		PolynomialElement result = this.defaultSelfApplyAlgorithm((PolynomialElement) element, amount);
+		if (positiveAmount) {
+			return result;
+		}
+		return this.invert(result);
+	}
+
+	@Override
+	public final PolynomialElement invertSelfApply(Element element) {
+		return this.invertSelfApply(element, MathUtil.TWO);
+	}
+
+	@Override
 	public PolynomialElement subtract(Element element1, Element element2) {
 		return this.applyInverse(element1, element2);
 	}
@@ -104,6 +146,21 @@ public class PolynomialRing
 	@Override
 	public PolynomialElement negate(Element element) {
 		return this.invert(element);
+	}
+
+	@Override
+	public final PolynomialElement divide(Element element, long amount) {
+		return this.invertSelfApply(element, amount);
+	}
+
+	@Override
+	public final PolynomialElement divide(Element element, BigInteger amount) {
+		return this.invertSelfApply(element, amount);
+	}
+
+	@Override
+	public final PolynomialElement halve(Element element) {
+		return this.invertSelfApply(element);
 	}
 
 	/**

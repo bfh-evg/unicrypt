@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -80,13 +81,69 @@ public abstract class AbstractRing<E extends DualisticElement<V>, V>
 	}
 
 	@Override
-	public final E subtract(final Element element1, final Element element2) {
-		return this.applyInverse(element1, element2);
+	public final E invertSelfApply(Element element, long amount) {
+		return this.invertSelfApply(element, BigInteger.valueOf(amount));
+	}
+
+	@Override
+	public final E invertSelfApply(Element element, Element<BigInteger> amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+		}
+		return this.invertSelfApply(element, amount.getValue());
+	}
+
+	@Override
+	public final E invertSelfApply(Element element, BigInteger amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+		}
+		if (amount.signum() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, amount);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		if (!this.isFinite() || !this.hasKnownOrder()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		boolean positiveAmount = (amount.signum() > 0);
+		amount = amount.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		E result = this.defaultSelfApplyAlgorithm((E) element, amount);
+		if (positiveAmount) {
+			return result;
+		}
+		return this.invert(result);
+	}
+
+	@Override
+	public final E invertSelfApply(Element element) {
+		return this.invertSelfApply(element, MathUtil.TWO);
 	}
 
 	@Override
 	public final E negate(final Element element) {
 		return this.invert(element);
+	}
+
+	@Override
+	public final E subtract(final Element element1, final Element element2) {
+		return this.applyInverse(element1, element2);
+	}
+
+	@Override
+	public final E divide(Element element, long divisor) {
+		return this.invertSelfApply(element, divisor);
+	}
+
+	@Override
+	public final E divide(Element element, BigInteger divisor) {
+		return this.invertSelfApply(element, divisor);
+	}
+
+	@Override
+	public final E halve(Element element) {
+		return this.invertSelfApply(element);
 	}
 
 	@Override

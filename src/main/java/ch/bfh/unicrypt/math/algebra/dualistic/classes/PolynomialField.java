@@ -192,15 +192,50 @@ public class PolynomialField
 		return this.multiply(element1, this.oneOver(element2));
 	}
 
-	/**
-	 * oneOver.
-	 * <p>
-	 * Compute using extended Euclidean algorithm for polynomial (Algorithm 2.226)
-	 * <p>
-	 * <p>
-	 * @param element
-	 * @return
-	 */
+	@Override
+	public final PolynomialElement nthRoot(Element element, long n) {
+		return this.nthRoot(element, BigInteger.valueOf(n));
+	}
+
+	@Override
+	public final PolynomialElement nthRoot(Element element, Element<BigInteger> n) {
+		if (n == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, n);
+		}
+		return this.nthRoot(element, n.getValue());
+	}
+
+	@Override
+	public final PolynomialElement nthRoot(Element element, BigInteger n) {
+		if (n == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, n);
+		}
+		if (n.signum() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, n);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		if (((ZModElement) element).isZero()) {
+			return this.getZeroElement();
+		}
+		if (!this.isFinite() || !this.hasKnownOrder()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		boolean positive = (n.signum() > 0);
+		n = n.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		PolynomialElement result = this.defaultPowerAlgorithm((PolynomialElement) element, n);
+		if (positive) {
+			return result;
+		}
+		return this.invert(result);
+	}
+
+	@Override
+	public final PolynomialElement squareRoot(Element element) {
+		return this.nthRoot(element, MathUtil.TWO);
+	}
+
 	@Override
 	public PolynomialElement oneOver(Element element) {
 		if (!this.contains(element)) {
@@ -209,7 +244,7 @@ public class PolynomialField
 		if (((PolynomialElement) element).isZero()) {
 			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this, element);
 		}
-
+		// see extended Euclidean algorithm for polynomials (Algorithm 2.226)
 		Triple euclid = this.extendedEuclidean((PolynomialElement) element, this.irreduciblePolynomial);
 		return this.getElement(((PolynomialElement) euclid.getSecond()).getValue());
 

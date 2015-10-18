@@ -133,6 +133,12 @@ public interface AdditiveElement<V>
 	 */
 	public AdditiveElement<V> subtract(Element element);
 
+	public AdditiveElement<V> divide(long divisor);
+
+	public AdditiveElement<V> divide(BigInteger divisor);
+
+	public AdditiveElement<V> halve();
+
 	@Override
 	public AdditiveSemiGroup<V> getSet();
 
@@ -150,6 +156,18 @@ public interface AdditiveElement<V>
 
 	@Override
 	public AdditiveElement<V> selfApply();
+
+	@Override
+	public AdditiveElement<V> invertSelfApply(long amount);
+
+	@Override
+	public AdditiveElement<V> invertSelfApply(BigInteger amount);
+
+	@Override
+	public AdditiveElement<V> invertSelfApply(Element<BigInteger> amount);
+
+	@Override
+	public AdditiveElement<V> invertSelfApply();
 
 	@Override
 	public AdditiveElement<V> invert();

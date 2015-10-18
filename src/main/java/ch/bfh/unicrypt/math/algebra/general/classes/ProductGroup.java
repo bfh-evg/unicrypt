@@ -44,9 +44,11 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import java.math.BigInteger;
 
 /**
  *
@@ -169,6 +171,47 @@ public class ProductGroup
 	@Override
 	public final Tuple applyInverse(Element element1, Element element2) {
 		return this.apply(element1, this.invert(element2));
+	}
+
+	@Override
+	public final Tuple invertSelfApply(Element element, long amount) {
+		return this.invertSelfApply(element, BigInteger.valueOf(amount));
+	}
+
+	@Override
+	public final Tuple invertSelfApply(Element element, Element<BigInteger> amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+		}
+		return this.invertSelfApply(element, amount.getValue());
+	}
+
+	@Override
+	public final Tuple invertSelfApply(Element element, BigInteger amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+		}
+		if (amount.signum() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, amount);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		if (!this.isFinite() || !this.hasKnownOrder()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		boolean positiveAmount = (amount.signum() > 0);
+		amount = amount.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		Tuple result = this.defaultSelfApply((Tuple) element, amount);
+		if (positiveAmount) {
+			return result;
+		}
+		return this.invert(result);
+	}
+
+	@Override
+	public final Tuple invertSelfApply(Element element) {
+		return this.invertSelfApply(element, MathUtil.TWO);
 	}
 
 }

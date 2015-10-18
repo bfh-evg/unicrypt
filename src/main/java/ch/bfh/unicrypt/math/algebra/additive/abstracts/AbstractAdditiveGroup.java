@@ -121,13 +121,28 @@ public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V>
 	}
 
 	@Override
+	public final E negate(final Element element) {
+		return this.invert(element);
+	}
+
+	@Override
 	public final E subtract(final Element element1, final Element element2) {
 		return this.applyInverse(element1, element2);
 	}
 
 	@Override
-	public final E negate(final Element element) {
-		return this.invert(element);
+	public final E divide(Element element, long divisor) {
+		return this.invertSelfApply(element, divisor);
+	}
+
+	@Override
+	public final E divide(Element element, BigInteger divisor) {
+		return this.invertSelfApply(element, divisor);
+	}
+
+	@Override
+	public final E halve(Element element) {
+		return this.invertSelfApply(element);
 	}
 
 }

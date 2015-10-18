@@ -132,4 +132,19 @@ public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, 
 		return this.applyInverse(element1, element2);
 	}
 
+	@Override
+	public final E divide(Element element, long divisor) {
+		return this.invertSelfApply(element, divisor);
+	}
+
+	@Override
+	public final E divide(Element element, BigInteger divisor) {
+		return this.invertSelfApply(element, divisor);
+	}
+
+	@Override
+	public final E halve(Element element) {
+		return this.invertSelfApply(element);
+	}
+
 }

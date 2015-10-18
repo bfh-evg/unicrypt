@@ -45,7 +45,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
  * This interface represents the mathematical concept of a prime field. A prime field is finite field of prime order
  * {@code p}. Therefore, the order of a prime field corresponds to its characteristic.
  * <p>
- * The prime order interface is implemented as a specialization of {@link FiniteField} and CyclicRing<V>. No
+ * The prime order interface is implemented as a specialization of {@link FiniteField} and {@link CyclicRing}. No
  * functionality is added.
  * <p>
  * @param <V> The generic type of the values representing the elements of a prime field

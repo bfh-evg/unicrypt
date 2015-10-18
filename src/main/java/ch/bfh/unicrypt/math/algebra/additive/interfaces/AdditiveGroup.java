@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import java.math.BigInteger;
 
 /**
  * This interface provides the renaming of some methods for the case of a additively written commutative {@link Group}.
@@ -78,10 +79,28 @@ public interface AdditiveGroup<V>
 	 */
 	public AdditiveElement<V> subtract(Element element1, Element element2);
 
+	public AdditiveElement<V> divide(Element element, long divisor);
+
+	public AdditiveElement<V> divide(Element element, BigInteger divisor);
+
+	public AdditiveElement<V> halve(Element element);
+
 	@Override
 	public AdditiveElement<V> invert(Element element);
 
 	@Override
 	public AdditiveElement<V> applyInverse(Element element1, Element element2);
+
+	@Override
+	public AdditiveElement<V> invertSelfApply(Element element, long amount);
+
+	@Override
+	public AdditiveElement<V> invertSelfApply(Element element, BigInteger amount);
+
+	@Override
+	public AdditiveElement<V> invertSelfApply(Element element, Element<BigInteger> amount);
+
+	@Override
+	public AdditiveElement<V> invertSelfApply(Element element);
 
 }

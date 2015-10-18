@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
+import java.math.BigInteger;
 
 /**
  * This interface represents the mathematical concept of a field. A field is a commutative ring with the additional
@@ -86,5 +87,13 @@ public interface Field<V>
 	 * @return The first element divided over the second element
 	 */
 	public DualisticElement<V> divide(Element element1, Element element2);
+
+	public DualisticElement<V> nthRoot(Element element, long n);
+
+	public DualisticElement<V> nthRoot(Element element, Element<BigInteger> n);
+
+	public DualisticElement<V> nthRoot(Element element, BigInteger n);
+
+	public DualisticElement<V> squareRoot(Element element);
 
 }

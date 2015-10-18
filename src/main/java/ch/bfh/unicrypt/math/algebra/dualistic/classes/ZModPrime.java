@@ -97,6 +97,50 @@ public class ZModPrime
 	}
 
 	@Override
+	public final ZModElement nthRoot(Element element, long n) {
+		return this.nthRoot(element, BigInteger.valueOf(n));
+	}
+
+	@Override
+	public final ZModElement nthRoot(Element element, Element<BigInteger> n) {
+		if (n == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, n);
+		}
+		return this.nthRoot(element, n.getValue());
+	}
+
+	@Override
+	public final ZModElement nthRoot(Element element, BigInteger n) {
+		if (n == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, n);
+		}
+		if (n.signum() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, n);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		if (((ZModElement) element).isZero()) {
+			return this.getZeroElement();
+		}
+		if (!this.isFinite() || !this.hasKnownOrder()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		boolean positive = (n.signum() > 0);
+		n = n.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		ZModElement result = this.defaultPowerAlgorithm((ZModElement) element, n);
+		if (positive) {
+			return result;
+		}
+		return this.invert(result);
+	}
+
+	@Override
+	public final ZModElement squareRoot(Element element) {
+		return this.nthRoot(element, MathUtil.TWO);
+	}
+
+	@Override
 	public ZModElement oneOver(Element element) {
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);

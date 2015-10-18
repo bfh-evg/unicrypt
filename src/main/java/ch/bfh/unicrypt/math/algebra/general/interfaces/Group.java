@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
+import java.math.BigInteger;
+
 /**
  * This interface represents the mathematical concept of a group. A group is a monoid for which inverse elements exist
  * for all elements in the group. It is therefore implemented as a specialization of {@link Monoid}.
@@ -73,5 +75,13 @@ public interface Group<V>
 	 * @return The result of applying the group operation to the the first and the inverse of the second element
 	 */
 	public Element<V> applyInverse(Element element1, Element element2);
+
+	public Element<V> invertSelfApply(Element element, long amount);
+
+	public Element<V> invertSelfApply(Element element, Element<BigInteger> amount);
+
+	public Element<V> invertSelfApply(Element element, BigInteger amount);
+
+	public Element<V> invertSelfApply(Element element);
 
 }

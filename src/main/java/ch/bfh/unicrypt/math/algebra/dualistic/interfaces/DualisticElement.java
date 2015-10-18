@@ -83,13 +83,22 @@ public interface DualisticElement<V>
 	public DualisticElement<V> selfApply();
 
 	@Override
+	public DualisticElement<V> invertSelfApply(long amount);
+
+	@Override
+	public DualisticElement<V> invertSelfApply(BigInteger amount);
+
+	@Override
+	public DualisticElement<V> invertSelfApply(Element<BigInteger> amount);
+
+	@Override
+	public DualisticElement<V> invertSelfApply();
+
+	@Override
 	public DualisticElement<V> invert();
 
 	@Override
 	public DualisticElement<V> add(Element element);
-
-	@Override
-	public DualisticElement<V> subtract(Element element);
 
 	@Override
 	public DualisticElement<V> times(long factor);
@@ -104,13 +113,22 @@ public interface DualisticElement<V>
 	public DualisticElement<V> timesTwo();
 
 	@Override
+	public DualisticElement<V> divide(long divisor);
+
+	@Override
+	public DualisticElement<V> divide(BigInteger divisor);
+
+	@Override
+	public DualisticElement<V> halve();
+
+	@Override
 	public DualisticElement<V> negate();
 
 	@Override
-	public DualisticElement<V> multiply(Element element);
+	public DualisticElement<V> subtract(Element element);
 
 	@Override
-	public DualisticElement<V> divide(Element element);
+	public DualisticElement<V> multiply(Element element);
 
 	@Override
 	public DualisticElement<V> power(long exponent);
@@ -125,6 +143,21 @@ public interface DualisticElement<V>
 	public DualisticElement<V> square();
 
 	@Override
+	public DualisticElement<V> nthRoot(long n);
+
+	@Override
+	public DualisticElement<V> nthRoot(BigInteger n);
+
+	@Override
+	public DualisticElement<V> nthRoot(Element<BigInteger> n);
+
+	@Override
+	public DualisticElement<V> squareRoot();
+
+	@Override
 	public DualisticElement<V> oneOver();
+
+	@Override
+	public DualisticElement<V> divide(Element element);
 
 }
