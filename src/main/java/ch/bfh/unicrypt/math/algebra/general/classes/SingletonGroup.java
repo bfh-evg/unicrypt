@@ -111,12 +111,12 @@ public class SingletonGroup
 	protected Sequence<SingletonElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
 		return Sequence.getInstance(this.element, new Mapping<SingletonElement, SingletonElement>() {
 
-			@Override
-			public SingletonElement apply(SingletonElement value) {
-				return value;
-			}
+								 @Override
+								 public SingletonElement apply(SingletonElement value) {
+									 return value;
+								 }
 
-		});
+							 });
 	}
 
 	@Override
@@ -142,11 +142,6 @@ public class SingletonGroup
 	@Override
 	protected SingletonElement abstractGetDefaultGenerator() {
 		return this.element;
-	}
-
-	@Override
-	protected boolean abstractIsGenerator(SingletonElement element) {
-		return true;
 	}
 
 	@Override

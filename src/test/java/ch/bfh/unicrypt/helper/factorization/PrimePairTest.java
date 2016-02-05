@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.factorization;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Test;
@@ -60,13 +61,14 @@ public class PrimePairTest {
 			for (int j = 0; j < 100; j++) {
 				if (MathUtil.isPrime(i) && MathUtil.isPrime(j) && i != j) {
 					PrimePair p = PrimePair.getInstance(i, j);
+					assertFalse(p.isPrime());
 					assertEquals(i * j, p.getValue().intValue());
 					assertEquals(Math.min(i, j), p.getSmallerPrimeFactor().intValue());
 					assertEquals(Math.max(i, j), p.getLargerPrimeFactor().intValue());
-					assertEquals(2, p.getPrimeFactors().length);
-					assertEquals(1, p.getExponents()[0]);
-					assertEquals(1, p.getExponents()[1]);
-					assertEquals(2, p.getExponents().length);
+					assertEquals(2, p.getPrimeFactors().getLength());
+					assertEquals((Integer) 1, p.getExponents().getAt(0));
+					assertEquals((Integer) 1, p.getExponents().getAt(1));
+					assertEquals(2, p.getExponents().getLength());
 					assertEquals(p, PrimePair.getInstance(BigInteger.valueOf(i), BigInteger.valueOf(j)));
 				} else {
 					try {
@@ -98,18 +100,22 @@ public class PrimePairTest {
 		}
 		for (int i = 1; i < 10; i++) {
 			PrimePair p = PrimePair.getRandomInstance(2);
+			assertFalse(p.isPrime());
 			assertTrue(p.getValue().intValue() == 6);
 		}
 		for (int i = 1; i < 10; i++) {
 			PrimePair p = PrimePair.getRandomInstance(3);
+			assertFalse(p.isPrime());
 			assertTrue(p.getValue().intValue() == 35);
 		}
 		for (int i = 1; i < 10; i++) {
 			PrimePair p = PrimePair.getRandomInstance(4);
+			assertFalse(p.isPrime());
 			assertTrue(p.getValue().intValue() == 143);
 		}
 		for (int i = 1; i < 100; i++) {
 			PrimePair p = PrimePair.getRandomInstance(5);
+			assertFalse(p.isPrime());
 			int v = p.getValue().intValue();
 			assertTrue(v == 17 * 19 || v == 17 * 23 || v == 17 * 29 || v == 17 * 31 || v == 19 * 23 || v == 19 * 29 || v == 19 * 31 || v == 23 * 29 || v == 23 * 31 || v == 29 * 31);
 		}

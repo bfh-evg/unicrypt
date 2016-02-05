@@ -62,7 +62,6 @@ import java.math.BigInteger;
  * Euler totient function. The order m=|G_m| is the product of all given prime factors of phi(n). If all prime factors
  * of phi(n) are given, which implies m=phi(n), then G_m is the parent group Z*_n.
  * <p>
- * <p/>
  * @see "Handbook of Applied Cryptography, Fact 2.132"
  * @see "Handbook of Applied Cryptography, Definition 2.100"
  * @see "Handbook of Applied Cryptography, Definition 2.166"
@@ -89,9 +88,8 @@ public class GStarMod
 	}
 
 	/**
-	 * Returns the modulus if this group.
+	 * Returns the modulus of this group.
 	 * <p>
-	 * <p/>
 	 * @return The modulus
 	 */
 	public final BigInteger getModulus() {
@@ -102,7 +100,6 @@ public class GStarMod
 	 * Returns a (possibly incomplete) prime factorization the modulus if this group. An incomplete factorization
 	 * implies that the group order is unknown in such a case.
 	 * <p>
-	 * <p/>
 	 * @return The prime factorization
 	 */
 	public final SpecialFactorization getModulusFactorization() {
@@ -112,7 +109,6 @@ public class GStarMod
 	/**
 	 * Returns prime factorization of the group order phi(n) of Z*_n.
 	 * <p>
-	 * <p/>
 	 * @return The prime factorization of the group order
 	 */
 	public final Factorization getOrderFactorization() {
@@ -137,7 +133,6 @@ public class GStarMod
 	/**
 	 * Returns the quotient k=phi(n)/m of the orders of the two involved groups.
 	 * <p>
-	 * <p/>
 	 * @return The quotient of the two orders.
 	 */
 	public BigInteger getCoFactor() {
@@ -221,13 +216,18 @@ public class GStarMod
 	// the implemented method is a mix between 4.80 and 4.81
 	// See also http://en.wikipedia.org/wiki/Schnorr_group
 	@Override
-	protected boolean abstractIsGenerator(GStarModElement element) {
-		for (final BigInteger prime : this.getOrderFactorization().getPrimeFactors()) {
-			if (element.selfApply(this.getOrder().divide(prime)).isEquivalent(this.getIdentityElement())) {
-				return false;
+	protected boolean defaultIsGenerator(GStarModElement element) {
+		// in case of a prime order subgroup, every element is a generator (except the identity element)
+		if (this.orderFactorization.isPrime()) {
+			return true;
+		} else {
+			for (final BigInteger prime : this.orderFactorization.getPrimeFactors()) {
+				if (element.selfApply(this.getOrder().divide(prime)).isEquivalent(this.getIdentityElement())) {
+					return false;
+				}
 			}
+			return true;
 		}
-		return true;
 	}
 
 	@Override
@@ -247,7 +247,6 @@ public class GStarMod
 	/**
 	 * This is the general static factory method for this class.
 	 * <p>
-	 * <p/>
 	 * @param modulusFactorization
 	 * @param orderFactorization
 	 * @return

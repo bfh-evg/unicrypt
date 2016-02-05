@@ -177,7 +177,7 @@ public class ZStarMod
 		if (!this.getModulusFactorization().getValue().equals(this.getModulus())) {
 			return Set.UNKNOWN;
 		}
-		return MathUtil.eulerFunction(this.getModulus(), this.getModulusFactorization().getPrimeFactors());
+		return MathUtil.eulerFunction(this.getModulusFactorization());
 	}
 
 	@Override

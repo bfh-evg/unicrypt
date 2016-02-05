@@ -64,7 +64,7 @@ public class PrimePair
 
 	protected PrimePair(BigInteger prime1, BigInteger prime2) {
 		// the smaller prime factor is stored at index 0, the larger at index 1
-		super(prime1.multiply(prime2), new BigInteger[]{prime1.min(prime2), prime1.max(prime2)}, new int[]{1, 1});
+		super(prime1.multiply(prime2), new BigInteger[]{prime1.min(prime2), prime1.max(prime2)}, new Integer[]{1, 1});
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class PrimePair
 	 * @return The smaller prime factor
 	 */
 	public BigInteger getSmallerPrimeFactor() {
-		return this.primeFactors[0];
+		return this.primeFactors.getAt(0);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class PrimePair
 	 * @return The larger prime factor
 	 */
 	public BigInteger getLargerPrimeFactor() {
-		return this.primeFactors[1];
+		return this.primeFactors.getAt(1);
 	}
 
 	/**

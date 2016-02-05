@@ -96,7 +96,7 @@ public interface SemiGroup<V>
 	public Element<V> apply(Sequence<Element> elements);
 
 	/**
-	 * Applies the binary operation repeatedly to {@code amount} many instances of a given input element. This is a
+	 * Applies the binary operation repeatedly to {@code amount} many instances of a given input element. This is a is a
 	 * convenient method for {@link SemiGroup#selfApply(Element, BigInteger)}.
 	 * <p>
 	 * @param element The given input element

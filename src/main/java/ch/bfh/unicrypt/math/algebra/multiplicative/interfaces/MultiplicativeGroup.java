@@ -79,12 +79,52 @@ public interface MultiplicativeGroup<V>
 	 */
 	public MultiplicativeElement<V> divide(Element element1, Element element2);
 
+	/**
+	 * This method is a synonym for {@link Group#invertSelfApply(Element, long)}. It computes the nth root of the given
+	 * element. To perform this operation, the group order must be known and {@code amount} must be relatively prime to
+	 * the order. This is a convenient method for {@link MultiplicativeGroup#nthRoot(Element, BigInteger)}.
+	 * <p>
+	 * @param element The given input element
+	 * @param n       The given degree of the root
+	 * @return The nth root of the input element
+	 * @see Group#invertSelfApply(Element, long)
+	 */
 	public MultiplicativeElement<V> nthRoot(Element element, long n);
 
-	public MultiplicativeElement<V> nthRoot(Element element, Element<BigInteger> n);
-
+	/**
+	 * This method is a synonym for {@link Group#invertSelfApply(Element, BigInteger)}. It computes the nth root of the
+	 * given element. To perform this operation, the group order must be known and {@code amount} must be relatively
+	 * prime to the order.
+	 * <p>
+	 * @param element The given input element
+	 * @param n       The given degree of the root
+	 * @return The nth root of the input element
+	 * @see Group#invertSelfApply(Element, BigInteger)
+	 */
 	public MultiplicativeElement<V> nthRoot(Element element, BigInteger n);
 
+	/**
+	 * This method is a synonym for {@link Group#invertSelfApply(Element, Element)} and the same as
+	 * {@link MultiplicativeGroup#nthRoot(Element, BigInteger)}, except that the degree of the root is given as an
+	 * instance of {@code Element<BigInteger>}, from which a {@code BigInteger} degree can be extracted using
+	 * {@link Element#getValue()}.
+	 * <p>
+	 * @param element The given input element
+	 * @param n       The given degree of the root
+	 * @return The nth root of the input element
+	 * @see Group#invertSelfApply(Element, Element)
+	 */
+	public MultiplicativeElement<V> nthRoot(Element element, Element<BigInteger> n);
+
+	/**
+	 * This method is a synonym for {@link Group#invertSelfApply(Element)} and the same as
+	 * {@link Group#invertSelfApply(Element, long)} for {@code n=2}. It computes the square root of the given input
+	 * element.
+	 * <p>
+	 * @param element A given input element
+	 * @return The square root of the input element
+	 * @see Group#invertSelfApply(Element)
+	 */
 	public MultiplicativeElement<V> squareRoot(Element element);
 
 	@Override

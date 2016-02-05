@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.math;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.factorization.Factorization;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
@@ -71,17 +71,16 @@ public class MathUtilTest {
 	@Test
 	public void testEulerFunction() {
 		// first 10 values with correct prime factors
-		Assert.assertEquals(MathUtil.eulerFunction(ONE, new BigInteger[]{}), ONE);
-		Assert.assertEquals(MathUtil.eulerFunction(TWO, new BigInteger[]{TWO}), ONE);
-		Assert.assertEquals(MathUtil.eulerFunction(THREE, new BigInteger[]{THREE}), TWO);
-		Assert.assertEquals(MathUtil.eulerFunction(FOUR, new BigInteger[]{TWO}), TWO);
-		Assert.assertEquals(MathUtil.eulerFunction(FIVE, new BigInteger[]{FIVE}), FOUR);
-		Assert.assertEquals(MathUtil.eulerFunction(SIX, new BigInteger[]{TWO, THREE}), TWO);
-		Assert.assertEquals(MathUtil.eulerFunction(SIX, TWO, THREE), TWO);
-		Assert.assertEquals(MathUtil.eulerFunction(SEVEN, new BigInteger[]{SEVEN}), SIX);
-		Assert.assertEquals(MathUtil.eulerFunction(EIGHT, new BigInteger[]{TWO}), FOUR);
-		Assert.assertEquals(MathUtil.eulerFunction(NINE, new BigInteger[]{THREE}), SIX);
-		Assert.assertEquals(MathUtil.eulerFunction(TEN, new BigInteger[]{TWO, FIVE}), FOUR);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance()), ONE);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(TWO)), ONE);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(THREE)), TWO);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(TWO, TWO)), TWO);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(FIVE)), FOUR);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(TWO, THREE)), TWO);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(SEVEN)), SIX);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(TWO, TWO, TWO)), FOUR);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(THREE, THREE)), SIX);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(TWO, FIVE)), FOUR);
 	}
 
 	@Test

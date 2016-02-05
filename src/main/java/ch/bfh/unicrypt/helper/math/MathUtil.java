@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.math;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.factorization.Factorization;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -78,22 +79,21 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Returns the value obtained from applying the Euler totient function to a positive integer. For computing the
-	 * result efficiently, the complete set of prime factors of the input value must be specified.
+	 * Returns the value obtained from applying the Euler totient function to a positive integer {@code n}. For
+	 * computing the result efficiently, the factorization of {@code n} must be specified.
 	 * <p>
-	 * @param value        The input value
-	 * @param primeFactors The prime factors of {@code value}
-	 * @return the result of applying the Euler totient function to {@code value}
+	 * @param factorization The factorization of {@code n}
+	 * @return The result of applying the Euler totient function to {@code n}
 	 * @see "Handbook of Applied Cryptography, Fact 2.101 (iii)"
 	 */
-	public static BigInteger eulerFunction(final BigInteger value, final BigInteger... primeFactors) {
+	public static BigInteger eulerFunction(final Factorization factorization) {
 		BigInteger product1 = ONE;
 		BigInteger product2 = ONE;
-		for (final BigInteger primeFactor : primeFactors) {
+		for (final BigInteger primeFactor : factorization.getPrimeFactors()) {
 			product1 = product1.multiply(primeFactor);
 			product2 = product2.multiply(primeFactor.subtract(ONE));
 		}
-		return value.multiply(product2).divide(product1);
+		return factorization.getValue().multiply(product2).divide(product1);
 	}
 
 	/**
@@ -214,7 +214,7 @@ public final class MathUtil {
 	 * Removes duplicates from a BigInteger array
 	 * <p>
 	 * @param values An array of BigInteger values
-	 * @return the same array of BigInteger values without duplicates
+	 * @return The same array of BigInteger values without duplicates
 	 */
 	public static BigInteger[] removeDuplicates(final BigInteger... values) {
 		final HashSet<BigInteger> hashSet = new HashSet<>(Arrays.asList(values));

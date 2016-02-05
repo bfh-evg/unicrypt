@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.helper.factorization;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import org.junit.Assert;
 import static org.junit.Assert.fail;
 import org.junit.Test;
@@ -59,9 +58,10 @@ public class FactorizationTest {
 	@Test
 	public void testGetInstance_BigInteger() {
 		Factorization f1 = Factorization.getInstance(BigInteger.valueOf(7));
+		Assert.assertTrue(f1.isPrime());
 		Assert.assertEquals(BigInteger.valueOf(7), f1.getValue());
-		Assert.assertEquals(BigInteger.valueOf(7), f1.getPrimeFactors()[0]);
-		Assert.assertEquals(1, f1.getExponents()[0]);
+		Assert.assertEquals(BigInteger.valueOf(7), f1.getPrimeFactors().getAt(0));
+		Assert.assertEquals((Integer) 1, f1.getExponents().getAt(0));
 		try {
 			Factorization f2 = Factorization.getInstance(BigInteger.valueOf(8));
 			fail();
@@ -73,10 +73,8 @@ public class FactorizationTest {
 	public void testGetInstance_BigIntegerArr() {
 		{
 			Factorization f1 = Factorization.getInstance(BigInteger.valueOf(7), BigInteger.valueOf(3));
+			Assert.assertFalse(f1.isPrime());
 			Assert.assertEquals(BigInteger.valueOf(21), f1.getValue());
-			Assert.assertFalse(-1 == Arrays.binarySearch(f1.getPrimeFactors(), BigInteger.valueOf(7)));
-			Assert.assertFalse(-1 == Arrays.binarySearch(f1.getPrimeFactors(), BigInteger.valueOf(3)));
-			Assert.assertTrue(-1 == Arrays.binarySearch(f1.getPrimeFactors(), BigInteger.valueOf(2)));
 		}
 		try {
 			Factorization f2 = Factorization.getInstance(BigInteger.valueOf(7), BigInteger.valueOf(8));
@@ -89,6 +87,7 @@ public class FactorizationTest {
 	public void testGetInstance_BigIntegerArr_intArr() {
 		{
 			Factorization f1 = Factorization.getInstance(new BigInteger[]{BigInteger.valueOf(3), BigInteger.valueOf(7)}, new int[]{2, 1});
+			Assert.assertFalse(f1.isPrime());
 			Assert.assertEquals(BigInteger.valueOf(63), f1.getValue());
 		}
 	}

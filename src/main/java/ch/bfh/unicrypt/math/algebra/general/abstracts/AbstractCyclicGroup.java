@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
@@ -124,7 +125,13 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
-		return this.abstractIsGenerator((E) element);
+		if (this.getOrder().equals(MathUtil.ONE)) {
+			return true;
+		}
+		if (this.isIdentityElement(element)) {
+			return false;
+		}
+		return this.defaultIsGenerator((E) element);
 	}
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
@@ -144,12 +151,12 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 		final AbstractCyclicGroup<E, V> group = this;
 		return Sequence.getInstance(this.getDefaultGenerator(), new Mapping<E, E>() {
 
-			@Override
-			public E apply(E element) {
-				return group.apply(group.getDefaultGenerator(), element);
-			}
+								 @Override
+								 public E apply(E element) {
+									 return group.apply(group.getDefaultGenerator(), element);
+								 }
 
-		}).limit(new Predicate<E>() {
+							 }).limit(new Predicate<E>() {
 
 			@Override
 			public boolean test(E element) {
@@ -159,8 +166,11 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 		});
 	}
 
-	protected abstract E abstractGetDefaultGenerator();
+	// we return true by default, because we assume that most cyclic groups will be of prime order
+	protected boolean defaultIsGenerator(E element) {
+		return true;
+	}
 
-	protected abstract boolean abstractIsGenerator(E element);
+	protected abstract E abstractGetDefaultGenerator();
 
 }

@@ -239,11 +239,6 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 	}
 
 	@Override
-	protected boolean abstractIsGenerator(EE element) {
-		return !element.isZero();
-	}
-
-	@Override
 	protected Sequence<EE> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
 		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE)).map(new Mapping<BigInteger, EE>() {
 

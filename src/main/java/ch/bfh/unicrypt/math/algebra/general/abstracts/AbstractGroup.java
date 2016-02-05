@@ -101,7 +101,7 @@ public abstract class AbstractGroup<E extends Element<V>, V>
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
 		}
 		if (amount.signum() == 0) {
-			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, amount);
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, amount);
 		}
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
@@ -110,8 +110,11 @@ public abstract class AbstractGroup<E extends Element<V>, V>
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		boolean positiveAmount = (amount.signum() > 0);
-		amount = amount.abs().mod(this.getOrder()).modInverse(this.getOrder());
-		E result = this.defaultSelfApplyAlgorithm((E) element, amount);
+		amount = amount.abs().mod(this.getOrder());
+		if (!MathUtil.areRelativelyPrime(amount, this.getOrder())) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, amount);
+		}
+		E result = this.defaultSelfApplyAlgorithm((E) element, amount.modInverse(this.getOrder()));
 		if (positiveAmount) {
 			return result;
 		}

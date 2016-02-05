@@ -99,7 +99,7 @@ public class Prime
 
 	// known order factor
 	protected Prime(BigInteger prime, BigInteger orderFactor) {
-		super(prime, new BigInteger[]{prime}, new int[]{1});
+		super(prime, new BigInteger[]{prime}, new Integer[]{1});
 		this.orderFactor = orderFactor;
 	}
 

@@ -76,12 +76,45 @@ public interface Group<V>
 	 */
 	public Element<V> applyInverse(Element element1, Element element2);
 
+	/**
+	 * Inverts applying the binary operation repeatedly to {@code amount} many instances of a given input element. To
+	 * perform this operation, the group order must be known and {@code amount} must be relatively prime to the order.
+	 * This is a convenient method for {@link Group#invertSelfApply(Element, BigInteger)}.
+	 * <p>
+	 * @param element The given input element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of inverting the application of the operation multiple times to the input element
+	 */
 	public Element<V> invertSelfApply(Element element, long amount);
 
-	public Element<V> invertSelfApply(Element element, Element<BigInteger> amount);
-
+	/**
+	 * Inverts applying the binary operation repeatedly to {@code amount} many instances of a given input element. To
+	 * perform this operation, the group order must be known and {@code amount} must be relatively prime to the order.
+	 * <p>
+	 * @param element The given input element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of inverting the application of the operation multiple times to the input element
+	 */
 	public Element<V> invertSelfApply(Element element, BigInteger amount);
 
+	/**
+	 * Same as {@link Group#invertSelfApply(Element, BigInteger)}, except that the amount is given as an instance of
+	 * {@code Element<BigInteger>}, from which a {@code BigInteger} value can be extracted using
+	 * {@link Element#getValue()}.
+	 * <p>
+	 * @param element The given input element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of inverting the application of the operation multiple times to the input element
+	 */
+	public Element<V> invertSelfApply(Element element, Element<BigInteger> amount);
+
+	/**
+	 * Inverts applying the binary operation to two instances of a given element. This is equivalent to
+	 * {@link Group#invertSelfApply(Element, long)} for {@code amount=2}.
+	 * <p>
+	 * @param element The given input element
+	 * @return The result of inverting the application of the operation to two instances of the input element
+	 */
 	public Element<V> invertSelfApply(Element element);
 
 }
