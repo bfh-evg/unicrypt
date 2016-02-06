@@ -55,6 +55,8 @@ import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class implements the group of integers Z*_n with the operation of multiplication modulo n. Its identity element
@@ -72,6 +74,10 @@ public class ZStarMod
 	   extends AbstractMultiplicativeGroup<ZStarModElement, BigInteger> {
 
 	private static final long serialVersionUID = 1L;
+
+	// here we use two maps to store groups of unknown and known order separately
+	private static final Map<BigInteger, ZStarMod> instances1 = new HashMap<>();
+	private static final Map<BigInteger, ZStarMod> instances2 = new HashMap<>();
 
 	private final BigInteger modulus;
 	private final Factorization modulusFactorization;
@@ -224,12 +230,14 @@ public class ZStarMod
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
 		}
 		if (modulus.compareTo(MathUtil.ONE) <= 0) {
-			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, modulus);
+			throw new UniCryptRuntimeException(ErrorCode.SET_CONSTRUCTION_FAILURE, modulus);
 		}
-		if (MathUtil.isPrime(modulus)) {
-			return ZStarModPrime.getInstance(modulus);
+		ZStarMod instance = ZStarMod.instances1.get(modulus);
+		if (instance == null) {
+			instance = new ZStarMod(modulus);
+			ZStarMod.instances1.put(modulus, instance);
 		}
-		return new ZStarMod(modulus);
+		return instance;
 	}
 
 	/**
@@ -244,9 +252,14 @@ public class ZStarMod
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulusFactorization);
 		}
 		if (modulusFactorization.getValue().compareTo(MathUtil.ONE) <= 0) {
-			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, modulusFactorization);
+			throw new UniCryptRuntimeException(ErrorCode.SET_CONSTRUCTION_FAILURE, modulusFactorization);
 		}
-		return new ZStarMod(modulusFactorization);
+		ZStarMod instance = ZStarMod.instances2.get(modulusFactorization.getValue());
+		if (instance == null) {
+			instance = new ZStarMod(modulusFactorization);
+			ZStarMod.instances2.put(modulusFactorization.getValue(), instance);
+		}
+		return instance;
 	}
 
 	public static ZStarMod getRandomInstance(int bitLength) {

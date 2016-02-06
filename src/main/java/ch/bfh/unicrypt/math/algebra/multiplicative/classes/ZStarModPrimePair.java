@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.factorization.PrimePair;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -62,6 +63,27 @@ public class ZStarModPrimePair
 		super(primePair);
 	}
 
+	public static ZStarModPrimePair getInstance(final long prime1, final long prime2) {
+		return ZStarModPrimePair.getInstance(BigInteger.valueOf(prime1), BigInteger.valueOf(prime2));
+	}
+
+	public static ZStarModPrimePair getInstance(final BigInteger prime1, final BigInteger prime2) {
+		if (prime1 == null || prime2 == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, prime1, prime2);
+		}
+		BigInteger value = prime1.multiply(prime2);
+		ZStarModPrimePair instance = ZStarModPrimePair.instances.get(value);
+		if (instance == null) {
+			instance = new ZStarModPrimePair(PrimePair.getInstance(prime1, prime2));
+			ZStarModPrimePair.instances.put(value, instance);
+		}
+		return instance;
+	}
+
+	public static ZStarModPrimePair getInstance(Prime prime1, Prime prime2) {
+		return new ZStarModPrimePair(PrimePair.getInstance(prime1, prime2));
+	}
+
 	public static ZStarModPrimePair getInstance(final PrimePair primePair) {
 		if (primePair == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primePair);
@@ -72,14 +94,6 @@ public class ZStarModPrimePair
 			ZStarModPrimePair.instances.put(primePair.getValue(), instance);
 		}
 		return instance;
-	}
-
-	public static ZStarModPrimePair getInstance(final long prime1, final long prime2) {
-		return ZStarModPrimePair.getInstance(BigInteger.valueOf(prime1), BigInteger.valueOf(prime2));
-	}
-
-	public static ZStarModPrimePair getInstance(final BigInteger prime1, final BigInteger prime2) {
-		return ZStarModPrimePair.getInstance(PrimePair.getInstance(prime1, prime2));
 	}
 
 }

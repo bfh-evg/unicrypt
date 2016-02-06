@@ -88,6 +88,22 @@ public class ZStarModSafePrime
 			   && !element.selfApply(this.getModulus().subtract(MathUtil.ONE).divide(MathUtil.TWO)).isIdentity();
 	}
 
+	public static ZStarModSafePrime getInstance(final long modulus) {
+		return ZStarModSafePrime.getInstance(BigInteger.valueOf(modulus));
+	}
+
+	public static ZStarModSafePrime getInstance(final BigInteger modulus) {
+		if (modulus == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+		}
+		ZStarModSafePrime instance = ZStarModSafePrime.instances.get(modulus);
+		if (instance == null) {
+			instance = new ZStarModSafePrime(SafePrime.getInstance(modulus));
+			ZStarModSafePrime.instances.put(modulus, instance);
+		}
+		return instance;
+	}
+
 	public static ZStarModSafePrime getInstance(final SafePrime modulus) {
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
@@ -98,14 +114,6 @@ public class ZStarModSafePrime
 			ZStarModSafePrime.instances.put(modulus.getValue(), instance);
 		}
 		return instance;
-	}
-
-	public static ZStarModSafePrime getInstance(final long modulus) {
-		return ZStarModSafePrime.getInstance(BigInteger.valueOf(modulus));
-	}
-
-	public static ZStarModSafePrime getInstance(final BigInteger modulus) {
-		return ZStarModSafePrime.getInstance(SafePrime.getInstance(modulus));
 	}
 
 	public static ZStarModSafePrime getFirstInstance(int bitLength) {

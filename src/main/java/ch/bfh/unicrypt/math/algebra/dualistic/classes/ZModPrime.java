@@ -167,11 +167,15 @@ public class ZModPrime
 	}
 
 	public static ZModPrime getInstance(BigInteger modulus) {
-		return ZModPrime.getInstance(Prime.getInstance(modulus));
-	}
-
-	public static ZModPrime getFirstInstance(int bitLength) {
-		return ZModPrime.getInstance(Prime.getFirstInstance(bitLength));
+		if (modulus == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+		}
+		ZModPrime instance = ZModPrime.instances.get(modulus);
+		if (instance == null) {
+			instance = new ZModPrime(Prime.getInstance(modulus));
+			ZModPrime.instances.put(modulus, instance);
+		}
+		return instance;
 	}
 
 	public static ZModPrime getInstance(final Prime modulus) {
@@ -184,6 +188,10 @@ public class ZModPrime
 			ZModPrime.instances.put(modulus.getValue(), instance);
 		}
 		return instance;
+	}
+
+	public static ZModPrime getFirstInstance(int bitLength) {
+		return ZModPrime.getInstance(Prime.getFirstInstance(bitLength));
 	}
 
 }

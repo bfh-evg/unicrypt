@@ -85,7 +85,16 @@ public class ZModPrimePair
 	}
 
 	public static ZModPrimePair getInstance(BigInteger prime1, BigInteger prime2) {
-		return ZModPrimePair.getInstance(PrimePair.getInstance(prime1, prime2));
+		if (prime1 == null || prime2 == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, prime1, prime2);
+		}
+		BigInteger value = prime1.multiply(prime2);
+		ZModPrimePair instance = ZModPrimePair.instances.get(value);
+		if (instance == null) {
+			instance = new ZModPrimePair(PrimePair.getInstance(prime1, prime2));
+			ZModPrimePair.instances.put(value, instance);
+		}
+		return instance;
 	}
 
 	public static ZModPrimePair getInstance(Prime prime1, Prime prime2) {

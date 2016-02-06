@@ -57,8 +57,8 @@ import java.util.Map;
 public class GStarModSafePrime
 	   extends GStarModPrime {
 
-	private final static Map<BigInteger, GStarModSafePrime> instances = new HashMap<>();
 	private static final long serialVersionUID = 1L;
+	private final static Map<BigInteger, GStarModSafePrime> instances = new HashMap<>();
 
 	protected GStarModSafePrime(SafePrime modulus) {
 		super(modulus, Prime.getInstance(modulus.getValue().subtract(MathUtil.ONE).divide(MathUtil.TWO)));
@@ -67,6 +67,22 @@ public class GStarModSafePrime
 	@Override
 	protected String defaultToStringContent() {
 		return this.getModulus().toString();
+	}
+
+	public static GStarModSafePrime getInstance(final long modulus) {
+		return GStarModSafePrime.getInstance(BigInteger.valueOf(modulus));
+	}
+
+	public static GStarModSafePrime getInstance(final BigInteger modulus) {
+		if (modulus == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+		}
+		GStarModSafePrime instance = GStarModSafePrime.instances.get(modulus);
+		if (instance == null) {
+			instance = new GStarModSafePrime(SafePrime.getInstance(modulus));
+			GStarModSafePrime.instances.put(modulus, instance);
+		}
+		return instance;
 	}
 
 	public static GStarModSafePrime getInstance(final SafePrime modulus) {
@@ -79,14 +95,6 @@ public class GStarModSafePrime
 			GStarModSafePrime.instances.put(modulus.getValue(), instance);
 		}
 		return instance;
-	}
-
-	public static GStarModSafePrime getInstance(final long modulus) {
-		return GStarModSafePrime.getInstance(BigInteger.valueOf(modulus));
-	}
-
-	public static GStarModSafePrime getInstance(final BigInteger modulus) {
-		return GStarModSafePrime.getInstance(SafePrime.getInstance(modulus));
 	}
 
 	public static GStarModSafePrime getFirstInstance(final int bitLength) {
