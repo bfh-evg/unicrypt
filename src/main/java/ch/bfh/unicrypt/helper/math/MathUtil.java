@@ -808,13 +808,13 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Computes the Legendre symbol {@code (a/n)} of a positive integer {@code a>0} and a prime number {@code p>2}.
+	 * Computes the Legendre symbol {@code (a/n)} of a non-negative integer {@code a>=0} and a prime number {@code p>2}.
 	 * <p>
 	 * @param a The given integer
 	 * @param p The given odd prime number
 	 * @return The Legendre symbol {@code (a/n)}
 	 */
-	public int legendreSymbol(BigInteger a, BigInteger p) {
+	public static int legendreSymbol(BigInteger a, BigInteger p) {
 
 		a = a.mod(p);
 

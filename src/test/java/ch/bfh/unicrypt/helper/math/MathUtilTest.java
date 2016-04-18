@@ -731,4 +731,25 @@ public class MathUtilTest {
 		Assert.assertEquals(-2, MathUtil.divideUp(5, n));
 	}
 
+	@Test
+	public void legendreSymbolTest() {
+		for (int p : new int[]{3, 5, 7, 11, 13, 17, 19, 23}) {
+			BigInteger bigP = BigInteger.valueOf(p);
+			BigInteger bigQ = bigP.subtract(ONE).divide(TWO);
+			for (int a = 0; a <= p; a++) {
+				BigInteger bigA = BigInteger.valueOf(a);
+				BigInteger bigR = bigA.modPow(bigQ, bigP);
+				int r;
+				if (bigR.equals(ONE)) {
+					r = 1;
+				} else if (bigR.equals(ZERO)) {
+					r = 0;
+				} else {
+					r = -1;
+				}
+				Assert.assertEquals(r, MathUtil.legendreSymbol(bigA, bigP));
+			}
+		}
+	}
+
 }
