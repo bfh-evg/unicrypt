@@ -67,6 +67,7 @@ public final class MathUtil {
 	public static final BigInteger FIVE = BigInteger.valueOf(5);
 	public static final BigInteger SIX = BigInteger.valueOf(6);
 	public static final BigInteger SEVEN = BigInteger.valueOf(7);
+	public static final BigInteger EIGHT = BigInteger.valueOf(8);
 
 	private static final byte[] BIT_MASKS = new byte[Byte.SIZE];
 	private static final byte[] BIT_MASKS_INV = new byte[Byte.SIZE];
@@ -804,6 +805,42 @@ public final class MathUtil {
 			return divideUp(x.negate(), y.negate());
 		}
 		return divide(x.add(y).subtract(ONE), y);
+	}
+
+	/**
+	 * Computes the Legendre symbol {@code (a/n)} of a positive integer {@code a>0} and a prime number {@code p>2}.
+	 * <p>
+	 * @param a The given integer
+	 * @param p The given odd prime number
+	 * @return The Legendre symbol {@code (a/n)}
+	 */
+	public int legendreSymbol(BigInteger a, BigInteger p) {
+
+		a = a.mod(p);
+
+		BigInteger t = MathUtil.ONE;
+		while (!a.equals(MathUtil.ZERO)) {
+			while (a.mod(MathUtil.TWO).equals(MathUtil.ZERO)) {
+				a = a.divide(MathUtil.TWO);
+
+				if (p.mod(MathUtil.EIGHT).equals(MathUtil.THREE) || p.mod(MathUtil.EIGHT).equals(MathUtil.FIVE)) {
+					t = t.negate();
+				}
+			}
+			BigInteger tmp = a;
+			a = p;
+			p = tmp;
+
+			if (a.mod(MathUtil.FOUR).equals(MathUtil.THREE) && p.mod(MathUtil.FOUR).equals(MathUtil.THREE)) {
+				t = t.negate();
+			}
+			a = a.mod(p);
+		}
+		if (p.equals(MathUtil.ONE)) {
+			return t.intValue();
+		} else {
+			return 0;
+		}
 	}
 
 }
