@@ -69,6 +69,13 @@ public class GStarModSafePrime
 		return this.getModulus().toString();
 	}
 
+	@Override
+	protected boolean abstractContains(final BigInteger value) {
+		return value.signum() > 0
+			   && value.compareTo(this.modulus) < 0
+			   && MathUtil.legendreSymbol(value, this.modulus) == 1;
+	}
+
 	public static GStarModSafePrime getInstance(final long modulus) {
 		return GStarModSafePrime.getInstance(BigInteger.valueOf(modulus));
 	}

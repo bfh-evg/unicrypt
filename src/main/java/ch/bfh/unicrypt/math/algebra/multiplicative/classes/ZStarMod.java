@@ -79,7 +79,7 @@ public class ZStarMod
 	private static final Map<BigInteger, ZStarMod> instances1 = new HashMap<>();
 	private static final Map<BigInteger, ZStarMod> instances2 = new HashMap<>();
 
-	private final BigInteger modulus;
+	protected final BigInteger modulus;
 	private final Factorization modulusFactorization;
 
 	protected ZStarMod(final BigInteger modulus) {

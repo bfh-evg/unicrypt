@@ -75,7 +75,7 @@ public class GStarMod
 
 	private static final long serialVersionUID = 1L;
 
-	private final BigInteger modulus;
+	protected final BigInteger modulus;
 	private final SpecialFactorization modulusFactorization;
 	private final Factorization orderFactorization;
 	private ZStarMod superGroup;

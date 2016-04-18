@@ -74,6 +74,13 @@ public class GStarModPrime
 		return ZStarModPrime.getInstance(this.getOrder());
 	}
 
+	@Override
+	protected boolean abstractContains(final BigInteger value) {
+		return value.signum() > 0
+			   && value.compareTo(this.modulus) < 0
+			   && value.modPow(this.getOrder(), this.modulus).equals(MathUtil.ONE);
+	}
+
 	public static GStarModPrime getInstance(final long modulus, long order) {
 		return GStarModPrime.getInstance(BigInteger.valueOf(modulus), BigInteger.valueOf(order));
 	}

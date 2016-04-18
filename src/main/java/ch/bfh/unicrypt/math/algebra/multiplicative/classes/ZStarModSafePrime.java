@@ -83,9 +83,9 @@ public class ZStarModSafePrime
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, element);
 		}
-		return !element.isIdentity()
-			   && !element.selfApply().isIdentity()
-			   && !element.selfApply(this.getModulus().subtract(MathUtil.ONE).divide(MathUtil.TWO)).isIdentity();
+		BigInteger value = ((Element<BigInteger>) element).getValue();
+		return (!value.equals(this.modulus.subtract(MathUtil.ONE)) || this.modulus.equals(MathUtil.TWO))
+			   && MathUtil.legendreSymbol(value, this.modulus) == -1;
 	}
 
 	public static ZStarModSafePrime getInstance(final long modulus) {
