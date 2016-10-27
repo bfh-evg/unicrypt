@@ -55,7 +55,7 @@ public class Triple
 
 	private static final long serialVersionUID = 1L;
 
-	protected Triple(final ProductSet set, final DenseArray<Element> elements) {
+	protected Triple(final ProductSet set, final DenseArray<? extends Element> elements) {
 		super(set, elements);
 	}
 

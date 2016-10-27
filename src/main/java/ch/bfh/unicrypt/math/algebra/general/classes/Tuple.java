@@ -70,8 +70,8 @@ public class Tuple
 
 	private static final long serialVersionUID = 1L;
 
-	protected Tuple(final ProductSet set, final DenseArray<Element> elements) {
-		super(set, elements);
+	protected Tuple(final ProductSet set, final DenseArray<? extends Element> elements) {
+		super(set, (DenseArray<Element>) elements);
 	}
 
 	public int getArity() {
@@ -314,7 +314,7 @@ public class Tuple
 	 * @param elements The array of input elements
 	 * @return The corresponding tuple element
 	 */
-	public static Tuple getInstance(DenseArray<Element> elements) {
+	public static Tuple getInstance(DenseArray<? extends Element> elements) {
 		if (elements == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, elements);
 		}
@@ -344,7 +344,7 @@ public class Tuple
 	}
 
 	// helper method to distinguish between pairs, triples and tuples
-	private static Tuple getInstance(ProductSet productSet, DenseArray<Element> elements) {
+	private static Tuple getInstance(ProductSet productSet, DenseArray<? extends Element> elements) {
 		if (elements.getLength() == 1) {
 			return new Singleton(productSet, elements);
 		}

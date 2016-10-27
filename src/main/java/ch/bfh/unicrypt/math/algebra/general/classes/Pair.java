@@ -55,7 +55,7 @@ public class Pair
 
 	private static final long serialVersionUID = 1L;
 
-	protected Pair(final ProductSet set, final DenseArray<Element> elements) {
+	protected Pair(final ProductSet set, final DenseArray<? extends Element> elements) {
 		super(set, elements);
 	}
 

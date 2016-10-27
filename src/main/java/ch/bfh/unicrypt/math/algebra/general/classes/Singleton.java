@@ -55,7 +55,7 @@ public class Singleton
 
 	private static final long serialVersionUID = 1L;
 
-	protected Singleton(final ProductSet set, final DenseArray<Element> elements) {
+	protected Singleton(final ProductSet set, final DenseArray<? extends Element> elements) {
 		super(set, elements);
 	}
 
