@@ -170,6 +170,22 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 		return (Pair) this.getOrProofGenerator().createPrivateInput(secret, index);
 	}
 
+	public Pair createPrivateInput(Element secret, Element member) {
+		int index = -1;
+		int i = 0;
+		for (Element m : this.members.getElements()) {
+			if (m.equals(member)) {
+				index = i;
+				break;
+			}
+			i++;
+		}
+		if (index == -1) {
+			throw new IllegalArgumentException();
+		}
+		return (Pair) this.getOrProofGenerator().createPrivateInput(secret, index);
+	}
+
 	private Tuple createProofImages(PUE publicInput) {
 		final Element[] images = new Element[this.members.getOrder().intValue()];
 		int i = 0;
@@ -193,8 +209,8 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 		final ProductSet setMembershipPFDomain = (ProductSet) this.getSetMembershipProofFunction().getDomain();
 		final Function proofFunction
 			   = CompositeFunction.getInstance(SharedDomainFunction.getInstance(
-							 SelectionFunction.getInstance(setMembershipPFDomain, 0),
-							 this.getSetMembershipProofFunction()), this.getDeltaFunction());
+					  SelectionFunction.getInstance(setMembershipPFDomain, 0),
+					  this.getSetMembershipProofFunction()), this.getDeltaFunction());
 
 		// proofFunction_x = composite( multiIdentity(1), proofFunction.partiallyApply(x, 0))
 		final Function[] proofFunctions = new Function[this.members.getOrder().intValue()];
