@@ -218,17 +218,17 @@ public class PolynomialSemiRing
 			}
 		}
 		coefficientMap.put(degree, this.getSemiRing().getOneElement());
-		return PolynomialSemiRing.this.abstractGetElement(coefficientMap);
+		return this.abstractGetElement(coefficientMap);
 	}
 
 	protected PolynomialElement abstractGetElement(Map<Integer, DualisticElement<BigInteger>> coefficientMap) {
-		return PolynomialSemiRing.this.abstractGetElement(Polynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(),
-																				 this.getSemiRing().getOneElement()));
+		return this.abstractGetElement(Polynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(),
+															  this.getSemiRing().getOneElement()));
 	}
 
 	protected PolynomialElement abstractGetElement(BitArray coefficients) {
-		return PolynomialSemiRing.this.abstractGetElement(Polynomial.getInstance(coefficients, this.getSemiRing().getZeroElement(),
-																				 this.getSemiRing().getOneElement()));
+		return this.abstractGetElement(Polynomial.getInstance(coefficients, this.getSemiRing().getZeroElement(),
+															  this.getSemiRing().getOneElement()));
 	}
 
 	@Override

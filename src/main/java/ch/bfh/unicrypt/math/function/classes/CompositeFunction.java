@@ -70,7 +70,7 @@ public final class CompositeFunction
 	}
 
 	@Override
-	protected final Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
+	protected Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
 		Element result = element;
 		for (Function function : this) {
 			result = function.apply(result, randomByteSequence);

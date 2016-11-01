@@ -109,7 +109,7 @@ public abstract class AbstractGroup<E extends Element<V>, V>
 		if (!this.isFinite() || !this.hasKnownOrder()) {
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
-		boolean positiveAmount = (amount.signum() > 0);
+		boolean positiveAmount = amount.signum() > 0;
 		amount = amount.abs().mod(this.getOrder());
 		if (!MathUtil.areRelativelyPrime(amount, this.getOrder())) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, amount);
@@ -128,7 +128,7 @@ public abstract class AbstractGroup<E extends Element<V>, V>
 
 	@Override
 	protected E defaultSelfApply(E element, BigInteger amount) {
-		boolean positiveAmount = (amount.signum() > 0);
+		boolean positiveAmount = amount.signum() > 0;
 		amount = amount.abs();
 		if (this.isFinite() && this.hasKnownOrder()) {
 			amount = amount.mod(this.getOrder());

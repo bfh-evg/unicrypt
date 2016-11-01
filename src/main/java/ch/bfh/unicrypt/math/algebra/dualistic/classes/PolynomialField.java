@@ -222,7 +222,7 @@ public class PolynomialField
 		if (!this.isFinite() || !this.hasKnownOrder()) {
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
-		boolean positive = (n.signum() > 0);
+		boolean positive = n.signum() > 0;
 		n = n.abs().mod(this.getOrder()).modInverse(this.getOrder());
 		PolynomialElement result = this.defaultPowerAlgorithm((PolynomialElement) element, n);
 		if (positive) {

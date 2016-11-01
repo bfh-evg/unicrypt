@@ -122,7 +122,8 @@ public abstract class Sequence<V>
 	public final BigInteger getLength() {
 		if (this.length.equals(Sequence.UNKNOWN)) {
 			long counter = 0;
-			for (V value : this) {
+			for (Iterator<V> it = this.iterator(); it.hasNext();) {
+				it.next();
 				counter++;
 			}
 			this.length = BigInteger.valueOf(counter);

@@ -126,7 +126,7 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 		if (!this.isFinite() || !this.hasKnownOrder()) {
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
-		boolean positive = (n.signum() > 0);
+		boolean positive = n.signum() > 0;
 		n = n.abs().mod(this.getOrder()).modInverse(this.getOrder());
 		E result = this.defaultPowerAlgorithm((E) element, n);
 		if (positive) {
@@ -145,7 +145,7 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 		if (element.isZero()) {
 			return element;
 		}
-		boolean negExponent = (exponent.signum() < 0);
+		boolean negExponent = exponent.signum() < 0;
 		exponent = exponent.abs();
 		if (this.isFinite() && this.hasKnownOrder()) {
 			exponent = exponent.mod(this.getOrder().subtract(MathUtil.ONE));

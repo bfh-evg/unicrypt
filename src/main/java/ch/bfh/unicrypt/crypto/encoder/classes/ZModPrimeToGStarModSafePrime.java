@@ -116,7 +116,7 @@ public class ZModPrimeToGStarModSafePrime
 			if (value.compareTo(domain.getOrder()) <= 0) {
 				return this.getCoDomain().getElement(value.subtract(MathUtil.ONE));
 			}
-			return this.getCoDomain().getElement((domain.getModulus().subtract(value)).subtract(MathUtil.ONE));
+			return this.getCoDomain().getElement(domain.getModulus().subtract(value).subtract(MathUtil.ONE));
 		}
 
 	}

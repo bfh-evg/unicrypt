@@ -212,10 +212,8 @@ public class SparseArray<V>
 		}
 		List<Integer> result = new LinkedList<>();
 		for (Integer i : this.map.keySet()) {
-			if (i >= this.rangeOffset && i < this.rangeOffset + this.rangeLength) {
-				if (this.map.get(i).equals(value)) {
-					result.add(this.getIndex(i));
-				}
+			if (i >= this.rangeOffset && i < this.rangeOffset + this.rangeLength && this.map.get(i).equals(value)) {
+				result.add(this.getIndex(i));
 			}
 		}
 		return Sequence.getInstance(result);
@@ -229,10 +227,9 @@ public class SparseArray<V>
 		}
 		List<Integer> result = new LinkedList<>();
 		for (Integer i : this.map.keySet()) {
-			if (i >= this.rangeOffset && i < this.rangeOffset + this.length - this.header - this.trailer) {
-				if (!this.map.get(i).equals(this.defaultValue)) {
-					result.add(this.getIndex(i));
-				}
+			if (i >= this.rangeOffset && i < this.rangeOffset + this.length - this.header - this.trailer
+				   && !this.map.get(i).equals(this.defaultValue)) {
+				result.add(this.getIndex(i));
 			}
 		}
 		return Sequence.getInstance(result);

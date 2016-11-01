@@ -96,7 +96,7 @@ public class InequalityOfPreimagesProofSystem
 		   final Function secondFunction) {
 		SigmaChallengeGenerator challengeGenerator
 			   = InequalityOfPreimagesProofSystem
-			   .createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId);
+					  .createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId);
 		return InequalityOfPreimagesProofSystem.getInstance(challengeGenerator, firstFunction, secondFunction);
 	}
 
@@ -109,7 +109,6 @@ public class InequalityOfPreimagesProofSystem
 			throw new IllegalArgumentException();
 		}
 
-		ProductSet codomain = ProductSet.getInstance(secondFunction.getCoDomain(), firstFunction.getCoDomain());
 		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(),
 														  secondFunction.getDomain()).getMinimalOrder());
 		if (!cs.isEquivalent(challengeGenerator.getChallengeSpace())) {

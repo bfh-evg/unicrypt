@@ -753,7 +753,7 @@ public final class MathUtil {
 	 */
 	public static int modulo(int x, int y) {
 		y = Math.abs(y);
-		return ((x % y) + y) % y;
+		return (x % y + y) % y;
 	}
 
 	/**

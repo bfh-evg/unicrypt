@@ -156,9 +156,9 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 	 */
 	protected static boolean checkChallengeSpace(final SigmaChallengeGenerator challengeGenerator,
 		   final Function proofFunction) {
-		return (proofFunction == null || challengeGenerator == null
+		return proofFunction == null || challengeGenerator == null
 			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()).isEquivalent(challengeGenerator
-					  .getChallengeSpace()));
+					  .getChallengeSpace());
 
 	}
 

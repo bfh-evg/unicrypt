@@ -62,6 +62,7 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class ByteArrayToString
 	   extends AbstractStringConverter<ByteArray> {
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -210,9 +211,9 @@ public class ByteArrayToString
 	 */
 	public static ByteArrayToString getInstance(Radix radix, String delimiter, boolean upperCase) {
 		if (radix == null || delimiter == null || delimiter.length() > 1
-			   || (radix == Radix.BINARY && delimiter.matches("^[0-1]$"))
-			   || (radix == Radix.HEX && delimiter.matches(upperCase ? "^[0-9A-F]$" : "^[0-9a-f]$"))
-			   || (radix == Radix.BASE64 && delimiter.length() > 0)) {
+			   || radix == Radix.BINARY && delimiter.matches("^[0-1]$")
+			   || radix == Radix.HEX && delimiter.matches(upperCase ? "^[0-9A-F]$" : "^[0-9a-f]$")
+			   || radix == Radix.BASE64 && delimiter.length() > 0) {
 			throw new IllegalArgumentException();
 		}
 		return new ByteArrayToString(radix, delimiter, upperCase);

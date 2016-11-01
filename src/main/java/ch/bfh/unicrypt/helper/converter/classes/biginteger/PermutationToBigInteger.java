@@ -84,7 +84,7 @@ public class PermutationToBigInteger
 
 	@Override
 	protected boolean defaultIsValidInput(Permutation permutation) {
-		return (permutation.getSize() == this.size);
+		return permutation.getSize() == this.size;
 	}
 
 	@Override

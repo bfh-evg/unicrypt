@@ -107,7 +107,7 @@ public abstract class AbstractRing<E extends DualisticElement<V>, V>
 		if (!this.isFinite() || !this.hasKnownOrder()) {
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
-		boolean positiveAmount = (amount.signum() > 0);
+		boolean positiveAmount = amount.signum() > 0;
 		amount = amount.abs().mod(this.getOrder()).modInverse(this.getOrder());
 		E result = this.defaultSelfApplyAlgorithm((E) element, amount);
 		if (positiveAmount) {
@@ -148,7 +148,7 @@ public abstract class AbstractRing<E extends DualisticElement<V>, V>
 
 	@Override
 	protected E defaultSelfApply(E element, BigInteger factor) {
-		boolean negFactor = (factor.signum() < 0);
+		boolean negFactor = factor.signum() < 0;
 		factor = factor.abs();
 		if (this.isFinite() && this.hasKnownOrder()) {
 			factor = factor.mod(this.getOrder());

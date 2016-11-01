@@ -170,7 +170,7 @@ public class BigIntegerSequence
 			if (this.getLength().signum() == 0) {
 				return true;
 			}
-			return (this.from.equals(other.from));
+			return this.from.equals(other.from);
 		}
 		return super.equals(obj);
 	}

@@ -137,12 +137,12 @@ public abstract class AbstractConverter<V, W>
 
 	@Override
 	public final boolean isValidInput(V value) {
-		return (value != null) && this.defaultIsValidInput(value);
+		return value != null && this.defaultIsValidInput(value);
 	}
 
 	@Override
 	public final boolean isValidOutput(W value) {
-		return (value != null) && this.defaultIsValidOutput(value);
+		return value != null && this.defaultIsValidOutput(value);
 	}
 
 	@Override

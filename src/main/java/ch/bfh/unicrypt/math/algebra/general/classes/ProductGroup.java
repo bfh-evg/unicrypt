@@ -200,7 +200,7 @@ public class ProductGroup
 		if (!this.isFinite() || !this.hasKnownOrder()) {
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
-		boolean positiveAmount = (amount.signum() > 0);
+		boolean positiveAmount = amount.signum() > 0;
 		amount = amount.abs().mod(this.getOrder()).modInverse(this.getOrder());
 		Tuple result = this.defaultSelfApply((Tuple) element, amount);
 		if (positiveAmount) {

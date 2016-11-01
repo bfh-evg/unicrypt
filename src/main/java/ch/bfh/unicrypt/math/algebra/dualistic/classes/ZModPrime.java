@@ -126,7 +126,7 @@ public class ZModPrime
 		if (!this.isFinite() || !this.hasKnownOrder()) {
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
-		boolean positive = (n.signum() > 0);
+		boolean positive = n.signum() > 0;
 		n = n.abs().mod(this.getOrder()).modInverse(this.getOrder());
 		ZModElement result = this.defaultPowerAlgorithm((ZModElement) element, n);
 		if (positive) {

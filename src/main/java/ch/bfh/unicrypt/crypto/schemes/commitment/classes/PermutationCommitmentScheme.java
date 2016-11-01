@@ -57,6 +57,7 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 //
+// @author R. Haenni
 // @see [Wik09] Construction 1: Pedersen Commitment
 // @see [TW10]  Matrix Commitment
 //
@@ -81,7 +82,7 @@ public class PermutationCommitmentScheme
 
 	@Override
 	protected Function abstractGetCommitmentFunction() {
-		return new PermutationCommitmentFunction(this.cyclicGroup, this.size, this.randomizationGenerator, this.messageGenerators);
+		return new PermutationCommitmentFunction();
 	}
 
 	public CyclicGroup getCyclicGroup() {
@@ -128,8 +129,7 @@ public class PermutationCommitmentScheme
 	private class PermutationCommitmentFunction
 		   extends AbstractFunction<PermutationCommitmentFunction, ProductSet, Pair, ProductGroup, Tuple> {
 
-		protected PermutationCommitmentFunction(CyclicGroup cyclicGroup, int size, Element randomizationGenerator,
-			   Tuple messageGenerators) {
+		protected PermutationCommitmentFunction() {
 			super(ProductSet.getInstance(messageSpace, randomizationSpace), commitmentSpace);
 		}
 

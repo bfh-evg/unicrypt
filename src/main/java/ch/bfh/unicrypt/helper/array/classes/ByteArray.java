@@ -102,7 +102,7 @@ public class ByteArray
 		super(ByteArray.class, length, rangeOffset, reverse, ALL_ZERO, trailer, header, rangeLength);
 		this.bytes = bytes;
 		this.bitReversed = bitReversed;
-		this.normalized = (rangeOffset == 0) && (rangeLength == length) && !reverse && !bitReversed;
+		this.normalized = rangeOffset == 0 && rangeLength == length && !reverse && !bitReversed;
 	}
 
 	/**
@@ -355,14 +355,6 @@ public class ByteArray
 			rangeIndex = this.rangeLength - rangeIndex - 1;
 		}
 		return this.abstractGetValueAt(this.rangeOffset + rangeIndex);
-	}
-
-	// copy of abstractGetValueAt with byte as return type
-	private byte abstractGetByteValueAt(int index) {
-		if (this.bitReversed) {
-			return MathUtil.reverse(this.bytes[index]);
-		}
-		return this.bytes[index];
 	}
 
 	// changes the byte array's internal representation by setting header, trailer, rangeOffset to 0 and

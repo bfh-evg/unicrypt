@@ -104,7 +104,7 @@ public class BitArrayToString
 	protected BitArray abstractReconvert(String string) {
 		boolean[] bits = new boolean[string.length()];
 		for (int i = 0; i < bits.length; i++) {
-			bits[i] = (string.charAt(i) == '1');
+			bits[i] = string.charAt(i) == '1';
 		}
 		BitArray result = BitArray.getInstance(bits);
 		return this.reverse ? result.reverse() : result;

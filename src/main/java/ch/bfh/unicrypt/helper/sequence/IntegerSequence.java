@@ -117,7 +117,7 @@ public class IntegerSequence
 			if (this.getLength().signum() == 0) {
 				return true;
 			}
-			return (this.from == other.from);
+			return this.from == other.from;
 		}
 		return super.equals(obj);
 	}

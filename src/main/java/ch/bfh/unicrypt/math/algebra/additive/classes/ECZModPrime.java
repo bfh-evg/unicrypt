@@ -186,10 +186,8 @@ public class ECZModPrime
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
 		}
 		// Test6a
-		if (!isTest) {
-			if (coFactor.compareTo(MathUtil.powerOfTwo(securityLevel / 8)) > 0) {
-				throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
-			}
+		if (!isTest && coFactor.compareTo(MathUtil.powerOfTwo(securityLevel / 8)) > 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
 		}
 		// Test6b
 		if (!MathUtil.sqrt(modulus.multiply(MathUtil.FOUR)).add(modulus).add(MathUtil.ONE).divide(subGroupOrder).equals(coFactor)) {
