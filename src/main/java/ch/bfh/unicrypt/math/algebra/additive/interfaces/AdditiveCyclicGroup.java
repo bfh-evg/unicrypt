@@ -65,6 +65,7 @@ public interface AdditiveCyclicGroup<V>
 	public Sequence<? extends AdditiveElement<V>> getIndependentGenerators();
 
 	@Override
-	public Sequence<? extends AdditiveElement<V>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
+	public Sequence<? extends AdditiveElement<V>> getIndependentGenerators(
+		   DeterministicRandomByteSequence randomByteSequence);
 
 }

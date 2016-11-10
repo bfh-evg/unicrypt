@@ -168,10 +168,12 @@ public interface AdditiveSemiGroup<V>
 	public <W> AdditiveElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;
 
 	@Override
-	public <W> AdditiveElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
+	public <W> AdditiveElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator)
+		   throws UniCryptException;
 
 	@Override
-	public <W, X> AdditiveElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
+	public <W, X> AdditiveElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator,
+		   Converter<W, X> finalConverter) throws UniCryptException;
 
 	@Override
 	public <W> AdditiveElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;

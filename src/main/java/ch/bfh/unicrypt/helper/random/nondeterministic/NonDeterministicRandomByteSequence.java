@@ -58,7 +58,7 @@ import ch.bfh.unicrypt.helper.random.RandomByteSequenceIterator;
 public class NonDeterministicRandomByteSequence
 	   extends RandomByteSequence {
 
-	final RandomByteSequenceIterator iterator;
+	final private RandomByteSequenceIterator iterator;
 
 	protected NonDeterministicRandomByteSequence(RandomByteSequenceIterator iterator) {
 		this.iterator = iterator;

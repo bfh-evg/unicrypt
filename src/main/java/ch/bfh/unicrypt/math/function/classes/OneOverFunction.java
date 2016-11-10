@@ -69,7 +69,8 @@ public class OneOverFunction
 	}
 
 	@Override
-	protected MultiplicativeElement abstractApply(final MultiplicativeElement element, final RandomByteSequence randomByteSequence) {
+	protected MultiplicativeElement abstractApply(final MultiplicativeElement element,
+		   final RandomByteSequence randomByteSequence) {
 		return element.oneOver();
 	}
 

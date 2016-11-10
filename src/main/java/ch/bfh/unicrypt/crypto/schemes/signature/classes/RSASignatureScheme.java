@@ -136,7 +136,8 @@ public class RSASignatureScheme<MS extends Set>
 	}
 
 	public static <MS extends Set> RSASignatureScheme<MS> getInstance(MS messageSpace, ZMod zMod) {
-		return RSASignatureScheme.getInstance(messageSpace, zMod, ConvertMethod.getInstance(), HashMethod.getInstance());
+		return RSASignatureScheme.getInstance(messageSpace, zMod, ConvertMethod.getInstance(),
+											  HashMethod.getInstance());
 	}
 
 	public static <MS extends Set, V> RSASignatureScheme<MS>

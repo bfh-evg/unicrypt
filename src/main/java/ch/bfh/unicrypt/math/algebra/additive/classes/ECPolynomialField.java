@@ -67,7 +67,8 @@ public class ECPolynomialField
 
 	private final BigInteger traceA;
 
-	protected ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy, BigInteger subGroupOrder, BigInteger coFactor) {
+	protected ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b,
+		   PolynomialElement gx, PolynomialElement gy, BigInteger subGroupOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, subGroupOrder, coFactor);
 		this.traceA = this.trace(a);
 	}
@@ -99,7 +100,8 @@ public class ECPolynomialField
 			return false;
 		}
 		// y²+xy=x³+ax²+b <=> x³+ax²+b-(y²+xy)=0
-		if (!x.power(3).add(this.getA().multiply(x.power(2))).add(this.getB()).subtract(y.power(2).add(x.multiply(y))).isZero()) {
+		if (!x.power(3).add(this.getA().multiply(x.power(2))).add(this.getB()).subtract(y.power(2).add(x.multiply(y))).
+			   isZero()) {
 			return false;
 		}
 		if (this.getCoFactor().intValue() == 2) {
@@ -125,7 +127,8 @@ public class ECPolynomialField
 	}
 
 	@Override
-	protected ECPolynomialElement abstractAdd(PolynomialElement x1, PolynomialElement y1, PolynomialElement x2, PolynomialElement y2) {
+	protected ECPolynomialElement abstractAdd(PolynomialElement x1, PolynomialElement y1, PolynomialElement x2,
+		   PolynomialElement y2) {
 		// "SEC 1: Elliptic Curve Cryptography", Version 2.0, 2009 (Section 2.2.2, page 8)
 		PolynomialElement lambda, x, y;
 		if (x1.isEquivalent(x2)) { // testing only the x-coordinates is sufficient
@@ -200,14 +203,21 @@ public class ECPolynomialField
 	 * @param coFactor        Co-factor of the subgroup
 	 * @return The resulting subgroup of the elliptic curve
 	 */
-	public static ECPolynomialField getInstance(int securityLevel, PolynomialField polynomialField, PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy, BigInteger subGroupOrder, BigInteger coFactor) {
-		return ECPolynomialField.getInstance(securityLevel, polynomialField, a, b, gx, gy, subGroupOrder, coFactor, false);
+	public static ECPolynomialField getInstance(int securityLevel, PolynomialField polynomialField, PolynomialElement a,
+		   PolynomialElement b, PolynomialElement gx, PolynomialElement gy, BigInteger subGroupOrder,
+		   BigInteger coFactor) {
+		return ECPolynomialField.getInstance(securityLevel, polynomialField, a, b, gx, gy, subGroupOrder, coFactor,
+											 false);
 	}
 
 	// a private helper method to include the possibility of test parameters which do not pass all tests
-	private static ECPolynomialField getInstance(int securityLevel, PolynomialField polynomialField, PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy, BigInteger subGroupOrder, BigInteger coFactor, boolean isTest) {
-		if (polynomialField == null || a == null || b == null || gx == null || gy == null || subGroupOrder == null || coFactor == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, polynomialField, a, b, gx, gy, subGroupOrder, coFactor);
+	private static ECPolynomialField getInstance(int securityLevel, PolynomialField polynomialField,
+		   PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
+		   BigInteger subGroupOrder, BigInteger coFactor, boolean isTest) {
+		if (polynomialField == null || a == null || b == null || gx == null || gy == null || subGroupOrder == null ||
+			   coFactor == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, polynomialField, a, b, gx, gy, subGroupOrder,
+											   coFactor);
 		}
 		int degree = polynomialField.getDegree();
 		BigInteger fieldOrder = polynomialField.getOrder();
@@ -242,8 +252,10 @@ public class ECPolynomialField
 				throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
 			}
 			// Test7b
-			if (!MathUtil.sqrt(fieldOrder.multiply(MathUtil.FOUR)).add(fieldOrder).add(MathUtil.ONE).divide(subGroupOrder).equals(coFactor)) {
-				throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, fieldOrder, subGroupOrder, coFactor);
+			if (!MathUtil.sqrt(fieldOrder.multiply(MathUtil.FOUR)).add(fieldOrder).add(MathUtil.ONE).divide(
+				   subGroupOrder).equals(coFactor)) {
+				throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, fieldOrder,
+												   subGroupOrder, coFactor);
 			}
 			// Test9a
 			for (BigInteger i : BigIntegerSequence.getInstance(1, 100 * degree - 1)) {
@@ -260,7 +272,8 @@ public class ECPolynomialField
 		ECPolynomialElement generator = instance.getDefaultGenerator();
 		// Test8
 		if (!instance.defaultSelfApplyAlgorithm(generator, subGroupOrder).isZero()) {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, generator, subGroupOrder, instance.defaultSelfApplyAlgorithm(generator, subGroupOrder));
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, generator, subGroupOrder, instance.
+											   defaultSelfApplyAlgorithm(generator, subGroupOrder));
 		}
 		return instance;
 	}
@@ -282,23 +295,4 @@ public class ECPolynomialField
 		);
 	}
 
-//	public static void main(String[] args) {
-//
-//		ECPolynomialField ec = ECPolynomialField.getInstance(TEST11);
-//		for (ECPolynomialElement element : ec.getElements()) {
-//			System.out.println(element);
-//		}
-//		PolynomialField field = ec.getFiniteField();
-//		for (PolynomialElement x : field.getElements()) {
-//			if (ec.contains(x)) {
-//				System.out.println(ec.getElement(x));
-//				System.out.println(ec.getElement(x).negate());
-//			}
-//			for (PolynomialElement y : field.getElements()) {
-//				if (ec.contains(x, y)) {
-//					System.out.println(ec.getElement(x, y));
-//				}
-//			}
-//		}
-//	}
 }

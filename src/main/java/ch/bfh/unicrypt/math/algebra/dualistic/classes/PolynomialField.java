@@ -105,7 +105,8 @@ public class PolynomialField
 	}
 
 	@Override
-	protected Converter<Polynomial<? extends DualisticElement<BigInteger>>, BigInteger> abstractGetBigIntegerConverter() {
+	protected Converter<Polynomial<? extends DualisticElement<BigInteger>>, BigInteger>
+		   abstractGetBigIntegerConverter() {
 		return new AbstractBigIntegerConverter<Polynomial<? extends DualisticElement<BigInteger>>>(null) {
 
 			@Override
@@ -133,7 +134,8 @@ public class PolynomialField
 				}
 				Polynomial<? extends DualisticElement<BigInteger>> polynomial
 					   = Polynomial.<DualisticElement<BigInteger>>getInstance(elements,
-																			  getSemiRing().getZeroElement(), getSemiRing().getOneElement());
+																			  getSemiRing().getZeroElement(),
+																			  getSemiRing().getOneElement());
 				return polynomial;
 			}
 		};
@@ -150,7 +152,8 @@ public class PolynomialField
 
 	@Override
 	// TODO Generalize to getRandomElements by replacing HybridRandomByteSequence by RandomByteSequence
-	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero, HybridRandomByteSequence randomByteSequence) {
+	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero,
+		   HybridRandomByteSequence randomByteSequence) {
 		if (degree >= this.getDegree()) {
 			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, degree);
 		}
@@ -177,7 +180,8 @@ public class PolynomialField
 			return this.getZeroElement();
 		}
 		final PolynomialRing ring
-			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.
+					  getSemiRing());
 		PolynomialElement result;
 		if (this.isBinary()) {
 			result = ring.abstractGetElement(multiplyBinary(polynomial1, polynomial2));
@@ -263,7 +267,8 @@ public class PolynomialField
 		return getInstance(primeField, degree, HybridRandomByteSequence.getInstance());
 	}
 
-	public static <V> PolynomialField getInstance(PrimeField primeField, int degree, HybridRandomByteSequence randomByteSequence) {
+	public static <V> PolynomialField getInstance(PrimeField primeField, int degree,
+		   HybridRandomByteSequence randomByteSequence) {
 		if (primeField == null || randomByteSequence == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primeField, randomByteSequence);
 		}
@@ -279,7 +284,8 @@ public class PolynomialField
 		if (primeField == null || irreduciblePolynomial == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primeField, irreduciblePolynomial);
 		}
-		if (!irreduciblePolynomial.getSet().getSemiRing().isEquivalent(primeField) || !irreduciblePolynomial.isIrreducible()) {
+		if (!irreduciblePolynomial.getSet().getSemiRing().isEquivalent(primeField) || !irreduciblePolynomial.
+			   isIrreducible()) {
 			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, primeField, irreduciblePolynomial);
 		}
 		return new PolynomialField(primeField, irreduciblePolynomial);

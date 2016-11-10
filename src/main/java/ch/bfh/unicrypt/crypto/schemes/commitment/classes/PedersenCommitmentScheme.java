@@ -93,7 +93,8 @@ public class PedersenCommitmentScheme
 		return PedersenCommitmentScheme.getInstance(cyclicGroup, DeterministicRandomByteSequence.getInstance());
 	}
 
-	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, DeterministicRandomByteSequence randomByteSequence) {
+	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup,
+		   DeterministicRandomByteSequence randomByteSequence) {
 		if (cyclicGroup == null || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
@@ -102,8 +103,8 @@ public class PedersenCommitmentScheme
 	}
 
 	public static PedersenCommitmentScheme getInstance(Element generator1, Element generator2) {
-		if (generator1 == null || generator2 == null || !generator1.getSet().isEquivalent(generator2.getSet())
-			   || !generator1.getSet().isCyclic() || !generator1.isGenerator() || !generator2.isGenerator()) {
+		if (generator1 == null || generator2 == null || !generator1.getSet().isEquivalent(generator2.getSet()) ||
+			   !generator1.getSet().isCyclic() || !generator1.isGenerator() || !generator2.isGenerator()) {
 			throw new IllegalArgumentException();
 		}
 		return new PedersenCommitmentScheme((CyclicGroup) generator1.getSet(), generator1, generator2);

@@ -199,7 +199,8 @@ public class PermutationCommitmentProofSystem
 		// w = <sV,eV>
 		final Element w = computeInnerProduct(sV, eV);
 		final Tuple rV
-			   = ProductGroup.getInstance(this.cyclicGroup.getZModOrder(), this.size).getRandomElement(randomByteSequence);
+			   = ProductGroup.getInstance(this.cyclicGroup.getZModOrder(), this.size)
+					  .getRandomElement(randomByteSequence);
 		Tuple ePrimeV = PermutationFunction.getInstance(eV.getSet()).apply(eV, pi);
 
 		// Compute commitments c_i and d
@@ -235,7 +236,8 @@ public class PermutationCommitmentProofSystem
 		// 'Normally' ke+kc+kr < cyclicGroup.getOrder
 		Element[] randEVs = new Element[this.size];
 		for (int i = 0; i < randEVs.length; i++) {
-			randEVs[i] = cyclicGroup.getZModOrder().getElement(randEV.getAt(i).convertToBigInteger().mod(cyclicGroup.getOrder()));
+			randEVs[i] = cyclicGroup.getZModOrder().getElement(randEV.getAt(i).convertToBigInteger()
+				   .mod(cyclicGroup.getOrder()));
 		}
 		randEV = Tuple.getInstance(randEVs);
 		randomElement = randomElement.append(Tuple.getInstance(randEV));
@@ -281,8 +283,8 @@ public class PermutationCommitmentProofSystem
 		final Tuple pV = Tuple.getInstance(ps);
 
 		// Verify preimage proof
-		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup,
-															this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.independentGenerators, cV);
+		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(),
+															this.getCommitmentSpace(), this.independentGenerators, cV);
 		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
 		final Element left = f.apply(response);                                         // [3N+3]
 		final Element right = commitment.apply(pV.selfApply(challenge));                //  [N+3]
@@ -382,7 +384,8 @@ public class PermutationCommitmentProofSystem
 						   cyclicGroup, size, DEFAULT_KR, DeterministicRandomByteSequence.getInstance());
 	}
 
-	public static PermutationCommitmentProofSystem getInstance(CyclicGroup cyclicGroup, int size, DeterministicRandomByteSequence rrbs) {
+	public static PermutationCommitmentProofSystem getInstance(CyclicGroup cyclicGroup, int size,
+		   DeterministicRandomByteSequence rrbs) {
 		return getInstance(
 			   createNonInteractiveSigmaChallengeGenerator(cyclicGroup.getZModOrder()),
 			   createNonInteractiveEValuesGenerator(cyclicGroup.getZModOrder(), size),
@@ -486,7 +489,8 @@ public class PermutationCommitmentProofSystem
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveSigmaChallengeGenerator(final int kc, final Element proverId, RandomOracle randomOracle) {
+		   createNonInteractiveSigmaChallengeGenerator(final int kc, final Element proverId,
+				  RandomOracle randomOracle) {
 		if (kc < 1) {
 			throw new IllegalArgumentException();
 		}
@@ -496,7 +500,8 @@ public class PermutationCommitmentProofSystem
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace, final Element proverId, RandomOracle randomOracle) {
+		   createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace, final Element proverId,
+				  RandomOracle randomOracle) {
 		if (challengeSpace == null) {
 			throw new IllegalArgumentException();
 		}

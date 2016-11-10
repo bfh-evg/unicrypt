@@ -130,7 +130,8 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 	}
 
 	@Override
-	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput, final RandomByteSequence randomByteSequence) {
+	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput,
+		   final RandomByteSequence randomByteSequence) {
 		final Element randomElement = this.getResponseSpace().getRandomElement(randomByteSequence);
 		final Element commitment = this.getPreimageProofFunction().apply(randomElement);
 		final Element challenge = this.getChallengeGenerator().generate(publicInput, commitment);

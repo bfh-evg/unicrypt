@@ -81,7 +81,8 @@ public class CompositeConverter<V, X, W>
 	 * @param converter2 The second converter
 	 * @return The new composite converter
 	 */
-	public static <V, X, W> CompositeConverter<V, X, W> getInstance(Converter<V, X> converter1, Converter<X, W> converter2) {
+	public static <V, X, W> CompositeConverter<V, X, W> getInstance(Converter<V, X> converter1,
+		   Converter<X, W> converter2) {
 		if (converter1 == null || converter2 == null) {
 			throw new IllegalArgumentException();
 		}

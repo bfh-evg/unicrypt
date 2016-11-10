@@ -110,7 +110,8 @@ public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends E
 	}
 
 	@Override
-	public final EE reEncrypt(final Element publicKey, final Element ciphertext, RandomByteSequence randomByteSequence) {
+	public final EE reEncrypt(final Element publicKey, final Element ciphertext,
+		   RandomByteSequence randomByteSequence) {
 		return this.reEncrypt(publicKey, ciphertext, this.getRandomizationSpace().getRandomElement(randomByteSequence));
 	}
 

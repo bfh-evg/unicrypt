@@ -80,7 +80,8 @@ public interface ReEncryptionScheme
 	 * @param randomByteSequence
 	 * @return
 	 */
-	public Element reEncrypt(final Element encryptionKey, final Element ciphertext, RandomByteSequence randomByteSequence);
+	public Element reEncrypt(final Element encryptionKey, final Element ciphertext,
+		   RandomByteSequence randomByteSequence);
 
 	/**
 	 *

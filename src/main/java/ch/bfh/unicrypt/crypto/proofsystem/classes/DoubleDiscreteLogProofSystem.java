@@ -205,7 +205,8 @@ public class DoubleDiscreteLogProofSystem
 			rhoSVs[i] = this.Z_q.getRandomElement(randomByteSequence);
 			rhoRVs[i] = this.Z_p.getRandomElement(randomByteSequence);
 
-			T1Vs[i] = this.pedersenCS.commit(this.Z_p.getElement(repF.apply(rhoMVs[i]).convertToBigInteger()), rhoRVs[i]);
+			T1Vs[i] = this.pedersenCS.commit(this.Z_p.getElement(repF.apply(rhoMVs[i]).convertToBigInteger()),
+											 rhoRVs[i]);
 			T2Vs[i] = this.generalizedPedersenCS.commit(rhoMVs[i], rhoSVs[i]);
 		}
 

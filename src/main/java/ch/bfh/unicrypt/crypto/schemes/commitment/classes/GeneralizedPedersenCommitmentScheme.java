@@ -107,12 +107,14 @@ public class GeneralizedPedersenCommitmentScheme
 			   .getInstance(cyclicGroup, size, DeterministicRandomByteSequence.getInstance());
 	}
 
-	public static GeneralizedPedersenCommitmentScheme getInstance(final CyclicGroup<?> cyclicGroup, final int size, DeterministicRandomByteSequence randomByteSequence) {
+	public static GeneralizedPedersenCommitmentScheme getInstance(final CyclicGroup<?> cyclicGroup, final int size,
+		   DeterministicRandomByteSequence randomByteSequence) {
 		if (cyclicGroup == null || size < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
 		Element randomizationGenerator = cyclicGroup.getIndependentGenerators(randomByteSequence).get(0);
-		Tuple messageGenerators = Tuple.getInstance(cyclicGroup.getIndependentGenerators(randomByteSequence).skip(1).limit(size));
+		Tuple messageGenerators = Tuple.getInstance(cyclicGroup.getIndependentGenerators(randomByteSequence).skip(1).
+			   limit(size));
 		return new GeneralizedPedersenCommitmentScheme(cyclicGroup, size, randomizationGenerator, messageGenerators);
 	}
 
@@ -126,9 +128,10 @@ public class GeneralizedPedersenCommitmentScheme
 	 */
 	public static GeneralizedPedersenCommitmentScheme getInstance(final Element randomizationGenerator,
 		   final Tuple messageGenerators) {
-		if (randomizationGenerator == null || messageGenerators == null || !randomizationGenerator.getSet().isCyclic()
-			   || messageGenerators.getArity() < 1 || !messageGenerators.getSet().isUniform()
-			   || !randomizationGenerator.getSet().isEquivalent(messageGenerators.getFirst().getSet())) {
+		if (randomizationGenerator == null || messageGenerators == null ||
+			   !randomizationGenerator.getSet().isCyclic() ||
+			   messageGenerators.getArity() < 1 || !messageGenerators.getSet().isUniform() ||
+			   !randomizationGenerator.getSet().isEquivalent(messageGenerators.getFirst().getSet())) {
 			throw new IllegalArgumentException();
 		}
 		CyclicGroup cycicGroup = (CyclicGroup) randomizationGenerator.getSet();

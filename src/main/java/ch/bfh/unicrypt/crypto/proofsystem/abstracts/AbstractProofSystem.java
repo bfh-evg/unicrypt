@@ -70,7 +70,8 @@ public abstract class AbstractProofSystem<PRS extends Set, PRE extends Element, 
 	}
 
 	@Override
-	public final PE generate(final Element privateInput, final Element publicInput, final RandomByteSequence randomByteSequence) {
+	public final PE generate(final Element privateInput, final Element publicInput,
+		   final RandomByteSequence randomByteSequence) {
 		if (!this.getPrivateInputSpace().contains(privateInput) || !this.getPublicInputSpace().contains(publicInput)
 			   || randomByteSequence == null) {
 			throw new IllegalArgumentException();

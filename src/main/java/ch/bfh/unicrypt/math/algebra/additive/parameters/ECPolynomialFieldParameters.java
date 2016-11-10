@@ -61,7 +61,8 @@ import java.util.ArrayList;
 public class ECPolynomialFieldParameters
 	   extends ECParameters<PolynomialField, PolynomialElement> {
 
-	public static final ECPolynomialFieldParameters TEST11 = new ECPolynomialFieldParameters(2, "37", "1", "1", "18", "15", 11, 2);
+	public static final ECPolynomialFieldParameters TEST11 = new ECPolynomialFieldParameters(2, "37", "1", "1", "18",
+																							 "15", 11, 2);
 
 	// only for testing
 	public static final ECPolynomialFieldParameters SECT113r1 = new ECPolynomialFieldParameters(
@@ -214,18 +215,22 @@ public class ECPolynomialFieldParameters
 		   "03FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE661CE18FF55987308059B186823851EC7DD9CA1161DE93D5174D66E8382E9BB2FE84E47",
 		   2);
 
-	private ECPolynomialFieldParameters(int securityLevel, String irreduciblePolynomial, String a, String b, String gx, String gy, int subGroupOrder, int coFactor) {
+	private ECPolynomialFieldParameters(int securityLevel, String irreduciblePolynomial, String a, String b, String gx,
+		   String gy, int subGroupOrder, int coFactor) {
 		this(securityLevel, irreduciblePolynomial, a, b, gx, gy, Integer.toHexString(subGroupOrder), coFactor);
 	}
 
-	private ECPolynomialFieldParameters(int securityLevel, String irreduciblePolynomial, String a, String b, String gx, String gy, String subGroupOrder, int coFactor) {
+	private ECPolynomialFieldParameters(int securityLevel, String irreduciblePolynomial, String a, String b, String gx,
+		   String gy, String subGroupOrder, int coFactor) {
 		super(securityLevel,
 			  PolynomialField.getInstance(ZModTwo.getInstance(), getPolynomial(irreduciblePolynomial)),
 			  new BigInteger(subGroupOrder, 16),
 			  BigInteger.valueOf(coFactor)
 		);
-		this.setCoefficient(this.finiteField.getElement(getPolynomial(a).getValue()), this.finiteField.getElement(getPolynomial(b).getValue()));
-		this.setGenerator(this.finiteField.getElement(getPolynomial(gx).getValue()), this.finiteField.getElement(getPolynomial(gy).getValue()));
+		this.setCoefficient(this.finiteField.getElement(getPolynomial(a).getValue()), this.finiteField.getElement(
+							getPolynomial(b).getValue()));
+		this.setGenerator(this.finiteField.getElement(getPolynomial(gx).getValue()), this.finiteField.getElement(
+						  getPolynomial(gy).getValue()));
 	}
 
 	// helper method to construct polynomial from string representation

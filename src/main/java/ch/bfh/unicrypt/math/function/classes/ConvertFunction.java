@@ -73,7 +73,8 @@ public class ConvertFunction
 
 	};
 
-	private ConvertFunction(final Set domain, final Set coDomain, Converter domainConverter, Converter coDomainConverter) {
+	private ConvertFunction(final Set domain, final Set coDomain, Converter domainConverter,
+		   Converter coDomainConverter) {
 		super(domain, coDomain);
 		this.domainConverter = domainConverter;
 		this.coDomainConverter = coDomainConverter;
@@ -95,19 +96,23 @@ public class ConvertFunction
 		if (domain == null || coDomain == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, domain, coDomain);
 		}
-		return new ConvertFunction(domain, coDomain, TrivialConverter.<V>getInstance(), TrivialConverter.<V>getInstance());
+		return new ConvertFunction(domain, coDomain, TrivialConverter.<V>getInstance(), TrivialConverter.
+								   <V>getInstance());
 	}
 
-	public static <V, W> ConvertFunction getInstance(final Set<V> domain, final Set<W> coDomain, Converter<V, W> converter) {
+	public static <V, W> ConvertFunction getInstance(final Set<V> domain, final Set<W> coDomain,
+		   Converter<V, W> converter) {
 		if (domain == null || coDomain == null || converter == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, domain, coDomain, converter);
 		}
 		return new ConvertFunction(domain, coDomain, converter, TrivialConverter.<W>getInstance());
 	}
 
-	public static <V, W, X> ConvertFunction getInstance(Set<V> domain, Set<W> coDomain, Converter<V, X> domainConverter, Converter<W, X> coDomainConverter) {
+	public static <V, W, X> ConvertFunction getInstance(Set<V> domain, Set<W> coDomain, Converter<V, X> domainConverter,
+		   Converter<W, X> coDomainConverter) {
 		if (domain == null || coDomain == null || domainConverter == null || coDomainConverter == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, domain, coDomain, domainConverter, coDomainConverter);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, domain, coDomain, domainConverter,
+											   coDomainConverter);
 		}
 		return new ConvertFunction(domain, coDomain, domainConverter, coDomainConverter);
 	}

@@ -85,7 +85,8 @@ public class ZStarModPrimeToGStarModSafePrime
 	}
 
 	private static class EncodingFunction
-		   extends AbstractFunction<EncodingFunction, ZStarModPrime, ZStarModElement, GStarModSafePrime, GStarModElement> {
+		   extends
+		   AbstractFunction<EncodingFunction, ZStarModPrime, ZStarModElement, GStarModSafePrime, GStarModElement> {
 
 		protected EncodingFunction(ZStarModPrime domain, GStarMod coDomain) {
 			super(domain, coDomain);
@@ -108,7 +109,8 @@ public class ZStarModPrimeToGStarModSafePrime
 	}
 
 	private static class DecodingFunction
-		   extends AbstractFunction<DecodingFunction, GStarModSafePrime, GStarModElement, ZStarModPrime, ZStarModElement> {
+		   extends
+		   AbstractFunction<DecodingFunction, GStarModSafePrime, GStarModElement, ZStarModPrime, ZStarModElement> {
 
 		protected DecodingFunction(GStarMod domain, ZStarModPrime coDomain) {
 			super(domain, coDomain);

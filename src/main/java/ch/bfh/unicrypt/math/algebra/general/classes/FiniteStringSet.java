@@ -99,8 +99,8 @@ public class FiniteStringSet
 
 	@Override
 	protected boolean abstractContains(String value) {
-		return value.length() >= this.minLength && value.length() <= this.maxLength
-			   && this.getAlphabet().containsAll(value);
+		return value.length() >= this.minLength && value.length() <= this.maxLength &&
+			   this.getAlphabet().containsAll(value);
 	}
 
 	@Override
@@ -125,7 +125,8 @@ public class FiniteStringSet
 
 	@Override
 	protected Sequence<FiniteStringElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE)).map(new Mapping<BigInteger, FiniteStringElement>() {
+		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE)).map(
+			   new Mapping<BigInteger, FiniteStringElement>() {
 
 			@Override
 			public FiniteStringElement apply(BigInteger value) {
@@ -142,8 +143,8 @@ public class FiniteStringSet
 	@Override
 	protected boolean abstractEquals(final Set set) {
 		final FiniteStringSet other = (FiniteStringSet) set;
-		return this.getAlphabet() == other.getAlphabet() && this.minLength == other.minLength
-			   && this.maxLength == other.maxLength;
+		return this.getAlphabet() == other.getAlphabet() && this.minLength == other.minLength &&
+			   this.maxLength == other.maxLength;
 	}
 
 	@Override

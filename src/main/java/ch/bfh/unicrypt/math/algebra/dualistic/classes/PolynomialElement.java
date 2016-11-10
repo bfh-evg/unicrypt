@@ -60,7 +60,8 @@ public class PolynomialElement
 
 	private static final long serialVersionUID = 1L;
 
-	protected PolynomialElement(final PolynomialSemiRing semiRing, Polynomial<? extends DualisticElement<BigInteger>> polynomial) {
+	protected PolynomialElement(final PolynomialSemiRing semiRing,
+		   Polynomial<? extends DualisticElement<BigInteger>> polynomial) {
 		super(semiRing, polynomial);
 	}
 

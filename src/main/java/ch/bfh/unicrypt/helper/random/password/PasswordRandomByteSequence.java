@@ -107,7 +107,8 @@ public abstract class PasswordRandomByteSequence
 	 * @param password The given password
 	 * @return The new random byte sequence
 	 */
-	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, ByteArray password) {
+	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory,
+		   ByteArray password) {
 		return PasswordRandomByteSequence.getInstance(factory, password, ByteArray.getInstance());
 	}
 
@@ -120,7 +121,8 @@ public abstract class PasswordRandomByteSequence
 	 * @param salt     The given salt
 	 * @return The new random byte sequence
 	 */
-	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, ByteArray password, ByteArray salt) {
+	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory,
+		   ByteArray password, ByteArray salt) {
 		if (factory == null || password == null || salt == null) {
 			throw new IllegalArgumentException();
 		}
@@ -158,7 +160,8 @@ public abstract class PasswordRandomByteSequence
 	 * @param password The given password
 	 * @return The new random byte sequence
 	 */
-	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, String password) {
+	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory,
+		   String password) {
 		return PasswordRandomByteSequence.getInstance(factory, password, ByteArray.getInstance());
 	}
 
@@ -171,7 +174,8 @@ public abstract class PasswordRandomByteSequence
 	 * @param salt     The given salt
 	 * @return The new random byte sequence
 	 */
-	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, String password, ByteArray salt) {
+	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory,
+		   String password, ByteArray salt) {
 		if (factory == null || password == null || salt == null) {
 			throw new IllegalArgumentException();
 		}

@@ -63,7 +63,8 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductMonoid;
 public class PasswordHashingScheme
 	   extends HashingScheme<ProductMonoid> {
 
-	protected PasswordHashingScheme(StringMonoid passwordSpace, Converter<String, ByteArray> converter, HashMethod<ByteArray> hashMethod) {
+	protected PasswordHashingScheme(StringMonoid passwordSpace, Converter<String, ByteArray> converter,
+		   HashMethod<ByteArray> hashMethod) {
 		super(ProductMonoid.getInstance(passwordSpace, ByteArrayMonoid.getInstance()),
 			  ConvertMethod.getInstance(converter, ByteArrayToByteArray.getInstance()),
 			  hashMethod);
@@ -81,7 +82,8 @@ public class PasswordHashingScheme
 		return PasswordHashingScheme.getInstance(passwordSpace, StringToByteArray.getInstance());
 	}
 
-	public static PasswordHashingScheme getInstance(StringMonoid passwordSpace, Converter<String, ByteArray> converter) {
+	public static PasswordHashingScheme getInstance(StringMonoid passwordSpace,
+		   Converter<String, ByteArray> converter) {
 		return PasswordHashingScheme.getInstance(passwordSpace, converter, HashMethod.getInstance());
 
 	}
@@ -90,7 +92,8 @@ public class PasswordHashingScheme
 		return PasswordHashingScheme.getInstance(passwordSpace, StringToByteArray.getInstance(), hashMethod);
 	}
 
-	public static PasswordHashingScheme getInstance(StringMonoid passwordSpace, Converter<String, ByteArray> converter, HashMethod<ByteArray> hashMethod) {
+	public static PasswordHashingScheme getInstance(StringMonoid passwordSpace, Converter<String, ByteArray> converter,
+		   HashMethod<ByteArray> hashMethod) {
 		if (passwordSpace == null || converter == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}

@@ -254,7 +254,8 @@ public class InequalityOfPreimagesProofSystem
 		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
 				  final Element proverId) {
 		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
-																					   proverId, RandomOracle.getInstance());
+																					   proverId,
+																					   RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator

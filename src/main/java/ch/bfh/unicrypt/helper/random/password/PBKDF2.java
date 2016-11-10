@@ -138,7 +138,8 @@ public class PBKDF2
 	 * @param rounds        The desired number of rounds
 	 * @return The new PBKDF2 factory
 	 */
-	public static PasswordRandomByteArraySequence.Factory getFactory(final HashAlgorithm hashAlgorithm, final int rounds) {
+	public static PasswordRandomByteArraySequence.Factory getFactory(final HashAlgorithm hashAlgorithm,
+		   final int rounds) {
 		return PBKDF2.getFactory(hashAlgorithm, rounds, StringToByteArray.getInstance());
 	}
 
@@ -149,9 +150,11 @@ public class PBKDF2
 	 * <p>
 	 * @param hashAlgorithm The given hash algorithm
 	 * @param rounds        The desired number of rounds
+	 * @param converter		   The converter from string to byteArray
 	 * @return The new PBKDF2 factory
 	 */
-	public static PasswordRandomByteArraySequence.Factory getFactory(final HashAlgorithm hashAlgorithm, final int rounds, final Converter<String, ByteArray> converter) {
+	public static PasswordRandomByteArraySequence.Factory getFactory(final HashAlgorithm hashAlgorithm,
+		   final int rounds, final Converter<String, ByteArray> converter) {
 		if (hashAlgorithm == null || rounds < 1 || converter == null) {
 			throw new IllegalArgumentException();
 		}

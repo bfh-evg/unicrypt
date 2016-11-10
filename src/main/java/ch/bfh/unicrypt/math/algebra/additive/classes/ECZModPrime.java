@@ -63,7 +63,8 @@ public class ECZModPrime
 
 	private static final long serialVersionUID = -5442792676496187516L;
 
-	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger subGroupOrder, BigInteger coFactor) {
+	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy,
+		   BigInteger subGroupOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, subGroupOrder, coFactor);
 	}
 
@@ -151,14 +152,18 @@ public class ECZModPrime
 	 * @param coFactor      Co-factor of the subgroup
 	 * @return The resulting subgroup of the elliptic curve
 	 */
-	public static ECZModPrime getInstance(int securityLevel, ZModPrime primeField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger subGroupOrder, BigInteger coFactor) {
+	public static ECZModPrime getInstance(int securityLevel, ZModPrime primeField, ZModElement a, ZModElement b,
+		   ZModElement gx, ZModElement gy, BigInteger subGroupOrder, BigInteger coFactor) {
 		return ECZModPrime.getInstance(securityLevel, primeField, a, b, gx, gy, subGroupOrder, coFactor, false);
 	}
 
 	// a private helper method to include the possibility of test parameters which do not pass all tests
-	private static ECZModPrime getInstance(int securityLevel, ZModPrime primeField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger subGroupOrder, BigInteger coFactor, boolean isTest) {
-		if (primeField == null || a == null || b == null || gx == null || gy == null || subGroupOrder == null || coFactor == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primeField, a, b, gx, gy, subGroupOrder, coFactor);
+	private static ECZModPrime getInstance(int securityLevel, ZModPrime primeField, ZModElement a, ZModElement b,
+		   ZModElement gx, ZModElement gy, BigInteger subGroupOrder, BigInteger coFactor, boolean isTest) {
+		if (primeField == null || a == null || b == null || gx == null || gy == null || subGroupOrder == null ||
+			   coFactor == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primeField, a, b, gx, gy, subGroupOrder,
+											   coFactor);
 		}
 		BigInteger modulus = primeField.getModulus();
 		// Test1
@@ -190,7 +195,8 @@ public class ECZModPrime
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
 		}
 		// Test6b
-		if (!MathUtil.sqrt(modulus.multiply(MathUtil.FOUR)).add(modulus).add(MathUtil.ONE).divide(subGroupOrder).equals(coFactor)) {
+		if (!MathUtil.sqrt(modulus.multiply(MathUtil.FOUR)).add(modulus).add(MathUtil.ONE).divide(subGroupOrder).equals(
+			   coFactor)) {
 			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, subGroupOrder, coFactor);
 		}
 		// Test8a

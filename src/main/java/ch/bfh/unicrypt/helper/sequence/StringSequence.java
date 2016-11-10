@@ -101,7 +101,8 @@ public class StringSequence
 		this.escaped = false;
 	}
 
-	protected StringSequence(String string, char separator, char openingParentesis, char closingParenthesis, char escapeChar) {
+	protected StringSequence(String string, char separator, char openingParentesis, char closingParenthesis,
+		   char escapeChar) {
 		super(Sequence.UNKNOWN);
 		this.string = string;
 		this.separator = separator;
@@ -162,8 +163,8 @@ public class StringSequence
 	 */
 	public static StringSequence getInstance(String string, char separator, char openingParenthesis,
 		   char closingParenthesis) {
-		if (string == null || separator == openingParenthesis || separator == closingParenthesis
-			   || openingParenthesis == closingParenthesis) {
+		if (string == null || separator == openingParenthesis || separator == closingParenthesis ||
+			   openingParenthesis == closingParenthesis) {
 			throw new IllegalArgumentException();
 		}
 		return new StringSequence(string, separator, openingParenthesis, closingParenthesis);
@@ -182,10 +183,10 @@ public class StringSequence
 	 */
 	public static StringSequence getInstance(String string, char separator, char openingParenthesis,
 		   char closingParenthesis, char escapeChar) {
-		if (string == null || separator == openingParenthesis || separator == closingParenthesis
-			   || separator == escapeChar
-			   || openingParenthesis == closingParenthesis || openingParenthesis == escapeChar
-			   || closingParenthesis == escapeChar) {
+		if (string == null || separator == openingParenthesis || separator == closingParenthesis ||
+			   separator == escapeChar ||
+			   openingParenthesis == closingParenthesis || openingParenthesis == escapeChar ||
+			   closingParenthesis == escapeChar) {
 			throw new IllegalArgumentException();
 		}
 		return new StringSequence(string, separator, openingParenthesis, closingParenthesis, escapeChar);
@@ -282,9 +283,9 @@ public class StringSequence
 			return false;
 		}
 		final StringSequence other = (StringSequence) obj;
-		return this.string.equals(other.string) && this.separator == other.separator
-			   && this.openingParenthesis == other.openingParenthesis
-			   && this.closingParenthesis == other.closingParenthesis && this.escapeChar == other.escapeChar;
+		return this.string.equals(other.string) && this.separator == other.separator &&
+			   this.openingParenthesis == other.openingParenthesis &&
+			   this.closingParenthesis == other.closingParenthesis && this.escapeChar == other.escapeChar;
 	}
 
 	@Override

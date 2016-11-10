@@ -61,7 +61,8 @@ public abstract class HybridRandomByteArraySequence
 	protected final NonDeterministicRandomByteSequence entropySource;
 	protected final ByteArray personalizationString;
 
-	protected HybridRandomByteArraySequence(NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
+	protected HybridRandomByteArraySequence(NonDeterministicRandomByteSequence entropySource,
+		   ByteArray personalizationString) {
 		this.entropySource = entropySource;
 		this.personalizationString = personalizationString;
 	}
@@ -125,14 +126,16 @@ public abstract class HybridRandomByteArraySequence
 		 * @param personalizationString The given personalizationS string
 		 * @return The new hybrid byte array sequence
 		 */
-		public HybridRandomByteArraySequence getInstance(NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
+		public HybridRandomByteArraySequence getInstance(NonDeterministicRandomByteSequence entropySource,
+			   ByteArray personalizationString) {
 			if (entropySource == null || personalizationString == null) {
 				throw new IllegalArgumentException();
 			}
 			return this.abstractGetInstance(entropySource, personalizationString);
 		}
 
-		protected abstract HybridRandomByteArraySequence abstractGetInstance(NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString);
+		protected abstract HybridRandomByteArraySequence abstractGetInstance(
+			   NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString);
 
 	}
 

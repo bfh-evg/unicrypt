@@ -76,7 +76,8 @@ public abstract class HybridRandomByteSequence
 	 * @return The new hybrid random byte sequence
 	 */
 	public static HybridRandomByteSequence getInstance(ByteArray personalizationString) {
-		return HybridRandomByteSequence.getInstance(NonDeterministicRandomByteSequence.getInstance(), personalizationString);
+		return HybridRandomByteSequence.getInstance(NonDeterministicRandomByteSequence.getInstance(),
+													personalizationString);
 	}
 
 	/**
@@ -98,7 +99,8 @@ public abstract class HybridRandomByteSequence
 	 * @param personalizationString The given personalization string
 	 * @return The new hybrid random byte sequence
 	 */
-	public static HybridRandomByteSequence getInstance(NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
+	public static HybridRandomByteSequence getInstance(NonDeterministicRandomByteSequence entropySource,
+		   ByteArray personalizationString) {
 		return HybridRandomByteSequence.getInstance(HMAC_DRBG.getFactory(), entropySource, personalizationString);
 	}
 
@@ -122,8 +124,10 @@ public abstract class HybridRandomByteSequence
 	 * @param personalizationString The given personalization string
 	 * @return The new hybrid random byte sequence
 	 */
-	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory, ByteArray personalizationString) {
-		return HybridRandomByteSequence.getInstance(factory, NonDeterministicRandomByteSequence.getInstance(), personalizationString);
+	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory,
+		   ByteArray personalizationString) {
+		return HybridRandomByteSequence.getInstance(factory, NonDeterministicRandomByteSequence.getInstance(),
+													personalizationString);
 	}
 
 	/**
@@ -135,7 +139,8 @@ public abstract class HybridRandomByteSequence
 	 * @param entropySource	The given entropy source
 	 * @return The new hybrid random byte sequence
 	 */
-	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory, NonDeterministicRandomByteSequence entropySource) {
+	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory,
+		   NonDeterministicRandomByteSequence entropySource) {
 		return HybridRandomByteSequence.getInstance(factory, entropySource, ByteArray.getInstance());
 	}
 
@@ -148,7 +153,8 @@ public abstract class HybridRandomByteSequence
 	 * @param personalizationString The given personalization string
 	 * @return The new hybrid random byte sequence
 	 */
-	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory, NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
+	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory,
+		   NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
 		if (factory == null || entropySource == null || personalizationString == null) {
 			throw new IllegalArgumentException();
 		}

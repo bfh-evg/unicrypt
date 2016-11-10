@@ -213,7 +213,8 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 				if (point.equals(infinityPoint)) {
 					return MathUtil.ZERO;
 				}
-				return MathUtil.pair(point.getX().convertToBigInteger(), point.getY().convertToBigInteger()).add(MathUtil.ONE);
+				return MathUtil.pair(point.getX().convertToBigInteger(), point.getY().convertToBigInteger()).add(
+					   MathUtil.ONE);
 			}
 
 			@Override
@@ -240,7 +241,8 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	protected Sequence<EE> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE)).map(new Mapping<BigInteger, EE>() {
+		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE)).map(
+			   new Mapping<BigInteger, EE>() {
 
 			@Override
 			public EE apply(BigInteger value) {

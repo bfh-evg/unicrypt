@@ -63,9 +63,9 @@ public class Subset
 	private static final long serialVersionUID = 1L;
 
 	private final Set<?> superSet;
-	private final LinkedHashSet<Element<Object>> elementSet;
+	private final java.util.Set<Element<Object>> elementSet;
 
-	protected Subset(Set<?> superSet, LinkedHashSet<Element<Object>> elements) {
+	protected Subset(Set<?> superSet, java.util.Set<Element<Object>> elements) {
 		super(superSet.getValueClass());
 		this.superSet = superSet;
 		this.elementSet = elements;
@@ -125,7 +125,8 @@ public class Subset
 
 	@Override
 	protected Sequence<Element<Object>> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomIntegerSequence(this.elementSet.size() - 1).map(new Mapping<Integer, Element<Object>>() {
+		return randomByteSequence.getRandomIntegerSequence(this.elementSet.size() - 1).map(
+			   new Mapping<Integer, Element<Object>>() {
 
 			@Override
 			public Element<Object> apply(Integer index) {

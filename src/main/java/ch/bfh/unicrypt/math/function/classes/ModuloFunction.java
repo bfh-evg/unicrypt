@@ -78,7 +78,8 @@ public class ModuloFunction
 	}
 
 	@Override
-	protected ZModElement abstractApply(final Element<BigInteger> element, final RandomByteSequence randomByteSequence) {
+	protected ZModElement abstractApply(final Element<BigInteger> element,
+		   final RandomByteSequence randomByteSequence) {
 		return this.getCoDomain().getElement(element.getValue().mod(this.getModulus()));
 	}
 

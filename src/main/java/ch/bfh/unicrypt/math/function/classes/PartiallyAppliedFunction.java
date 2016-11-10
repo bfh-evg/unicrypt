@@ -108,9 +108,9 @@ public class PartiallyAppliedFunction
 
 	@Override
 	protected boolean defaultIsEquivalent(PartiallyAppliedFunction other) {
-		return this.getParentFunction().isEquivalent(other.getParentFunction())
-			   && this.getParameter().isEquivalent(other.getParameter())
-			   && this.getIndex() == other.getIndex();
+		return this.getParentFunction().isEquivalent(other.getParentFunction()) &&
+			   this.getParameter().isEquivalent(other.getParameter()) &&
+			   this.getIndex() == other.getIndex();
 	}
 
 	@Override
@@ -137,7 +137,8 @@ public class PartiallyAppliedFunction
 	 * @param index          The index of the parameter to fix
 	 * @return
 	 */
-	public static PartiallyAppliedFunction getInstance(final Function parentFunction, final Element element, final int index) {
+	public static PartiallyAppliedFunction getInstance(final Function parentFunction, final Element element,
+		   final int index) {
 		if (parentFunction == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, parentFunction);
 		}
@@ -151,7 +152,8 @@ public class PartiallyAppliedFunction
 		if (!domain.getAt(index).contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, parentFunction, element);
 		}
-		return new PartiallyAppliedFunction(domain.removeAt(index), parentFunction.getCoDomain(), parentFunction, element, index);
+		return new PartiallyAppliedFunction(domain.removeAt(index), parentFunction.getCoDomain(), parentFunction,
+											element, index);
 	}
 
 }

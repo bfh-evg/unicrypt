@@ -84,7 +84,8 @@ public abstract class DeterministicRandomByteSequence
 	 * @return The new random byte sequence
 	 */
 	public static DeterministicRandomByteSequence getInstance(DeterministicRandomByteArraySequence.Factory factory) {
-		return DeterministicRandomByteSequence.getInstance(factory, ByteArray.getInstance(false, factory.getSeedByteLength()));
+		return DeterministicRandomByteSequence.getInstance(factory, ByteArray.getInstance(false, factory.
+																						  getSeedByteLength()));
 	}
 
 	/**
@@ -94,7 +95,8 @@ public abstract class DeterministicRandomByteSequence
 	 * @param seed    The given seed
 	 * @return The new random byte sequence
 	 */
-	public static DeterministicRandomByteSequence getInstance(DeterministicRandomByteArraySequence.Factory factory, ByteArray seed) {
+	public static DeterministicRandomByteSequence getInstance(DeterministicRandomByteArraySequence.Factory factory,
+		   ByteArray seed) {
 		if (factory == null || seed == null) {
 			throw new IllegalArgumentException();
 		}

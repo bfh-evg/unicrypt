@@ -90,7 +90,6 @@ public abstract class RandomByteSequence
 					}
 
 					@Override
-
 					protected void updateBefore() {
 						iterator.updateBefore();
 					}
@@ -154,7 +153,8 @@ public abstract class RandomByteSequence
 	 * @return The random integer sequence
 	 */
 	public Sequence<Integer> getRandomIntegerSequence(int minValue, int maxValue) {
-		return this.getRandomBigIntegerSequence(BigInteger.valueOf(minValue), BigInteger.valueOf(maxValue)).map(new Mapping<BigInteger, Integer>() {
+		return this.getRandomBigIntegerSequence(BigInteger.valueOf(minValue), BigInteger.valueOf(maxValue)).map(
+			   new Mapping<BigInteger, Integer>() {
 
 			@Override
 			public Integer apply(BigInteger value) {
@@ -179,7 +179,8 @@ public abstract class RandomByteSequence
 		if (bitLength == 0) {
 			this.getRandomBigIntegerSequence(MathUtil.ZERO, MathUtil.ZERO);
 		}
-		return this.getRandomBigIntegerSequence(MathUtil.powerOfTwo(bitLength - 1), MathUtil.powerOfTwo(bitLength).subtract(MathUtil.ONE));
+		return this.getRandomBigIntegerSequence(MathUtil.powerOfTwo(bitLength - 1), MathUtil.powerOfTwo(bitLength).
+												subtract(MathUtil.ONE));
 	}
 
 	/**

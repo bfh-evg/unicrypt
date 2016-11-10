@@ -96,7 +96,8 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 		if (randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		return (KE) this.getSecretKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
+		return (KE) this.getSecretKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(),
+																randomByteSequence);
 	}
 
 	@Override

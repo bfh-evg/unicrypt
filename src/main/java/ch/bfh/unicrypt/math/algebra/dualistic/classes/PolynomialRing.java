@@ -182,7 +182,8 @@ public class PolynomialRing
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, g, h);
 		}
 		final PolynomialRing ring
-			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.
+					  getSemiRing());
 
 		while (!h.isEquivalent(ring.getZeroElement())) {
 			Pair div = longDivision(g, h);
@@ -217,7 +218,8 @@ public class PolynomialRing
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, g, h);
 		}
 		final PolynomialRing ring
-			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.
+					  getSemiRing());
 		final PolynomialElement zero = ring.getZeroElement();
 		final PolynomialElement one = ring.getOneElement();
 
@@ -278,7 +280,8 @@ public class PolynomialRing
 
 		// Create explicitly a ring to work in (the instance might be a field).
 		final PolynomialRing ring
-			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.
+					  getSemiRing());
 		final PolynomialElement zero = ring.getZeroElement();
 
 		PolynomialElement q = zero;
@@ -317,7 +320,8 @@ public class PolynomialRing
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		final PolynomialRing ring
-			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.
+					  getSemiRing());
 		PolynomialElement x = ring.getElement(ring.getSemiRing().getZeroElement(), ring.getSemiRing().getOneElement());
 		PolynomialElement u = x;
 		PolynomialElement d;
@@ -364,7 +368,8 @@ public class PolynomialRing
 			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, k);
 		}
 		final PolynomialRing ring
-			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.
+					  getSemiRing());
 		PolynomialElement s = ring.getOneElement();
 
 		if (k.signum() == 0) {

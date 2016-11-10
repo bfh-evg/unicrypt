@@ -100,7 +100,8 @@ public class ZModToBinaryPolynomialField
 		}
 
 		@Override
-		protected PolynomialElement abstractApply(final ZModElement element, final RandomByteSequence randomByteSequence) {
+		protected PolynomialElement abstractApply(final ZModElement element,
+			   final RandomByteSequence randomByteSequence) {
 			BitArray bitArray = bitToBigIntConverter.reconvert(element.getValue());
 			return this.getCoDomain().getElement(bitArray);
 		}
@@ -115,7 +116,8 @@ public class ZModToBinaryPolynomialField
 		}
 
 		@Override
-		protected ZModElement abstractApply(final PolynomialElement element, final RandomByteSequence randomByteSequence) {
+		protected ZModElement abstractApply(final PolynomialElement element,
+			   final RandomByteSequence randomByteSequence) {
 			BitArray bitArray = element.getValue().getCoefficients();
 			BigInteger bigInt = bitToBigIntConverter.convert(bitArray);
 			return this.getCoDomain().getElement(bigInt.mod(this.getCoDomain().getModulus()));

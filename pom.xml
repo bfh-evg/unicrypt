@@ -292,14 +292,13 @@ Redistributions of files must retain the above copyright notice.
 							<artifactId>maven-pmd-plugin</artifactId>
 							<version>3.7</version>
 							<configuration>
+								<rulesets>
+									<ruleset>${pom.basedir}/src/pmd/pmdRules.xml</ruleset>
+								</rulesets>
 								<linkXref>true</linkXref>
 								<sourceEncoding>utf-8</sourceEncoding>
-								<minimumTokens>100</minimumTokens>
+								<minimumTokens>200</minimumTokens>
 								<targetJdk>1.8</targetJdk>
-								<excludes>
-									<exclude>**/common/*.java</exclude>
-									<exclude>**/generated/*.java</exclude>
-								</excludes>
 								<excludeRoots>
 									<excludeRoot>target/generated-sources</excludeRoot>
 								</excludeRoots>
@@ -310,8 +309,9 @@ Redistributions of files must retain the above copyright notice.
 							<artifactId>maven-checkstyle-plugin</artifactId>
 							<version>2.16</version>
 							<configuration>
-								<configLocation>src/checkstyle/checkstyle-configuration.xml</configLocation>
-								<headerLocation>src/checkstyle/checkstyle-header.txt</headerLocation>
+								<configLocation>${pom.basedir}/src/checkstyle/checkstyle-configuration.xml
+								</configLocation>
+								<headerLocation>${pom.basedir}/src/checkstyle/checkstyle-header.txt</headerLocation>
 							</configuration>
 							<reportSets>
 								<reportSet>
@@ -320,6 +320,11 @@ Redistributions of files must retain the above copyright notice.
 									</reports>
 								</reportSet>
 							</reportSets>
+						</plugin>
+						<plugin>
+							<groupId>org.codehaus.mojo</groupId>
+							<artifactId>findbugs-maven-plugin</artifactId>
+							<version>3.0.4</version>
 						</plugin>
 					</reportPlugins>
 				</configuration>

@@ -67,8 +67,8 @@ public class FiatShamirSigmaChallengeGenerator
 	private final HashMethod hashMethod;
 	private final Converter<ByteArray, BigInteger> converter;
 
-	protected FiatShamirSigmaChallengeGenerator(ZMod challengeSpace, Element proverId, ConvertMethod convertMethod, HashMethod hashMethod,
-		   Converter<ByteArray, BigInteger> converter) {
+	protected FiatShamirSigmaChallengeGenerator(ZMod challengeSpace, Element proverId, ConvertMethod convertMethod,
+		   HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
 		super(challengeSpace, proverId);
 		this.convertMethod = convertMethod;
 		this.hashMethod = hashMethod;
@@ -121,12 +121,14 @@ public class FiatShamirSigmaChallengeGenerator
 		HashMethod<ByteArray> hashMethod = HashMethod.getInstance();
 		int hashLength = hashMethod.getHashAlgorithm().getByteLength();
 		Converter<ByteArray, BigInteger> converter = ByteArrayToBigInteger.getInstance(hashLength);
-		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, proverId, convertMethod, hashMethod, converter);
+		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, proverId, convertMethod, hashMethod,
+															 converter);
 	}
 
-	public static <V> FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace, ConvertMethod<V> convertMethod, HashMethod<V> hashMethod,
-		   Converter<ByteArray, BigInteger> converter) {
-		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, (Element) null, convertMethod, hashMethod, converter);
+	public static <V> FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace, ConvertMethod<V> convertMethod,
+		   HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter) {
+		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, (Element) null, convertMethod, hashMethod,
+															 converter);
 	}
 
 	/**
@@ -150,8 +152,8 @@ public class FiatShamirSigmaChallengeGenerator
 	 *                       array in a big integer representing the challenge
 	 * @return a challenge generator
 	 */
-	public static <V> FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace, Element proverId, ConvertMethod<V> convertMethod,
-		   HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter) {
+	public static <V> FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace, Element proverId,
+		   ConvertMethod<V> convertMethod, HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter) {
 		if (challengeSpace == null || convertMethod == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();
 		}

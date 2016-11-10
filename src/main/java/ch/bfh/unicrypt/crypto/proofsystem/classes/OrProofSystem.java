@@ -105,7 +105,7 @@ public class OrProofSystem
 		if (challengeGenerator == null || proofFunction == null
 			   || proofFunction.getArity() < 2
 			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder())
-			   .isEquivalent(challengeGenerator.getChallengeSpace())) {
+					  .isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException();
 		}
 		return new OrProofSystem(challengeGenerator, proofFunction);
@@ -157,8 +157,8 @@ public class OrProofSystem
 		Tuple domainElements = ((ProductMonoid) this.getProofFunction().getDomain()).getIdentityElement();
 		domainElements = domainElements.replaceAt(index, secret);
 
-		return (Pair) this.getPrivateInputSpace().getElement(domainElements,
-															 ZMod.getInstance(this.getProofFunction().getArity()).getElement(index));
+		return (Pair) this.getPrivateInputSpace()
+			   .getElement(domainElements, ZMod.getInstance(this.getProofFunction().getArity()).getElement(index));
 	}
 
 	@Override

@@ -104,7 +104,8 @@ public class PolynomialSemiRing
 	public PolynomialElement getElement(BitArray coefficients) {
 		//TODO: Change back to protected -> ZModToBinaryPolynomialField is then not working anymore.
 		return this.getElement(Polynomial.<DualisticElement<BigInteger>>getInstance(coefficients,
-																					this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
+																					this.getSemiRing().getZeroElement(),
+																					this.getSemiRing().getOneElement()));
 	}
 
 	public PolynomialElement getElement(DualisticElement... elements) {
@@ -118,7 +119,8 @@ public class PolynomialSemiRing
 		if (coefficients == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, coefficients);
 		}
-		if (!coefficients.isEmpty() && (!coefficients.getSet().isUniform() || !coefficients.getSet().getFirst().isEquivalent(this.getSemiRing()))) {
+		if (!coefficients.isEmpty() && (!coefficients.getSet().isUniform() || !coefficients.getSet().getFirst().
+			   isEquivalent(this.getSemiRing()))) {
 			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, coefficients);
 		}
 		Map<Integer, DualisticElement<BigInteger>> coefficientMap = new HashMap();
@@ -151,7 +153,8 @@ public class PolynomialSemiRing
 		if (roots == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, roots);
 		}
-		if (roots.isEmpty() || !roots.getSet().isUniform() || !roots.getSet().getFirst().isEquivalent(this.getSemiRing())) {
+		if (roots.isEmpty() || !roots.getSet().isUniform() || !roots.getSet().getFirst().
+			   isEquivalent(this.getSemiRing())) {
 			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, roots);
 		}
 
@@ -200,7 +203,8 @@ public class PolynomialSemiRing
 	}
 
 	// TODO Generalize to getRandomElements by replacing HybridRandomByteSequence by RandomByteSequence
-	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero, HybridRandomByteSequence randomByteSequence) {
+	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero,
+		   HybridRandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
 		}
@@ -253,8 +257,8 @@ public class PolynomialSemiRing
 	protected boolean abstractContains(Polynomial value) {
 		Sequence<Integer> indices = value.getCoefficientIndices();
 		for (int i : indices) {
-			if (!(Element.class.isInstance(value.getCoefficient(i))
-				   && this.getSemiRing().contains((Element) value.getCoefficient(i)))) {
+			if (!(Element.class.isInstance(value.getCoefficient(i)) &&
+				   this.getSemiRing().contains((Element) value.getCoefficient(i)))) {
 				return false;
 			}
 		}
@@ -295,7 +299,8 @@ public class PolynomialSemiRing
 				}
 				Polynomial<? extends DualisticElement<BigInteger>> polynomial
 					   = Polynomial.<DualisticElement<BigInteger>>getInstance(elements,
-																			  getSemiRing().getZeroElement(), getSemiRing().getOneElement());
+																			  getSemiRing().getZeroElement(),
+																			  getSemiRing().getOneElement());
 				return polynomial;
 			}
 		};

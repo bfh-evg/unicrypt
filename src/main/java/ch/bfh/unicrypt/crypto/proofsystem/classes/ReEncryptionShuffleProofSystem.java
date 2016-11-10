@@ -163,17 +163,19 @@ public class ReEncryptionShuffleProofSystem
 		// Create sigma proof
 		PreimageProofFunction f
 			   = new PreimageProofFunction(this.getCyclicGroup(), this.getSize(), this.getResponseSpace(),
-										   this.getCommitmentSpace(), this.getIndependentGenerators(), uPrimeV, this.encryptionScheme,
-										   this.encryptionPK);
+										   this.getCommitmentSpace(), this.getIndependentGenerators(), uPrimeV,
+										   this.encryptionScheme, this.encryptionPK);
 
 		Tuple randomElement = this.getResponseSpace().extractPrefix(2).getRandomElement(randomByteSequence);
-		Tuple randEV = ProductGroup.getInstance(ZMod.getInstance(MathUtil.powerOfTwo(this.getKe() + this.getKc() + this.getKr())),
-												this.getSize()).getRandomElement(randomByteSequence);
+		Tuple randEV = ProductGroup.getInstance(
+			   ZMod.getInstance(MathUtil.powerOfTwo(this.getKe() + this.getKc() + this.getKr())),
+			   this.getSize()).getRandomElement(randomByteSequence);
 
 		// 'Normally' ke+kc+kr < cyclicGroup.getOrder, but in case it isn't!
 		Element[] randEVs = new Element[this.getSize()];
 		for (int i = 0; i < randEVs.length; i++) {
-			randEVs[i] = this.getCyclicGroup().getZModOrder().getElement(randEV.getAt(i).convertToBigInteger().mod(this.getCyclicGroup().getOrder()));
+			randEVs[i] = this.getCyclicGroup().getZModOrder().getElement(randEV.getAt(i).convertToBigInteger()
+				   .mod(this.getCyclicGroup().getOrder()));
 		}
 		randEV = Tuple.getInstance(randEVs);
 		randomElement = randomElement.append(Tuple.getInstance(randEV));
@@ -208,7 +210,8 @@ public class ReEncryptionShuffleProofSystem
 
 		// 1. Verify preimage proof
 		PreimageProofFunction f = new PreimageProofFunction(this.getCyclicGroup(), this.getSize(),
-															this.getResponseSpace(), this.getCommitmentSpace(), this.getIndependentGenerators(), uPrimeV,
+															this.getResponseSpace(), this.getCommitmentSpace(),
+															this.getIndependentGenerators(), uPrimeV,
 															this.encryptionScheme, this.encryptionPK);
 		final Element challenge = this.getSigmaChallengeGenerator().generate(publicInput, commitment);
 		final Element left = f.apply(response);                                   // [3N+3]
@@ -263,7 +266,8 @@ public class ReEncryptionShuffleProofSystem
 			// - Prod(u'_i^(e'_i)) * Enc(1, -r)         [2n+2]
 			final Element a = computeInnerProduct(this.uPrimeV, ePrimeV);
 			final Element b
-				   = encryptionScheme.encrypt(encryptionPK, encryptionScheme.getMessageSpace().getIdentityElement(), r.invert());
+				   = encryptionScheme.encrypt(encryptionPK, encryptionScheme.getMessageSpace().getIdentityElement(),
+											  r.invert());
 			cV[1] = a.apply(b);
 
 			//                                        ---------
@@ -295,7 +299,8 @@ public class ReEncryptionShuffleProofSystem
 
 	public static ReEncryptionShuffleProofSystem
 		   getInstance(int size, ElGamalEncryptionScheme elgamal,
-				  Element encryptionPK, Element proverId, int ke, int kc, int kr, DeterministicRandomByteSequence rrbs) {
+				  Element encryptionPK, Element proverId, int ke, int kc, int kr,
+				  DeterministicRandomByteSequence rrbs) {
 		return getInstance(
 			   createNonInteractiveSigmaChallengeGenerator(kc, proverId),
 			   createNonInteractiveEValuesGenerator(ke, size),
@@ -331,7 +336,8 @@ public class ReEncryptionShuffleProofSystem
 		if (elgamal == null || size < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		Tuple independentGenerators = Tuple.getInstance(elgamal.getCyclicGroup().getIndependentGenerators(randomByteSequence).limit(size + 1));
+		Tuple independentGenerators = Tuple.getInstance(
+			   elgamal.getCyclicGroup().getIndependentGenerators(randomByteSequence).limit(size + 1));
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, independentGenerators,
 						   elgamal, encryptionPK, kr);
 	}

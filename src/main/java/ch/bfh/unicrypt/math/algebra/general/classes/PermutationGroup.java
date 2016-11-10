@@ -114,7 +114,8 @@ public class PermutationGroup
 						int[] permutationVector = new int[size];
 						int randomIndex;
 						for (int i = 0; i < size; i++) {
-							// the following lines are necessary to use the existing random integer generation on the same iterator
+							// the following lines are necessary to use the existing random integer generation on the
+							// same iterator
 							randomIndex = new RandomByteSequence() {
 
 								@Override
@@ -141,7 +142,6 @@ public class PermutationGroup
 	}
 
 	@Override
-
 	protected boolean abstractContains(Permutation value) {
 		return value.getSize() == this.getSize();
 	}

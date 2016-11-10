@@ -169,10 +169,12 @@ public interface EC<V, DE extends DualisticElement<V>>
 	public <W> ECElement<V, DE> getElementFrom(W value, Converter<Point<DE>, W> converter) throws UniCryptException;
 
 	@Override
-	public <W> ECElement<V, DE> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
+	public <W> ECElement<V, DE> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws
+		   UniCryptException;
 
 	@Override
-	public <W, X> ECElement<V, DE> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
+	public <W, X> ECElement<V, DE> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator,
+		   Converter<W, X> finalConverter) throws UniCryptException;
 
 	@Override
 	public <W> ECElement<V, DE> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
@@ -247,6 +249,7 @@ public interface EC<V, DE extends DualisticElement<V>>
 	public Sequence<? extends ECElement<V, DE>> getIndependentGenerators();
 
 	@Override
-	public Sequence<? extends ECElement<V, DE>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
+	public Sequence<? extends ECElement<V, DE>> getIndependentGenerators(
+		   DeterministicRandomByteSequence randomByteSequence);
 
 }

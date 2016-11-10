@@ -316,7 +316,8 @@ public class PolynomialEvaluationProofSystem
 	private Tuple computeDeltas(Tuple uV, Tuple fV) {
 		PolynomialSemiRing polynomialSemiRing = this.polynomial.getSet();
 		PolynomialElement[] result = new PolynomialElement[1];
-		this.xPoly = polynomialSemiRing.getElement(polynomialSemiRing.getSemiRing().getZeroElement(), polynomialSemiRing.getSemiRing().getOneElement());
+		this.xPoly = polynomialSemiRing.getElement(polynomialSemiRing.getSemiRing().getZeroElement(),
+												   polynomialSemiRing.getSemiRing().getOneElement());
 		createTree1(this.d + 1, 0, this.polynomial.getSet().getOneElement(), uV, fV, result);
 
 		Element[] dVs = new Element[this.d + 1];
@@ -326,7 +327,8 @@ public class PolynomialEvaluationProofSystem
 		return Tuple.getInstance(dVs);
 	}
 
-	public void createTree1(int level, int degree, PolynomialElement poly, Tuple uV, Tuple fV, PolynomialElement[] result) {
+	public void createTree1(int level, int degree, PolynomialElement poly, Tuple uV, Tuple fV,
+		   PolynomialElement[] result) {
 		if (level == 0) {
 			if (degree == 0) {
 				result[0] = poly;
@@ -355,7 +357,8 @@ public class PolynomialEvaluationProofSystem
 		return result[0];
 	}
 
-	public void createTree2(int level, int degree, DualisticElement value, Tuple fBarV, Element x, DualisticElement[] result) {
+	public void createTree2(int level, int degree, DualisticElement value, Tuple fBarV, Element x,
+		   DualisticElement[] result) {
 		if (level == 0) {
 			result[0] = result[0].add(value.multiply(polynomial.getValue().getCoefficient(degree)));
 		} else {

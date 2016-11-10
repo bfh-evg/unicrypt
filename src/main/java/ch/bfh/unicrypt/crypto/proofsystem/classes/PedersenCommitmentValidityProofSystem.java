@@ -90,7 +90,8 @@ public class PedersenCommitmentValidityProofSystem
 	@Override
 	protected Function abstractGetDeltaFunction() {
 		final ProductSet deltaFunctionDomain = ProductSet.getInstance(this.pedersenCS.getMessageSpace(),
-																	  this.getSetMembershipProofFunction().getCoDomain());
+																	  this.getSetMembershipProofFunction()
+																			 .getCoDomain());
 		final Function deltaFunction = CompositeFunction.getInstance(
 			   SharedDomainFunction.getInstance(
 					  SelectionFunction.getInstance(deltaFunctionDomain, 1),
@@ -110,8 +111,8 @@ public class PedersenCommitmentValidityProofSystem
 	public static PedersenCommitmentValidityProofSystem getInstance(final PedersenCommitmentScheme pedersenCS,
 		   final Subset messages, final Element proverId) {
 		SigmaChallengeGenerator challengeGenerator
-			   = PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																							  messages.getOrder().intValue(), proverId);
+			   = PedersenCommitmentValidityProofSystem.
+					  createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);
 		return PedersenCommitmentValidityProofSystem.getInstance(challengeGenerator, pedersenCS, messages);
 	}
 
@@ -131,23 +132,28 @@ public class PedersenCommitmentValidityProofSystem
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages) {
+		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS,
+				  final int numberOfMessages) {
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																							numberOfMessages, RandomOracle.getInstance());
+																							numberOfMessages,
+																							RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
 				  final Element proverId) {
 		return PedersenCommitmentValidityProofSystem
-			   .createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, proverId, RandomOracle.getInstance());
+			   .createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, proverId,
+													   RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
 				  final RandomOracle randomOracle) {
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																							numberOfMessages, (Element) null, randomOracle);
+																							numberOfMessages,
+																							(Element) null,
+																							randomOracle);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator

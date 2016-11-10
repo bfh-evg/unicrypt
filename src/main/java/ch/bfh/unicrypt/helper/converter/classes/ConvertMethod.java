@@ -104,7 +104,8 @@ public class ConvertMethod<W>
 	 * @return The new converter method
 	 */
 	public static <W> ConvertMethod<W> getInstance(Converter<?, W>... converters) {
-		if (converters == null || converters.length == 0 || converters[0] == null || converters[0].getOutputClass() == null) {
+		if (converters == null || converters.length == 0 || converters[0] == null || converters[0].getOutputClass() ==
+			   null) {
 			throw new IllegalArgumentException();
 		}
 		Class<W> outputClass = converters[0].getOutputClass();
@@ -114,7 +115,8 @@ public class ConvertMethod<W>
 				throw new IllegalArgumentException();
 			}
 			Class<?> inputClass = converter.getInputClass();
-			if (inputClass == null || convertMethod.converterMap.containsKey(inputClass) || !outputClass.equals(converter.getOutputClass())) {
+			if (inputClass == null || convertMethod.converterMap.containsKey(inputClass) || !outputClass.equals(
+				   converter.getOutputClass())) {
 				throw new IllegalArgumentException();
 			}
 			convertMethod.converterMap.put(inputClass, converter);

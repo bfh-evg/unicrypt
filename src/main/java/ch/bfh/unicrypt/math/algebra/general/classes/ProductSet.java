@@ -236,7 +236,8 @@ public class ProductSet
 					protected Tuple abstractNext() {
 						Element[] elements = new Element[tupleLenght];
 						for (int i = 0; i < tupleLenght; i++) {
-							// the following lines are necessary to use the existing random integer generation on the same iterator
+							// the following lines are necessary to use the existing random integer generation on the
+							// same iterator
 							HybridRandomByteSequence rbs = new HybridRandomByteSequence() {
 
 								@Override

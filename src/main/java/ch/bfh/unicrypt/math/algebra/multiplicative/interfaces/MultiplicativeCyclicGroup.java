@@ -65,6 +65,7 @@ public interface MultiplicativeCyclicGroup<V>
 	public Sequence<? extends MultiplicativeElement<V>> getIndependentGenerators();
 
 	@Override
-	public Sequence<? extends MultiplicativeElement<V>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
+	public Sequence<? extends MultiplicativeElement<V>> getIndependentGenerators(
+		   DeterministicRandomByteSequence randomByteSequence);
 
 }

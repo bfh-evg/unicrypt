@@ -372,7 +372,8 @@ public interface Set<V> {
 	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 * @see Element#convertTo(ConvertMethod, Aggregator)
 	 */
-	public <W> Element<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
+	public <W> Element<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws
+		   UniCryptException;
 
 	/**
 	 * This is the most general method for re-constructing elements of type {@code V} from a value of type {@code W}. It
@@ -392,7 +393,8 @@ public interface Set<V> {
 	 * @throws ch.bfh.unicrypt.UniCryptException if no such element exists
 	 * @see Element#convertTo(ConvertMethod, Aggregator, Converter)
 	 */
-	public <W, X> Element<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
+	public <W, X> Element<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator,
+		   Converter<W, X> finalConverter) throws UniCryptException;
 
 	/**
 	 * This method is the counter-part of the method {@link Element#convertTo(ConvertMethod)}. It can be used to convert

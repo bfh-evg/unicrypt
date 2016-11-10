@@ -68,7 +68,8 @@ public class Hash_DRBG
 	private final int seedLength;
 	private final ByteArrayToBigInteger converter;
 
-	private Hash_DRBG(HashAlgorithm hashAlgorithm, NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
+	private Hash_DRBG(HashAlgorithm hashAlgorithm, NonDeterministicRandomByteSequence entropySource,
+		   ByteArray personalizationString) {
 		super(entropySource, personalizationString);
 		this.hashAlgorithm = hashAlgorithm;
 		// The minimal entropy is equal to 3/2 times the supported security strength of the hash function
@@ -87,7 +88,8 @@ public class Hash_DRBG
 		int max = MathUtil.divideUp(this.seedLength, this.hashAlgorithm.getBitLength());
 		ByteArray[] hashes = new ByteArray[max];
 		for (int i = 0; i < max; i++) {
-			ByteArray hashInput = ByteArray.getInstance(ByteArray.getInstance(MathUtil.getByte(i + 1)), MathUtil.getByteArray(seedLength), input);
+			ByteArray hashInput = ByteArray.getInstance(ByteArray.getInstance(MathUtil.getByte(i + 1)), MathUtil.
+														getByteArray(seedLength), input);
 			hashes[i] = this.hashAlgorithm.getHashValue(hashInput);
 		}
 		return ByteArray.getInstance(hashes).extractPrefix(this.seedLength / Byte.SIZE);
@@ -114,7 +116,8 @@ public class Hash_DRBG
 
 		return new RandomByteArraySequenceIterator() {
 
-			private ByteArray value = hashDerivationFunction(entropySource.next(minEntropy / Byte.SIZE).append(personalizationString));
+			private ByteArray value = hashDerivationFunction(entropySource.next(minEntropy / Byte.SIZE).append(
+				   personalizationString));
 			private final ByteArray constant = hashDerivationFunction(this.value.insert(BYTE_ZERO));
 			private ByteArray data = this.value;
 			private long counter = 1;
@@ -159,7 +162,8 @@ public class Hash_DRBG
 		return new HybridRandomByteArraySequence.Factory() {
 
 			@Override
-			protected HybridRandomByteArraySequence abstractGetInstance(NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
+			protected HybridRandomByteArraySequence abstractGetInstance(
+				   NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
 				return new Hash_DRBG(hashAlgorithm, entropySource, personalizationString);
 			}
 

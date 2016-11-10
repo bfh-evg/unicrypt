@@ -102,7 +102,8 @@ public class ConvertEncoder
 		if (domain == null || coDomain == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ConvertEncoder(domain, coDomain, TrivialConverter.<V>getInstance(), TrivialConverter.<V>getInstance());
+		return new ConvertEncoder(domain, coDomain, TrivialConverter.<V>getInstance(),
+								  TrivialConverter.<V>getInstance());
 	}
 
 	public static <V, W> ConvertEncoder getInstance(Set<V> domain, Set<W> coDomain, Converter<V, W> converter) {
@@ -112,7 +113,8 @@ public class ConvertEncoder
 		return new ConvertEncoder(domain, coDomain, converter, TrivialConverter.<W>getInstance());
 	}
 
-	public static <V, W, X> ConvertEncoder getInstance(Set<V> domain, Set<W> coDomain, Converter<V, X> domainConverter, Converter<W, X> coDomainConverter) {
+	public static <V, W, X> ConvertEncoder getInstance(Set<V> domain, Set<W> coDomain, Converter<V, X> domainConverter,
+		   Converter<W, X> coDomainConverter) {
 		if (domain == null || coDomain == null || domainConverter == null || coDomainConverter == null) {
 			throw new IllegalArgumentException();
 		}
@@ -131,7 +133,8 @@ public class ConvertEncoder
 
 	@Override
 	protected String defaultToStringContent() {
-		return this.domain.toString() + "," + this.coDomain.toString() + "," + this.domainConverter.toString() + "," + this.coDomainConverter.toString();
+		return this.domain.toString() + "," + this.coDomain.toString() + "," + this.domainConverter.toString() + ","
+			   + this.coDomainConverter.toString();
 	}
 
 }

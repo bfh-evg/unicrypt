@@ -64,7 +64,8 @@ public class HMAC_DRBG
 	private final HashAlgorithm hashAlgorithm;
 	private final int minEntropy;
 
-	private HMAC_DRBG(HashAlgorithm hashAlgorithm, NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
+	private HMAC_DRBG(HashAlgorithm hashAlgorithm, NonDeterministicRandomByteSequence entropySource,
+		   ByteArray personalizationString) {
 		super(entropySource, personalizationString);
 		this.hashAlgorithm = hashAlgorithm;
 		// The minimal entropy is equal to 3/2 times the supported security strength of the hash function
@@ -130,7 +131,8 @@ public class HMAC_DRBG
 		return new HybridRandomByteArraySequence.Factory() {
 
 			@Override
-			protected HybridRandomByteArraySequence abstractGetInstance(NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
+			protected HybridRandomByteArraySequence abstractGetInstance(
+				   NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
 				return new HMAC_DRBG(hashAlgorithm, entropySource, personalizationString);
 			}
 

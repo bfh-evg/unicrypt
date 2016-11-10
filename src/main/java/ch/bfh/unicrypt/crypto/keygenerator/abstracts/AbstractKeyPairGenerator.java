@@ -149,7 +149,8 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 		if (randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		return (PRE) this.getPrivateKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
+		return (PRE) this.getPrivateKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(),
+																  randomByteSequence);
 	}
 
 	/**
@@ -229,7 +230,8 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	 */
 	@Override
 	public Pair generateKeyPair(RandomByteSequence randomByteSequence) {
-		return (Pair) this.getKeyPairGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
+		return (Pair) this.getKeyPairGenerationFunction().apply(SingletonGroup.getInstance().getElement(),
+																randomByteSequence);
 	}
 
 	/**

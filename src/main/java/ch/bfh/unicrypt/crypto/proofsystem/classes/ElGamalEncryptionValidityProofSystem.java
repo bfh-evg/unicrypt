@@ -118,8 +118,8 @@ public class ElGamalEncryptionValidityProofSystem
 	public static ElGamalEncryptionValidityProofSystem getInstance(final Element proverId,
 		   final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts) {
 		SigmaChallengeGenerator challengeGenerator
-			   = ElGamalEncryptionValidityProofSystem.createNonInteractiveChallengeGenerator(elGamalES,
-																							 plaintexts.getOrder().intValue(), proverId);
+			   = ElGamalEncryptionValidityProofSystem.
+					  createNonInteractiveChallengeGenerator(elGamalES, plaintexts.getOrder().intValue(), proverId);
 		return ElGamalEncryptionValidityProofSystem.getInstance(challengeGenerator, elGamalES, publicKey, plaintexts);
 	}
 

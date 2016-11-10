@@ -312,7 +312,8 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	}
 
 	@Override
-	public final <W> E getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException {
+	public final <W> E getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws
+		   UniCryptException {
 		if (value == null || convertMethod == null || aggregator == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value, convertMethod, aggregator);
 		}
@@ -325,9 +326,11 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	}
 
 	@Override
-	public final <W, X> E getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException {
+	public final <W, X> E getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator,
+		   Converter<W, X> finalConverter) throws UniCryptException {
 		if (value == null || convertMethod == null || aggregator == null || finalConverter == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value, convertMethod, aggregator, finalConverter);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value, convertMethod, aggregator,
+											   finalConverter);
 		}
 		try {
 			Tree<W> tree = aggregator.disaggregate(finalConverter.reconvert(value));
@@ -357,7 +360,8 @@ public abstract class AbstractSet<E extends Element<V>, V>
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value);
 		}
 		if (this.isProduct()) {
-			return this.getElementFrom(value, ConvertMethod.getInstance(BigInteger.class), BigIntegerAggregator.getInstance());
+			return this.getElementFrom(value, ConvertMethod.getInstance(BigInteger.class), BigIntegerAggregator.
+									   getInstance());
 
 		} else {
 			return this.getElementFrom(value, this.getBigIntegerConverter());
@@ -370,7 +374,8 @@ public abstract class AbstractSet<E extends Element<V>, V>
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value);
 		}
 		if (this.isProduct()) {
-			return this.getElementFrom(value, ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
+			return this.getElementFrom(value, ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.
+									   getInstance());
 		} else {
 			return this.getElementFrom(value, this.getByteArrayConverter());
 
@@ -462,8 +467,8 @@ public abstract class AbstractSet<E extends Element<V>, V>
 		return this.stringConverter;
 	}
 
-	// helper method for selecting a converter from a given convert method or to return one of the default converters for
-	// bigIntgers, strings, or byteArrays if no converter exists
+	// helper method for selecting a converter from a given convert method or to return one of the default converters
+	// for bigIntgers, strings, or byteArrays if no converter exists
 	protected final <W> Converter<V, W> getConverter(ConvertMethod<W> convertMethod) {
 		Converter<V, W> converter = (Converter<V, W>) convertMethod.getConverter(this.getValueClass());
 		if (converter == null) {

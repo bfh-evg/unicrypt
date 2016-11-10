@@ -65,7 +65,8 @@ public interface CyclicRing<V>
 	public Sequence<? extends DualisticElement<V>> getIndependentGenerators();
 
 	@Override
-	public Sequence<? extends DualisticElement<V>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
+	public Sequence<? extends DualisticElement<V>> getIndependentGenerators(
+		   DeterministicRandomByteSequence randomByteSequence);
 
 	@Override
 	public DualisticElement<V> getRandomGenerator();

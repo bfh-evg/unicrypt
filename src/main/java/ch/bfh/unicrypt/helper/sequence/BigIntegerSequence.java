@@ -126,7 +126,8 @@ public class BigIntegerSequence
 		if (bitLength == 0) {
 			BigIntegerSequence.getInstance(0, 0);
 		}
-		return BigIntegerSequence.getInstance(MathUtil.powerOfTwo(bitLength - 1), MathUtil.powerOfTwo(bitLength).subtract(MathUtil.ONE));
+		return BigIntegerSequence.getInstance(MathUtil.powerOfTwo(bitLength - 1),
+											  MathUtil.powerOfTwo(bitLength).subtract(MathUtil.ONE));
 	}
 
 	@Override

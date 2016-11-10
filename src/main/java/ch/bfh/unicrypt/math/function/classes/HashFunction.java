@@ -119,7 +119,8 @@ public class HashFunction
 	 * @param hashMethod    The name of the hash algorithm
 	 * @return
 	 */
-	public static <V> HashFunction getInstance(Set domain, ConvertMethod<V> convertMethod, final HashMethod<V> hashMethod) {
+	public static <V> HashFunction getInstance(Set domain, ConvertMethod<V> convertMethod,
+		   final HashMethod<V> hashMethod) {
 		if (domain == null || convertMethod == null || hashMethod == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, domain, convertMethod, hashMethod);
 		}

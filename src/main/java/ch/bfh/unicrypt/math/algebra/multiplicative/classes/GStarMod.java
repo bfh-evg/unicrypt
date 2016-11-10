@@ -151,10 +151,10 @@ public class GStarMod
 
 	@Override
 	protected boolean abstractContains(final BigInteger value) {
-		return value.signum() > 0
-			   && value.compareTo(this.modulus) < 0
-			   && MathUtil.areRelativelyPrime(value, this.modulus)
-			   && value.modPow(this.getOrder(), this.modulus).equals(MathUtil.ONE);
+		return value.signum() > 0 &&
+			   value.compareTo(this.modulus) < 0 &&
+			   MathUtil.areRelativelyPrime(value, this.modulus) &&
+			   value.modPow(this.getOrder(), this.modulus).equals(MathUtil.ONE);
 	}
 
 	@Override
@@ -169,7 +169,8 @@ public class GStarMod
 
 	@Override
 	protected Sequence<GStarModElement> abstractGetRandomElements(final RandomByteSequence randomByteSequence) {
-		return this.getZStarMod().abstractGetRandomElements(randomByteSequence).map(new Mapping<ZStarModElement, GStarModElement>() {
+		return this.getZStarMod().abstractGetRandomElements(randomByteSequence).map(
+			   new Mapping<ZStarModElement, GStarModElement>() {
 
 			@Override
 			public GStarModElement apply(ZStarModElement element) {
@@ -254,7 +255,8 @@ public class GStarMod
 	public static GStarMod getInstance(SpecialFactorization modulusFactorization, Factorization orderFactorization) {
 		GStarMod group = new GStarMod(modulusFactorization, orderFactorization);
 		if (!group.getOrder().mod(orderFactorization.getValue()).equals(MathUtil.ZERO)) {
-			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulusFactorization, orderFactorization);
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulusFactorization,
+											   orderFactorization);
 		}
 		return group;
 	}

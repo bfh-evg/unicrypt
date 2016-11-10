@@ -72,7 +72,8 @@ public class RandomOracle
 	private final Converter<BigInteger, ByteArray> bigIntegerConverter;
 	private final Converter<String, ByteArray> stringConverter;
 
-	protected RandomOracle(DeterministicRandomByteArraySequence.Factory factory, HashAlgorithm hashAlgorithm, Converter<BigInteger, ByteArray> bigIntegerConverter, Converter<String, ByteArray> stringConverter) {
+	protected RandomOracle(DeterministicRandomByteArraySequence.Factory factory, HashAlgorithm hashAlgorithm,
+		   Converter<BigInteger, ByteArray> bigIntegerConverter, Converter<String, ByteArray> stringConverter) {
 		this.factory = factory;
 		this.hashAlgorithm = hashAlgorithm;
 		this.bigIntegerConverter = bigIntegerConverter;
@@ -180,8 +181,10 @@ public class RandomOracle
 	 * @param hashAlgorithm The given hash algorithm
 	 * @return The new random oracle
 	 */
-	public static RandomOracle getInstance(DeterministicRandomByteArraySequence.Factory factory, HashAlgorithm hashAlgorithm) {
-		return RandomOracle.getInstance(factory, hashAlgorithm, BigIntegerToByteArray.getInstance(), StringToByteArray.getInstance());
+	public static RandomOracle getInstance(DeterministicRandomByteArraySequence.Factory factory,
+		   HashAlgorithm hashAlgorithm) {
+		return RandomOracle.getInstance(factory, hashAlgorithm, BigIntegerToByteArray.getInstance(), StringToByteArray.
+										getInstance());
 	}
 
 	/**
@@ -195,8 +198,11 @@ public class RandomOracle
 	 * @param stringConverter     The given {@code String} converter
 	 * @return The new random oracle
 	 */
-	public static RandomOracle getInstance(DeterministicRandomByteArraySequence.Factory factory, HashAlgorithm hashAlgorithm, Converter<BigInteger, ByteArray> bigIntegerConverter, Converter<String, ByteArray> stringConverter) {
-		if (factory == null || hashAlgorithm == null || factory.getSeedByteLength() > hashAlgorithm.getByteLength() || bigIntegerConverter == null || stringConverter == null) {
+	public static RandomOracle getInstance(DeterministicRandomByteArraySequence.Factory factory,
+		   HashAlgorithm hashAlgorithm, Converter<BigInteger, ByteArray> bigIntegerConverter,
+		   Converter<String, ByteArray> stringConverter) {
+		if (factory == null || hashAlgorithm == null || factory.getSeedByteLength() > hashAlgorithm.getByteLength() ||
+			   bigIntegerConverter == null || stringConverter == null) {
 			throw new IllegalArgumentException();
 		}
 		return new RandomOracle(factory, hashAlgorithm, bigIntegerConverter, stringConverter);

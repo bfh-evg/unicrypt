@@ -110,7 +110,8 @@ public final class CompositeFunction
 		} else {
 			for (int i = 1; i < arity; i++) {
 				if (!(functions.getAt(i - 1).getCoDomain().isEquivalent(functions.getAt(i).getDomain()))) {
-					throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, functions.getAt(i - 1).getCoDomain(), functions.getAt(i).getDomain());
+					throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, functions.getAt(i - 1).getCoDomain(),
+													   functions.getAt(i).getDomain());
 				}
 			}
 		}

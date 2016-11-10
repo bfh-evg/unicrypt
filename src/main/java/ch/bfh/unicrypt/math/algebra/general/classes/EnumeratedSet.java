@@ -106,7 +106,8 @@ public class EnumeratedSet<V>
 
 	@Override
 	protected Sequence<EnumeratedSetElement<V>> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomIntegerSequence(this.getOrder().intValue() - 1).map(new Mapping<Integer, EnumeratedSetElement<V>>() {
+		return randomByteSequence.getRandomIntegerSequence(this.getOrder().intValue() - 1).map(
+			   new Mapping<Integer, EnumeratedSetElement<V>>() {
 
 			@Override
 			public EnumeratedSetElement<V> apply(Integer index) {

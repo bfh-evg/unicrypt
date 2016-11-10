@@ -167,7 +167,8 @@ public class ZMod
 
 	@Override
 	protected Sequence<ZModElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomBigIntegerSequence(this.modulus.subtract(MathUtil.ONE)).map(new Mapping<BigInteger, ZModElement>() {
+		return randomByteSequence.getRandomBigIntegerSequence(this.modulus.subtract(MathUtil.ONE)).map(
+			   new Mapping<BigInteger, ZModElement>() {
 
 			@Override
 			public ZModElement apply(BigInteger value) {

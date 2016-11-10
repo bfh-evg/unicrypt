@@ -127,7 +127,8 @@ public class FiniteByteArraySet
 
 	@Override
 	protected Sequence<FiniteByteArrayElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE)).map(new Mapping<BigInteger, FiniteByteArrayElement>() {
+		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE)).map(
+			   new Mapping<BigInteger, FiniteByteArrayElement>() {
 
 			@Override
 			public FiniteByteArrayElement apply(BigInteger value) {

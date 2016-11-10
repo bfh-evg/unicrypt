@@ -150,17 +150,20 @@ public class IdentityShuffleProofSystem
 
 		// Create sigma proof
 		PreimageProofFunction f = new PreimageProofFunction(this.getCyclicGroup(), this.getSize(),
-															this.getResponseSpace(), this.getCommitmentSpace(), this.getIndependentGenerators(), u, uPrimeV, gK_1,
+															this.getResponseSpace(), this.getCommitmentSpace(),
+															this.getIndependentGenerators(), u, uPrimeV, gK_1,
 															this.identityGroup);
 
 		Tuple randomElement = this.getResponseSpace().extractPrefix(2).getRandomElement(randomByteSequence);
-		Tuple randEV = ProductGroup.getInstance(ZMod.getInstance(MathUtil.powerOfTwo(this.getKe() + this.getKc() + this.getKr())),
-												this.getSize()).getRandomElement(randomByteSequence);
+		Tuple randEV = ProductGroup.getInstance(
+			   ZMod.getInstance(MathUtil.powerOfTwo(this.getKe() + this.getKc() + this.getKr())),
+			   this.getSize()).getRandomElement(randomByteSequence);
 
 		// 'Normally' ke+kc+kr < cyclicGroup.getOrder, but in case it isn't!
 		Element[] randEVs = new Element[this.getSize()];
 		for (int i = 0; i < randEVs.length; i++) {
-			randEVs[i] = this.getCyclicGroup().getZModOrder().getElement(randEV.getAt(i).convertToBigInteger().mod(this.getCyclicGroup().getOrder()));
+			randEVs[i] = this.getCyclicGroup().getZModOrder().getElement(randEV.getAt(i).convertToBigInteger()
+				   .mod(this.getCyclicGroup().getOrder()));
 		}
 		randEV = Tuple.getInstance(randEVs);
 		randomElement = randomElement.append(Tuple.getInstance(randEV));
@@ -202,7 +205,8 @@ public class IdentityShuffleProofSystem
 
 		// 1. Verify preimage proof
 		PreimageProofFunction f = new PreimageProofFunction(this.getCyclicGroup(), this.getSize(),
-															this.getResponseSpace(), this.getCommitmentSpace(), this.getIndependentGenerators(), u, uPrimeV, gK_1,
+															this.getResponseSpace(), this.getCommitmentSpace(),
+															this.getIndependentGenerators(), u, uPrimeV, gK_1,
 															this.identityGroup);
 		final Element challenge = this.getSigmaChallengeGenerator().generate(publicInput, commitment);
 		final Element left = f.apply(response);                                   // [2N+3]
@@ -312,7 +316,8 @@ public class IdentityShuffleProofSystem
 		if (identityGroup == null || size < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		Tuple independentGenerators = Tuple.getInstance(identityGroup.getIndependentGenerators(randomByteSequence).limit(size + 1));
+		Tuple independentGenerators = Tuple.getInstance(identityGroup.getIndependentGenerators(randomByteSequence)
+			   .limit(size + 1));
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, independentGenerators, identityGroup, kr);
 	}
 

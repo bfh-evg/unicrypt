@@ -158,7 +158,8 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 
 	@Override
 	protected Triple abstractGenerate(Pair privateInput, PUE publicInput, RandomByteSequence randomByteSequence) {
-		return this.getOrProofGenerator().generate(privateInput, this.createProofImages(publicInput), randomByteSequence);
+		return this.getOrProofGenerator().generate(privateInput, this.createProofImages(publicInput),
+												   randomByteSequence);
 	}
 
 	@Override

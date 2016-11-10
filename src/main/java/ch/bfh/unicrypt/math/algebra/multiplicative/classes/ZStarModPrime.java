@@ -85,7 +85,8 @@ public class ZStarModPrime
 	}
 
 	@Override
-	public final Sequence<ZStarModElement> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence) {
+	public final Sequence<ZStarModElement> getIndependentGenerators(
+		   DeterministicRandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
 		}

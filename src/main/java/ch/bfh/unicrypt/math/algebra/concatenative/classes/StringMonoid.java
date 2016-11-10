@@ -112,7 +112,8 @@ public class StringMonoid
 	protected final StringElement abstractGetRandomElement(int length, RandomByteSequence randomByteSequence) {
 		char[] chars = new char[length];
 		for (int i = 0; i < length; i++) {
-			chars[i] = this.getAlphabet().getCharacter(randomByteSequence.getRandomIntegerSequence(this.getAlphabet().getSize() - 1).get());
+			chars[i] = this.getAlphabet().getCharacter(randomByteSequence.getRandomIntegerSequence(this.getAlphabet().
+				   getSize() - 1).get());
 		}
 		return this.abstractGetElement(new String(chars));
 	}

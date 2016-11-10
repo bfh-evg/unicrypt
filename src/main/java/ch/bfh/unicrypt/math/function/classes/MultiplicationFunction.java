@@ -91,7 +91,8 @@ public class MultiplicationFunction
 	 * @param arity                   The number of input elements
 	 * @return The resulting function
 	 */
-	public static MultiplicationFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup, final int arity) {
+	public static MultiplicationFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup,
+		   final int arity) {
 		if (multiplicativeSemiGroup == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, multiplicativeSemiGroup);
 		}

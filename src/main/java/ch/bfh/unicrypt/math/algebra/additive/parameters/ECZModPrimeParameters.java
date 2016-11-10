@@ -185,17 +185,21 @@ public class ECZModPrimeParameters
 		   "1fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa51868783bf2f966b7fcc0148f709a5d03bb5c9b8899c47aebb6fb71e91386409",
 		   "1");
 
-	private ECZModPrimeParameters(int securityLevel, String modulus, String a, String b, String gx, String gy, String subGroupOrder, String coFactor) {
+	private ECZModPrimeParameters(int securityLevel, String modulus, String a, String b, String gx, String gy,
+		   String subGroupOrder, String coFactor) {
 		super(securityLevel,
 			  ZModPrime.getInstance(new BigInteger(modulus, 16)),
 			  new BigInteger(subGroupOrder, 16),
 			  new BigInteger(coFactor, 16)
 		);
-		this.setCoefficient(this.finiteField.getElement(new BigInteger(a, 16)), this.finiteField.getElement(new BigInteger(b, 16)));
-		this.setGenerator(this.finiteField.getElement(new BigInteger(gx, 16)), this.finiteField.getElement(new BigInteger(gy, 16)));
+		this.setCoefficient(this.finiteField.getElement(new BigInteger(a, 16)), this.finiteField.getElement(
+							new BigInteger(b, 16)));
+		this.setGenerator(this.finiteField.getElement(new BigInteger(gx, 16)), this.finiteField.getElement(
+						  new BigInteger(gy, 16)));
 	}
 
-	private ECZModPrimeParameters(int securityLevel, int modulus, int a, int b, int gx, int gy, int subGroupOrder, int coFactor) {
+	private ECZModPrimeParameters(int securityLevel, int modulus, int a, int b, int gx, int gy, int subGroupOrder,
+		   int coFactor) {
 		super(securityLevel,
 			  ZModPrime.getInstance(BigInteger.valueOf(modulus)),
 			  BigInteger.valueOf(subGroupOrder),

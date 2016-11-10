@@ -85,13 +85,16 @@ public interface SemiRing<V>
 	public <W> DualisticElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;
 
 	@Override
-	public <W> DualisticElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
+	public <W> DualisticElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator)
+		   throws UniCryptException;
 
 	@Override
-	public <W, X> DualisticElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
+	public <W, X> DualisticElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator,
+		   Converter<W, X> finalConverter) throws UniCryptException;
 
 	@Override
-	public <W> DualisticElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
+	public <W> DualisticElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod)
+		   throws UniCryptException;
 
 	@Override
 	public DualisticElement<V> getElementFrom(long integer) throws UniCryptException;

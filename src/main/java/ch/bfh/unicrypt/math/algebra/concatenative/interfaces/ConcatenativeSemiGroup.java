@@ -191,13 +191,16 @@ public interface ConcatenativeSemiGroup<V>
 	public <W> ConcatenativeElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;
 
 	@Override
-	public <W> ConcatenativeElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
+	public <W> ConcatenativeElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator)
+		   throws UniCryptException;
 
 	@Override
-	public <W, X> ConcatenativeElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
+	public <W, X> ConcatenativeElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod,
+		   Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
 
 	@Override
-	public <W> ConcatenativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
+	public <W> ConcatenativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws
+		   UniCryptException;
 
 	@Override
 	public ConcatenativeElement<V> getElementFrom(long integer) throws UniCryptException;

@@ -168,13 +168,16 @@ public interface MultiplicativeSemiGroup<V>
 	public <W> MultiplicativeElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;
 
 	@Override
-	public <W> MultiplicativeElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws UniCryptException;
+	public <W> MultiplicativeElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod,
+		   Aggregator<W> aggregator) throws UniCryptException;
 
 	@Override
-	public <W, X> MultiplicativeElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
+	public <W, X> MultiplicativeElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod,
+		   Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
 
 	@Override
-	public <W> MultiplicativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
+	public <W> MultiplicativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws
+		   UniCryptException;
 
 	@Override
 	public MultiplicativeElement<V> getElementFrom(long integer) throws UniCryptException;
