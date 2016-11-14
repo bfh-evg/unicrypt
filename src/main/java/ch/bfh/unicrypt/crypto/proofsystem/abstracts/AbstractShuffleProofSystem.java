@@ -115,7 +115,7 @@ public abstract class AbstractShuffleProofSystem
 	final private int kr;
 
 	/**
-	 * The independent generators, a tuple of arity {@link size} + 1.
+	 * The independent generators, a tuple of arity {@code size+1}.
 	 */
 	final private Tuple independentGenerators;
 

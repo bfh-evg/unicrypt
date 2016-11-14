@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.random.password.PasswordRandomByteSequence;
@@ -82,9 +81,8 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	 *
 	 * @param privateKeySpace
 	 * @param publicKeySpace
-	 * @param converter
 	 */
-	protected AbstractKeyPairGenerator(PRS privateKeySpace, PUS publicKeySpace, StringToByteArray converter) {
+	protected AbstractKeyPairGenerator(PRS privateKeySpace, PUS publicKeySpace) {
 		this.privateKeySpace = privateKeySpace;
 		this.publicKeySpace = publicKeySpace;
 	}

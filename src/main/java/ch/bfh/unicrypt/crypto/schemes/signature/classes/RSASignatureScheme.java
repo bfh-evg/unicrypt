@@ -84,8 +84,8 @@ public class RSASignatureScheme<MS extends Set>
 	}
 
 	@Override
-	protected RSAKeyGenerator abstractGetKeyPairGenerator(StringToByteArray converter) {
-		return RSAKeyGenerator.getInstance(this.zMod, converter);
+	protected RSAKeyGenerator abstractGetKeyPairGenerator() {
+		return RSAKeyGenerator.getInstance(this.zMod);
 	}
 
 	@Override

@@ -54,14 +54,11 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 
 /**
  * This class represents the concept of a hash function, which maps an arbitrarily long input element into an element of
- * a given co-domain. The mapping itself is defined by some cryptographic hash function such as SHA-256. For complex
- * input elements, there are two options: one in which the individual elements are first recursively paired with
- * {@link MathUtil#elegantPair(java.math.BigInteger[])}, and one in which the hashing itself is done recursively. The
- * co-domain is always an instance of {@link ZPlusMod}. Its order corresponds to the size of the cryptographic hash
- * function's output space (a power of 2).
+ * a given co-domain. The mapping itself is defined by some cryptographic hash function such as SHA-256. The co-domain
+ * is always an instance of {@link FixedByteArraySet}.
  * <p>
  * @see Element#getHashValue()
- * @see Element#getRecursiveHashValue()
+ * @see Element#getHashValue(ConvertMethod, HashMethod)
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
