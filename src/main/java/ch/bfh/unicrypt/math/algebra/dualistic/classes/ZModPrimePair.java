@@ -57,7 +57,7 @@ import java.util.Map;
 public class ZModPrimePair
 	   extends ZMod {
 
-	private static final Map<BigInteger, ZModPrimePair> instances = new HashMap<>();
+	private static final Map<BigInteger, ZModPrimePair> INSTANCES = new HashMap<>();
 
 	private final PrimePair primePair;
 
@@ -89,10 +89,10 @@ public class ZModPrimePair
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, prime1, prime2);
 		}
 		BigInteger value = prime1.multiply(prime2);
-		ZModPrimePair instance = ZModPrimePair.instances.get(value);
+		ZModPrimePair instance = ZModPrimePair.INSTANCES.get(value);
 		if (instance == null) {
 			instance = new ZModPrimePair(PrimePair.getInstance(prime1, prime2));
-			ZModPrimePair.instances.put(value, instance);
+			ZModPrimePair.INSTANCES.put(value, instance);
 		}
 		return instance;
 	}
@@ -105,10 +105,10 @@ public class ZModPrimePair
 		if (primePair == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primePair);
 		}
-		ZModPrimePair instance = ZModPrimePair.instances.get(primePair.getValue());
+		ZModPrimePair instance = ZModPrimePair.INSTANCES.get(primePair.getValue());
 		if (instance == null) {
 			instance = new ZModPrimePair(primePair);
-			ZModPrimePair.instances.put(primePair.getValue(), instance);
+			ZModPrimePair.INSTANCES.put(primePair.getValue(), instance);
 		}
 		return instance;
 	}

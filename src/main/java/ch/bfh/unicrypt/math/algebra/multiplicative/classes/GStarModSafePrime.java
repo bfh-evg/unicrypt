@@ -58,7 +58,7 @@ public class GStarModSafePrime
 	   extends GStarModPrime {
 
 	private static final long serialVersionUID = 1L;
-	private final static Map<BigInteger, GStarModSafePrime> instances = new HashMap<>();
+	private final static Map<BigInteger, GStarModSafePrime> INSTANCES = new HashMap<>();
 
 	protected GStarModSafePrime(SafePrime modulus) {
 		super(modulus, Prime.getInstance(modulus.getValue().subtract(MathUtil.ONE).divide(MathUtil.TWO)));
@@ -84,10 +84,10 @@ public class GStarModSafePrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
 		}
-		GStarModSafePrime instance = GStarModSafePrime.instances.get(modulus);
+		GStarModSafePrime instance = GStarModSafePrime.INSTANCES.get(modulus);
 		if (instance == null) {
 			instance = new GStarModSafePrime(SafePrime.getInstance(modulus));
-			GStarModSafePrime.instances.put(modulus, instance);
+			GStarModSafePrime.INSTANCES.put(modulus, instance);
 		}
 		return instance;
 	}
@@ -96,10 +96,10 @@ public class GStarModSafePrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
 		}
-		GStarModSafePrime instance = GStarModSafePrime.instances.get(modulus.getValue());
+		GStarModSafePrime instance = GStarModSafePrime.INSTANCES.get(modulus.getValue());
 		if (instance == null) {
 			instance = new GStarModSafePrime(modulus);
-			GStarModSafePrime.instances.put(modulus.getValue(), instance);
+			GStarModSafePrime.INSTANCES.put(modulus.getValue(), instance);
 		}
 		return instance;
 	}

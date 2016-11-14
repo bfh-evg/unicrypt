@@ -61,7 +61,7 @@ public class ZModPrime
 	   implements PrimeField<BigInteger> {
 
 	private static final long serialVersionUID = 1L;
-	private static final Map<BigInteger, ZModPrime> instances = new HashMap<>();
+	private static final Map<BigInteger, ZModPrime> INSTANCES = new HashMap<>();
 
 	protected ZModPrime(Prime prime) {
 		super(prime.getValue());
@@ -170,10 +170,10 @@ public class ZModPrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
 		}
-		ZModPrime instance = ZModPrime.instances.get(modulus);
+		ZModPrime instance = ZModPrime.INSTANCES.get(modulus);
 		if (instance == null) {
 			instance = new ZModPrime(Prime.getInstance(modulus));
-			ZModPrime.instances.put(modulus, instance);
+			ZModPrime.INSTANCES.put(modulus, instance);
 		}
 		return instance;
 	}
@@ -182,10 +182,10 @@ public class ZModPrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
 		}
-		ZModPrime instance = ZModPrime.instances.get(modulus.getValue());
+		ZModPrime instance = ZModPrime.INSTANCES.get(modulus.getValue());
 		if (instance == null) {
 			instance = new ZModPrime(modulus);
-			ZModPrime.instances.put(modulus.getValue(), instance);
+			ZModPrime.INSTANCES.put(modulus.getValue(), instance);
 		}
 		return instance;
 	}

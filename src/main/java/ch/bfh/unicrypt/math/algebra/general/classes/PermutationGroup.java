@@ -189,7 +189,7 @@ public class PermutationGroup
 		return hash;
 	}
 
-	private static final Map<Integer, PermutationGroup> instances = new HashMap<>();
+	private static final Map<Integer, PermutationGroup> INSTANCES = new HashMap<>();
 
 	/**
 	 * Returns a the unique instance of this class for a given non-negative permutation size.
@@ -201,10 +201,10 @@ public class PermutationGroup
 		if (size < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE);
 		}
-		PermutationGroup instance = PermutationGroup.instances.get(size);
+		PermutationGroup instance = PermutationGroup.INSTANCES.get(size);
 		if (instance == null) {
 			instance = new PermutationGroup(size);
-			PermutationGroup.instances.put(size, instance);
+			PermutationGroup.INSTANCES.put(size, instance);
 		}
 		return instance;
 	}

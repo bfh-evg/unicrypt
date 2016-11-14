@@ -99,8 +99,8 @@ public class FiniteStringSet
 
 	@Override
 	protected boolean abstractContains(String value) {
-		return value.length() >= this.minLength && value.length() <= this.maxLength &&
-			   this.getAlphabet().containsAll(value);
+		return value.length() >= this.minLength && value.length() <= this.maxLength
+			   && this.getAlphabet().containsAll(value);
 	}
 
 	@Override
@@ -143,8 +143,8 @@ public class FiniteStringSet
 	@Override
 	protected boolean abstractEquals(final Set set) {
 		final FiniteStringSet other = (FiniteStringSet) set;
-		return this.getAlphabet() == other.getAlphabet() && this.minLength == other.minLength &&
-			   this.maxLength == other.maxLength;
+		return this.getAlphabet() == other.getAlphabet() && this.minLength == other.minLength
+			   && this.maxLength == other.maxLength;
 	}
 
 	@Override
@@ -174,7 +174,7 @@ public class FiniteStringSet
 	}
 
 	public static FiniteStringSet getInstance(final Alphabet alphabet, final int minLength, final int maxLength) {
-		if (alphabet == null || minLength < 0 || maxLength < minLength) {
+		if (alphabet == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, alphabet);
 		}
 		if (minLength < 0 || maxLength < minLength) {

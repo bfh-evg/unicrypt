@@ -72,7 +72,7 @@ public class SelectionFunction
 	}
 
 	public int[] getIndices() {
-		return this.indices;
+		return Arrays.copyOf(this.indices, this.indices.length);
 	}
 
 	@Override

@@ -99,8 +99,8 @@ public abstract class Sequence<V>
 	 * @return {@code true} if the sequence is empty, {@code false} otherwise
 	 */
 	public final boolean isEmpty() {
-		return this.length.equals(MathUtil.ZERO) || (this.length.equals(Sequence.UNKNOWN) &&
-			   !this.iterator().hasNext());
+		return this.length.equals(MathUtil.ZERO) || (this.length.equals(Sequence.UNKNOWN)
+			   && !this.iterator().hasNext());
 	}
 
 	/**
@@ -720,7 +720,7 @@ public abstract class Sequence<V>
 			public SequenceIterator<V> iterator() {
 				return new SequenceIterator<V>() {
 
-					V currentValue = startValue;
+					private V currentValue = startValue;
 
 					@Override
 					public boolean hasNext() {

@@ -156,16 +156,16 @@ public class SingletonGroup
 		return hash;
 	}
 
-	private static final Map<BigInteger, SingletonGroup> instances = new HashMap<>();
+	private static final Map<BigInteger, SingletonGroup> INSTANCES = new HashMap<>();
 
 	public static SingletonGroup getInstance(final BigInteger value) {
 		if (value == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, value);
 		}
-		SingletonGroup instance = SingletonGroup.instances.get(value);
+		SingletonGroup instance = SingletonGroup.INSTANCES.get(value);
 		if (instance == null) {
 			instance = new SingletonGroup(value);
-			SingletonGroup.instances.put(value, instance);
+			SingletonGroup.INSTANCES.put(value, instance);
 		}
 		return instance;
 	}

@@ -218,7 +218,7 @@ public class IdentityShuffleProofSystem
 	//===================================================================================
 	// Nested class PreimageProofFunction
 	//
-	private class PreimageProofFunction
+	private static class PreimageProofFunction
 		   extends AbstractFunction<PreimageProofFunction, ProductGroup, Tuple, ProductGroup, Tuple> {
 
 		private final CyclicGroup cyclicGroup;

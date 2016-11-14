@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * This class is a default implementation of the {@link ImmutableArray} interface. It is optimized for sparse arrays
@@ -138,8 +139,9 @@ public class SparseArray<V>
 			throw new IllegalArgumentException();
 		}
 		Map<Integer, V> newMap = new HashMap();
-		for (Integer i : map.keySet()) {
-			V value = map.get(i);
+		for (Entry<Integer, V> entry : map.entrySet()) {
+			int i = entry.getKey();
+			V value = entry.getValue();
 			if (value == null || i < 0 || i >= length) {
 				throw new IllegalArgumentException();
 			}
@@ -211,8 +213,9 @@ public class SparseArray<V>
 			return super.defaultGetIndices(value);
 		}
 		List<Integer> result = new LinkedList<>();
-		for (Integer i : this.map.keySet()) {
-			if (i >= this.rangeOffset && i < this.rangeOffset + this.rangeLength && this.map.get(i).equals(value)) {
+		for (Entry<Integer, V> entry : this.map.entrySet()) {
+			int i = entry.getKey();
+			if (i >= this.rangeOffset && i < this.rangeOffset + this.rangeLength && entry.getValue().equals(value)) {
 				result.add(this.getIndex(i));
 			}
 		}
@@ -226,9 +229,10 @@ public class SparseArray<V>
 			return super.defaultGetIndicesExcept(value);
 		}
 		List<Integer> result = new LinkedList<>();
-		for (Integer i : this.map.keySet()) {
+		for (Entry<Integer, V> entry : this.map.entrySet()) {
+			int i = entry.getKey();
 			if (i >= this.rangeOffset && i < this.rangeOffset + this.length - this.header - this.trailer
-				   && !this.map.get(i).equals(this.defaultValue)) {
+				   && !entry.getValue().equals(this.defaultValue)) {
 				result.add(this.getIndex(i));
 			}
 		}

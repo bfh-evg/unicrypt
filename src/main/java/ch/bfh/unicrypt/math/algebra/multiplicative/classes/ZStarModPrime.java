@@ -66,7 +66,7 @@ public class ZStarModPrime
 	   implements MultiplicativeCyclicGroup<BigInteger> {
 
 	private static final long serialVersionUID = 1L;
-	private final static Map<BigInteger, ZStarModPrime> instances = new HashMap<>();
+	private final static Map<BigInteger, ZStarModPrime> INSTANCES = new HashMap<>();
 
 	protected ZStarModPrime(Prime modulus) {
 		super(modulus);
@@ -141,10 +141,10 @@ public class ZStarModPrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
 		}
-		ZStarModPrime instance = ZStarModPrime.instances.get(modulus);
+		ZStarModPrime instance = ZStarModPrime.INSTANCES.get(modulus);
 		if (instance == null) {
 			instance = new ZStarModPrime(Prime.getInstance(modulus));
-			ZStarModPrime.instances.put(modulus, instance);
+			ZStarModPrime.INSTANCES.put(modulus, instance);
 		}
 		return instance;
 	}
@@ -153,10 +153,10 @@ public class ZStarModPrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
 		}
-		ZStarModPrime instance = ZStarModPrime.instances.get(modulus.getValue());
+		ZStarModPrime instance = ZStarModPrime.INSTANCES.get(modulus.getValue());
 		if (instance == null) {
 			instance = new ZStarModPrime(modulus);
-			ZStarModPrime.instances.put(modulus.getValue(), instance);
+			ZStarModPrime.INSTANCES.put(modulus.getValue(), instance);
 		}
 		return instance;
 	}

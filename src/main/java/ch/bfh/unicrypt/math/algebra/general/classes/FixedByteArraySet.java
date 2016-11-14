@@ -81,16 +81,16 @@ public class FixedByteArraySet
 		});
 	}
 
-	private static final Map<Integer, FixedByteArraySet> instances = new HashMap<>();
+	private static final Map<Integer, FixedByteArraySet> INSTANCES = new HashMap<>();
 
 	public static FixedByteArraySet getInstance(final int length) {
 		if (length < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, length);
 		}
-		FixedByteArraySet instance = FixedByteArraySet.instances.get(Integer.valueOf(length));
+		FixedByteArraySet instance = FixedByteArraySet.INSTANCES.get(Integer.valueOf(length));
 		if (instance == null) {
 			instance = new FixedByteArraySet(length);
-			FixedByteArraySet.instances.put(length, instance);
+			FixedByteArraySet.INSTANCES.put(length, instance);
 		}
 		return instance;
 	}

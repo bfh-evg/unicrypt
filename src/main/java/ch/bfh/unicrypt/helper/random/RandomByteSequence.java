@@ -76,7 +76,7 @@ public abstract class RandomByteSequence
 			public RandomByteArraySequenceIterator iterator() {
 				return new RandomByteArraySequenceIterator() {
 
-					final RandomByteSequenceIterator iterator = source.iterator();
+					private final RandomByteSequenceIterator iterator = source.iterator();
 
 					@Override
 					protected ByteArray abstractNext() {

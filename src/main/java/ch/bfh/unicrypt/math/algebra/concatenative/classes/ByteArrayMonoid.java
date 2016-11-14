@@ -63,7 +63,7 @@ public class ByteArrayMonoid
 	   extends AbstractConcatenativeMonoid<ByteArrayElement, ByteArray> {
 
 	private static final long serialVersionUID = 1L;
-	private static final Map<Integer, ByteArrayMonoid> instances = new HashMap<>();
+	private static final Map<Integer, ByteArrayMonoid> INSTANCES = new HashMap<>();
 
 	private ByteArrayMonoid(int blockLength) {
 		super(ByteArray.class, blockLength);
@@ -147,10 +147,10 @@ public class ByteArrayMonoid
 		if (blockLength < 1) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, blockLength);
 		}
-		ByteArrayMonoid instance = ByteArrayMonoid.instances.get(Integer.valueOf(blockLength));
+		ByteArrayMonoid instance = ByteArrayMonoid.INSTANCES.get(Integer.valueOf(blockLength));
 		if (instance == null) {
 			instance = new ByteArrayMonoid(blockLength);
-			ByteArrayMonoid.instances.put(blockLength, instance);
+			ByteArrayMonoid.INSTANCES.put(blockLength, instance);
 		}
 		return instance;
 	}

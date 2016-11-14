@@ -57,7 +57,7 @@ import java.util.Map;
 public class ZStarModSafePrime
 	   extends ZStarModPrime {
 
-	private final static Map<BigInteger, ZStarModSafePrime> instances = new HashMap<>();
+	private final static Map<BigInteger, ZStarModSafePrime> INSTANCES = new HashMap<>();
 	private ZStarModElement defaultGenerator;
 
 	private ZStarModSafePrime(SafePrime modulus) {
@@ -96,10 +96,10 @@ public class ZStarModSafePrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
 		}
-		ZStarModSafePrime instance = ZStarModSafePrime.instances.get(modulus);
+		ZStarModSafePrime instance = ZStarModSafePrime.INSTANCES.get(modulus);
 		if (instance == null) {
 			instance = new ZStarModSafePrime(SafePrime.getInstance(modulus));
-			ZStarModSafePrime.instances.put(modulus, instance);
+			ZStarModSafePrime.INSTANCES.put(modulus, instance);
 		}
 		return instance;
 	}
@@ -108,10 +108,10 @@ public class ZStarModSafePrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
 		}
-		ZStarModSafePrime instance = ZStarModSafePrime.instances.get(modulus.getValue());
+		ZStarModSafePrime instance = ZStarModSafePrime.INSTANCES.get(modulus.getValue());
 		if (instance == null) {
 			instance = new ZStarModSafePrime(modulus);
-			ZStarModSafePrime.instances.put(modulus.getValue(), instance);
+			ZStarModSafePrime.INSTANCES.put(modulus.getValue(), instance);
 		}
 		return instance;
 	}

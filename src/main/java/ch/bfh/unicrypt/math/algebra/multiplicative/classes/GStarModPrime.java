@@ -58,7 +58,7 @@ public class GStarModPrime
 	   extends GStarMod {
 
 	private static final long serialVersionUID = 1L;
-	private final static Map2D<BigInteger, BigInteger, GStarModPrime> instances = HashMap2D.getInstance();
+	private final static Map2D<BigInteger, BigInteger, GStarModPrime> INSTANCES = HashMap2D.getInstance();
 
 	protected GStarModPrime(Prime modulus, Prime order) {
 		super(modulus, order);
@@ -89,13 +89,13 @@ public class GStarModPrime
 		if (modulus == null || order == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus, order);
 		}
-		GStarModPrime instance = GStarModPrime.instances.get(modulus, order);
+		GStarModPrime instance = GStarModPrime.INSTANCES.get(modulus, order);
 		if (instance == null) {
 			if (!modulus.subtract(MathUtil.ONE).mod(order).equals(MathUtil.ZERO)) {
 				throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, order);
 			}
 			instance = new GStarModPrime(Prime.getInstance(modulus), Prime.getInstance(order));
-			GStarModPrime.instances.put(modulus, order, instance);
+			GStarModPrime.INSTANCES.put(modulus, order, instance);
 		}
 		return instance;
 	}
@@ -104,13 +104,13 @@ public class GStarModPrime
 		if (modulus == null || order == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus, order);
 		}
-		GStarModPrime instance = GStarModPrime.instances.get(modulus.getValue(), order.getValue());
+		GStarModPrime instance = GStarModPrime.INSTANCES.get(modulus.getValue(), order.getValue());
 		if (instance == null) {
 			if (!modulus.getValue().subtract(MathUtil.ONE).mod(order.getValue()).equals(MathUtil.ZERO)) {
 				throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, order);
 			}
 			instance = new GStarModPrime(modulus, order);
-			GStarModPrime.instances.put(modulus.getValue(), order.getValue(), instance);
+			GStarModPrime.INSTANCES.put(modulus.getValue(), order.getValue(), instance);
 		}
 		return instance;
 	}

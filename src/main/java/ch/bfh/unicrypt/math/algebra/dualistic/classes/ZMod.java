@@ -72,7 +72,7 @@ public class ZMod
 	   extends AbstractCyclicRing<ZModElement, BigInteger> {
 
 	private static final long serialVersionUID = 1L;
-	private static final Map<BigInteger, ZMod> instances = new HashMap<>();
+	private static final Map<BigInteger, ZMod> INSTANCES = new HashMap<>();
 
 	protected final BigInteger modulus;
 
@@ -186,10 +186,6 @@ public class ZMod
 
 	@Override
 	protected boolean abstractIsGenerator(ZModElement element) {
-		// the second condition is necessary to handle the trivial group Z_1
-		if (this.modulus.equals(MathUtil.ONE) || this.modulus.equals(MathUtil.ONE)) {
-			return true;
-		}
 		return MathUtil.areRelativelyPrime(element.getValue(), this.modulus);
 	}
 
@@ -224,10 +220,10 @@ public class ZMod
 		if (modulus.compareTo(MathUtil.ONE) < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.SET_CONSTRUCTION_FAILURE, modulus);
 		}
-		ZMod instance = ZMod.instances.get(modulus);
+		ZMod instance = ZMod.INSTANCES.get(modulus);
 		if (instance == null) {
 			instance = new ZMod(modulus);
-			ZMod.instances.put(modulus, instance);
+			ZMod.INSTANCES.put(modulus, instance);
 		}
 		return instance;
 	}

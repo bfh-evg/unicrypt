@@ -56,7 +56,7 @@ import java.util.Map;
 public class ZStarModPrimePair
 	   extends ZStarMod {
 
-	private final static Map<BigInteger, ZStarModPrimePair> instances = new HashMap<>();
+	private final static Map<BigInteger, ZStarModPrimePair> INSTANCES = new HashMap<>();
 	private static final long serialVersionUID = 1L;
 
 	protected ZStarModPrimePair(PrimePair primePair) {
@@ -72,10 +72,10 @@ public class ZStarModPrimePair
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, prime1, prime2);
 		}
 		BigInteger value = prime1.multiply(prime2);
-		ZStarModPrimePair instance = ZStarModPrimePair.instances.get(value);
+		ZStarModPrimePair instance = ZStarModPrimePair.INSTANCES.get(value);
 		if (instance == null) {
 			instance = new ZStarModPrimePair(PrimePair.getInstance(prime1, prime2));
-			ZStarModPrimePair.instances.put(value, instance);
+			ZStarModPrimePair.INSTANCES.put(value, instance);
 		}
 		return instance;
 	}
@@ -88,10 +88,10 @@ public class ZStarModPrimePair
 		if (primePair == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primePair);
 		}
-		ZStarModPrimePair instance = ZStarModPrimePair.instances.get(primePair.getValue());
+		ZStarModPrimePair instance = ZStarModPrimePair.INSTANCES.get(primePair.getValue());
 		if (instance == null) {
 			instance = new ZStarModPrimePair(primePair);
-			ZStarModPrimePair.instances.put(primePair.getValue(), instance);
+			ZStarModPrimePair.INSTANCES.put(primePair.getValue(), instance);
 		}
 		return instance;
 	}

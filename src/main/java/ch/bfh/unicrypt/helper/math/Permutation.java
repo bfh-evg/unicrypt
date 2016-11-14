@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.UniCryptRuntimeException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Instances of this class represent permutations {@code p:{0,...,size-1}->{0,...,size-1}} of a given {@code size}.
@@ -240,6 +241,9 @@ public class Permutation
 
 			@Override
 			public Integer next() {
+				if (!this.hasNext()) {
+					throw new NoSuchElementException();
+				}
 				return permutationVector[this.currentIndex++];
 			}
 

@@ -241,7 +241,7 @@ public class ZModToECPolynomialField
 //		}
 	}
 
-	private class DecodingFunction
+	private static class DecodingFunction
 		   extends AbstractFunction<DecodingFunction, ECPolynomialField, ECPolynomialElement, ZMod, ZModElement> {
 
 		public DecodingFunction(ECPolynomialField domain, ZMod coDomain) {

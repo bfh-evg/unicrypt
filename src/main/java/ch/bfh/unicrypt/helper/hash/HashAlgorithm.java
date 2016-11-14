@@ -178,7 +178,7 @@ public class HashAlgorithm
 	}
 
 	/**
-	 * Returns the keyed hash value for a given byte array and key.
+	 * Returns the HMAC value (RFC 2104) for a given byte array and key.
 	 * <p>
 	 * @param message The given byte array
 	 * @param key     The given key
@@ -205,7 +205,7 @@ public class HashAlgorithm
 	}
 
 	/**
-	 * Returns the keyed hash value for a given byte array truncated to a certain number of bytes.
+	 * Returns the HMAC value (RFC 2104) for a given byte array truncated to a certain number of bytes.
 	 * <p>
 	 * @param message    The given byte array
 	 * @param key        The given key
