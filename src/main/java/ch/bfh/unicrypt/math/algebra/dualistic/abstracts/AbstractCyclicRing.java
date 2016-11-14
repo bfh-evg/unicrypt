@@ -51,6 +51,7 @@ import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
@@ -143,12 +144,12 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 		final AbstractCyclicRing<E, V> ring = this;
 		return Sequence.getInstance(this.getDefaultGenerator(), new Mapping<E, E>() {
 
-			@Override
-			public E apply(E element) {
-				return ring.apply(ring.getDefaultGenerator(), element);
-			}
+								 @Override
+								 public E apply(E element) {
+									 return ring.apply(ring.getDefaultGenerator(), element);
+								 }
 
-		}).limit(new Predicate<E>() {
+							 }).limit(new Predicate<E>() {
 
 			@Override
 			public boolean test(E element) {

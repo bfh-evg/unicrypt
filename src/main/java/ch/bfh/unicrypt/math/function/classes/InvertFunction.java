@@ -49,10 +49,10 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 /**
  * This interface represents the the concept of a function f:X->X, which computes the inverse of the given input
  * element.
- * <p/>
+ * <p>
  * @see Group#invert(Element)
  * @see Element#invert()
- * <p/>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -73,9 +73,9 @@ public class InvertFunction
 
 	/**
 	 * This is the default constructor for this class. It creates an invert function for a given group.
-	 * <p/>
+	 * <p>
 	 * @param group The given Group
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static InvertFunction getInstance(final Group group) {
 		return new InvertFunction(group, group);

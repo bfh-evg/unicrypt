@@ -53,7 +53,7 @@ public interface SymmetricEncryptionScheme
 
 	/**
 	 *
-	 * @return
+	 * @return Returns the generator to create secret keys
 	 */
 	public SecretKeyGenerator getSecretKeyGenerator();
 

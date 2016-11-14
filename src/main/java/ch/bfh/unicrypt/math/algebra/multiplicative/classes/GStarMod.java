@@ -151,10 +151,10 @@ public class GStarMod
 
 	@Override
 	protected boolean abstractContains(final BigInteger value) {
-		return value.signum() > 0 &&
-			   value.compareTo(this.modulus) < 0 &&
-			   MathUtil.areRelativelyPrime(value, this.modulus) &&
-			   value.modPow(this.getOrder(), this.modulus).equals(MathUtil.ONE);
+		return value.signum() > 0
+			   && value.compareTo(this.modulus) < 0
+			   && MathUtil.areRelativelyPrime(value, this.modulus)
+			   && value.modPow(this.getOrder(), this.modulus).equals(MathUtil.ONE);
 	}
 
 	@Override
@@ -250,7 +250,7 @@ public class GStarMod
 	 * <p>
 	 * @param modulusFactorization
 	 * @param orderFactorization
-	 * @return
+	 * @return returns an instance of GStarMod
 	 */
 	public static GStarMod getInstance(SpecialFactorization modulusFactorization, Factorization orderFactorization) {
 		GStarMod group = new GStarMod(modulusFactorization, orderFactorization);

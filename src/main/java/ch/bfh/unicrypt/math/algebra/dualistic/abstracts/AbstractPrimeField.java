@@ -53,7 +53,7 @@ import java.math.BigInteger;
  * This abstract class provides a basis implementation for objects of type {@link PrimeField}.
  * <p>
  * @param <E> Generic type of the elements of this prime field
- * @param <M> Generic type of the {@link MultplicativeCyclicGroup} of this prime field
+ * @param <M> Generic type of the {@link MultiplicativeCyclicGroup} of this prime field
  * @param <V> Generic type of values stored in the elements of this prime field
  * @author R. Haenni
  */

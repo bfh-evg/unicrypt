@@ -88,7 +88,7 @@ public class ModuloFunction
 	 * <p>
 	 * @param domain  The given Group
 	 * @param modulus
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static ModuloFunction getInstance(final Set<BigInteger> domain, BigInteger modulus) {
 		return ModuloFunction.getInstance(domain, ZMod.getInstance(modulus));

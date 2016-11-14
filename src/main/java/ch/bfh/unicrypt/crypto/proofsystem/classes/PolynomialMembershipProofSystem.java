@@ -66,7 +66,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @see [BG13] Zero-Knowledge Argument for Polynomial Evaluation with Application to Blacklists
+ * @see "[BG13] Zero-Knowledge Argument for Polynomial Evaluation with Application to Blacklists"
  * <p>
  * @author philipp
  */
@@ -90,7 +90,7 @@ public class PolynomialMembershipProofSystem
 
 		PolynomialElement polynomial
 			   = PolynomialSemiRing.getInstance((ZModPrime) members.getSuperset())
-			   .getElementByRoots(Tuple.getInstance(roots));
+					  .getElementByRoots(Tuple.getInstance(roots));
 		this.pepsi = PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 

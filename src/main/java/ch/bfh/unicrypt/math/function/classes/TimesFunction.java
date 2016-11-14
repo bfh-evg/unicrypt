@@ -59,10 +59,10 @@ import java.math.BigInteger;
  * This class represents the the concept of a function f:XxZ->Y, where Z is an atomic group. The second input element
  * can thus be transformed into an integer value z, which determines the number of times the group operation is applied
  * to the first input element.
- * <p/>
+ * <p>
  * @see Group#selfApply(Element, Element)
  * @see Element#selfApply(Element)
- * <p/>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -86,9 +86,9 @@ public class TimesFunction
 	/**
 	 * This is a special constructor, where the group of the second parameter is selected automatically from the given
 	 * group.
-	 * <p/>
+	 * <p>
 	 * @param additiveSemiGroup The underlying group
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup) {
 		if (additiveSemiGroup == null) {
@@ -104,10 +104,10 @@ public class TimesFunction
 	 * This is the general constructor of this class. The first parameter is the group on which it operates, and the
 	 * second parameter is the atomic group, from which an element is needed to determine the number of times the group
 	 * operation is applied.
-	 * <p/>
+	 * <p>
 	 * @param additiveSemiGroup The underlying group
 	 * @param amountSet
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup,
 		   final Set<BigInteger> amountSet) {

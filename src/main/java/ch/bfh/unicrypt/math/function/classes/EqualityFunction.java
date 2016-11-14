@@ -53,8 +53,8 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 /**
  * This class represents the concept of a function, which tests the given input elements for equality. For this to work,
  * its domain is a power group and its co-domain the Boolean group. If all all input elements are equal, the function
- * outputs {@link BooleanGroup#TRUE}, and {@link BooleanGroup#FALSE} otherwise.
- * <p/>
+ * outputs {@link BooleanSet#TRUE}, and {@link BooleanSet#FALSE} otherwise.
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0

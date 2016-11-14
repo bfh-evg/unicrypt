@@ -54,7 +54,7 @@ import java.util.Arrays;
 /**
  * This class represents the concept of a generalized identity function f:X->X^n with f(x)=(x,...,x) for all elements x
  * in X. This class represents the concept of an identity function f:X->X with f(x)=x for all elements x in X.
- * <p/>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -82,10 +82,10 @@ public class MultiIdentityFunction
 	/**
 	 * This is the default constructor for this class. It creates a generalized identity function for a given group,
 	 * which reproduces the input value multiple time.
-	 * <p/>
+	 * <p>
 	 * @param set   The given set
 	 * @param arity The arity of the output element
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static MultiIdentityFunction getInstance(final Set set, final int arity) {
 		if (set == null) {

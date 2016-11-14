@@ -53,7 +53,7 @@ public interface ProbabilisticEncoder
 	/**
 	 *
 	 * @param element
-	 * @return
+	 * @return Returns the encoded element
 	 */
 	@Override
 	public Element encode(Element element);

@@ -65,8 +65,8 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * <p>
  * The private input is not only the private value x_i itself but a pair consisting of the tuple (x0,...,xN) and the
  * index i. Within the tuple (x0,...,xN) only x_i must have the correct value, all other values can have any value. Use
- * the helper method {@link createPrivateInput} to create the correct private input for the private value x_i and the
- * index i.
+ * the helper method {@link #createPrivateInput(Element, int)} to create the correct private input for the private value
+ * x_i and the index i.
  * <p>
  * @author P. Locher
  */

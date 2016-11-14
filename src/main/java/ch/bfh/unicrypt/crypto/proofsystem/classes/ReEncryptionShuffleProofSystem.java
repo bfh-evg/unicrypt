@@ -73,7 +73,7 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
  * permutation is indeed a commitment to a valid permutation must be done separately by a
  * {@link PermutationCommitmentProofSystem}.
  * <p>
- * @see Wik09
+ * @see "Wik09"
  * @author P. Locher
  */
 public class ReEncryptionShuffleProofSystem

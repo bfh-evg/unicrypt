@@ -64,7 +64,7 @@ import java.math.BigInteger;
 
 /**
  *
- * @see [ASM10] Proof-of-Knowledge of Representation of Committed Value and Its Applications
+ * @see "[ASM10] Proof-of-Knowledge of Representation of Committed Value and Its Applications"
  * <p>
  * @author philipp
  */

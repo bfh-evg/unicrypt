@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 /**
  * This class represents the concept of a generalized identity function f:X->X^n with f(x)=(x,...,x) for all elements x
  * in X. This class represents the concept of an identity function f:X->X with f(x)=x for all elements x in X.
- * <p/>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -73,9 +73,9 @@ public class IdentityFunction
 	/**
 	 * This is the default constructor for this class. It creates a generalized identity function for a given group,
 	 * which reproduces the input value multiple time.
-	 * <p/>
+	 * <p>
 	 * @param set The given set
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static IdentityFunction getInstance(final Set set) {
 		if (set == null) {

@@ -60,7 +60,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
- * @see [BG13] Zero-Knowledge Argument for Polynomial Evaluation with Application to Blacklists
+ * @see "[BG13] Zero-Knowledge Argument for Polynomial Evaluation with Application to Blacklists"
  * <p>
  * @author philipp
  */

@@ -75,7 +75,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * <p>
  * (The prover can't prove directly knowledge of an r such that f_x(r)=y as f_x(r) is not a homomorphic function.)
  * <p>
- * @see CGS97
+ * @see "CGS97"
  * <p>
  * @author P. Locher
  * @param <PUS> The public input space.

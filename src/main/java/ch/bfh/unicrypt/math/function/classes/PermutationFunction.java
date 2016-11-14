@@ -59,7 +59,6 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
  * the function permutes the given input tuple element of X^n according to the permutation element given as a second
  * argument. The output of the function is the permuted tuple element.
  * <p>
- * <p/>
  * @see PermutationGroup
  * <p>
  * @author R. Haenni
@@ -78,7 +77,6 @@ public class PermutationFunction
 	/**
 	 * Returns the permutation group of size n, which is need to conduct the actual permutation.
 	 * <p>
-	 * <p/>
 	 * @return The permutation group
 	 */
 	public PermutationGroup getPermutationGroup() {
@@ -100,10 +98,9 @@ public class PermutationFunction
 	 * This is the general constructor of this class, which construct a permutation function from a given group and for
 	 * the specified arity.
 	 * <p>
-	 * <p/>
 	 * @param set   The given group
 	 * @param arity The arity of the tuple elements to permute
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static PermutationFunction getInstance(final Set set, final int arity) {
 		if (set == null) {
@@ -119,9 +116,8 @@ public class PermutationFunction
 	 * This is a special constructor of this class, which deals with the particular case, where a product group is given
 	 * from the beginning.
 	 * <p>
-	 * <p/>
 	 * @param productSet The given power group
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static PermutationFunction getInstance(final ProductSet productSet) {
 		if (productSet == null) {

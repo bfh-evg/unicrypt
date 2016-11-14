@@ -53,7 +53,7 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 /**
  * This class represents the concept of a randomized function with no input. When the function is called, it selects an
  * element from the co-domain at random and returns it as output value.
- * <p/>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -75,9 +75,9 @@ public class RandomFunction
 	/**
 	 * This is the general constructor of this class. It creates a function that generates random elements from a given
 	 * group.
-	 * <p/>
+	 * <p>
 	 * @param set The given group
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static RandomFunction getInstance(final Set set) {
 		if (set == null) {

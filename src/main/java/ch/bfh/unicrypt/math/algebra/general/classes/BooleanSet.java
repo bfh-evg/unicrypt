@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;

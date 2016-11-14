@@ -115,7 +115,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	/**
 	 *
 	 * @param password
-	 * @return
+	 * @return Returns the private key
 	 */
 	@Override
 	public PRE generatePrivateKey(String password) {
@@ -129,7 +129,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	 *
 	 * @param password
 	 * @param salt
-	 * @return
+	 * @return Returns the private key
 	 */
 	@Override
 	public PRE generatePrivateKey(String password, ByteArray salt) {
@@ -142,7 +142,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	/**
 	 *
 	 * @param randomByteSequence
-	 * @return
+	 * @return Returns the private key
 	 */
 	@Override
 	public final PRE generatePrivateKey(RandomByteSequence randomByteSequence) {
@@ -168,7 +168,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	/**
 	 *
 	 * @param privateKey
-	 * @return
+	 * @return Returns the public key
 	 */
 	@Override
 	public final PUE generatePublicKey(Element privateKey) {
@@ -179,7 +179,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	 *
 	 * @param privateKey
 	 * @param randomByteSequence
-	 * @return
+	 * @return Returns the public key
 	 */
 	@Override
 	public final PUE generatePublicKey(Element privateKey, RandomByteSequence randomByteSequence) {
@@ -191,7 +191,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	/**
 	 *
-	 * @return
+	 * @return Returns the keypair space
 	 */
 	@Override
 	public ProductSet getKeyPairSpace() {
@@ -201,7 +201,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	//		this.keyPairSpace = ProductSet.getInstance(this.getPrivateKeySpace(), this.getPublicKeySpace());
 	/**
 	 *
-	 * @return
+	 * @return Returns the function used to generate keypairs
 	 */
 	@Override
 	public final Function getKeyPairGenerationFunction() {
@@ -216,7 +216,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	/**
 	 *
-	 * @return
+	 * @return Returns a keypair
 	 */
 	@Override
 	public Pair generateKeyPair() {
@@ -226,7 +226,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	/**
 	 *
 	 * @param randomByteSequence
-	 * @return
+	 * @return Returns the keypair based on the provided sequence
 	 */
 	@Override
 	public Pair generateKeyPair(RandomByteSequence randomByteSequence) {
@@ -237,7 +237,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	/**
 	 *
 	 * @param password
-	 * @return
+	 * @return Returns the keypair based on the provided password
 	 */
 	@Override
 	public Pair generateKeyPair(String password) {
@@ -248,7 +248,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	 *
 	 * @param password
 	 * @param salt
-	 * @return
+	 * @return Returns the keypair based on the provided password and salt
 	 */
 	@Override
 	public Pair generateKeyPair(String password, ByteArray salt) {
@@ -260,7 +260,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	/**
 	 *
-	 * @return
+	 * @return Returns a string representing this object
 	 */
 	@Override
 	protected String defaultToStringContent() {
@@ -269,7 +269,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	/**
 	 *
-	 * @return
+	 * @return Returns the default function to generate a private key
 	 */
 	protected Function defaultGetPrivateKeyGenerationFunction() {
 		return RandomFunction.getInstance(this.getPrivateKeySpace());
@@ -277,7 +277,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	/**
 	 *
-	 * @return
+	 * @return Returns the function to generate a public key
 	 */
 	protected abstract Function abstractGetPublicKeyGenerationFunction();
 

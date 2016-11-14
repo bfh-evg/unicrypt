@@ -92,7 +92,7 @@ public class SelectionFunction
 	 * <p>
 	 * @param productSet The product group that defines the domain of the function
 	 * @param indices    The given sequence of indices
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static SelectionFunction getInstance(final ProductSet productSet, final int... indices) {
 		if (productSet == null) {

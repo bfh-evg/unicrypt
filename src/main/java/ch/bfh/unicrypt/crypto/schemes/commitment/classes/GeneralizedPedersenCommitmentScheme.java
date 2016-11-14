@@ -124,14 +124,14 @@ public class GeneralizedPedersenCommitmentScheme
 	 * <p>
 	 * @param randomizationGenerator
 	 * @param messageGenerators
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static GeneralizedPedersenCommitmentScheme getInstance(final Element randomizationGenerator,
 		   final Tuple messageGenerators) {
-		if (randomizationGenerator == null || messageGenerators == null ||
-			   !randomizationGenerator.getSet().isCyclic() ||
-			   messageGenerators.getArity() < 1 || !messageGenerators.getSet().isUniform() ||
-			   !randomizationGenerator.getSet().isEquivalent(messageGenerators.getFirst().getSet())) {
+		if (randomizationGenerator == null || messageGenerators == null
+			   || !randomizationGenerator.getSet().isCyclic()
+			   || messageGenerators.getArity() < 1 || !messageGenerators.getSet().isUniform()
+			   || !randomizationGenerator.getSet().isEquivalent(messageGenerators.getFirst().getSet())) {
 			throw new IllegalArgumentException();
 		}
 		CyclicGroup cycicGroup = (CyclicGroup) randomizationGenerator.getSet();

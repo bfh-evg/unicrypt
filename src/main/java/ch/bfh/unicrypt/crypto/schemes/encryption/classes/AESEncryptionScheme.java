@@ -164,8 +164,8 @@ public class AESEncryptionScheme
 					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
 				}
 				encryptedBytes = cipher.doFinal(message.getValue().getBytes());
-			} catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException |
-				   InvalidAlgorithmParameterException exception) {
+			} catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException
+				   | InvalidAlgorithmParameterException exception) {
 				throw new UniCryptRuntimeException(ErrorCode.JAVA_AES_FAILURE, exception);
 			}
 			return this.getCoDomain().getElement(encryptedBytes);
@@ -194,8 +194,8 @@ public class AESEncryptionScheme
 					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
 				}
 				message = cipher.doFinal(encryption.getValue().getBytes());
-			} catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException |
-				   InvalidAlgorithmParameterException exception) {
+			} catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException
+				   | InvalidAlgorithmParameterException exception) {
 				throw new UniCryptRuntimeException(ErrorCode.JAVA_AES_FAILURE, exception);
 			}
 			return this.getCoDomain().getElement(message);
@@ -207,7 +207,7 @@ public class AESEncryptionScheme
 	 * Convenience method in order to easily get a secret AES-key given a password
 	 * <p>
 	 * @param password
-	 * @return
+	 * @return Returns an AES-key
 	 */
 	public FiniteByteArrayElement getPasswordBasedKey(String password) {
 		return super.getSecretKeyGenerator().generateSecretKey(password);
@@ -218,7 +218,7 @@ public class AESEncryptionScheme
 	 * <p>
 	 * @param password
 	 * @param salt
-	 * @return
+	 * @return Returns an AES-key
 	 */
 	public FiniteByteArrayElement getPasswordBasedKey(String password, ByteArray salt) {
 		return super.getSecretKeyGenerator().generateSecretKey(password, salt);
@@ -230,8 +230,8 @@ public class AESEncryptionScheme
 	}
 
 	public static AESEncryptionScheme getInstance(KeyLength keyLength, Mode mode, ByteArray initializationVector) {
-		if (keyLength == null || mode == null || initializationVector == null ||
-			   initializationVector.getLength() != AES_BLOCK_SIZE / Byte.SIZE) {
+		if (keyLength == null || mode == null || initializationVector == null
+			   || initializationVector.getLength() != AES_BLOCK_SIZE / Byte.SIZE) {
 			throw new IllegalArgumentException();
 		}
 		return new AESEncryptionScheme(keyLength, mode, initializationVector);

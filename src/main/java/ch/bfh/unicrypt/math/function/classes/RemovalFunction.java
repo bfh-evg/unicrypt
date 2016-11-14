@@ -90,7 +90,7 @@ public class RemovalFunction
 	 * <p>
 	 * @param productSet The product group that defines the domain of the function
 	 * @param index      The given sequence of indices
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static RemovalFunction getInstance(final ProductSet productSet, final int index) {
 		if (productSet == null) {

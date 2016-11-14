@@ -103,7 +103,7 @@ public class HashFunction
 	 * This constructor generates a default SHA-256 hash function. The order of the co-domain is 2^256.
 	 * <p>
 	 * @param domain
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static HashFunction getInstance(Set domain) {
 		return HashFunction.getInstance(domain, ConvertMethod.getInstance(), HashMethod.getInstance());
@@ -117,7 +117,7 @@ public class HashFunction
 	 * @param domain
 	 * @param convertMethod
 	 * @param hashMethod    The name of the hash algorithm
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static <V> HashFunction getInstance(Set domain, ConvertMethod<V> convertMethod,
 		   final HashMethod<V> hashMethod) {

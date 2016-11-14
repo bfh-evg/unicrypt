@@ -223,7 +223,7 @@ public class ZStarMod
 	 * {@code modulus} is not prime, then a group of unknown order is returned.
 	 * <p>
 	 * @param modulus The modulus
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static ZStarMod getInstance(final BigInteger modulus) {
 		if (modulus == null) {
@@ -245,7 +245,7 @@ public class ZStarMod
 	 * the given prime factorization. This always leads to a group of known order.
 	 * <p>
 	 * @param modulusFactorization The given prime factorization
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static ZStarMod getInstance(final Factorization modulusFactorization) {
 		if (modulusFactorization == null) {

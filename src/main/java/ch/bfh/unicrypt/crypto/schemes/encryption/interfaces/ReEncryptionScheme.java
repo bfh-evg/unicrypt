@@ -55,13 +55,13 @@ public interface ReEncryptionScheme
 
 	/**
 	 *
-	 * @return
+	 * @return Returns the identity function
 	 */
 	public Function getIdentityEncryptionFunction();
 
 	/**
 	 *
-	 * @return
+	 * @return Returns the re-encryption function
 	 */
 	public Function getReEncryptionFunction();
 
@@ -69,7 +69,7 @@ public interface ReEncryptionScheme
 	 *
 	 * @param encryptionKey
 	 * @param ciphertext
-	 * @return
+	 * @return Returns a re-encryption of the ciphertext
 	 */
 	public Element reEncrypt(final Element encryptionKey, final Element ciphertext);
 
@@ -78,7 +78,7 @@ public interface ReEncryptionScheme
 	 * @param encryptionKey
 	 * @param ciphertext
 	 * @param randomByteSequence
-	 * @return
+	 * @return Returns a re-encryption of the ciphertext
 	 */
 	public Element reEncrypt(final Element encryptionKey, final Element ciphertext,
 		   RandomByteSequence randomByteSequence);
@@ -88,20 +88,20 @@ public interface ReEncryptionScheme
 	 * @param encryptionKey
 	 * @param ciphertext
 	 * @param randomization
-	 * @return
+	 * @return Returns a re-encryption of the ciphertext
 	 */
 	public Element reEncrypt(final Element encryptionKey, final Element ciphertext, final Element randomization);
 
 	/**
 	 *
-	 * @return
+	 * @return Returns the message space
 	 */
 	@Override
 	public Monoid getMessageSpace();
 
 	/**
 	 *
-	 * @return
+	 * @return Return the encryption space
 	 */
 	@Override
 	public Monoid getEncryptionSpace();

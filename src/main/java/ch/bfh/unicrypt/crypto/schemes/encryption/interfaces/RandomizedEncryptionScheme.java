@@ -54,7 +54,7 @@ public interface RandomizedEncryptionScheme
 
 	/**
 	 *
-	 * @return
+	 * @return Returns the randomization space
 	 */
 	public Set getRandomizationSpace();
 
@@ -63,7 +63,7 @@ public interface RandomizedEncryptionScheme
 	 * @param encryptionKey
 	 * @param message
 	 * @param randomByteSequence
-	 * @return
+	 * @return Returns the encrypted message
 	 */
 	public Element encrypt(Element encryptionKey, Element message, RandomByteSequence randomByteSequence);
 
@@ -72,7 +72,7 @@ public interface RandomizedEncryptionScheme
 	 * @param decryptionKey
 	 * @param message
 	 * @param randomization
-	 * @return
+	 * @return Returns the encrypted message
 	 */
 	public Element encrypt(Element decryptionKey, Element message, Element randomization);
 

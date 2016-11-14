@@ -195,7 +195,7 @@ public class PermutationGroup
 	 * Returns a the unique instance of this class for a given non-negative permutation size.
 	 * <p>
 	 * @param size The size of the permutation
-	 * @return
+	 * @return The unique instance of this class for the provided size
 	 */
 	public static PermutationGroup getInstance(final int size) {
 		if (size < 0) {

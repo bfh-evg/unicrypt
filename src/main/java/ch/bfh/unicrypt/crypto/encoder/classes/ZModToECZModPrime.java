@@ -60,7 +60,7 @@ import java.math.BigInteger;
  *
  * <p>
  * @author R. Haenni
- * @see B. King, "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)", 2009, Algorithm 1
+ * @see "B. King, 'Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)', 2009, Algorithm 1"
  */
 public class ZModToECZModPrime
 	   extends AbstractEncoder<ZMod, ZModElement, ECZModPrime, ECZModElement>

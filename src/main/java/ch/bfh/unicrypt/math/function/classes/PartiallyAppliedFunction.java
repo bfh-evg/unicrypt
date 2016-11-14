@@ -108,9 +108,9 @@ public class PartiallyAppliedFunction
 
 	@Override
 	protected boolean defaultIsEquivalent(PartiallyAppliedFunction other) {
-		return this.getParentFunction().isEquivalent(other.getParentFunction()) &&
-			   this.getParameter().isEquivalent(other.getParameter()) &&
-			   this.getIndex() == other.getIndex();
+		return this.getParentFunction().isEquivalent(other.getParentFunction())
+			   && this.getParameter().isEquivalent(other.getParameter())
+			   && this.getIndex() == other.getIndex();
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class PartiallyAppliedFunction
 	 * @param parentFunction
 	 * @param element        The given parameter to fix
 	 * @param index          The index of the parameter to fix
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static PartiallyAppliedFunction getInstance(final Function parentFunction, final Element element,
 		   final int index) {
