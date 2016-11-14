@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSign
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
@@ -93,8 +92,8 @@ public class SchnorrSignatureScheme<MS extends Set>
 	}
 
 	@Override
-	protected DiscreteLogarithmKeyGenerator abstractGetKeyPairGenerator(StringToByteArray converter) {
-		return DiscreteLogarithmKeyGenerator.getInstance(this.generator, converter);
+	protected DiscreteLogarithmKeyGenerator abstractGetKeyPairGenerator() {
+		return DiscreteLogarithmKeyGenerator.getInstance(this.generator);
 	}
 
 	public final CyclicGroup getCyclicGroup() {
@@ -182,8 +181,8 @@ public class SchnorrSignatureScheme<MS extends Set>
 	public static <MS extends Set, V> SchnorrSignatureScheme
 		   getInstance(MS messageSpace, CyclicGroup cyclicGroup, ConvertMethod<V> convertMethod,
 				  HashMethod<V> hashMethod) {
-		if (messageSpace == null || cyclicGroup == null || !cyclicGroup.isCyclic() || convertMethod == null ||
-			   hashMethod == null) {
+		if (messageSpace == null || cyclicGroup == null || !cyclicGroup.isCyclic() || convertMethod == null
+			   || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
 		return new SchnorrSignatureScheme<>(messageSpace, cyclicGroup, cyclicGroup.getDefaultGenerator(), convertMethod,
@@ -197,8 +196,8 @@ public class SchnorrSignatureScheme<MS extends Set>
 
 	public static <MS extends Set, V> SchnorrSignatureScheme
 		   getInstance(MS messageSpace, Element generator, ConvertMethod<V> convertMethod, HashMethod<V> hashMethod) {
-		if (messageSpace == null || generator == null || !generator.getSet().isCyclic() || !generator.isGenerator() ||
-			   convertMethod == null || hashMethod == null) {
+		if (messageSpace == null || generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()
+			   || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
 		return new SchnorrSignatureScheme<>(messageSpace, (CyclicGroup) generator.getSet(), generator, convertMethod,

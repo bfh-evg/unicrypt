@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.SecretKeyGenerator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.random.password.PasswordRandomByteSequence;
@@ -61,7 +60,7 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 	private final KS secretKeySpace;
 	private Function secretKeyGenerationFunction; // with singleton domain
 
-	protected AbstractSecretKeyGenerator(final KS secretKeySpace, StringToByteArray converter) {
+	protected AbstractSecretKeyGenerator(final KS secretKeySpace) {
 		this.secretKeySpace = secretKeySpace;
 	}
 

@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
@@ -66,8 +65,8 @@ public class RSAKeyGenerator
 	private final ZMod zMod;
 	private ZStarMod zStarMod;
 
-	protected RSAKeyGenerator(ZMod zMod, StringToByteArray converter) {
-		super(zMod, zMod, converter);
+	protected RSAKeyGenerator(ZMod zMod) {
+		super(zMod, zMod);
 		this.zMod = zMod;
 	}
 
@@ -100,14 +99,10 @@ public class RSAKeyGenerator
 	}
 
 	public static RSAKeyGenerator getInstance(ZMod zMod) {
-		return RSAKeyGenerator.getInstance(zMod, StringToByteArray.getInstance());
-	}
-
-	public static RSAKeyGenerator getInstance(ZMod zMod, StringToByteArray converter) {
-		if (zMod == null || converter == null) {
+		if (zMod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new RSAKeyGenerator(zMod, converter);
+		return new RSAKeyGenerator(zMod);
 	}
 
 }

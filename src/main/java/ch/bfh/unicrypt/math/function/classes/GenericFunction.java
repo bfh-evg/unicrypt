@@ -70,7 +70,7 @@ public class GenericFunction<D extends Set, DE extends Element, C extends Set, C
 	}
 
 	public Function getFunction() {
-		return this.getFunction();
+		return this.function;
 	}
 
 	@Override
