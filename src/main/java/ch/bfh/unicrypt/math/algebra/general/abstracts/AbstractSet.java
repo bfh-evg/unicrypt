@@ -256,7 +256,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final boolean contains(V value) {
 		if (value == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.abstractContains(value);
 	}
@@ -264,7 +264,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final boolean contains(Element<?> element) {
 		if (element == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, element);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (!this.valueClass.isInstance(element.getValue())) {
 			return false;
@@ -280,7 +280,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final E getRandomElement(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.getRandomElements(randomByteSequence).get();
 	}
@@ -293,7 +293,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final Sequence<E> getRandomElements(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.abstractGetRandomElements(randomByteSequence);
 	}
@@ -357,7 +357,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final E getElementFrom(BigInteger value) throws UniCryptException {
 		if (value == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (this.isProduct()) {
 			return this.getElementFrom(value, ConvertMethod.getInstance(BigInteger.class), BigIntegerAggregator.
@@ -371,7 +371,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final E getElementFrom(ByteArray value) throws UniCryptException {
 		if (value == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (this.isProduct()) {
 			return this.getElementFrom(value, ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.
@@ -385,7 +385,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final E getElementFrom(String value) throws UniCryptException {
 		if (value == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (this.isProduct()) {
 			return this.getElementFrom(value, ConvertMethod.getInstance(String.class), StringAggregator.getInstance());
@@ -397,7 +397,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final boolean isEquivalent(final Set<?> other) {
 		if (other == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, other);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (this == other) {
 			return true;

@@ -61,7 +61,7 @@ public class Singleton
 
 	public static Singleton getInstance(Element first) {
 		if (first == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, first);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		DenseArray<Element> elements = DenseArray.getInstance(first);
 		return new Singleton(ProductSet.getInstance(first.getSet()), elements);

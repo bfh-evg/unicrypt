@@ -63,7 +63,7 @@ public class SingletonElement
 
 	public static SingletonElement getInstance(BigInteger value) {
 		if (value == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, value);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return SingletonGroup.getInstance(value).getElement(value);
 	}

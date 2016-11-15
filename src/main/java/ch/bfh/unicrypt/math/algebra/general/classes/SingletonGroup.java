@@ -160,7 +160,7 @@ public class SingletonGroup
 
 	public static SingletonGroup getInstance(final BigInteger value) {
 		if (value == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, value);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		SingletonGroup instance = SingletonGroup.INSTANCES.get(value);
 		if (instance == null) {

@@ -83,7 +83,7 @@ public class PolynomialSemiRing
 
 	public static PolynomialSemiRing getInstance(SemiRing semiRing) {
 		if (semiRing == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, semiRing);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new PolynomialSemiRing(semiRing);
 	}
@@ -117,7 +117,7 @@ public class PolynomialSemiRing
 
 	public PolynomialElement getElement(Tuple coefficients) {
 		if (coefficients == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, coefficients);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (!coefficients.isEmpty() && (!coefficients.getSet().isUniform() || !coefficients.getSet().getFirst().
 			   isEquivalent(this.getSemiRing()))) {
@@ -133,7 +133,7 @@ public class PolynomialSemiRing
 
 	public PolynomialElement getElementFrom(int... values) throws UniCryptException {
 		if (values == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, values);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		BigInteger[] bigIntegers = new BigInteger[values.length];
 		for (int i = 0; i < values.length; i++) {
@@ -144,14 +144,14 @@ public class PolynomialSemiRing
 
 	public PolynomialElement getElementFrom(BigInteger... values) throws UniCryptException {
 		if (values == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, values);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.getElement(ProductSet.getInstance(this.getSemiRing(), values.length).getElementFrom(values));
 	}
 
 	public PolynomialElement getElementByRoots(Tuple roots) {
 		if (roots == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, roots);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (roots.isEmpty() || !roots.getSet().isUniform() || !roots.getSet().getFirst().
 			   isEquivalent(this.getSemiRing())) {
@@ -183,7 +183,7 @@ public class PolynomialSemiRing
 	// TODO Generalize to getRandomElements by replacing HybridRandomByteSequence by RandomByteSequence
 	public PolynomialElement getRandomElement(int degree, HybridRandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (degree < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, degree);
@@ -206,7 +206,7 @@ public class PolynomialSemiRing
 	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero,
 		   HybridRandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (degree < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, degree);
@@ -257,8 +257,8 @@ public class PolynomialSemiRing
 	protected boolean abstractContains(Polynomial value) {
 		Sequence<Integer> indices = value.getCoefficientIndices();
 		for (int i : indices) {
-			if (!(Element.class.isInstance(value.getCoefficient(i)) &&
-				   this.getSemiRing().contains((Element) value.getCoefficient(i)))) {
+			if (!(Element.class.isInstance(value.getCoefficient(i))
+				   && this.getSemiRing().contains((Element) value.getCoefficient(i)))) {
 				return false;
 			}
 		}

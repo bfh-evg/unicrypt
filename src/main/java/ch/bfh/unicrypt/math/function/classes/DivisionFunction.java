@@ -88,7 +88,7 @@ public class DivisionFunction
 	 */
 	public static DivisionFunction getInstance(final MultiplicativeGroup multiplicativeGroup) {
 		if (multiplicativeGroup == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, multiplicativeGroup);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new DivisionFunction(ProductGroup.getInstance(multiplicativeGroup, 2), multiplicativeGroup);
 	}

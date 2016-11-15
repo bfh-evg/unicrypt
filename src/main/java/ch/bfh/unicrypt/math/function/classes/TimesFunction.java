@@ -92,7 +92,7 @@ public class TimesFunction
 	 */
 	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup) {
 		if (additiveSemiGroup == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, additiveSemiGroup);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (additiveSemiGroup.isFinite() && additiveSemiGroup.hasKnownOrder()) {
 			return TimesFunction.getInstance(additiveSemiGroup, additiveSemiGroup.getZModOrder());

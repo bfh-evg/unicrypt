@@ -143,10 +143,10 @@ public class StringMonoid
 
 	public static StringMonoid getInstance(Alphabet alphabet, int blockLength) {
 		if (alphabet == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, alphabet);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (blockLength < 1) {
-			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, blockLength);
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH);
 		}
 		return new StringMonoid(alphabet, blockLength);
 	}

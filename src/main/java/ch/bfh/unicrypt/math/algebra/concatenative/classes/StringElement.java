@@ -62,7 +62,7 @@ public class StringElement
 
 	public static StringElement getInstance(String string) {
 		if (string == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, string);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return StringMonoid.getInstance().getElement(string);
 	}

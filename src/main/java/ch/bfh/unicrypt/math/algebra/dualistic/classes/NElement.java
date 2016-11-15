@@ -71,7 +71,7 @@ public class NElement
 
 	public static NElement getInstance(BigInteger value) {
 		if (value == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, value);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (value.signum() < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, value);

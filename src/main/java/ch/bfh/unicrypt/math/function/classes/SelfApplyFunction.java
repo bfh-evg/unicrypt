@@ -92,7 +92,7 @@ public class SelfApplyFunction
 	 */
 	public static SelfApplyFunction getInstance(final SemiGroup semiGroup) {
 		if (semiGroup == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, semiGroup);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (semiGroup.isFinite() && semiGroup.hasKnownOrder()) {
 			return SelfApplyFunction.getInstance(semiGroup, semiGroup.getZModOrder());

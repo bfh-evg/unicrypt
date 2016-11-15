@@ -88,7 +88,7 @@ public abstract class AbstractRing<E extends DualisticElement<V>, V>
 	@Override
 	public final E invertSelfApply(Element element, Element<BigInteger> amount) {
 		if (amount == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.invertSelfApply(element, amount.getValue());
 	}
@@ -96,7 +96,7 @@ public abstract class AbstractRing<E extends DualisticElement<V>, V>
 	@Override
 	public final E invertSelfApply(Element element, BigInteger amount) {
 		if (amount == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (amount.signum() == 0) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, amount);

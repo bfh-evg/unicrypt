@@ -214,8 +214,8 @@ public class ECPolynomialField
 	private static ECPolynomialField getInstance(int securityLevel, PolynomialField polynomialField,
 		   PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
 		   BigInteger subGroupOrder, BigInteger coFactor, boolean isTest) {
-		if (polynomialField == null || a == null || b == null || gx == null || gy == null || subGroupOrder == null ||
-			   coFactor == null) {
+		if (polynomialField == null || a == null || b == null || gx == null || gy == null || subGroupOrder == null
+			   || coFactor == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, polynomialField, a, b, gx, gy, subGroupOrder,
 											   coFactor);
 		}
@@ -280,7 +280,7 @@ public class ECPolynomialField
 
 	public static ECPolynomialField getInstance(final ECParameters<PolynomialField, PolynomialElement> parameters) {
 		if (parameters == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, parameters);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return ECPolynomialField.getInstance(
 			   parameters.getSecurityLevel(),

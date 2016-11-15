@@ -146,7 +146,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	@Override
 	public Function getAt(int... indices) {
 		if (indices == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, indices);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		Function function = this;
 		for (final int index : indices) {

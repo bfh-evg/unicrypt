@@ -92,7 +92,7 @@ public class PowerFunction
 	 */
 	public static PowerFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup) {
 		if (multiplicativeSemiGroup == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, multiplicativeSemiGroup);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (multiplicativeSemiGroup.isFinite() && multiplicativeSemiGroup.hasKnownOrder()) {
 			return PowerFunction.getInstance(multiplicativeSemiGroup, multiplicativeSemiGroup.getZModOrder());

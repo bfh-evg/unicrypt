@@ -94,7 +94,7 @@ public class MultiplicationFunction
 	public static MultiplicationFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup,
 		   final int arity) {
 		if (multiplicativeSemiGroup == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, multiplicativeSemiGroup);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (arity < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);

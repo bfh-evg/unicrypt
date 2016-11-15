@@ -127,7 +127,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	@Override
 	public final <W> W convertTo(Converter<V, W> converter) {
 		if (converter == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, converter);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return converter.convert(this.value);
 	}
@@ -151,7 +151,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	@Override
 	public final <W> Tree<W> convertTo(final ConvertMethod<W> convertMethod) {
 		if (convertMethod == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, convertMethod);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultConvertTo(convertMethod);
 	}
@@ -304,7 +304,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	@Override
 	public final boolean isEquivalent(final Element other) {
 		if (other == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, other);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (this == other) {
 			return true;

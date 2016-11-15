@@ -94,7 +94,7 @@ public class RemovalFunction
 	 */
 	public static RemovalFunction getInstance(final ProductSet productSet, final int index) {
 		if (productSet == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, productSet);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (index < 0 || index >= productSet.getArity()) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, productSet, index);

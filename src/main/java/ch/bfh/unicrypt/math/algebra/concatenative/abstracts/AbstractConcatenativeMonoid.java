@@ -88,7 +88,7 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 	@Override
 	public final E getRandomElement(int length, RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (length < 0 || length % this.getBlockLength() != 0) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, length);

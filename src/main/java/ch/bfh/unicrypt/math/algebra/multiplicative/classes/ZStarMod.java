@@ -227,7 +227,7 @@ public class ZStarMod
 	 */
 	public static ZStarMod getInstance(final BigInteger modulus) {
 		if (modulus == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (modulus.compareTo(MathUtil.ONE) <= 0) {
 			throw new UniCryptRuntimeException(ErrorCode.SET_CONSTRUCTION_FAILURE, modulus);
@@ -249,7 +249,7 @@ public class ZStarMod
 	 */
 	public static ZStarMod getInstance(final Factorization modulusFactorization) {
 		if (modulusFactorization == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulusFactorization);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (modulusFactorization.getValue().compareTo(MathUtil.ONE) <= 0) {
 			throw new UniCryptRuntimeException(ErrorCode.SET_CONSTRUCTION_FAILURE, modulusFactorization);
@@ -268,7 +268,7 @@ public class ZStarMod
 
 	public static ZStarMod getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (bitLength < 1) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_BITLENGTH, bitLength);

@@ -94,7 +94,7 @@ public class ZStarModSafePrime
 
 	public static ZStarModSafePrime getInstance(final BigInteger modulus) {
 		if (modulus == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		ZStarModSafePrime instance = ZStarModSafePrime.INSTANCES.get(modulus);
 		if (instance == null) {
@@ -106,7 +106,7 @@ public class ZStarModSafePrime
 
 	public static ZStarModSafePrime getInstance(final SafePrime modulus) {
 		if (modulus == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		ZStarModSafePrime instance = ZStarModSafePrime.INSTANCES.get(modulus.getValue());
 		if (instance == null) {

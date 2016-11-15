@@ -136,7 +136,7 @@ public class EnumeratedSet<V>
 
 	public static <V> EnumeratedSet<V> getInstance(V... values) {
 		if (values == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, values);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (values.length == 0) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, values);

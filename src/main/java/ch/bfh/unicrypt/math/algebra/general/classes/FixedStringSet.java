@@ -70,7 +70,7 @@ public class FixedStringSet
 
 	public static FixedStringSet getInstance(final Alphabet alphabet, final int length) {
 		if (alphabet == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, alphabet);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (length < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, length);

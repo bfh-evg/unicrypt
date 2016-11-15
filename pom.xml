@@ -325,6 +325,10 @@ Redistributions of files must retain the above copyright notice.
 							<groupId>org.codehaus.mojo</groupId>
 							<artifactId>findbugs-maven-plugin</artifactId>
 							<version>3.0.4</version>
+							<configuration>
+								<effort>Max</effort>
+								<threshold>medium</threshold>
+							</configuration>
 						</plugin>
 					</reportPlugins>
 				</configuration>

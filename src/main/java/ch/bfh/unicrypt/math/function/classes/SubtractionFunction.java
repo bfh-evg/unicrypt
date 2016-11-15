@@ -86,7 +86,7 @@ public class SubtractionFunction
 	 */
 	public static SubtractionFunction getInstance(final AdditiveGroup additiveGroup) {
 		if (additiveGroup == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, additiveGroup);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new SubtractionFunction(ProductGroup.getInstance(additiveGroup, 2), additiveGroup);
 	}

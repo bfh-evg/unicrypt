@@ -175,7 +175,7 @@ public class FiniteStringSet
 
 	public static FiniteStringSet getInstance(final Alphabet alphabet, final int minLength, final int maxLength) {
 		if (alphabet == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, alphabet);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (minLength < 0 || maxLength < minLength) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, minLength, maxLength);

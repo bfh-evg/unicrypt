@@ -146,7 +146,7 @@ public class Tuple
 	@Override
 	public Element getAt(int... indices) {
 		if (indices == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, indices);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		Element element = this;
 		for (final int index : indices) {
@@ -316,7 +316,7 @@ public class Tuple
 	 */
 	public static Tuple getInstance(DenseArray<? extends Element> elements) {
 		if (elements == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, elements);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		ProductSet productSet;
 		if (elements.isUniform() && !elements.isEmpty()) {

@@ -104,7 +104,7 @@ public class PermutationFunction
 	 */
 	public static PermutationFunction getInstance(final Set set, final int arity) {
 		if (set == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, set);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (arity < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);
@@ -121,7 +121,7 @@ public class PermutationFunction
 	 */
 	public static PermutationFunction getInstance(final ProductSet productSet) {
 		if (productSet == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, productSet);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (!productSet.isUniform()) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, productSet);

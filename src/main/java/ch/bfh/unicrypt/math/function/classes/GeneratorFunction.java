@@ -82,7 +82,7 @@ public class GeneratorFunction
 
 	public static GeneratorFunction getInstance(Element generator) {
 		if (generator == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, generator);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (!generator.getSet().isCyclic() || !generator.isGenerator()) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, generator);
@@ -93,7 +93,7 @@ public class GeneratorFunction
 
 	public static GeneratorFunction getInstance(CyclicGroup cyclicGroup) {
 		if (cyclicGroup == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, cyclicGroup);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new GeneratorFunction(cyclicGroup.getZModOrder(), cyclicGroup, cyclicGroup.getDefaultGenerator());
 	}

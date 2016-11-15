@@ -165,7 +165,7 @@ public class ProductCyclicGroup
 	@Override
 	public final Sequence<Tuple> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
@@ -188,7 +188,7 @@ public class ProductCyclicGroup
 	@Override
 	public final Sequence<Tuple> getRandomGenerators(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultGetRandomGenerators(randomByteSequence);
 	}

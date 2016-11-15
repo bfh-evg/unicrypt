@@ -100,7 +100,7 @@ public final class ProductFunction
 
 	public static ProductFunction getInstance(DenseArray<Function> functions) {
 		if (functions == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, functions);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (functions.getLength() == 0) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, functions);

@@ -64,7 +64,7 @@ public class FiniteStringElement
 
 	public static FiniteStringElement getInstance(String string) {
 		if (string == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, string);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return FixedStringSet.getInstance(string.length()).getElement(string);
 	}

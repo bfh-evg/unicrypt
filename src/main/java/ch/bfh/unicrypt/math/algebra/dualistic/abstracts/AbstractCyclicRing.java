@@ -91,7 +91,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 	@Override
 	public final Sequence<E> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
@@ -114,7 +114,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 	@Override
 	public final Sequence<E> getRandomGenerators(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultGetRandomGenerators(randomByteSequence);
 	}

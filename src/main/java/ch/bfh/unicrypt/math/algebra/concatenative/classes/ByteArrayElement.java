@@ -73,7 +73,7 @@ public class ByteArrayElement
 
 	public static ByteArrayElement getInstance(ByteArray byteArray) {
 		if (byteArray == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, byteArray);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return ByteArrayMonoid.getInstance().getElement(byteArray);
 	}

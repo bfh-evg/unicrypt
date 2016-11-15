@@ -86,7 +86,7 @@ public class ZStarModPrimePair
 
 	public static ZStarModPrimePair getInstance(final PrimePair primePair) {
 		if (primePair == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primePair);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		ZStarModPrimePair instance = ZStarModPrimePair.INSTANCES.get(primePair.getValue());
 		if (instance == null) {

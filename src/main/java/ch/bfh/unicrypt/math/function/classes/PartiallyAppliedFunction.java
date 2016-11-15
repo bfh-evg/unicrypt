@@ -140,7 +140,7 @@ public class PartiallyAppliedFunction
 	public static PartiallyAppliedFunction getInstance(final Function parentFunction, final Element element,
 		   final int index) {
 		if (parentFunction == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, parentFunction);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (!parentFunction.getDomain().isProduct()) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, parentFunction);

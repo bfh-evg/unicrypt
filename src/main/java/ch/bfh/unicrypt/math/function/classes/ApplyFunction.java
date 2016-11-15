@@ -98,7 +98,7 @@ public class ApplyFunction
 	 */
 	public static ApplyFunction getInstance(final SemiGroup semiGroup, final int arity) {
 		if (semiGroup == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, semiGroup);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (arity < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);

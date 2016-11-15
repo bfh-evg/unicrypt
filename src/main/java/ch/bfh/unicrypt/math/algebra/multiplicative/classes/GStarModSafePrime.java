@@ -82,7 +82,7 @@ public class GStarModSafePrime
 
 	public static GStarModSafePrime getInstance(final BigInteger modulus) {
 		if (modulus == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		GStarModSafePrime instance = GStarModSafePrime.INSTANCES.get(modulus);
 		if (instance == null) {
@@ -94,7 +94,7 @@ public class GStarModSafePrime
 
 	public static GStarModSafePrime getInstance(final SafePrime modulus) {
 		if (modulus == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		GStarModSafePrime instance = GStarModSafePrime.INSTANCES.get(modulus.getValue());
 		if (instance == null) {

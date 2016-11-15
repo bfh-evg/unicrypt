@@ -89,7 +89,7 @@ public class MultiIdentityFunction
 	 */
 	public static MultiIdentityFunction getInstance(final Set set, final int arity) {
 		if (set == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, set);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (arity < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);

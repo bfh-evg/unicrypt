@@ -67,7 +67,7 @@ public class PermutationElement
 
 	public static PermutationElement getInstance(Permutation permutation) {
 		if (permutation == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, permutation);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return PermutationGroup.getInstance(permutation.getSize()).getElement(permutation);
 	}

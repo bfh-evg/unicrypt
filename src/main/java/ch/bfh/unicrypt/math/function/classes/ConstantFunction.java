@@ -105,7 +105,7 @@ public class ConstantFunction
 	 */
 	public static ConstantFunction getInstance(final Element element) {
 		if (element == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, element);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new ConstantFunction(element.getSet(), element);
 	}
@@ -119,7 +119,7 @@ public class ConstantFunction
 	 */
 	public static ConstantFunction getInstance(final Monoid monoid) {
 		if (monoid == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, monoid);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new ConstantFunction(monoid, monoid.getIdentityElement());
 	}

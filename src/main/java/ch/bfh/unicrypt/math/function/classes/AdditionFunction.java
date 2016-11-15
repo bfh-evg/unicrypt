@@ -93,7 +93,7 @@ public class AdditionFunction
 	 */
 	public static AdditionFunction getInstance(final AdditiveSemiGroup additiveSemiGroup, final int arity) {
 		if (additiveSemiGroup == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, additiveSemiGroup);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (arity < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);

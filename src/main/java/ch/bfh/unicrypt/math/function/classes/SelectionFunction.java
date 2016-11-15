@@ -96,7 +96,7 @@ public class SelectionFunction
 	 */
 	public static SelectionFunction getInstance(final ProductSet productSet, final int... indices) {
 		if (productSet == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, productSet);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new SelectionFunction(productSet, productSet.getAt(indices), indices);
 	}

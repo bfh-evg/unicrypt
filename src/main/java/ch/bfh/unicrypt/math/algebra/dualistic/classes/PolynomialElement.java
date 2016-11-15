@@ -67,7 +67,7 @@ public class PolynomialElement
 
 	public DualisticElement<BigInteger> evaluate(DualisticElement element) {
 		if (element == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, element);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (!this.getSet().getSemiRing().contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, element);
@@ -105,7 +105,7 @@ public class PolynomialElement
 
 	public Pair getPoint(DualisticElement element) {
 		if (element == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, element);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (!this.getSet().getSemiRing().contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, element);
@@ -125,7 +125,7 @@ public class PolynomialElement
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		if (element == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, element);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (!this.getSet().getSemiRing().contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, element);

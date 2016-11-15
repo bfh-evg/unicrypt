@@ -88,7 +88,7 @@ public class ZStarModPrime
 	public final Sequence<ZStarModElement> getIndependentGenerators(
 		   DeterministicRandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
@@ -111,7 +111,7 @@ public class ZStarModPrime
 	@Override
 	public final Sequence<ZStarModElement> getRandomGenerators(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
@@ -139,7 +139,7 @@ public class ZStarModPrime
 
 	public static ZStarModPrime getInstance(final BigInteger modulus) {
 		if (modulus == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		ZStarModPrime instance = ZStarModPrime.INSTANCES.get(modulus);
 		if (instance == null) {
@@ -151,7 +151,7 @@ public class ZStarModPrime
 
 	public static ZStarModPrime getInstance(final Prime modulus) {
 		if (modulus == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		ZStarModPrime instance = ZStarModPrime.INSTANCES.get(modulus.getValue());
 		if (instance == null) {

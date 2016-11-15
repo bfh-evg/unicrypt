@@ -165,7 +165,7 @@ public class Subset
 		LinkedHashSet<Element<Object>> hashSet = new LinkedHashSet<>();
 		for (Element element : elements) {
 			if (element == null) {
-				throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, element);
+				throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 			}
 			if (!superSet.contains(element)) {
 				throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, superSet, element);

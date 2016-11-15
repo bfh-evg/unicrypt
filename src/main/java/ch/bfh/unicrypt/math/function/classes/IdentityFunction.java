@@ -79,7 +79,7 @@ public class IdentityFunction
 	 */
 	public static IdentityFunction getInstance(final Set set) {
 		if (set == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, set);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new IdentityFunction(set);
 	}

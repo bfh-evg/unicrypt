@@ -169,7 +169,7 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(final Element... elements) {
 		if (elements == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultApply(Sequence.getInstance(elements));
 	}
@@ -177,7 +177,7 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(final ImmutableArray<Element> elements) {
 		if (elements == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultApply(Sequence.getInstance(elements));
 	}
@@ -185,7 +185,7 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(Sequence<Element> elements) {
 		if (elements == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultApply(elements);
 	}
@@ -198,7 +198,7 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple selfApply(Element element, Element<BigInteger> amount) {
 		if (amount == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.selfApply(element, amount.getValue());
 	}
@@ -206,7 +206,7 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple selfApply(Element element, BigInteger amount) {
 		if (amount == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);

@@ -74,7 +74,7 @@ public class ZElement
 
 	public static ZElement getInstance(BigInteger value) {
 		if (value == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, value);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return Z.getInstance().getElement(value);
 	}

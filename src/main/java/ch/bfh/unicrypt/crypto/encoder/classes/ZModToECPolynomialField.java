@@ -84,7 +84,7 @@ public class ZModToECPolynomialField
 
 	public static ZModToECPolynomialField getInstance(ECPolynomialField ec, int trials) {
 		if (ec == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, ec);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (trials < 1) {
 			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, trials);

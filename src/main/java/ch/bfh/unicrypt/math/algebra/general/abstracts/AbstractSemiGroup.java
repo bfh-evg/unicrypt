@@ -83,7 +83,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 	@Override
 	public final E apply(final Element... elements) {
 		if (elements == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultApply(Sequence.getInstance(elements).filter(Predicate.NOT_NULL));
 	}
@@ -91,7 +91,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 	@Override
 	public final E apply(final ImmutableArray<Element> elements) {
 		if (elements == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		// no filtering of null value required
 		return this.defaultApply(Sequence.getInstance(elements));
@@ -100,7 +100,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 	@Override
 	public final E apply(final Sequence<Element> elements) {
 		if (elements == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultApply(elements.filter(Predicate.NOT_NULL));
 	}
@@ -113,7 +113,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 	@Override
 	public final E selfApply(final Element element, final Element<BigInteger> amount) {
 		if (amount == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.selfApply(element, amount.getValue());
 	}
@@ -121,7 +121,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 	@Override
 	public final E selfApply(final Element element, final BigInteger amount) {
 		if (amount == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);

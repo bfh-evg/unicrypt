@@ -86,7 +86,7 @@ public class GenericFunction<D extends Set, DE extends Element, C extends Set, C
 	public static <D extends Set, DE extends Element, C extends Set, CE extends Element> GenericFunction<D, DE, C, CE>
 		   getInstance(Function function) {
 		if (function == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, function);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new GenericFunction<>(function);
 	}

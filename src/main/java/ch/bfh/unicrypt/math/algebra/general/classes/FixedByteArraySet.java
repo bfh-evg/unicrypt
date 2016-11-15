@@ -97,7 +97,7 @@ public class FixedByteArraySet
 
 	public static FixedByteArraySet getInstance(final BigInteger minOrder) {
 		if (minOrder == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, minOrder);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (minOrder.signum() < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, minOrder);

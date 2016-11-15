@@ -72,7 +72,7 @@ public class FiniteByteArrayElement
 
 	public static FiniteByteArrayElement getInstance(ByteArray byteArray) {
 		if (byteArray == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, byteArray);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return FixedByteArraySet.getInstance(byteArray.getLength()).getElement(byteArray);
 	}

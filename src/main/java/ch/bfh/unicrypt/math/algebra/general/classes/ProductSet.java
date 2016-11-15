@@ -97,7 +97,7 @@ public class ProductSet
 
 	public final Tuple getElementFrom(final int... values) throws UniCryptException {
 		if (values == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, values);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		BigInteger[] bigIntegers = new BigInteger[values.length];
 		for (int i = 0; i < values.length; i++) {
@@ -108,7 +108,7 @@ public class ProductSet
 
 	public final Tuple getElementFrom(BigInteger... values) throws UniCryptException {
 		if (values == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, values);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (values.length != this.getLength()) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, values);
@@ -122,7 +122,7 @@ public class ProductSet
 
 	public final Tuple getElementFrom(ByteArray... values) throws UniCryptException {
 		if (values == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, values);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (values.length != this.getLength()) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, values);
@@ -136,7 +136,7 @@ public class ProductSet
 
 	public final Tuple getElementFrom(String... values) throws UniCryptException {
 		if (values == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, values);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (values.length != this.getLength()) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, values);
@@ -389,7 +389,7 @@ public class ProductSet
 	@Override
 	public Set getAt(int... indices) {
 		if (indices == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, indices);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		Set set = this;
 		for (final int index : indices) {
@@ -588,7 +588,7 @@ public class ProductSet
 
 	public static ProductSet getInstance(DenseArray<Set> sets) {
 		if (sets == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, sets);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		boolean isSemiGroup = true;
 		boolean isMonoid = true;

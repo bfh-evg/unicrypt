@@ -160,8 +160,8 @@ public class ECZModPrime
 	// a private helper method to include the possibility of test parameters which do not pass all tests
 	private static ECZModPrime getInstance(int securityLevel, ZModPrime primeField, ZModElement a, ZModElement b,
 		   ZModElement gx, ZModElement gy, BigInteger subGroupOrder, BigInteger coFactor, boolean isTest) {
-		if (primeField == null || a == null || b == null || gx == null || gy == null || subGroupOrder == null ||
-			   coFactor == null) {
+		if (primeField == null || a == null || b == null || gx == null || gy == null || subGroupOrder == null
+			   || coFactor == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primeField, a, b, gx, gy, subGroupOrder,
 											   coFactor);
 		}
@@ -222,7 +222,7 @@ public class ECZModPrime
 
 	public static ECZModPrime getInstance(final ECParameters<ZModPrime, ZModElement> parameters) {
 		if (parameters == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, parameters);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return ECZModPrime.getInstance(
 			   parameters.getSecurityLevel(),

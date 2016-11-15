@@ -86,7 +86,7 @@ public class ApplyInverseFunction
 	 */
 	public static ApplyInverseFunction getInstance(final Group group) {
 		if (group == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, group);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new ApplyInverseFunction(ProductGroup.getInstance(group, 2), group);
 	}

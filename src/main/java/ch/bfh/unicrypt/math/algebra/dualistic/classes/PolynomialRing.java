@@ -105,7 +105,7 @@ public class PolynomialRing
 	@Override
 	public final PolynomialElement invertSelfApply(Element element, Element<BigInteger> amount) {
 		if (amount == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.invertSelfApply(element, amount.getValue());
 	}
@@ -113,7 +113,7 @@ public class PolynomialRing
 	@Override
 	public final PolynomialElement invertSelfApply(Element element, BigInteger amount) {
 		if (amount == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, amount);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (amount.signum() == 0) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, amount);
@@ -311,7 +311,7 @@ public class PolynomialRing
 	 */
 	public boolean isIrreduciblePolynomial(PolynomialElement f) {
 		if (f == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, f);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (!this.contains(f)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, f);
@@ -348,7 +348,7 @@ public class PolynomialRing
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		if (randomByteSequence == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, randomByteSequence);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (degree < 1) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_DEGREE, this, degree);
@@ -390,7 +390,7 @@ public class PolynomialRing
 
 	public static PolynomialRing getInstance(Ring ring) {
 		if (ring == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, ring);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new PolynomialRing(ring);
 	}

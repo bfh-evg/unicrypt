@@ -104,7 +104,7 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 	@Override
 	public final E nthRoot(Element element, Element<BigInteger> n) {
 		if (n == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, n);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.nthRoot(element, n.getValue());
 	}
@@ -112,7 +112,7 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 	@Override
 	public final E nthRoot(Element element, BigInteger n) {
 		if (n == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, n);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (n.signum() == 0) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, n);

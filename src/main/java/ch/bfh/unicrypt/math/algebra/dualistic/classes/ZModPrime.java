@@ -104,7 +104,7 @@ public class ZModPrime
 	@Override
 	public final ZModElement nthRoot(Element element, Element<BigInteger> n) {
 		if (n == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, n);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.nthRoot(element, n.getValue());
 	}
@@ -112,7 +112,7 @@ public class ZModPrime
 	@Override
 	public final ZModElement nthRoot(Element element, BigInteger n) {
 		if (n == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, n);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (n.signum() == 0) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, n);
@@ -168,7 +168,7 @@ public class ZModPrime
 
 	public static ZModPrime getInstance(BigInteger modulus) {
 		if (modulus == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		ZModPrime instance = ZModPrime.INSTANCES.get(modulus);
 		if (instance == null) {
@@ -180,7 +180,7 @@ public class ZModPrime
 
 	public static ZModPrime getInstance(final Prime modulus) {
 		if (modulus == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		ZModPrime instance = ZModPrime.INSTANCES.get(modulus.getValue());
 		if (instance == null) {

@@ -86,7 +86,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	@Override
 	public E multiply(Element... elements) {
 		if (elements == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultMultiply(Sequence.getInstance(elements).filter(Predicate.NOT_NULL));
 	}
@@ -94,7 +94,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	@Override
 	public E multiply(ImmutableArray<Element> elements) {
 		if (elements == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		// no filtering of null values required
 		return this.defaultMultiply(Sequence.getInstance(elements));
@@ -103,7 +103,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	@Override
 	public E multiply(Sequence<Element> elements) {
 		if (elements == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultMultiply(elements.filter(Predicate.NOT_NULL));
 	}
@@ -116,7 +116,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	@Override
 	public E power(Element element, BigInteger exponent) {
 		if (exponent == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, exponent);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, exponent);
@@ -127,7 +127,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	@Override
 	public E power(Element element, Element<BigInteger> exponent) {
 		if (exponent == null) {
-			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, exponent);
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.power(element, exponent.getValue());
 	}
