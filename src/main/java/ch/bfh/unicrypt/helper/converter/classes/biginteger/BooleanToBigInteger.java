@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,13 +42,14 @@
 package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 
 /**
  * The single instance of this class converts the Boolean values {@code false} into {@link BigInteger#ZERO} and
  * {@code true} into {@link BigInteger#ONE}.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class BooleanToBigInteger
@@ -74,20 +75,20 @@ public class BooleanToBigInteger
 
 	@Override
 	protected boolean defaultIsValidOutput(BigInteger value) {
-		return value.equals(BigInteger.ZERO) || value.equals(BigInteger.ONE);
+		return value.equals(MathUtil.ZERO) || value.equals(MathUtil.ONE);
 	}
 
 	@Override
 	protected BigInteger abstractConvert(Boolean value) {
 		if (value) {
-			return BigInteger.ONE;
+			return MathUtil.ONE;
 		}
-		return BigInteger.ZERO;
+		return MathUtil.ZERO;
 	}
 
 	@Override
 	protected Boolean abstractReconvert(BigInteger value) {
-		if (value.equals(BigInteger.ZERO)) {
+		if (value.equals(MathUtil.ZERO)) {
 			return false;
 		}
 		return true;

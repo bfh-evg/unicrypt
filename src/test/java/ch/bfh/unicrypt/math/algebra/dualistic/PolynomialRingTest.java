@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
+import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
@@ -52,6 +53,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -100,57 +102,69 @@ public class PolynomialRingTest {
 
 	@Test
 	public void testEuclidean() {
-		PolynomialElement p1 = ring2.getElement(one, zero, zero, zero, one, one, one, zero, one, one, one);
-		PolynomialElement p2 = ring2.getElement(one, zero, one, one, zero, one, one, zero, zero, one, zero);
+		try {
+			PolynomialElement p1 = ring2.getElementFrom(one, zero, zero, zero, one, one, one, zero, one, one, one);
+			PolynomialElement p2 = ring2.getElementFrom(one, zero, one, one, zero, one, one, zero, zero, one, zero);
 
-		PolynomialElement gcd = ring2.euclidean(p1, p2);
-		assertEquals(ring2.getElement(one, one, zero, one), gcd);
+			PolynomialElement gcd = ring2.euclidean(p1, p2);
+			assertEquals(ring2.getElementFrom(one, one, zero, one), gcd);
+		} catch (UniCryptException ex) {
+			fail();
+		}
 	}
 
 	@Test
 	public void testExtendedEuclidean() {
 
-		PolynomialElement p1 = ring2.getElement(one, zero, zero, zero, one, one, one, zero, one, one, one);
-		PolynomialElement p2 = ring2.getElement(one, zero, one, one, zero, one, one, zero, zero, one, zero);
+		try {
+			PolynomialElement p1 = ring2.getElementFrom(one, zero, zero, zero, one, one, one, zero, one, one, one);
+			PolynomialElement p2 = ring2.getElementFrom(one, zero, one, one, zero, one, one, zero, zero, one, zero);
 
-		Triple euclid = ring2.extendedEuclidean(p1, p2);
-		PolynomialElement d = ring2.getElement(one, one, zero, one);
-		PolynomialElement s = ring2.getElement(zero, zero, zero, zero, one);
-		PolynomialElement t = ring2.getElement(one, one, one, one, one, one);
-		assertEquals(d, euclid.getFirst());
-		assertEquals(s, euclid.getSecond());
-		assertEquals(t, euclid.getThird());
-		assertEquals(d, p1.multiply(s).add(p2.multiply(t)));
+			Triple euclid = ring2.extendedEuclidean(p1, p2);
+			PolynomialElement d = ring2.getElementFrom(one, one, zero, one);
+			PolynomialElement s = ring2.getElementFrom(zero, zero, zero, zero, one);
+			PolynomialElement t = ring2.getElementFrom(one, one, one, one, one, one);
+			assertEquals(d, euclid.getFirst());
+			assertEquals(s, euclid.getSecond());
+			assertEquals(t, euclid.getThird());
+			assertEquals(d, p1.multiply(s).add(p2.multiply(t)));
 
-		// gcd(1+2x^2, 1+4x+x^2+x^3) = 4 => 1
-		p1 = ring5.getElement(one, zero, BigInteger.valueOf(2));
-		p2 = ring5.getElement(one, BigInteger.valueOf(4), one, one);
-		euclid = ring5.extendedEuclidean(p1, p2);
-		d = (PolynomialElement) euclid.getFirst();
-		s = (PolynomialElement) euclid.getSecond();
-		t = (PolynomialElement) euclid.getThird();
-		assertTrue(d.isOne());
-		assertEquals(d, p1.multiply(s).add(p2.multiply(t)));
+			// gcd(1+2x^2, 1+4x+x^2+x^3) = 4 => 1
+			p1 = ring5.getElementFrom(one, zero, BigInteger.valueOf(2));
+			p2 = ring5.getElementFrom(one, BigInteger.valueOf(4), one, one);
+			euclid = ring5.extendedEuclidean(p1, p2);
+			d = (PolynomialElement) euclid.getFirst();
+			s = (PolynomialElement) euclid.getSecond();
+			t = (PolynomialElement) euclid.getThird();
+			assertTrue(d.isOne());
+			assertEquals(d, p1.multiply(s).add(p2.multiply(t)));
+		} catch (UniCryptException ex) {
+			fail();
+		}
 	}
 
 	@Test
 	public void testIsIrreduciblePolynomial() {
-		PolynomialElement p = ring2.getElement(one, one, zero, zero, one);
-		assertTrue(ring2.isIrreduciblePolynomial(p));
+		try {
+			PolynomialElement p = ring2.getElementFrom(one, one, zero, zero, one);
+			assertTrue(ring2.isIrreduciblePolynomial(p));
 
-		ZModPrime zmod3 = ZModPrime.getInstance(3);
-		PolynomialRing ring3 = PolynomialRing.getInstance(zmod3);
-		p = ring3.getElement(zero, one);
-		assertTrue(p.isIrreducible());
+			ZModPrime zmod3 = ZModPrime.getInstance(3);
+			PolynomialRing ring3 = PolynomialRing.getInstance(zmod3);
+			p = ring3.getElementFrom(zero, one);
+			assertTrue(p.isIrreducible());
 
-		p = ring3.getElement(one, zero, BigInteger.valueOf(2), one);
-		assertTrue(p.isIrreducible());
-		p = ring3.getElement(one, BigInteger.valueOf(2), zero, one);
-		assertTrue(p.isIrreducible());
-		p = ring3.getElement(one, one, BigInteger.valueOf(2), one);
-		assertTrue(p.isIrreducible());
-		p = ring3.getElement(BigInteger.valueOf(2), BigInteger.valueOf(2), BigInteger.valueOf(2), one);
-		assertTrue(p.isIrreducible());
+			p = ring3.getElementFrom(one, zero, BigInteger.valueOf(2), one);
+			assertTrue(p.isIrreducible());
+			p = ring3.getElementFrom(one, BigInteger.valueOf(2), zero, one);
+			assertTrue(p.isIrreducible());
+			p = ring3.getElementFrom(one, one, BigInteger.valueOf(2), one);
+			assertTrue(p.isIrreducible());
+			p = ring3.getElementFrom(BigInteger.valueOf(2), BigInteger.valueOf(2), BigInteger.valueOf(2), one);
+			assertTrue(p.isIrreducible());
+		} catch (UniCryptException ex) {
+			fail();
+		}
 
 	}
 

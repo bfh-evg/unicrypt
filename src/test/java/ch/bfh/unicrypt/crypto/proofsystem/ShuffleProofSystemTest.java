@@ -47,28 +47,23 @@ import ch.bfh.unicrypt.crypto.proofsystem.classes.PermutationCommitmentProofSyst
 import ch.bfh.unicrypt.crypto.proofsystem.classes.ReEncryptionShuffleProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
-import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
 import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.math.Permutation;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
-import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -82,24 +77,24 @@ public class ShuffleProofSystemTest {
 	public ShuffleProofSystemTest() {
 	}
 
-	//@Test
+	@Test
 	public void testShuffleProofGenerator() {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.getInstance();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
+		final RandomOracle ro = RandomOracle.getInstance();
+		final RandomByteSequence randomByteSequence = HybridRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence deterministicRandomByteSequence = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 5;
 		final Element encryptionPK = G_q.getElement(4);
-		final Element g = G_q.getIndependentGenerator(0, rrs);
+		final Element g = G_q.getIndependentGenerators(deterministicRandomByteSequence).get(0);
 
 		// Permutation
 		Permutation permutation = Permutation.getInstance(new int[]{3, 2, 1, 4, 0});
 		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
 
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, deterministicRandomByteSequence);
 
 		Tuple sV = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(6)); //pcs.getRandomizationSpace().getRandomElement(random);
 		Tuple cPiV = pcs.commit(pi, sV);
@@ -107,7 +102,7 @@ public class ShuffleProofSystemTest {
 		// Ciphertexts
 		Tuple rV = Tuple.getInstance(Z_q.getElement(7), Z_q.getElement(8), Z_q.getElement(9), Z_q.getElement(10), Z_q.getElement(11));
 		ProductGroup uVSpace = ProductGroup.getInstance(ProductGroup.getInstance(G_q, 2), size);
-		Tuple uV = uVSpace.getRandomElement(randomGenerator);
+		Tuple uV = uVSpace.getRandomElement(randomByteSequence);
 		Element[] uPrimes = new Element[size];
 		for (int i = 0; i < size; i++) {
 			uPrimes[i] = uV.getAt(i).apply(Tuple.getInstance(g.selfApply(rV.getAt(i)), encryptionPK.selfApply(rV.getAt(i))));
@@ -115,16 +110,16 @@ public class ShuffleProofSystemTest {
 		Tuple uPrimeV = PermutationFunction.getInstance(ProductGroup.getInstance(G_q, 2), size).apply(Tuple.getInstance(uPrimes), pi);
 
 		// Shuffle Proof Generator
-		ReEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
-		SigmaChallengeGenerator scg = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(G_q, encryptionScheme, size, 4, null);
-		ChallengeGenerator ecg = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(G_q, encryptionScheme, size, 4, ro);
-		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scg, ecg, G_q, size, encryptionScheme, encryptionPK, 2, rrs);
+		ElGamalEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
+		SigmaChallengeGenerator scg = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(4, null);
+		ChallengeGenerator ecg = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(4, size, ro);
+		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scg, ecg, size, encryptionScheme, encryptionPK, 2, deterministicRandomByteSequence);
 
 		// Proof and verify
 		Tuple privateInput = Tuple.getInstance(pi, sV, rV);
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 
-		Triple proof = spg.generate(privateInput, publicInput, randomGenerator);
+		Tuple proof = spg.generate(privateInput, publicInput, randomByteSequence);
 		boolean v = spg.verify(proof, publicInput);
 		assertTrue(v);
 	}
@@ -134,16 +129,15 @@ public class ShuffleProofSystemTest {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		final DeterministicRandomByteSequence rbs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 10;
 		final Element encryptionPK = G_q.getElement(4);
-		final Element g = G_q.getIndependentGenerator(0, rrs);
+		final Element g = G_q.getIndependentGenerators(rbs).get(0);
 
 		// Permutation
-		Permutation permutation = Permutation.getRandomInstance(size);
-		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		PermutationElement pi = PermutationGroup.getInstance(size).getRandomElement();
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rbs);
 
 		Tuple sV = pcs.getRandomizationSpace().getRandomElement();
 		Tuple cPiV = pcs.commit(pi, sV);
@@ -159,14 +153,14 @@ public class ShuffleProofSystemTest {
 		Tuple uPrimeV = PermutationFunction.getInstance(ProductGroup.getInstance(G_q, 2), size).apply(Tuple.getInstance(uPrimes), pi);
 
 		// Shuffle Proof Generator
-		ReEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
-		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(G_q, size, encryptionScheme, encryptionPK, proverId, 60, 60, 20, rrs);
+		ElGamalEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
+		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(size, encryptionScheme, encryptionPK, proverId, 60, 60, 20, rbs);
 
 		// Proof and verify
 		Tuple privateInput = Tuple.getInstance(pi, sV, rV);
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 
-		Triple proof = spg.generate(privateInput, publicInput);
+		Tuple proof = spg.generate(privateInput, publicInput);
 		boolean v = spg.verify(proof, publicInput);
 		assertTrue(v);
 	}
@@ -176,25 +170,24 @@ public class ShuffleProofSystemTest {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.getInstance();
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		final RandomOracle ro = RandomOracle.getInstance();
+		final DeterministicRandomByteSequence deterministicRandomByteSequence = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 5;
 		final Element encryptionPK = G_q.getElement(4);
-		final Element g = G_q.getIndependentGenerator(0, rrs);
+		final Element g = G_q.getIndependentGenerators(deterministicRandomByteSequence).get(0);
 
 		// Permutation
 		Permutation permutation = Permutation.getInstance(new int[]{3, 2, 1, 4, 0});
 		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, deterministicRandomByteSequence);
 		Tuple sV = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(6)); //pcs.getRandomizationSpace().getRandomElement(random);
 		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Ciphertexts
 		Tuple rV = Tuple.getInstance(Z_q.getElement(7), Z_q.getElement(8), Z_q.getElement(9), Z_q.getElement(10), Z_q.getElement(11));
 		ProductGroup uVSpace = ProductGroup.getInstance(ProductGroup.getInstance(G_q, 2), size);
-		Tuple uV = uVSpace.getRandomElement(randomGenerator);
+		Tuple uV = uVSpace.getRandomElement(deterministicRandomByteSequence);
 		Element[] uPrimes = new Element[size];
 		for (int i = 0; i < size; i++) {
 			uPrimes[i] = uV.getAt(i).apply(Tuple.getInstance(g.selfApply(rV.getAt(i)), encryptionPK.selfApply(rV.getAt(i))));
@@ -202,10 +195,10 @@ public class ShuffleProofSystemTest {
 		Tuple uPrimeV = PermutationFunction.getInstance(ProductGroup.getInstance(G_q, 2), size).apply(Tuple.getInstance(uPrimes), pi);
 
 		// Shuffle Proof Generator
-		ReEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
-		SigmaChallengeGenerator scg = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(G_q, encryptionScheme, size, 80, null);
-		ChallengeGenerator ecg = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(G_q, encryptionScheme, size, 80, ro);
-		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scg, ecg, G_q, size, encryptionScheme, encryptionPK, 20, rrs);
+		ElGamalEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
+		SigmaChallengeGenerator scg = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(80, null);
+		ChallengeGenerator ecg = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(80, size, ro);
+		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scg, ecg, size, encryptionScheme, encryptionPK, 20, deterministicRandomByteSequence);
 
 		// Proof and verify
 		// Invalid: uV with wrong permutation permuted
@@ -213,7 +206,7 @@ public class ShuffleProofSystemTest {
 		Tuple privateInput = Tuple.getInstance(pi, sV, rV);
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeVInvalid);
 
-		Triple proof = spg.generate(privateInput, publicInput, randomGenerator);
+		Tuple proof = spg.generate(privateInput, publicInput, deterministicRandomByteSequence);
 		boolean v = spg.verify(proof, publicInput);
 		assertTrue(!v);
 
@@ -222,7 +215,7 @@ public class ShuffleProofSystemTest {
 		privateInput = Tuple.getInstance(pi, sVInvalid, rV);
 		publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 
-		proof = spg.generate(privateInput, publicInput, randomGenerator);
+		proof = spg.generate(privateInput, publicInput, deterministicRandomByteSequence);
 		v = spg.verify(proof, publicInput);
 		assertTrue(!v);
 
@@ -231,7 +224,7 @@ public class ShuffleProofSystemTest {
 		privateInput = Tuple.getInstance(pi, sV, rVInvalid);
 		publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 
-		proof = spg.generate(privateInput, publicInput, randomGenerator);
+		proof = spg.generate(privateInput, publicInput, deterministicRandomByteSequence);
 		v = spg.verify(proof, publicInput);
 		assertTrue(!v);
 	}
@@ -241,18 +234,17 @@ public class ShuffleProofSystemTest {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.getInstance();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		final RandomOracle ro = RandomOracle.getInstance();
+		final DeterministicRandomByteSequence rbs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 100;
 		final Element encryptionPK = G_q.getElement(4);
-		final Element g = G_q.getIndependentGenerator(0, rrs);
+		final Element g = G_q.getIndependentGenerators(rbs).get(0);
 
 		// Permutation
-		Permutation permutation = Permutation.getRandomInstance(size);
-		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
+		PermutationElement pi = PermutationGroup.getInstance(size).getRandomElement();
 
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rbs);
 
 		Tuple sV = pcs.getRandomizationSpace().getRandomElement();
 		Tuple cPiV = pcs.commit(pi, sV);
@@ -268,22 +260,22 @@ public class ShuffleProofSystemTest {
 		Tuple uPrimeV = PermutationFunction.getInstance(ProductGroup.getInstance(G_q, 2), size).apply(Tuple.getInstance(uPrimes), pi);
 
 		// Permutation commitment proof generator
-		SigmaChallengeGenerator scg = PermutationCommitmentProofSystem.createNonInteractiveSigmaChallengeGenerator(G_q, size, 80, null);
-		ChallengeGenerator ecg = PermutationCommitmentProofSystem.createNonInteractiveEValuesGenerator(G_q, size, 80, ro);
-		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(scg, ecg, G_q, size, 20, rrs);
+		SigmaChallengeGenerator scg = PermutationCommitmentProofSystem.createNonInteractiveSigmaChallengeGenerator(80, null);
+		ChallengeGenerator ecg = PermutationCommitmentProofSystem.createNonInteractiveEValuesGenerator(80, size, ro);
+		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(scg, ecg, G_q, size, 20, rbs);
 
 		// Shuffle Proof Generator
-		ReEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
-		SigmaChallengeGenerator scgS = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(G_q, encryptionScheme, size, 80, null);
-		ChallengeGenerator ecgS = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(G_q, encryptionScheme, size, 80, ro);
-		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scgS, ecgS, G_q, size, encryptionScheme, encryptionPK, 20, rrs);
+		ElGamalEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
+		SigmaChallengeGenerator scgS = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(80, null);
+		ChallengeGenerator ecgS = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(80, size, ro);
+		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scgS, ecgS, size, encryptionScheme, encryptionPK, 20, rbs);
 
 		// Proof
-		Pair proofPermutation = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
+		Tuple proofPermutation = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
 
 		Tuple privateInput = Tuple.getInstance(pi, sV, rV);
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
-		Triple proofShuffle = spg.generate(privateInput, publicInput);
+		Tuple proofShuffle = spg.generate(privateInput, publicInput);
 
 		// Verify
 		// (Important: If it is not given from the context, check equality of
@@ -294,54 +286,6 @@ public class ShuffleProofSystemTest {
 
 		assertTrue(vPermutation && vShuffle);
 
-	}
-
-	@Test
-	public void testShuffleProofGenerator3() throws Exception {
-
-		final RandomOracle ro = PseudoRandomOracle.getInstance();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
-		final int size = 10;
-
-		final ECZModPrime G_q_Com = ECZModPrime.getInstance(SECECCParamsFp.secp160r1);
-		final Tuple independentGenerators = G_q_Com.getIndependentGenerators(size, rrs);
-		final GStarMod G_q_Enc = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
-		final ZMod Z_q = G_q_Enc.getZModOrder();
-
-		final ReEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(G_q_Enc);
-		final Element encryptionPK = G_q_Enc.getElement(4);
-
-		// Permutation
-		Permutation permutation = Permutation.getRandomInstance(size);
-		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
-
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(independentGenerators.getAt(0), independentGenerators.extractRange(1, size));
-
-		Tuple sV = pcs.getRandomizationSpace().getRandomElement();
-		Tuple cPiV = pcs.commit(pi, sV);
-
-		// Ciphertexts
-		Tuple rV = ProductGroup.getInstance(Z_q, size).getRandomElement();
-		ProductGroup uVSpace = ProductGroup.getInstance(ProductGroup.getInstance(G_q_Enc, 2), size);
-		Tuple uV = uVSpace.getRandomElement();
-		Element[] uPrimes = new Element[size];
-		for (int i = 0; i < size; i++) {
-			uPrimes[i] = encryptionScheme.reEncrypt(encryptionPK, uV.getAt(i), rV.getAt(i)); //uV.getAt(i).apply(Tuple.getFirstInstance(g.selfApply(rV.getAt(i)), encryptionPK.selfApply(rV.getAt(i))));
-		}
-		Tuple uPrimeV = PermutationFunction.getInstance(ProductGroup.getInstance(G_q_Enc, 2), size).apply(Tuple.getInstance(uPrimes), pi);
-
-		// Shuffle Proof Generator
-		SigmaChallengeGenerator scg = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(G_q_Com, encryptionScheme, size);
-		ChallengeGenerator ecg = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(G_q_Com, encryptionScheme, size, 80, ro);
-		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scg, ecg, G_q_Com, size, encryptionScheme, encryptionPK, 20, rrs);
-
-		// Proof and verify
-		Tuple privateInput = Tuple.getInstance(pi, sV, rV);
-		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
-
-		Triple proof = spg.generate(privateInput, publicInput);
-		boolean v = spg.verify(proof, publicInput);
-		assertTrue(v);
 	}
 
 }

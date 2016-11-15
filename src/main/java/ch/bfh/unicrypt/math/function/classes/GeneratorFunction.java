@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,19 +41,22 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class GeneratorFunction
 	   extends AbstractFunction<GeneratorFunction, ZMod, ZModElement, CyclicGroup, Element> {
+
 	private static final long serialVersionUID = 1L;
 
 	private Element generator;
@@ -78,8 +81,11 @@ public class GeneratorFunction
 	}
 
 	public static GeneratorFunction getInstance(Element generator) {
-		if (generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()) {
-			throw new IllegalArgumentException();
+		if (generator == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (!generator.getSet().isCyclic() || !generator.isGenerator()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, generator);
 		}
 		CyclicGroup cyclicGroup = (CyclicGroup) generator.getSet();
 		return new GeneratorFunction(cyclicGroup.getZModOrder(), cyclicGroup, generator);
@@ -87,7 +93,7 @@ public class GeneratorFunction
 
 	public static GeneratorFunction getInstance(CyclicGroup cyclicGroup) {
 		if (cyclicGroup == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new GeneratorFunction(cyclicGroup.getZModOrder(), cyclicGroup, cyclicGroup.getDefaultGenerator());
 	}

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,41 +42,32 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractSecretKeyGenerator;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ByteArrayKeyGenerator
 	   extends AbstractSecretKeyGenerator<FixedByteArraySet, FiniteByteArrayElement> {
 
-	protected ByteArrayKeyGenerator(FixedByteArraySet fixedByteArraySet, StringToByteArray converter) {
-		super(fixedByteArraySet, converter);
+	protected ByteArrayKeyGenerator(FixedByteArraySet fixedByteArraySet) {
+		super(fixedByteArraySet);
 	}
 
 	public static ByteArrayKeyGenerator getInstance(int keyLength) {
-		return ByteArrayKeyGenerator.getInstance(keyLength, StringToByteArray.getInstance());
-	}
-
-	public static ByteArrayKeyGenerator getInstance(int keyLength, StringToByteArray converter) {
-		if (keyLength < 0 || converter == null) {
+		if (keyLength < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteArrayKeyGenerator(FixedByteArraySet.getInstance(keyLength), converter);
+		return new ByteArrayKeyGenerator(FixedByteArraySet.getInstance(keyLength));
 	}
 
 	public static ByteArrayKeyGenerator getInstance(FixedByteArraySet fixedByteArraySet) {
-		return ByteArrayKeyGenerator.getInstance(fixedByteArraySet, StringToByteArray.getInstance());
-	}
-
-	public static ByteArrayKeyGenerator getInstance(FixedByteArraySet fixedByteArraySet, StringToByteArray converter) {
-		if (fixedByteArraySet == null || converter == null) {
+		if (fixedByteArraySet == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteArrayKeyGenerator(fixedByteArraySet, converter);
+		return new ByteArrayKeyGenerator(fixedByteArraySet);
 	}
 
 }

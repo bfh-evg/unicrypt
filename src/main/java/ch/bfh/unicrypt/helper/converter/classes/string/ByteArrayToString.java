@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -57,11 +57,12 @@ import javax.xml.bind.DatatypeConverter;
  * the string length a multiple of 4). The default mode of operation is {@code HEX} with upper-case letters and no
  * delimiter.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class ByteArrayToString
 	   extends AbstractStringConverter<ByteArray> {
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -210,9 +211,9 @@ public class ByteArrayToString
 	 */
 	public static ByteArrayToString getInstance(Radix radix, String delimiter, boolean upperCase) {
 		if (radix == null || delimiter == null || delimiter.length() > 1
-			   || (radix == Radix.BINARY && delimiter.matches("^[0-1]$"))
-			   || (radix == Radix.HEX && delimiter.matches(upperCase ? "^[0-9A-F]$" : "^[0-9a-f]$"))
-			   || (radix == Radix.BASE64 && delimiter.length() > 0)) {
+			   || radix == Radix.BINARY && delimiter.matches("^[0-1]$")
+			   || radix == Radix.HEX && delimiter.matches(upperCase ? "^[0-9A-F]$" : "^[0-9a-f]$")
+			   || radix == Radix.BASE64 && delimiter.length() > 0) {
 			throw new IllegalArgumentException();
 		}
 		return new ByteArrayToString(radix, delimiter, upperCase);

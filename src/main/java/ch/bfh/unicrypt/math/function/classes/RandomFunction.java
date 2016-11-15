@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,51 +41,47 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a randomized function with no input. When the function is called, it selects an
  * element from the co-domain at random and returns it as output value.
- * <p/>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
  */
 public class RandomFunction
 	   extends AbstractFunction<RandomFunction, SingletonGroup, SingletonElement, Set, Element> {
+
 	private static final long serialVersionUID = 1L;
 
 	private RandomFunction(final Set coDomain) {
 		super(SingletonGroup.getInstance(), coDomain);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Element abstractApply(final SingletonElement element, final RandomByteSequence randomByteSequence) {
 		return this.getCoDomain().getRandomElement(randomByteSequence);
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the general constructor of this class. It creates a function that generates random elements from a given
 	 * group.
-	 * <p/>
+	 * <p>
 	 * @param set The given group
-	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
+	 * @return Returns an instance of this class
 	 */
 	public static RandomFunction getInstance(final Set set) {
 		if (set == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new RandomFunction(set);
 	}

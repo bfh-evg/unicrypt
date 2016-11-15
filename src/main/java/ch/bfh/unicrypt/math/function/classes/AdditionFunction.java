@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,12 +41,16 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface represents the the concept of a function f:X^n->X, which applies the group operation sequentially to
@@ -63,6 +67,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class AdditionFunction
 	   extends AbstractFunction<AdditionFunction, ProductSemiGroup, Tuple, AdditiveSemiGroup, AdditiveElement> {
+
 	private static final long serialVersionUID = 1L;
 
 	private AdditionFunction(final ProductSemiGroup domain, final AdditiveSemiGroup coDomain) {
@@ -85,12 +90,13 @@ public class AdditionFunction
 	 * @param additiveSemiGroup The group on which this function operates
 	 * @param arity             The number of input elements
 	 * @return The resulting function
-	 * @throws IllegalArgumentException if {@code group} is null
-	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static AdditionFunction getInstance(final AdditiveSemiGroup additiveSemiGroup, final int arity) {
-		if (additiveSemiGroup == null || arity < 0) {
-			throw new IllegalArgumentException();
+		if (additiveSemiGroup == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (arity < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);
 		}
 		return new AdditionFunction(ProductSemiGroup.getInstance(additiveSemiGroup, arity), additiveSemiGroup);
 	}

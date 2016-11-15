@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,24 +41,27 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.map.HashMap2D;
 import ch.bfh.unicrypt.helper.map.Map2D;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class GStarModPrime
 	   extends GStarMod {
 
-	private final static Map2D<Prime, Prime, GStarModPrime> instances = HashMap2D.getInstance();
 	private static final long serialVersionUID = 1L;
+	private final static Map2D<BigInteger, BigInteger, GStarModPrime> INSTANCES = HashMap2D.getInstance();
 
-	protected GStarModPrime(Prime modulus, Prime orderFactor) {
-		super(modulus, orderFactor);
+	protected GStarModPrime(Prime modulus, Prime order) {
+		super(modulus, order);
 	}
 
 	@Override
@@ -71,25 +74,43 @@ public class GStarModPrime
 		return ZStarModPrime.getInstance(this.getOrder());
 	}
 
-	public static GStarModPrime getInstance(final long modulus, long orderFactor) {
-		return GStarModPrime.getInstance(BigInteger.valueOf(modulus), BigInteger.valueOf(orderFactor));
+	@Override
+	protected boolean abstractContains(final BigInteger value) {
+		return value.signum() > 0
+			   && value.compareTo(this.modulus) < 0
+			   && value.modPow(this.getOrder(), this.modulus).equals(MathUtil.ONE);
 	}
 
-	public static GStarModPrime getInstance(final BigInteger modulus, BigInteger orderFactor) {
-		return GStarModPrime.getInstance(Prime.getInstance(modulus), Prime.getInstance(orderFactor));
+	public static GStarModPrime getInstance(final long modulus, long order) {
+		return GStarModPrime.getInstance(BigInteger.valueOf(modulus), BigInteger.valueOf(order));
 	}
 
-	public static GStarModPrime getInstance(Prime modulus, Prime orderFactor) {
-		if (modulus == null || orderFactor == null) {
-			throw new IllegalArgumentException();
+	public static GStarModPrime getInstance(final BigInteger modulus, BigInteger order) {
+		if (modulus == null || order == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus, order);
 		}
-		if (!modulus.getValue().subtract(BigInteger.ONE).mod(orderFactor.getValue()).equals(BigInteger.ZERO)) {
-			throw new IllegalArgumentException();
-		}
-		GStarModPrime instance = GStarModPrime.instances.get(modulus, orderFactor);
+		GStarModPrime instance = GStarModPrime.INSTANCES.get(modulus, order);
 		if (instance == null) {
-			instance = new GStarModPrime(modulus, orderFactor);
-			GStarModPrime.instances.put(modulus, orderFactor, instance);
+			if (!modulus.subtract(MathUtil.ONE).mod(order).equals(MathUtil.ZERO)) {
+				throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, order);
+			}
+			instance = new GStarModPrime(Prime.getInstance(modulus), Prime.getInstance(order));
+			GStarModPrime.INSTANCES.put(modulus, order, instance);
+		}
+		return instance;
+	}
+
+	public static GStarModPrime getInstance(Prime modulus, Prime order) {
+		if (modulus == null || order == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus, order);
+		}
+		GStarModPrime instance = GStarModPrime.INSTANCES.get(modulus.getValue(), order.getValue());
+		if (instance == null) {
+			if (!modulus.getValue().subtract(MathUtil.ONE).mod(order.getValue()).equals(MathUtil.ZERO)) {
+				throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulus, order);
+			}
+			instance = new GStarModPrime(modulus, order);
+			GStarModPrime.INSTANCES.put(modulus.getValue(), order.getValue(), instance);
 		}
 		return instance;
 	}

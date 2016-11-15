@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -43,22 +43,40 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import java.math.BigInteger;
 
 /**
- * TODO This interface represents the mathematical concept of a ring. A ring is a semiring where additive operations are
- * a commutative {@link Group}. It is therefore implemented as a specialization of {@link SemiRing}. One familiar
- * example of a ring is the set of integers. Some return types are updated.
+ * This interface represents the mathematical concept of a ring. A ring is a semiring where the set together with
+ * addition forms a commutative group. Therefore, every element of the ring has an additive inverse.
  * <p>
- * @author rolfhaenni
- * @param <V> Generic type of values stored in the elements of this ring
+ * The ring interface is therefore implemented as a specialization of {@link SemiRing} and {@link AdditiveGroup}. No
+ * functionality is added. Some return types are updated.
+ * <p>
+ * @param <V> The generic type of the values representing the elements of a ring
+ * <p>
+ * @author R. Haenni
+ * <p>
+ * @see SemiRing
+ * @see AdditiveGroup
+ * @see DualisticElement
+ * @see "Handbook of Applied Cryptography, Definition 2.175"
  */
 public interface Ring<V>
 	   extends SemiRing<V>, AdditiveGroup<V> {
 
 	@Override
+	public DualisticElement<V> negate(Element element);
+
+	@Override
 	public DualisticElement<V> subtract(Element element1, Element element2);
 
 	@Override
-	public DualisticElement<V> negate(Element element);
+	public DualisticElement<V> divide(Element element, long divisor);
+
+	@Override
+	public DualisticElement<V> divide(Element element, BigInteger divisor);
+
+	@Override
+	public DualisticElement<V> halve(Element element);
 
 }

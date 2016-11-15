@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
@@ -57,7 +59,7 @@ import java.util.Iterator;
  * @param <DE>
  * @param <C>
  * @param <CE>
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, D, DE, C, CE>, D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends AbstractFunction<CF, D, DE, C, CE>
@@ -144,14 +146,14 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	@Override
 	public Function getAt(int... indices) {
 		if (indices == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		Function function = this;
 		for (final int index : indices) {
 			if (function.isCompound()) {
 				function = ((ImmutableArray<Function>) function).getAt(index);
 			} else {
-				throw new IllegalArgumentException();
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, indices, index);
 			}
 		}
 		return function;

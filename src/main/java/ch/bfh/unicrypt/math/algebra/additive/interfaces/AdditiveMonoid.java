@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -45,29 +45,33 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 
 /**
- * This interface represents an additively written {@link Monoid}. No functionality is added. Some return types are
- * updated.
+ * This interface provides the renaming of some methods for the case of a additively written commutative {@link Monoid}.
+ * No functionality is added. Some return types are updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of this monoid
+ * @param <V> The generic type of values stored in the elements of this monoid
  */
 public interface AdditiveMonoid<V>
 	   extends Monoid<V>, AdditiveSemiGroup<V> {
 
 	/**
-	 * Returns the neutral element of this monoid, which in this case is 0 (see {@link Monoid}).
+	 * This method is a synonym for {@link Monoid#getIdentityElement()}. It returns the identity element, which in the
+	 * case of a additively written monoid is 0.
 	 * <p>
-	 * @return The neutral element
+	 * @return The identity element of this monoid
+	 * @see Monoid#getIdentityElement()
 	 */
 	public AdditiveElement<V> getZeroElement();
 
 	/**
-	 * Returns {@code true} if the given element corresponds to the neutral element, which is 0.
+	 * This method is a synonym for {@link Monoid#isIdentityElement(Element)}. Returns {@code true} if the given element
+	 * is the identity element of this monoid.
 	 * <p>
 	 * @param element The given element
-	 * @return {@code true} if the given element equals zero
+	 * @return {@code true} if this given element is the identity element, {@code false} otherwise
+	 * @see Monoid#isIdentityElement(Element)
 	 */
 	public boolean isZeroElement(Element element);
 

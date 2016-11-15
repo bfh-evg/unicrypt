@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -46,7 +46,8 @@ import java.math.BigInteger;
 
 /**
  * Instances of this class offer an inexpensive way of creating iterators over a finite range of integers. If the upper
- * bound of the range is smaller than the lower bound of the range, then the range is empty.
+ * bound of the range is smaller than the lower bound of the range, then the range is empty. If no upper bound is given,
+ * the sequence is infinite.
  * <p>
  * @author R. Haenni
  * @version 2.0
@@ -71,6 +72,12 @@ public class BigIntegerSequence
 		this.to = to;
 	}
 
+	/**
+	 * Creates a new infinitely long BigInteger sequence for a given lower bound.
+	 * <p>
+	 * @param from The lower bound
+	 * @return The new BigInteger sequence
+	 */
 	public static BigIntegerSequence getInstance(BigInteger from) {
 		if (from == null) {
 			throw new IllegalArgumentException();
@@ -79,17 +86,25 @@ public class BigIntegerSequence
 	}
 
 	/**
-	 * Creates a new BigInteger sequence for given upper and lower integer bounds. The result is an empty range, if the
-	 * upper bound is smaller than the lower bound.
+	 * Creates a new BigInteger sequence for given lower and upper bounds. The result is an empty range, if the upper
+	 * bound is smaller than the lower bound.
 	 * <p>
 	 * @param from The lower bound
 	 * @param to   The upper bound
 	 * @return The new BigInteger sequence
 	 */
-	public static BigIntegerSequence getInstance(int from, int to) {
+	public static BigIntegerSequence getInstance(long from, long to) {
 		return BigIntegerSequence.getInstance(BigInteger.valueOf(from), BigInteger.valueOf(to));
 	}
 
+	/**
+	 * Creates a new BigInteger sequence for given lower and upper bounds. The result is an empty range, if the upper
+	 * bound is smaller than the lower bound.
+	 * <p>
+	 * @param from The lower bound
+	 * @param to   The upper bound
+	 * @return The new BigInteger sequence
+	 */
 	public static BigIntegerSequence getInstance(BigInteger from, BigInteger to) {
 		if (from == null || to == null) {
 			throw new IllegalArgumentException();
@@ -97,16 +112,27 @@ public class BigIntegerSequence
 		return new BigIntegerSequence(from, to);
 	}
 
+	/**
+	 * Creates a new BigInteger sequence of all integers of a given bit length {@code b}. The values range from
+	 * {@code 2^(b-1)} to {@code 2^b-1}.
+	 * <p>
+	 * @param bitLength The given bit length
+	 * @return The new BigInteger sequence
+	 */
 	public static BigIntegerSequence getInstance(int bitLength) {
 		if (bitLength < 0) {
 			throw new IllegalArgumentException();
 		}
-		return BigIntegerSequence.getInstance(MathUtil.powerOfTwo(bitLength - 1), MathUtil.powerOfTwo(bitLength - 1).subtract(MathUtil.ONE));
+		if (bitLength == 0) {
+			BigIntegerSequence.getInstance(0, 0);
+		}
+		return BigIntegerSequence.getInstance(MathUtil.powerOfTwo(bitLength - 1),
+											  MathUtil.powerOfTwo(bitLength).subtract(MathUtil.ONE));
 	}
 
 	@Override
-	public ExtendedIterator<BigInteger> iterator() {
-		return new ExtendedIterator<BigInteger>() {
+	public SequenceIterator<BigInteger> iterator() {
+		return new SequenceIterator<BigInteger>() {
 			private BigInteger currentValue = from;
 
 			@Override
@@ -115,7 +141,7 @@ public class BigIntegerSequence
 			}
 
 			@Override
-			public BigInteger next() {
+			public BigInteger abstractNext() {
 				BigInteger value = currentValue;
 				this.currentValue = this.currentValue.add(MathUtil.ONE);
 				return value;
@@ -137,17 +163,17 @@ public class BigIntegerSequence
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
+		if (getClass() == obj.getClass()) {
+			final BigIntegerSequence other = (BigIntegerSequence) obj;
+			if (this.getLength() != other.getLength()) {
+				return false;
+			}
+			if (this.getLength().signum() == 0) {
+				return true;
+			}
+			return this.from.equals(other.from);
 		}
-		final BigIntegerSequence other = (BigIntegerSequence) obj;
-		if (this.getLength() != other.getLength()) {
-			return false;
-		}
-		if (this.getLength().signum() == 0) {
-			return true;
-		}
-		return (this.from.equals(other.from));
+		return super.equals(obj);
 	}
 
 	@Override

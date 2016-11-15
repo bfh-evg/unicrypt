@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,7 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.UniCryptException;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
+import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
+import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.CompositeConverter;
@@ -50,11 +56,12 @@ import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.BigIntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.ExtendedIterator;
-import ch.bfh.unicrypt.helper.sequence.Mapping;
-import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -72,8 +79,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -82,8 +87,8 @@ import java.math.BigInteger;
  * necessary to override some default methods. Every abstract method has a name starting with {@code abstract...} and
  * every default method has a name starting with {@code default...}.
  * <p>
- * @param <E> Generic type of elements of this set
- * @param <V> Generic type of values stored in the elements of this set
+ * @param <E> The generic type of elements of this set
+ * @param <V> The generic type of values stored in the elements of this set
  * @see AbstractElement
  * <p>
  * @author R. Haenni
@@ -99,8 +104,11 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	// the class of the values used to represent elements of this set
 	private final Class<?> valueClass;
 
-	// various variables for storing information about the order of this set
-	private BigInteger order, lowerBound, upperBound, minimum;
+	// the order of this set
+	private BigInteger order;
+
+	// other variables for storing information about the order of this set
+	private BigInteger lowerBound, upperBound, minimum;
 
 	// the default converters used to convert elements into BigInteger, String, and ByteArray
 	private Converter<V, BigInteger> bigIntegerConverter;
@@ -218,13 +226,13 @@ public abstract class AbstractSet<E extends Element<V>, V>
 
 	@Override
 	public final boolean isSingleton() {
-		return this.getOrder().equals(BigInteger.ONE);
+		return this.getOrder().equals(MathUtil.ONE);
 	}
 
 	@Override
 	public ZMod getZModOrder() {
 		if (!(this.isFinite() && this.hasKnownOrder())) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		return ZMod.getInstance(this.getOrder());
 	}
@@ -232,7 +240,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public ZStarMod getZStarModOrder() {
 		if (!(this.isFinite() && this.hasKnownOrder())) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		return ZStarMod.getInstance(this.getOrder());
 	}
@@ -240,7 +248,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final E getElement(V value) {
 		if (!this.contains(value)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, value);
 		}
 		return this.abstractGetElement(value);
 	}
@@ -248,7 +256,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final boolean contains(V value) {
 		if (value == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.abstractContains(value);
 	}
@@ -256,7 +264,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final boolean contains(Element<?> element) {
 		if (element == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (!this.valueClass.isInstance(element.getValue())) {
 			return false;
@@ -266,15 +274,15 @@ public abstract class AbstractSet<E extends Element<V>, V>
 
 	@Override
 	public final E getRandomElement() {
-		return this.abstractGetRandomElement(HybridRandomByteSequence.getInstance());
+		return this.getRandomElement(HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
 	public final E getRandomElement(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		return this.abstractGetRandomElement(randomByteSequence);
+		return this.getRandomElements(randomByteSequence).get();
 	}
 
 	@Override
@@ -283,130 +291,113 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	}
 
 	@Override
-	public final Sequence<E> getRandomElements(long n) {
-		if (n < 0) {
-			throw new IllegalArgumentException();
-		}
-		return this.getRandomElements().limit(n);
-	}
-
-	@Override
-	public final Sequence<E> getRandomElements(final RandomByteSequence randomByteSequence) {
+	public final Sequence<E> getRandomElements(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		return new Sequence<E>() {
-
-			@Override
-			public ExtendedIterator<E> iterator() {
-				return new ExtendedIterator<E>() {
-
-					@Override
-					public boolean hasNext() {
-						return true;
-					}
-
-					@Override
-					public E next() {
-						return abstractGetRandomElement(randomByteSequence);
-					}
-				};
-			}
-		};
+		return this.abstractGetRandomElements(randomByteSequence);
 	}
 
 	@Override
-	public final Sequence<E> getRandomElements(long n, final RandomByteSequence randomByteSequence) {
-		if (n < 0 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.getRandomElements(randomByteSequence).limit(n);
-	}
-
-	@Override
-	public final <W> E getElementFrom(W value, Converter<V, W> converter) {
+	public final <W> E getElementFrom(W value, Converter<V, W> converter) throws UniCryptException {
 		if (value == null || converter == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value, converter);
 		}
 		try {
 			V convertedValue = converter.reconvert(value);
 			return this.getElement(convertedValue);
-		} catch (Exception e) {
-			return null;
+		} catch (Exception exception) {
+			throw new UniCryptException(ErrorCode.ELEMENT_CONVERSION_FAILURE, exception);
 		}
 	}
 
 	@Override
-	public final <W> E getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) {
+	public final <W> E getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator) throws
+		   UniCryptException {
 		if (value == null || convertMethod == null || aggregator == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value, convertMethod, aggregator);
 		}
 		try {
 			Tree<W> tree = aggregator.disaggregate(value);
 			return this.defaultGetElementFrom(tree, convertMethod);
-		} catch (Exception e) {
-			return null;
+		} catch (Exception exception) {
+			throw new UniCryptException(ErrorCode.ELEMENT_CONVERSION_FAILURE, exception);
 		}
 	}
 
 	@Override
-	public final <W> E getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) {
-		if (tree == null || convertMethod == null) {
-			throw new IllegalArgumentException();
+	public final <W, X> E getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator,
+		   Converter<W, X> finalConverter) throws UniCryptException {
+		if (value == null || convertMethod == null || aggregator == null || finalConverter == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, value, convertMethod, aggregator,
+											   finalConverter);
 		}
 		try {
+			Tree<W> tree = aggregator.disaggregate(finalConverter.reconvert(value));
 			return this.defaultGetElementFrom(tree, convertMethod);
-		} catch (Exception e) {
-			return null;
+		} catch (Exception exception) {
+			throw new UniCryptException(ErrorCode.ELEMENT_CONVERSION_FAILURE, exception);
 		}
+
 	}
 
 	@Override
-	public final E getElementFrom(long value) {
-		return this.defaultGetElementFrom(BigInteger.valueOf(value));
+	public final <W> E getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException {
+		if (tree == null || convertMethod == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, tree, convertMethod);
+		}
+		return this.defaultGetElementFrom(tree, convertMethod);
 	}
 
 	@Override
-	public final E getElementFrom(BigInteger value) {
+	public final E getElementFrom(long value) throws UniCryptException {
+		return this.getElementFrom(BigInteger.valueOf(value));
+	}
+
+	@Override
+	public final E getElementFrom(BigInteger value) throws UniCryptException {
 		if (value == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		try {
-			return this.defaultGetElementFrom(value);
-		} catch (Exception e) {
-			return null;
+		if (this.isProduct()) {
+			return this.getElementFrom(value, ConvertMethod.getInstance(BigInteger.class), BigIntegerAggregator.
+									   getInstance());
+
+		} else {
+			return this.getElementFrom(value, this.getBigIntegerConverter());
 		}
 	}
 
 	@Override
-	public final E getElementFrom(ByteArray value) {
+	public final E getElementFrom(ByteArray value) throws UniCryptException {
 		if (value == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		try {
-			return this.defaultGetElementFrom(value);
-		} catch (Exception e) {
-			return null;
+		if (this.isProduct()) {
+			return this.getElementFrom(value, ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.
+									   getInstance());
+		} else {
+			return this.getElementFrom(value, this.getByteArrayConverter());
+
 		}
 	}
 
 	@Override
-	public final E getElementFrom(String value) {
+	public final E getElementFrom(String value) throws UniCryptException {
 		if (value == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		try {
-			return this.defaultGetElementFrom(value);
-		} catch (Exception e) {
-			return null;
+		if (this.isProduct()) {
+			return this.getElementFrom(value, ConvertMethod.getInstance(String.class), StringAggregator.getInstance());
+		} else {
+			return this.getElementFrom(value, this.getStringConverter());
 		}
-
 	}
 
 	@Override
 	public final boolean isEquivalent(final Set<?> other) {
 		if (other == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (this == other) {
 			return true;
@@ -425,14 +416,6 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	@Override
 	public final Sequence<E> getElements() {
 		return this.defaultGetElements();
-	}
-
-	@Override
-	public final Sequence<E> getElements(final long n) {
-		if (n < 0) {
-			throw new IllegalArgumentException();
-		}
-		return this.getElements().limit(n);
 	}
 
 	@Override
@@ -460,23 +443,6 @@ public abstract class AbstractSet<E extends Element<V>, V>
 		return this.abstractEquals((Set) other);
 	}
 
-	protected final <W> Converter<V, W> getConverter(ConvertMethod<W> convertMethod) {
-		Converter<V, W> converter = (Converter<V, W>) convertMethod.getConverter(this.getValueClass());
-		if (converter == null) {
-			Class<W> outputClass = convertMethod.getOutputClass();
-			if (outputClass == String.class) {
-				converter = (Converter<V, W>) this.getStringConverter();
-			} else if (outputClass == BigInteger.class) {
-				converter = (Converter<V, W>) this.getBigIntegerConverter();
-			} else if (outputClass == ByteArray.class) {
-				converter = (Converter<V, W>) this.getByteArrayConverter();
-			} else {
-				throw new IllegalArgumentException();
-			}
-		}
-		return converter;
-	}
-
 	@Override
 	public final Converter<V, BigInteger> getBigIntegerConverter() {
 		if (this.bigIntegerConverter == null) {
@@ -501,9 +467,28 @@ public abstract class AbstractSet<E extends Element<V>, V>
 		return this.stringConverter;
 	}
 
+	// helper method for selecting a converter from a given convert method or to return one of the default converters
+	// for bigIntgers, strings, or byteArrays if no converter exists
+	protected final <W> Converter<V, W> getConverter(ConvertMethod<W> convertMethod) {
+		Converter<V, W> converter = (Converter<V, W>) convertMethod.getConverter(this.getValueClass());
+		if (converter == null) {
+			Class<W> outputClass = convertMethod.getOutputClass();
+			if (outputClass == String.class) {
+				converter = (Converter<V, W>) this.getStringConverter();
+			} else if (outputClass == BigInteger.class) {
+				converter = (Converter<V, W>) this.getBigIntegerConverter();
+			} else if (outputClass == ByteArray.class) {
+				converter = (Converter<V, W>) this.getByteArrayConverter();
+			} else {
+				throw new UniCryptRuntimeException(ErrorCode.OBJECT_NOT_FOUND, this, convertMethod);
+			}
+		}
+		return converter;
+	}
+
 	// this method is only called for sets of unknown order
 	protected BigInteger defaultGetOrderLowerBound() {
-		return BigInteger.ONE;
+		return MathUtil.ONE;
 	}
 
 	// this method is only called for sets of unknown order
@@ -522,38 +507,23 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	}
 
 	// this method is overridden in ProductSet
-	protected <W> E defaultGetElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) {
+	protected <W> E defaultGetElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException {
 		if (!tree.isLeaf()) {
-			throw new IllegalArgumentException();
+			throw new UniCryptException(ErrorCode.ELEMENT_CONVERSION_FAILURE);
 		}
 		W value = ((Leaf<W>) tree).getValue();
 		Converter<V, W> converter = this.getConverter(convertMethod);
 		return this.getElement(converter.reconvert(value));
 	}
 
-	// this method is overridden in ProductSet
-	protected E defaultGetElementFrom(BigInteger value) {
-		return this.getElementFrom(value, this.getBigIntegerConverter());
-	}
-
-	// this method is overridden in ProductSet
-	protected E defaultGetElementFrom(ByteArray value) {
-		return this.getElementFrom(value, this.getByteArrayConverter());
-	}
-
-	// this method is overridden in ProductSet
-	protected E defaultGetElementFrom(String value) {
-		return this.getElementFrom(value, this.getStringConverter());
+	// this method us usually overriden in classes of value type ByteArray
+	protected Converter<V, ByteArray> defaultGetByteArrayConverter() {
+		return CompositeConverter.getInstance(this.getBigIntegerConverter(), BigIntegerToByteArray.getInstance());
 	}
 
 	// this method us usually overriden in classes of value type String
 	protected Converter<V, String> defaultGetStringConverter() {
 		return CompositeConverter.getInstance(this.getBigIntegerConverter(), BigIntegerToString.getInstance());
-	}
-
-	// this method us usually overriden in classes of value type ByteArray
-	protected Converter<V, ByteArray> defaultGetByteArrayConverter() {
-		return CompositeConverter.getInstance(this.getBigIntegerConverter(), BigIntegerToByteArray.getInstance());
 	}
 
 	// isEquivalent is usually the same as equals, but there are a few exceptions
@@ -568,7 +538,11 @@ public abstract class AbstractSet<E extends Element<V>, V>
 
 			@Override
 			public E apply(BigInteger value) {
-				return set.getElementFrom(value);
+				try {
+					return set.getElementFrom(value);
+				} catch (UniCryptException exception) {
+					return null;
+				}
 			}
 
 		}).filter(Predicate.NOT_NULL);
@@ -584,7 +558,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 
 	protected abstract E abstractGetElement(V value);
 
-	protected abstract E abstractGetRandomElement(RandomByteSequence randomByteSequence);
+	protected abstract Sequence<E> abstractGetRandomElements(RandomByteSequence randomByteSequence);
 
 	protected abstract Converter<V, BigInteger> abstractGetBigIntegerConverter();
 

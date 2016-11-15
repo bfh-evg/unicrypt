@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,11 +41,16 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.math.Polynomial;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptException;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.math.Polynomial;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -54,8 +59,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +83,7 @@ public class PolynomialSemiRing
 
 	public static PolynomialSemiRing getInstance(SemiRing semiRing) {
 		if (semiRing == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new PolynomialSemiRing(semiRing);
 	}
@@ -99,31 +102,27 @@ public class PolynomialSemiRing
 	}
 
 	public PolynomialElement getElement(BitArray coefficients) {
-		//TODO: Change back to protected -> ZModToBinaryEncoder is then not working anymore.
+		//TODO: Change back to protected -> ZModToBinaryPolynomialField is then not working anymore.
 		return this.getElement(Polynomial.<DualisticElement<BigInteger>>getInstance(coefficients,
-																					this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
-	}
-
-	public PolynomialElement getElement(BigInteger... values) {
-		if (values == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.getElement(ProductSet.getInstance(this.getSemiRing(), values.length).getElementFrom(values));
+																					this.getSemiRing().getZeroElement(),
+																					this.getSemiRing().getOneElement()));
 	}
 
 	public PolynomialElement getElement(DualisticElement... elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.getElement(Tuple.getInstance(elements));
 	}
 
 	public PolynomialElement getElement(Tuple coefficients) {
-		if (coefficients == null || !coefficients.isEmpty() && (!coefficients.getSet().isUniform()
-			   || !coefficients.getSet().getFirst().isEquivalent(this.getSemiRing()))) {
-			throw new IllegalArgumentException();
+		if (coefficients == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-
+		if (!coefficients.isEmpty() && (!coefficients.getSet().isUniform() || !coefficients.getSet().getFirst().
+			   isEquivalent(this.getSemiRing()))) {
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, coefficients);
+		}
 		Map<Integer, DualisticElement<BigInteger>> coefficientMap = new HashMap();
 		for (int i = 0; i < coefficients.getArity(); i++) {
 			coefficientMap.put(i, (DualisticElement<BigInteger>) coefficients.getAt(i));
@@ -132,10 +131,31 @@ public class PolynomialSemiRing
 													  this.getSemiRing().getOneElement()));
 	}
 
+	public PolynomialElement getElementFrom(int... values) throws UniCryptException {
+		if (values == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		BigInteger[] bigIntegers = new BigInteger[values.length];
+		for (int i = 0; i < values.length; i++) {
+			bigIntegers[i] = BigInteger.valueOf(values[i]);
+		}
+		return this.getElementFrom(bigIntegers);
+	}
+
+	public PolynomialElement getElementFrom(BigInteger... values) throws UniCryptException {
+		if (values == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		return this.getElement(ProductSet.getInstance(this.getSemiRing(), values.length).getElementFrom(values));
+	}
+
 	public PolynomialElement getElementByRoots(Tuple roots) {
-		if (roots == null || roots.isEmpty() || !roots.getSet().isUniform()
-			   || !roots.getSet().getFirst().isEquivalent(this.getSemiRing())) {
-			throw new IllegalArgumentException();
+		if (roots == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (roots.isEmpty() || !roots.getSet().isUniform() || !roots.getSet().getFirst().
+			   isEquivalent(this.getSemiRing())) {
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, roots);
 		}
 
 		DualisticElement zero = this.getSemiRing().getZeroElement();
@@ -160,32 +180,38 @@ public class PolynomialSemiRing
 		return this.getRandomElement(degree, HybridRandomByteSequence.getInstance());
 	}
 
-	public PolynomialElement getRandomElement(int degree, RandomByteSequence randomByteSequence) {
-		if (degree < 0 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
+	// TODO Generalize to getRandomElements by replacing HybridRandomByteSequence by RandomByteSequence
+	public PolynomialElement getRandomElement(int degree, HybridRandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		Map<Integer, DualisticElement<BigInteger>> coefficientMap
-			   = new HashMap<>();
+		if (degree < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, degree);
+		}
+		Map<Integer, DualisticElement<BigInteger>> coefficientMap = new HashMap<>();
 		for (int i = 0; i <= degree; i++) {
 			DualisticElement<BigInteger> coefficient = this.getSemiRing().getRandomElement(randomByteSequence);
 			if (!coefficient.isZero()) {
 				coefficientMap.put(i, coefficient);
 			}
 		}
-		return this.getElementUnchecked(coefficientMap);
+		return this.abstractGetElement(coefficientMap);
 	}
 
 	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero) {
 		return this.getRandomMonicElement(degree, a0NotZero, HybridRandomByteSequence.getInstance());
 	}
 
+	// TODO Generalize to getRandomElements by replacing HybridRandomByteSequence by RandomByteSequence
 	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero,
-		   RandomByteSequence randomByteSequence) {
-		if (degree < 0 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
+		   HybridRandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		Map<Integer, DualisticElement<BigInteger>> coefficientMap
-			   = new HashMap<>();
+		if (degree < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, degree);
+		}
+		Map<Integer, DualisticElement<BigInteger>> coefficientMap = new HashMap<>();
 		for (int i = 0; i <= degree - 1; i++) {
 			DualisticElement<BigInteger> coefficient = this.getSemiRing().getRandomElement(randomByteSequence);
 			while (i == 0 && a0NotZero && coefficient.isZero()) {
@@ -196,25 +222,19 @@ public class PolynomialSemiRing
 			}
 		}
 		coefficientMap.put(degree, this.getSemiRing().getOneElement());
-
-		return getElementUnchecked(coefficientMap);
+		return this.abstractGetElement(coefficientMap);
 	}
 
-	protected PolynomialElement getElementUnchecked(Map<Integer, DualisticElement<BigInteger>> coefficientMap) {
-		return abstractGetElement(Polynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(),
-														 this.getSemiRing().getOneElement()));
+	protected PolynomialElement abstractGetElement(Map<Integer, DualisticElement<BigInteger>> coefficientMap) {
+		return this.abstractGetElement(Polynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(),
+															  this.getSemiRing().getOneElement()));
 	}
 
-	protected PolynomialElement getElementUnchecked(BitArray coefficients) {
-		//TODO: Change back to protected -> ZModToBinaryEncoder is then not working anymore.
-		return abstractGetElement(Polynomial.getInstance(coefficients, this.getSemiRing().getZeroElement(),
-														 this.getSemiRing().getOneElement()));
+	protected PolynomialElement abstractGetElement(BitArray coefficients) {
+		return this.abstractGetElement(Polynomial.getInstance(coefficients, this.getSemiRing().getZeroElement(),
+															  this.getSemiRing().getOneElement()));
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
 	protected boolean abstractEquals(final Set set) {
 		final PolynomialSemiRing other = (PolynomialSemiRing) set;
@@ -253,8 +273,6 @@ public class PolynomialSemiRing
 	@Override
 	protected Converter<Polynomial<? extends DualisticElement<BigInteger>>, BigInteger> abstractGetBigIntegerConverter() {
 		return new AbstractBigIntegerConverter<Polynomial<? extends DualisticElement<BigInteger>>>(null) {
-			private static final long serialVersionUID = 1L;
-			// class not needed
 
 			@Override
 			protected BigInteger abstractConvert(Polynomial<? extends DualisticElement<BigInteger>> polynomial) {
@@ -272,32 +290,36 @@ public class PolynomialSemiRing
 				DualisticElement[] elements = new DualisticElement[bigIntegers.length];
 				int i = 0;
 				for (BigInteger bigInteger : bigIntegers) {
-					DualisticElement<BigInteger> element = getSemiRing().getElementFrom(bigInteger);
-					elements[i] = element;
+					try {
+						elements[i] = getSemiRing().getElementFrom(bigInteger);
+					} catch (UniCryptException exception) {
+						throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, exception, value);
+					}
 					i++;
 				}
 				Polynomial<? extends DualisticElement<BigInteger>> polynomial
 					   = Polynomial.<DualisticElement<BigInteger>>getInstance(elements,
-																			  getSemiRing().getZeroElement(), getSemiRing().getOneElement());
+																			  getSemiRing().getZeroElement(),
+																			  getSemiRing().getOneElement());
 				return polynomial;
 			}
 		};
 	}
 
 	@Override
-	protected PolynomialElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException("Not possible for infinite order.");
+	protected Sequence<PolynomialElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override
-	protected PolynomialElement defaultSelfApplyAlgorithm(PolynomialElement element, BigInteger posAmount) {
+	protected PolynomialElement defaultSelfApplyAlgorithm(PolynomialElement element, BigInteger posFactor) {
 		// TODO Optimize for binary
 		Polynomial<? extends DualisticElement<BigInteger>> polynomial = element.getValue();
 		Map<Integer, DualisticElement<BigInteger>> coefficientMap = new HashMap();
 		for (Integer i : polynomial.getCoefficientIndices()) {
-			coefficientMap.put(i, polynomial.getCoefficient(i).selfApply(posAmount));
+			coefficientMap.put(i, polynomial.getCoefficient(i).selfApply(posFactor));
 		}
-		return this.getElementUnchecked(coefficientMap);
+		return this.abstractGetElement(coefficientMap);
 	}
 
 	@Override
@@ -307,7 +329,7 @@ public class PolynomialSemiRing
 
 		if (this.isBinary()) {
 			BitArray coefficients = polynomial1.getCoefficients().xor(polynomial2.getCoefficients(), false);
-			return this.getElementUnchecked(coefficients);
+			return this.abstractGetElement(coefficients);
 		} else {
 			Map<Integer, DualisticElement<BigInteger>> coefficientMap = new HashMap();
 			for (Integer i : polynomial1.getCoefficientIndices()) {
@@ -321,13 +343,13 @@ public class PolynomialSemiRing
 					coefficientMap.put(i, coefficient.add(polynomial2.getCoefficient(i)));
 				}
 			}
-			return this.getElementUnchecked(coefficientMap);
+			return this.abstractGetElement(coefficientMap);
 		}
 	}
 
 	@Override
 	protected PolynomialElement abstractGetIdentityElement() {
-		return this.getElementUnchecked(new HashMap<Integer, DualisticElement<BigInteger>>());
+		return this.abstractGetElement(new HashMap<Integer, DualisticElement<BigInteger>>());
 	}
 
 	@Override
@@ -340,13 +362,14 @@ public class PolynomialSemiRing
 		}
 
 		if (this.isBinary()) {
-			return this.getElementUnchecked(multiplyBinary(polynomial1, polynomial2));
+			return this.abstractGetElement(multiplyBinary(polynomial1, polynomial2));
 		} else {
-			return this.getElementUnchecked(multiplyNonBinary(polynomial1, polynomial2));
+			return this.abstractGetElement(multiplyNonBinary(polynomial1, polynomial2));
 		}
 	}
 
-	protected BitArray multiplyBinary(Polynomial<? extends DualisticElement<BigInteger>> polynomial1,
+	protected BitArray multiplyBinary(
+		   Polynomial<? extends DualisticElement<BigInteger>> polynomial1,
 		   Polynomial<? extends DualisticElement<BigInteger>> polynomial2) {
 		BitArray c1 = polynomial1.getCoefficients();
 		BitArray c2 = polynomial2.getCoefficients();
@@ -367,9 +390,9 @@ public class PolynomialSemiRing
 		return result;
 	}
 
-	protected Map<Integer, DualisticElement<BigInteger>>
-		   multiplyNonBinary(Polynomial<? extends DualisticElement<BigInteger>> polynomial1,
-				  Polynomial<? extends DualisticElement<BigInteger>> polynomial2) {
+	protected Map<Integer, DualisticElement<BigInteger>> multiplyNonBinary(
+		   Polynomial<? extends DualisticElement<BigInteger>> polynomial1,
+		   Polynomial<? extends DualisticElement<BigInteger>> polynomial2) {
 		Map<Integer, DualisticElement<BigInteger>> coefficientMap = new HashMap();
 		for (Integer i : polynomial1.getCoefficientIndices()) {
 			for (Integer j : polynomial2.getCoefficientIndices()) {
@@ -392,7 +415,7 @@ public class PolynomialSemiRing
 		Map<Integer, DualisticElement<BigInteger>> coefficientMap
 			   = new HashMap<>();
 		coefficientMap.put(0, this.getSemiRing().getOneElement());
-		return getElementUnchecked(coefficientMap);
+		return abstractGetElement(coefficientMap);
 	}
 
 	@Override

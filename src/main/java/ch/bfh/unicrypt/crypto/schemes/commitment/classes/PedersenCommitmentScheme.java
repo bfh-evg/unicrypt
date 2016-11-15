@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,9 +42,10 @@
 package ch.bfh.unicrypt.crypto.schemes.commitment.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
@@ -52,7 +53,6 @@ import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 
 public class PedersenCommitmentScheme
 	   extends AbstractRandomizedCommitmentScheme<ZMod, ZModElement, CyclicGroup, Element, ZMod> {
@@ -90,25 +90,24 @@ public class PedersenCommitmentScheme
 	}
 
 	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup) {
-		return PedersenCommitmentScheme.getInstance(cyclicGroup, ReferenceRandomByteSequence.getInstance());
+		return PedersenCommitmentScheme.getInstance(cyclicGroup, DeterministicRandomByteSequence.getInstance());
 	}
 
 	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup,
-		   ReferenceRandomByteSequence referenceRandomByteSequence) {
-		if (cyclicGroup == null || referenceRandomByteSequence == null) {
+		   DeterministicRandomByteSequence randomByteSequence) {
+		if (cyclicGroup == null || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		// TODO: is this thread safe???
-		referenceRandomByteSequence.reset();
-		Tuple generators = cyclicGroup.getIndependentGenerators(2, referenceRandomByteSequence);
-		return new PedersenCommitmentScheme(cyclicGroup, generators.getAt(0), generators.getAt(1));
+		Sequence<Element> generators = cyclicGroup.getIndependentGenerators(randomByteSequence);
+		return new PedersenCommitmentScheme(cyclicGroup, generators.get(0), generators.get(1));
 	}
 
 	public static PedersenCommitmentScheme getInstance(Element generator1, Element generator2) {
-		if (generator1 == null || generator2 == null || !generator1.getSet().isEquivalent(generator2.getSet())
-			   || !generator1.getSet().isCyclic() || !generator1.isGenerator() || !generator2.isGenerator()) {
+		if (generator1 == null || generator2 == null || !generator1.getSet().isEquivalent(generator2.getSet()) ||
+			   !generator1.getSet().isCyclic() || !generator1.isGenerator() || !generator2.isGenerator()) {
 			throw new IllegalArgumentException();
 		}
 		return new PedersenCommitmentScheme((CyclicGroup) generator1.getSet(), generator1, generator2);
 	}
+
 }

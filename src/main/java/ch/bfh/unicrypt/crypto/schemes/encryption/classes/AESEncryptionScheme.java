@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -43,7 +43,10 @@ package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.ByteArrayKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
@@ -52,7 +55,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -64,8 +66,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AESEncryptionScheme
-	   extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement,
-	   FixedByteArraySet, FiniteByteArrayElement, ByteArrayKeyGenerator> {
+	   extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, ByteArrayKeyGenerator> {
+
 	private static final long serialVersionUID = 1L;
 
 	public enum KeyLength {
@@ -109,10 +111,8 @@ public class AESEncryptionScheme
 		this.initializationVector = initializationVector;
 		try {
 			this.cipher = Cipher.getInstance(ALGORITHM_NAME + "/" + mode + "/NoPadding");
-		} catch (NoSuchAlgorithmException ex) {
-			throw new RuntimeException();
-		} catch (NoSuchPaddingException ex) {
-			throw new RuntimeException();
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException exception) {
+			throw new UniCryptRuntimeException(ErrorCode.JAVA_AES_FAILURE, exception);
 		}
 	}
 
@@ -159,19 +159,14 @@ public class AESEncryptionScheme
 			try {
 				if (mode == Mode.CBC) {
 					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec,
-													 new IvParameterSpec(initializationVector.getBytes()));
+								new IvParameterSpec(initializationVector.getBytes()));
 				} else {
 					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
 				}
 				encryptedBytes = cipher.doFinal(message.getValue().getBytes());
-			} catch (InvalidKeyException ex) {
-				throw new RuntimeException();
-			} catch (IllegalBlockSizeException ex) {
-				throw new RuntimeException();
-			} catch (BadPaddingException ex) {
-				throw new RuntimeException();
-			} catch (InvalidAlgorithmParameterException ex) {
-				throw new RuntimeException();
+			} catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException
+				   | InvalidAlgorithmParameterException exception) {
+				throw new UniCryptRuntimeException(ErrorCode.JAVA_AES_FAILURE, exception);
 			}
 			return this.getCoDomain().getElement(encryptedBytes);
 		}
@@ -194,19 +189,14 @@ public class AESEncryptionScheme
 			try {
 				if (mode == Mode.CBC) {
 					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec,
-													 new IvParameterSpec(initializationVector.getBytes()));
+								new IvParameterSpec(initializationVector.getBytes()));
 				} else {
 					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
 				}
 				message = cipher.doFinal(encryption.getValue().getBytes());
-			} catch (InvalidKeyException e) {
-				throw new RuntimeException();
-			} catch (IllegalBlockSizeException e) {
-				throw new RuntimeException();
-			} catch (BadPaddingException e) {
-				throw new RuntimeException();
-			} catch (InvalidAlgorithmParameterException ex) {
-				throw new RuntimeException();
+			} catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException
+				   | InvalidAlgorithmParameterException exception) {
+				throw new UniCryptRuntimeException(ErrorCode.JAVA_AES_FAILURE, exception);
 			}
 			return this.getCoDomain().getElement(message);
 		}
@@ -217,7 +207,7 @@ public class AESEncryptionScheme
 	 * Convenience method in order to easily get a secret AES-key given a password
 	 * <p>
 	 * @param password
-	 * @return
+	 * @return Returns an AES-key
 	 */
 	public FiniteByteArrayElement getPasswordBasedKey(String password) {
 		return super.getSecretKeyGenerator().generateSecretKey(password);
@@ -228,7 +218,7 @@ public class AESEncryptionScheme
 	 * <p>
 	 * @param password
 	 * @param salt
-	 * @return
+	 * @return Returns an AES-key
 	 */
 	public FiniteByteArrayElement getPasswordBasedKey(String password, ByteArray salt) {
 		return super.getSecretKeyGenerator().generateSecretKey(password, salt);
@@ -236,7 +226,7 @@ public class AESEncryptionScheme
 
 	public static AESEncryptionScheme getInstance() {
 		return AESEncryptionScheme.getInstance(AESEncryptionScheme.DEFAULT_KEY_LENGTH, AESEncryptionScheme.DEFAULT_MODE,
-																					   AESEncryptionScheme.DEFAULT_IV);
+											   AESEncryptionScheme.DEFAULT_IV);
 	}
 
 	public static AESEncryptionScheme getInstance(KeyLength keyLength, Mode mode, ByteArray initializationVector) {

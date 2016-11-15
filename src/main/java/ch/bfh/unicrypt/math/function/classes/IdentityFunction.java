@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,50 +41,45 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a generalized identity function f:X->X^n with f(x)=(x,...,x) for all elements x
  * in X. This class represents the concept of an identity function f:X->X with f(x)=x for all elements x in X.
- * <p/>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
  */
 public class IdentityFunction
 	   extends AbstractFunction<IdentityFunction, Set, Element, Set, Element> {
+
 	private static final long serialVersionUID = 1L;
 
 	private IdentityFunction(final Set set) {
 		super(set, set);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
 		return element;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the default constructor for this class. It creates a generalized identity function for a given group,
 	 * which reproduces the input value multiple time.
-	 * <p/>
+	 * <p>
 	 * @param set The given set
-	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
-	 * @throws IllegalArgumentException if {@code arity} is negative
+	 * @return Returns an instance of this class
 	 */
 	public static IdentityFunction getInstance(final Set set) {
 		if (set == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new IdentityFunction(set);
 	}

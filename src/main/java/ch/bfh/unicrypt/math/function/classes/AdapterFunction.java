@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,12 +41,14 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.util.Arrays;
 
 /**
@@ -58,6 +60,7 @@ import java.util.Arrays;
  */
 public class AdapterFunction
 	   extends AbstractFunction<AdapterFunction, ProductSet, Tuple, ProductSet, Tuple> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final int[] indices;
@@ -68,7 +71,7 @@ public class AdapterFunction
 	}
 
 	public int[] getIndices() {
-		return this.indices;
+		return Arrays.copyOf(this.indices, this.indices.length);
 	}
 
 	@Override
@@ -76,9 +79,6 @@ public class AdapterFunction
 		return Arrays.equals(this.getIndices(), function.getIndices());
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Tuple abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
 		Element[] elements = new Element[this.getIndices().length];
@@ -88,9 +88,6 @@ public class AdapterFunction
 		return this.getCoDomain().getElement(elements);
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the general constructor of this class. The resulting function selects and returns in a hierarchy of tuple
 	 * elements the element that corresponds to a given sequence of indices (e.g., 0,3,2 for the third element in the
@@ -98,13 +95,11 @@ public class AdapterFunction
 	 * <p>
 	 * @param productSet The product group that defines the domain of the function
 	 * @param indices    The given sequence of indices
-	 * @throws IllegalArgumentException  of {@code group} is null
-	 * @throws IllegalArgumentException  if {@code indices} is null or if its length exceeds the hierarchy's depth
-	 * @throws IndexOutOfBoundsException if {@code indices} contains an out-of-bounds index
+	 * @return The new function
 	 */
 	public static AdapterFunction getInstance(final ProductSet productSet, final int... indices) {
 		if (productSet == null || indices == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, productSet, indices);
 		}
 		Set[] sets = new Set[indices.length];
 		for (int i = 0; i < indices.length; i++) {

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,12 +41,13 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.crypto.keygenerator.classes.DiscreteLogarithmKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSignatureScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
@@ -76,15 +77,17 @@ public class DSASignatureScheme<MS extends Set>
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
 
-	protected DSASignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator, ConvertMethod convertMethod, HashMethod hashMethod) {
-		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), cyclicGroup.getZModOrder(), convertMethod, hashMethod);
+	protected DSASignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator,
+		   ConvertMethod convertMethod, HashMethod hashMethod) {
+		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), cyclicGroup.getZModOrder(),
+			  convertMethod, hashMethod);
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
 	}
 
 	@Override
-	protected DiscreteLogarithmKeyGenerator abstractGetKeyPairGenerator(StringToByteArray converter) {
-		return DiscreteLogarithmKeyGenerator.getInstance(this.generator, converter);
+	protected DiscreteLogarithmKeyGenerator abstractGetKeyPairGenerator() {
+		return DiscreteLogarithmKeyGenerator.getInstance(this.generator);
 	}
 
 	public final CyclicGroup getCyclicGroup() {
@@ -123,26 +126,28 @@ public class DSASignatureScheme<MS extends Set>
 
 	@Override
 	protected Function abstractGetVerificationFunction() {
-		ZMod zMod = this.cyclicGroup.getZModOrder();
-		ProductSet inputSpace
-			   = ProductSet.getInstance(this.getVerificationKeySpace(), this.messageSpace, this.signatureSpace);
-		return null;
+		throw new UniCryptRuntimeException(ErrorCode.NOT_YET_IMPLEMENTED, this);
 	}
 
 	public static <MS extends Set> DSASignatureScheme getInstance(MS messageSpace, CyclicGroup cyclicGroup) {
-		return DSASignatureScheme.getInstance(messageSpace, cyclicGroup, ConvertMethod.getInstance(), HashMethod.getInstance());
+		return DSASignatureScheme.getInstance(messageSpace, cyclicGroup, ConvertMethod.getInstance(), HashMethod.
+											  getInstance());
 	}
 
 	public static <MS extends Set, V> DSASignatureScheme
-		   getInstance(MS messageSpace, CyclicGroup cyclicGroup, ConvertMethod<V> convertMethod, HashMethod<V> hashMethod) {
-		if (messageSpace == null || cyclicGroup == null || !cyclicGroup.isCyclic() || convertMethod == null || hashMethod == null) {
+		   getInstance(MS messageSpace, CyclicGroup cyclicGroup, ConvertMethod<V> convertMethod,
+				  HashMethod<V> hashMethod) {
+		if (messageSpace == null || cyclicGroup == null || !cyclicGroup.isCyclic() || convertMethod == null
+			   || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new DSASignatureScheme<>(messageSpace, cyclicGroup, cyclicGroup.getDefaultGenerator(), convertMethod, hashMethod);
+		return new DSASignatureScheme<>(messageSpace, cyclicGroup, cyclicGroup.getDefaultGenerator(), convertMethod,
+										hashMethod);
 	}
 
 	public static <MS extends Set> DSASignatureScheme getInstance(MS messageSpace, Element generator) {
-		return DSASignatureScheme.getInstance(messageSpace, generator, ConvertMethod.getInstance(), HashMethod.getInstance());
+		return DSASignatureScheme.getInstance(messageSpace, generator, ConvertMethod.getInstance(), HashMethod.
+											  getInstance());
 	}
 
 	public static <MS extends Set, V> DSASignatureScheme
@@ -151,7 +156,8 @@ public class DSASignatureScheme<MS extends Set>
 			   || !generator.isGenerator() || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new DSASignatureScheme<>(messageSpace, (CyclicGroup) generator.getSet(), generator, convertMethod, hashMethod);
+		return new DSASignatureScheme<>(messageSpace, (CyclicGroup) generator.getSet(), generator, convertMethod,
+										hashMethod);
 	}
 
 }

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -52,9 +52,10 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link MultiplicativeSemiGroup}.
  * <p>
- * @param <E> Generic type of the elements of this semigroup
- * @param <V> Generic type of values stored in the elements of this semigroup
- * @author
+ * @param <E> The generic type of the elements of this semigroup
+ * @param <V> The generic type of the values stored in the elements of this semigroup
+ * <p>
+ * @author R. Haenni
  */
 public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeElement<V>, V>
 	   extends AbstractSemiGroup<E, V>
@@ -87,18 +88,18 @@ public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeEl
 	}
 
 	@Override
-	public final E power(final Element element, final BigInteger amount) {
-		return this.selfApply(element, amount);
+	public final E power(final Element element, final long exponent) {
+		return this.selfApply(element, exponent);
 	}
 
 	@Override
-	public final E power(final Element element, final Element<BigInteger> amount) {
-		return this.selfApply(element, amount);
+	public final E power(final Element element, final BigInteger exponent) {
+		return this.selfApply(element, exponent);
 	}
 
 	@Override
-	public final E power(final Element element, final long amount) {
-		return this.selfApply(element, amount);
+	public final E power(final Element element, final Element<BigInteger> exponent) {
+		return this.selfApply(element, exponent);
 	}
 
 	@Override
@@ -107,8 +108,8 @@ public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeEl
 	}
 
 	@Override
-	public final E productOfPowers(Element[] elements, BigInteger[] amounts) {
-		return this.multiSelfApply(elements, amounts);
+	public final E productOfPowers(Element[] elements, BigInteger[] exponents) {
+		return this.multiSelfApply(elements, exponents);
 	}
 
 }

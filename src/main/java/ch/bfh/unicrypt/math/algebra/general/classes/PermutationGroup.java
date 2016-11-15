@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,13 +41,18 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.math.Permutation;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.PermutationToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.math.Permutation;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomByteSequenceIterator;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +70,7 @@ import java.util.Map;
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public class PermutationGroup
 	   extends AbstractGroup<PermutationElement, Permutation> {
@@ -74,12 +79,6 @@ public class PermutationGroup
 
 	private final int size;
 
-	/**
-	 * Returns a new instance of this class for a given {@code size >= 0}.
-	 * <p>
-	 * @param size The size
-	 * @throws IllegalArgumentException if {@code size} is negative
-	 */
 	private PermutationGroup(final int size) {
 		super(Permutation.class);
 		this.size = size;
@@ -95,22 +94,51 @@ public class PermutationGroup
 		return this.size;
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
 	protected String defaultToStringContent() {
 		return "" + this.getSize();
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
-	protected PermutationElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
-		return this.abstractGetElement(Permutation.getRandomInstance(this.getSize(), randomByteSequence));
+	protected Sequence<PermutationElement> abstractGetRandomElements(final RandomByteSequence randomByteSequence) {
+		final RandomByteSequenceIterator iterator = randomByteSequence.iterator();
+		return new Sequence<PermutationElement>() {
+
+			@Override
+			public SequenceIterator<PermutationElement> iterator() {
+				return new SequenceIterator<PermutationElement>() {
+
+					@Override
+					protected PermutationElement abstractNext() {
+						// Durstenfeld's version of the Fisher–Yates shuffle algorithm
+						int[] permutationVector = new int[size];
+						int randomIndex;
+						for (int i = 0; i < size; i++) {
+							// the following lines are necessary to use the existing random integer generation on the
+							// same iterator
+							randomIndex = new RandomByteSequence() {
+
+								@Override
+								public RandomByteSequenceIterator iterator() {
+									return iterator;
+								}
+
+							}.getRandomIntegerSequence(i).get();
+							permutationVector[i] = permutationVector[randomIndex];
+							permutationVector[randomIndex] = i;
+						}
+						return abstractGetElement(Permutation.getInstance(permutationVector));
+					}
+
+					@Override
+					public boolean hasNext() {
+						return true;
+					}
+
+				};
+			}
+
+		};
 	}
 
 	@Override
@@ -161,26 +189,22 @@ public class PermutationGroup
 		return hash;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static final Map<Integer, PermutationGroup> instances = new HashMap<>();
+	private static final Map<Integer, PermutationGroup> INSTANCES = new HashMap<>();
 
 	/**
 	 * Returns a the unique instance of this class for a given non-negative permutation size.
 	 * <p>
 	 * @param size The size of the permutation
-	 * @return
-	 * @throws IllegalArgumentException if {@code modulus} is null, zero, or negative
+	 * @return The unique instance of this class for the provided size
 	 */
 	public static PermutationGroup getInstance(final int size) {
 		if (size < 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE);
 		}
-		PermutationGroup instance = PermutationGroup.instances.get(Integer.valueOf(size));
+		PermutationGroup instance = PermutationGroup.INSTANCES.get(size);
 		if (instance == null) {
 			instance = new PermutationGroup(size);
-			PermutationGroup.instances.put(Integer.valueOf(size), instance);
+			PermutationGroup.INSTANCES.put(size, instance);
 		}
 		return instance;
 	}

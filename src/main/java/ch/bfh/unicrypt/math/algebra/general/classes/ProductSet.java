@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,10 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
-import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
-import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptException;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
@@ -52,9 +51,14 @@ import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractConverter;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.sequence.Mapping;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomByteSequenceIterator;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.MultiSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
@@ -63,13 +67,12 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.Iterator;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ProductSet
 	   extends AbstractSet<Tuple, DenseArray<Element>>
@@ -92,9 +95,9 @@ public class ProductSet
 		return this.getElement(DenseArray.getInstance(elements));
 	}
 
-	public final Tuple getElementFrom(final int... values) {
+	public final Tuple getElementFrom(final int... values) throws UniCryptException {
 		if (values == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		BigInteger[] bigIntegers = new BigInteger[values.length];
 		for (int i = 0; i < values.length; i++) {
@@ -103,16 +106,44 @@ public class ProductSet
 		return this.getElementFrom(bigIntegers);
 	}
 
-	public final Tuple getElementFrom(BigInteger... values) {
-		if (values == null || values.length != this.getLength()) {
-			throw new IllegalArgumentException();
+	public final Tuple getElementFrom(BigInteger... values) throws UniCryptException {
+		if (values == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (values.length != this.getLength()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, values);
 		}
 		Element[] elements = new Element[this.getLength()];
 		for (int i : this.getAllIndices()) {
 			elements[i] = this.getAt(i).getElementFrom(values[i]);
-			if (elements[i] == null) {
-				return null; // no such element
-			}
+		}
+		return this.abstractGetElement(DenseArray.getInstance(elements));
+	}
+
+	public final Tuple getElementFrom(ByteArray... values) throws UniCryptException {
+		if (values == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (values.length != this.getLength()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, values);
+		}
+		Element[] elements = new Element[this.getLength()];
+		for (int i : this.getAllIndices()) {
+			elements[i] = this.getAt(i).getElementFrom(values[i]);
+		}
+		return this.abstractGetElement(DenseArray.getInstance(elements));
+	}
+
+	public final Tuple getElementFrom(String... values) throws UniCryptException {
+		if (values == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (values.length != this.getLength()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, values);
+		}
+		Element[] elements = new Element[this.getLength()];
+		for (int i : this.getAllIndices()) {
+			elements[i] = this.getAt(i).getElementFrom(values[i]);
 		}
 		return this.abstractGetElement(DenseArray.getInstance(elements));
 	}
@@ -120,7 +151,7 @@ public class ProductSet
 	@Override
 	protected BigInteger abstractGetOrder() {
 		if (this.isEmpty()) {
-			return BigInteger.ONE;
+			return MathUtil.ONE;
 		}
 		if (this.isUniform()) {
 			Set first = this.getFirst();
@@ -129,7 +160,7 @@ public class ProductSet
 			}
 			return first.getOrder();
 		}
-		BigInteger result = BigInteger.ONE;
+		BigInteger result = MathUtil.ONE;
 		for (Set set : this.sets) {
 			if (!set.isFinite()) {
 				return Set.INFINITE;
@@ -177,23 +208,57 @@ public class ProductSet
 
 			@Override
 			protected BigInteger abstractConvert(DenseArray<Element> elements) {
-				return Tuple.getInstance(elements).defaultConvertToBigInteger();
+				return Tuple.getInstance(elements).convertToBigInteger();
 			}
 
 			@Override
 			protected DenseArray<Element> abstractReconvert(BigInteger value) {
-				return getElementFrom(value).getValue();
+				try {
+					return getElementFrom(value).getValue();
+				} catch (UniCryptException exception) {
+					throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONVERSION_FAILURE, exception, value);
+				}
 			}
 		};
 	}
 
 	@Override
-	protected Tuple abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		final Element[] randomElements = new Element[this.getLength()];
-		for (int i : this.getAllIndices()) {
-			randomElements[i] = this.getAt(i).getRandomElement(randomByteSequence);
-		}
-		return this.abstractGetElement(DenseArray.getInstance(randomElements));
+	protected Sequence<Tuple> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		final int tupleLenght = this.getLength();
+		final RandomByteSequenceIterator iterator = randomByteSequence.iterator();
+		return new Sequence<Tuple>() {
+
+			@Override
+			public SequenceIterator<Tuple> iterator() {
+				return new SequenceIterator<Tuple>() {
+
+					@Override
+					protected Tuple abstractNext() {
+						Element[] elements = new Element[tupleLenght];
+						for (int i = 0; i < tupleLenght; i++) {
+							// the following lines are necessary to use the existing random integer generation on the
+							// same iterator
+							HybridRandomByteSequence rbs = new HybridRandomByteSequence() {
+
+								@Override
+								public RandomByteSequenceIterator iterator() {
+									return iterator;
+								}
+							};
+							elements[i] = getAt(i).getRandomElement(rbs);
+						}
+						return abstractGetElement(DenseArray.getInstance(elements));
+					}
+
+					@Override
+					public boolean hasNext() {
+						return true;
+					}
+
+				};
+			}
+
+		};
 	}
 
 	@Override
@@ -221,13 +286,13 @@ public class ProductSet
 	}
 
 	@Override
-	protected <W> Tuple defaultGetElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) {
+	protected <W> Tuple defaultGetElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException {
 		if (tree.isLeaf()) {
-			throw new IllegalArgumentException();
+			throw new UniCryptException(ErrorCode.ELEMENT_CONVERSION_FAILURE);
 		}
 		Node<W> node = (Node<W>) tree;
 		if (this.getLength() != node.getSize()) {
-			throw new IllegalArgumentException();
+			throw new UniCryptException(ErrorCode.ELEMENT_CONVERSION_FAILURE);
 		}
 		Element[] elements = new Element[this.getLength()];
 		int i = 0;
@@ -236,21 +301,6 @@ public class ProductSet
 			i++;
 		}
 		return this.getElement(DenseArray.getInstance(elements));
-	}
-
-	@Override
-	protected Tuple defaultGetElementFrom(BigInteger value) {
-		return this.getElementFrom(value, ConvertMethod.getInstance(BigInteger.class), BigIntegerAggregator.getInstance());
-	}
-
-	@Override
-	protected Tuple defaultGetElementFrom(ByteArray value) {
-		return this.getElementFrom(value, ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
-	}
-
-	@Override
-	protected Tuple defaultGetElementFrom(String value) {
-		return this.getElementFrom(value, ConvertMethod.getInstance(String.class), StringAggregator.getInstance());
 	}
 
 	@Override
@@ -339,14 +389,14 @@ public class ProductSet
 	@Override
 	public Set getAt(int... indices) {
 		if (indices == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		Set set = this;
 		for (final int index : indices) {
 			if (set.isProduct()) {
 				set = ((ProductSet) set).getAt(index);
 			} else {
-				throw new IllegalArgumentException();
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, indices, index);
 			}
 		}
 		return set;
@@ -462,7 +512,7 @@ public class ProductSet
 		if (this.isUniform()) {
 			return this.getFirst().getOrderLowerBound().pow(this.getLength());
 		}
-		BigInteger result = BigInteger.ONE;
+		BigInteger result = MathUtil.ONE;
 		for (Set set : this.sets) {
 			result = result.multiply(set.getOrderLowerBound());
 		}
@@ -474,7 +524,7 @@ public class ProductSet
 		if (this.isUniform()) {
 			return this.getFirst().getOrderUpperBound().pow(this.getLength());
 		}
-		BigInteger result = BigInteger.ONE;
+		BigInteger result = MathUtil.ONE;
 		for (Set set : this.sets) {
 			if (set.getOrderUpperBound().equals(Set.INFINITE)) {
 				return Set.INFINITE;
@@ -538,7 +588,7 @@ public class ProductSet
 
 	public static ProductSet getInstance(DenseArray<Set> sets) {
 		if (sets == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		boolean isSemiGroup = true;
 		boolean isMonoid = true;

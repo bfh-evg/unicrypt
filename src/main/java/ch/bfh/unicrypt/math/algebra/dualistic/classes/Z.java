@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,13 +41,16 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -66,6 +69,7 @@ public class Z
 	   extends AbstractCyclicRing<ZElement, BigInteger> {
 
 	private static final long serialVersionUID = 1L;
+	private static Z instance;
 
 	private Z() {
 		super(BigInteger.class);
@@ -79,13 +83,9 @@ public class Z
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
-	protected ZElement defaultSelfApply(ZElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().multiply(amount));
+	protected ZElement defaultSelfApply(ZElement element, BigInteger factor) {
+		return this.abstractGetElement(element.getValue().multiply(factor));
 	}
 
 	@Override
@@ -94,25 +94,13 @@ public class Z
 	}
 
 	@Override
-	protected ZElement defaultGetRandomGenerator(final RandomByteSequence randomByteSequence) {
-		if (randomByteSequence.getRandomNumberGenerator().nextBoolean()) {
-			return this.getDefaultGenerator();
-		}
-		return this.getDefaultGenerator().invert();
-	}
-
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
-	@Override
 	protected ZElement abstractApply(ZElement element1, ZElement element2) {
 		return this.abstractGetElement(element1.getValue().add(element2.getValue()));
 	}
 
 	@Override
 	protected ZElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ZERO);
+		return this.abstractGetElement(MathUtil.ZERO);
 	}
 
 	@Override
@@ -127,12 +115,12 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetOne() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElement(MathUtil.ONE);
 	}
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return Group.INFINITE;
+		return Set.INFINITE;
 	}
 
 	@Override
@@ -146,23 +134,23 @@ public class Z
 	}
 
 	@Override
+	protected Sequence<ZElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	}
+
+	@Override
 	protected Converter<BigInteger, BigInteger> abstractGetBigIntegerConverter() {
 		return BigIntegerToBigInteger.getInstance();
 	}
 
 	@Override
-	protected ZElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	protected ZElement abstractGetDefaultGenerator() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElement(MathUtil.ONE);
 	}
 
 	@Override
 	protected boolean abstractIsGenerator(final ZElement element) {
-		return element.getValue().abs().equals(BigInteger.ONE);
+		return element.getValue().abs().equals(MathUtil.ONE);
 	}
 
 	@Override
@@ -174,11 +162,6 @@ public class Z
 	protected int abstractHashCode() {
 		return 1;
 	}
-
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static Z instance;
 
 	/**
 	 * Returns the unique instance of this class for an infinite distribution.

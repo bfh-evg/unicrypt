@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -43,39 +43,57 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
+import java.math.BigInteger;
 
 /**
- * This interface represents the mathematical concept of a field. A field is a commutative ring in which one can divide
- * by any nonzero element. It is implemented as a specialization of {@link Ring}.
+ * This interface represents the mathematical concept of a field. A field is a commutative ring with the additional
+ * property that the set of non-zero elements together with multiplication forms a second commutative group. Therefore,
+ * both operations form a commutative group with corresponding additive and multiplicative inverses.
  * <p>
- * @author rolfhaenni
- * @param <V> Generic type of values stored in the elements of this field
+ * The field interface is implemented as a specialization of {@link Ring} with additional methods for returning the
+ * multiplicative group and for computing multiplicative inverses and divisions.
+ * <p>
+ * @param <V> The generic type of the values representing the elements of a field
+ * <p>
+ * @author R. Haenni
+ * <p>
+ * @see "Handbook of Applied Cryptography, Definition 2.181"
  */
 public interface Field<V>
 	   extends Ring<V> {
 
 	/**
-	 * Returns the multiplicative group of this field.
+	 * Returns the multiplicative group of this field. The set of the multiplicative group contains all the elements of
+	 * the field except the zero element.
 	 * <p>
-	 * @return the multiplicative group of this field
+	 * @return The multiplicative group of this field
 	 */
 	public MultiplicativeGroup<V> getMultiplicativeGroup();
 
 	/**
-	 * Returns the fraction element1 over element2.
+	 * Returns the multiplicative inverse of the given element. Throws an exception if the given element is the zero
+	 * element.
 	 * <p>
-	 * @param element1 The given numerator
-	 * @param element2 The given denominator
-	 * @return the result from dividing element1 with element2
+	 * @param element The given element
+	 * @return The multiplicative inverse of the given element
+	 */
+	public DualisticElement<V> oneOver(Element element);
+
+	/**
+	 * Divides the first element over the second element.
+	 * <p>
+	 * @param element1 The first given element
+	 * @param element2 The second given element
+	 * @return The first element divided over the second element
 	 */
 	public DualisticElement<V> divide(Element element1, Element element2);
 
-	/**
-	 * Returns the fraction one over the given element.
-	 * <p>
-	 * @param element The given element
-	 * @return one over the given element
-	 */
-	public DualisticElement<V> oneOver(Element element);
+	public DualisticElement<V> nthRoot(Element element, long n);
+
+	public DualisticElement<V> nthRoot(Element element, Element<BigInteger> n);
+
+	public DualisticElement<V> nthRoot(Element element, BigInteger n);
+
+	public DualisticElement<V> squareRoot(Element element);
 
 }

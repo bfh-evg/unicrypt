@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
@@ -48,7 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class FiniteStringElement
 	   extends AbstractElement<FiniteStringSet, FiniteStringElement, String>
@@ -58,6 +60,13 @@ public class FiniteStringElement
 
 	protected FiniteStringElement(final FiniteStringSet set, final String string) {
 		super(set, string);
+	}
+
+	public static FiniteStringElement getInstance(String string) {
+		if (string == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		return FixedStringSet.getInstance(string.length()).getElement(string);
 	}
 
 	public int getLength() {

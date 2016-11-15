@@ -41,13 +41,14 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class FilteredSequenceTest {
 

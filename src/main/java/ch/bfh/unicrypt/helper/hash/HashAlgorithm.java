@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.hash;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -50,6 +51,9 @@ import java.security.NoSuchAlgorithmException;
  * Instances of this class represent hash algorithms such as SHA-1 or SHA-256. This class is a wrapper class for
  * {@link MessageDigest} with method names adjusted to the conventions of UniCrypt. A hash algorithm maps arbitrary Java
  * byte arrays into fixed-length byte arrays. The resulting byte array is called hash value of the input.
+ * <p>
+ * There are also methods to compute keyed hash values based on HMAC as defined in RFC 2104 "HMAC: Keyed-Hashing for
+ * Message Authentication".
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -85,8 +89,14 @@ public class HashAlgorithm
 
 	private static final long serialVersionUID = 1L;
 
-	private final MessageDigest messageDigest;
+	// The name of the algorithm
 	private final String algorithmName;
+
+	// An instance of MessageDigest to execute the algorithm
+	private final MessageDigest messageDigest;
+
+	// The block length of the algorithm (used in HMAC)
+	private final int blockLength;
 
 	private HashAlgorithm(String algorithmName) {
 		this.algorithmName = algorithmName;
@@ -94,6 +104,25 @@ public class HashAlgorithm
 			this.messageDigest = MessageDigest.getInstance(algorithmName);
 		} catch (final NoSuchAlgorithmException e) {
 			throw new IllegalArgumentException();
+		}
+		switch (algorithmName) {
+			case "SHA-1":
+				this.blockLength = 64;
+				break;
+			case "SHA-224":
+				this.blockLength = 64;
+				break;
+			case "SHA-256":
+				this.blockLength = 64;
+				break;
+			case "SHA-384":
+				this.blockLength = 128;
+				break;
+			case "SHA-512":
+				this.blockLength = 128;
+				break;
+			default:
+				this.blockLength = 0; // impossible case
 		}
 	}
 
@@ -109,43 +138,82 @@ public class HashAlgorithm
 	/**
 	 * Returns the hash value of a given Java byte array.
 	 * <p>
-	 * @param bytes The given Java byte array
-	 * @return The hash value of the given Java byte array
+	 * This method must be synchronized in order to work properly in multi-threaded environment. The underlying
+	 * messageDigest is not thread safe
+	 * <p>
+	 * @param message The given Java byte array
+	 * @return The hash value
 	 */
-	public byte[] getHashValue(byte[] bytes) {
-		if (bytes == null) {
+	public synchronized byte[] getHashValue(byte[] message) {
+		if (message == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.messageDigest.digest(bytes);
+		return this.messageDigest.digest(message);
+
 	}
 
 	/**
 	 * Returns the hash value of a given byte array.
 	 * <p>
-	 * @param byteArray The given byte array
-	 * @return The hash value of the given byte array
+	 * @param message The given byte array
+	 * @return The hash value
 	 */
-	public ByteArray getHashValue(ByteArray byteArray) {
-		if (byteArray == null) {
+	public ByteArray getHashValue(ByteArray message) {
+		if (message == null) {
 			throw new IllegalArgumentException();
 		}
-		return byteArray.getHashValue(this);
+		// this call gives acces to the internal byte[] representation of ByteArray
+		return message.getHashValue(this);
 	}
 
 	/**
-	 * Returns the hash value of some bytes extracted from a given byte array.
+	 * Returns the hash value of a given byte array truncated to a certain number of bytes.
 	 * <p>
-	 * @param bytes  The given byte array
-	 * @param offset The offset to start from in the given byte array
-	 * @param length The number of bytes to use, starting at {@code offset}
-	 * @return The hash value of the bytes extracted from the given byte array
+	 * @param message    The given byte array
+	 * @param hashLength The length of the hash value
+	 * @return The hash value
 	 */
-	public byte[] getHashValue(byte[] bytes, int offset, int length) {
-		if (bytes == null || offset < 0 || offset + length > bytes.length) {
+	public ByteArray getHashValue(ByteArray message, int hashLength) {
+		return this.getHashValue(message).extractPrefix(hashLength);
+	}
+
+	/**
+	 * Returns the HMAC value (RFC 2104) for a given byte array and key.
+	 * <p>
+	 * @param message The given byte array
+	 * @param key     The given key
+	 * @return The keyed hash value
+	 */
+	public ByteArray getHashValue(ByteArray message, ByteArray key) {
+		if (message == null || key == null) {
 			throw new IllegalArgumentException();
 		}
-		this.messageDigest.update(bytes, offset, length);
-		return this.messageDigest.digest();
+		if (key.getLength() > this.blockLength) {
+			key = key.getHashValue(this);
+		}
+		if (key.getLength() < this.blockLength) {
+			key = key.addSuffix(this.blockLength - key.getLength());
+		}
+		ByteArray ipad = ByteArray.getInstance(MathUtil.getByte(0x36), this.blockLength);
+		ByteArray byteArray1 = key.xor(ipad).append(message).getHashValue(this);
+		ByteArray opad = ByteArray.getInstance(MathUtil.getByte(0x5C), this.blockLength);
+		ByteArray byteArray2 = key.xor(opad);
+		// according to RFC 2104
+		return byteArray2.append(byteArray1).getHashValue(this);
+		// according to FIPS 198
+		//return byteArray2.append(byteArray1).append(message).getHashValue(this);
+	}
+
+	/**
+	 * Returns the HMAC value (RFC 2104) for a given byte array truncated to a certain number of bytes.
+	 * <p>
+	 * @param message    The given byte array
+	 * @param key        The given key
+	 * @param hashLength The length of the hash value
+	 * @return The keyed hash value
+	 */
+	public ByteArray getHashValue(ByteArray message, ByteArray key, int hashLength) {
+		return this.getHashValue(message, key).extractPrefix(hashLength);
 	}
 
 	/**

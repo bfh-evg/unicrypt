@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,16 +41,18 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.BinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.ByteArrayToString;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
-import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.util.Arrays;
 
 /**
@@ -60,7 +62,7 @@ import java.util.Arrays;
  * class for the implementations of {@link BitArray}.
  * <p>
  * @see BitArray
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class ByteArray
@@ -100,7 +102,7 @@ public class ByteArray
 		super(ByteArray.class, length, rangeOffset, reverse, ALL_ZERO, trailer, header, rangeLength);
 		this.bytes = bytes;
 		this.bitReversed = bitReversed;
-		this.normalized = (rangeOffset == 0) && (rangeLength == length) && !reverse && !bitReversed;
+		this.normalized = rangeOffset == 0 && rangeLength == length && !reverse && !bitReversed;
 	}
 
 	/**
@@ -175,7 +177,7 @@ public class ByteArray
 			if (integer > Byte.MAX_VALUE || integer < Byte.MIN_VALUE) {
 				throw new IllegalArgumentException();
 			}
-			bytes[i++] = (byte) (integer & 0xFF);
+			bytes[i++] = MathUtil.getByte(integer);
 		}
 		return new ByteArray(bytes);
 	}
@@ -265,7 +267,7 @@ public class ByteArray
 		if (length < 0 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		return randomByteSequence.getNextByteArray(length);
+		return randomByteSequence.group(length).get();
 	}
 
 	/**
@@ -338,7 +340,7 @@ public class ByteArray
 	 */
 	public byte getByteAt(int index) {
 		if (index < 0 || index >= this.length) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 		}
 		return this.abstractGetByteAt(index);
 	}
@@ -353,14 +355,6 @@ public class ByteArray
 			rangeIndex = this.rangeLength - rangeIndex - 1;
 		}
 		return this.abstractGetValueAt(this.rangeOffset + rangeIndex);
-	}
-
-	// copy of abstractGetValueAt with byte as return type
-	private byte abstractGetByteValueAt(int index) {
-		if (this.bitReversed) {
-			return MathUtil.reverse(this.bytes[index]);
-		}
-		return this.bytes[index];
 	}
 
 	// changes the byte array's internal representation by setting header, trailer, rangeOffset to 0 and

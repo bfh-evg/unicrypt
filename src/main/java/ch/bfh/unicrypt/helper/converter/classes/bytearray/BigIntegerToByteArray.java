@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -52,11 +52,12 @@ import java.nio.ByteOrder;
  * {@link BigInteger#BigInteger(byte[])}. The {@code BigInteger} values can be positive or negative. There are two modes
  * of operation: the default mode using big-endian byte order and the alternative mode using little-endian byte order.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class BigIntegerToByteArray
 	   extends AbstractByteArrayConverter<BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final ByteOrder byteOrder;
@@ -86,6 +87,16 @@ public class BigIntegerToByteArray
 			throw new IllegalArgumentException();
 		}
 		return new BigIntegerToByteArray(byteOrder);
+	}
+
+	/**
+	 * This is a convenience method to allow inputs of type {@code long}.
+	 * <p>
+	 * @param value The given value
+	 * @return The resulting byte array
+	 */
+	public ByteArray convert(long value) {
+		return this.convert(BigInteger.valueOf(value));
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractValidityProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -58,13 +59,27 @@ import ch.bfh.unicrypt.math.function.classes.InvertFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
+/**
+ * This class implements the validity proof system for ElGamal encryptions: ZKP[(m,r) : y=enc(m,r) ∧ m ∈ M] where enc
+ * creates an ElGamal encryption and M is the set of permitted plaintexts.
+ * <p>
+ * The class only provides instantiation functions and methods to get the setMembershipFunction and deltaFunction.
+ * Everything else is implemented in the superclass {@link AbstractValidityProofSystem}.
+ * <p>
+ * @author P. Locher
+ */
 public class ElGamalEncryptionValidityProofSystem
 	   extends AbstractValidityProofSystem<ProductGroup, Pair> {
 
+	/**
+	 * The ElGamal encryption scheme.
+	 */
 	private final ElGamalEncryptionScheme elGamalES;
+
+	/**
+	 * The public key of the ElGamal encryption.
+	 */
 	private final Element publicKey;
 
 	protected ElGamalEncryptionValidityProofSystem(final SigmaChallengeGenerator challengeGenerator,
@@ -72,31 +87,6 @@ public class ElGamalEncryptionValidityProofSystem
 		super(challengeGenerator, plaintexts);
 		this.elGamalES = elGamalES;
 		this.publicKey = publicKey;
-	}
-
-	public static ElGamalEncryptionValidityProofSystem getInstance(final ElGamalEncryptionScheme elGamalES,
-		   final Element publicKey, final Subset plaintexts) {
-		return ElGamalEncryptionValidityProofSystem.getInstance((Element) null, elGamalES, publicKey, plaintexts);
-	}
-
-	public static ElGamalEncryptionValidityProofSystem getInstance(final Element proverId,
-		   final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts) {
-		SigmaChallengeGenerator challengeGenerator
-			   = ElGamalEncryptionValidityProofSystem.createNonInteractiveChallengeGenerator(elGamalES,
-																							 plaintexts.getOrder().intValue(), proverId);
-		return ElGamalEncryptionValidityProofSystem.getInstance(challengeGenerator, elGamalES, publicKey, plaintexts);
-	}
-
-	public static ElGamalEncryptionValidityProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator,
-		   final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts) {
-		if (challengeGenerator == null || elGamalES == null || publicKey == null
-			   || !elGamalES.getCyclicGroup().contains(publicKey)
-			   || plaintexts == null || plaintexts.getOrder().intValue() < 1
-			   || !ZMod.getInstance(elGamalES.getCyclicGroup().getOrder()).isEquivalent(challengeGenerator
-					  .getChallengeSpace())) {
-			throw new IllegalArgumentException();
-		}
-		return new ElGamalEncryptionValidityProofSystem(challengeGenerator, elGamalES, publicKey, plaintexts);
 	}
 
 	@Override
@@ -120,17 +110,42 @@ public class ElGamalEncryptionValidityProofSystem
 					  ApplyFunction.getInstance(elGamalCyclicGroup)));
 	}
 
+	public static ElGamalEncryptionValidityProofSystem getInstance(final ElGamalEncryptionScheme elGamalES,
+		   final Element publicKey, final Subset plaintexts) {
+		return ElGamalEncryptionValidityProofSystem.getInstance((Element) null, elGamalES, publicKey, plaintexts);
+	}
+
+	public static ElGamalEncryptionValidityProofSystem getInstance(final Element proverId,
+		   final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts) {
+		SigmaChallengeGenerator challengeGenerator
+			   = ElGamalEncryptionValidityProofSystem.
+					  createNonInteractiveChallengeGenerator(elGamalES, plaintexts.getOrder().intValue(), proverId);
+		return ElGamalEncryptionValidityProofSystem.getInstance(challengeGenerator, elGamalES, publicKey, plaintexts);
+	}
+
+	public static ElGamalEncryptionValidityProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator,
+		   final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts) {
+		if (challengeGenerator == null || elGamalES == null || publicKey == null
+			   || !elGamalES.getCyclicGroup().contains(publicKey)
+			   || plaintexts == null || plaintexts.getOrder().intValue() < 1
+			   || !ZMod.getInstance(elGamalES.getCyclicGroup().getOrder()).isEquivalent(challengeGenerator
+					  .getChallengeSpace())) {
+			throw new IllegalArgumentException();
+		}
+		return new ElGamalEncryptionValidityProofSystem(challengeGenerator, elGamalES, publicKey, plaintexts);
+	}
+
 	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
 		   final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts) {
 		return ElGamalEncryptionValidityProofSystem
-			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, PseudoRandomOracle.getInstance());
+			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
 		   final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverId) {
 		return ElGamalEncryptionValidityProofSystem
 			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, proverId,
-													   PseudoRandomOracle.getInstance());
+													   RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(

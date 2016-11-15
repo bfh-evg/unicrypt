@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -62,11 +62,11 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ElGamalEncryptionScheme
-	   extends AbstractReEncryptionScheme<CyclicGroup, Element, ProductGroup, Pair, ZMod, ZModElement, CyclicGroup,
-	   ZMod, DiscreteLogarithmKeyGenerator> {
+	   extends AbstractReEncryptionScheme<CyclicGroup, Element, ProductGroup, Pair, ZMod, ZModElement, CyclicGroup, ZMod, DiscreteLogarithmKeyGenerator> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final CyclicGroup cyclicGroup;
@@ -91,7 +91,7 @@ public class ElGamalEncryptionScheme
 	@Override
 	protected Function abstractGetEncryptionFunction() {
 		ProductGroup encryptionDomain = ProductGroup.getInstance(this.getEncryptionKeySpace(), this.messageSpace,
-																							   this.randomizationSpace);
+																 this.randomizationSpace);
 		return SharedDomainFunction.getInstance(CompositeFunction.getInstance(
 			   SelectionFunction.getInstance(encryptionDomain, 2),
 			   this.getEncryptionFunctionLeft()),
@@ -145,9 +145,6 @@ public class ElGamalEncryptionScheme
 	}
 
 	public static ElGamalEncryptionScheme getInstance(Element generator) {
-		boolean nul=generator == null;
-		boolean cyclic=generator.getSet().isCyclic();
-		boolean gen=generator.isGenerator();
 
 		if (generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()) {
 			throw new IllegalArgumentException();

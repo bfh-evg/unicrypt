@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
@@ -52,11 +54,11 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link DualisticElement}.
  * <p>
- * @param <S> Generic type of the {@link Semiring} of this element
- * @param <E> Generic type of this element
- * @param <V> Generic type of value stored in this element
+ * @param <S> The generic type of the {@link SemiRing} of this element
+ * @param <E> The generic type of this element
+ * @param <V> The generic type of the value stored in this element
  * <p>
- * @author
+ * @author R. Haenni
  */
 public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends DualisticElement<V>, V>
 	   extends AbstractAdditiveElement<S, E, V>
@@ -74,18 +76,18 @@ public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends 
 	}
 
 	@Override
-	public final E power(final BigInteger amount) {
-		return (E) this.getSet().power(this, amount);
+	public final E power(final long exponent) {
+		return (E) this.getSet().power(this, exponent);
 	}
 
 	@Override
-	public final E power(final Element<BigInteger> amount) {
-		return (E) this.getSet().power(this, amount);
+	public final E power(final BigInteger exponent) {
+		return (E) this.getSet().power(this, exponent);
 	}
 
 	@Override
-	public final E power(final long amount) {
-		return (E) this.getSet().power(this, amount);
+	public final E power(final Element<BigInteger> exponent) {
+		return (E) this.getSet().power(this, exponent);
 	}
 
 	@Override
@@ -99,7 +101,43 @@ public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends 
 			Field field = ((Field) this.getSet());
 			return (E) field.divide(this, element);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, element);
+	}
+
+	@Override
+	public final E nthRoot(long n) {
+		if (this.getSet().isField()) {
+			Field field = ((Field) this.getSet());
+			return (E) field.nthRoot(this, n);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, n);
+	}
+
+	@Override
+	public final E nthRoot(BigInteger n) {
+		if (this.getSet().isField()) {
+			Field field = ((Field) this.getSet());
+			return (E) field.nthRoot(this, n);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, n);
+	}
+
+	@Override
+	public final E nthRoot(Element<BigInteger> n) {
+		if (this.getSet().isField()) {
+			Field field = ((Field) this.getSet());
+			return (E) field.nthRoot(this, n);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, n);
+	}
+
+	@Override
+	public final E squareRoot() {
+		if (this.getSet().isField()) {
+			Field field = ((Field) this.getSet());
+			return (E) field.squareRoot(this);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override
@@ -108,7 +146,7 @@ public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends 
 			Field field = ((Field) this.getSet());
 			return (E) field.oneOver(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override

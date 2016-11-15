@@ -41,18 +41,21 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
+import ch.bfh.unicrypt.UniCryptException;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.deterministic.CTR_DRBG;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
-import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -100,11 +103,20 @@ public class BooleanSetTest {
 	public void testGetElementFromBigInteger() {
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
-		BooleanElement result = instance.getElementFrom(BigInteger.ZERO);
-		assertEquals(false, result.getValue());
+		BooleanElement result;
+		try {
+			result = instance.getElementFrom(MathUtil.ZERO);
+			assertEquals(false, result.getValue());
+		} catch (UniCryptException ex) {
+			fail();
+		}
 
-		result = instance.getElementFrom(BigInteger.ONE);
-		assertEquals(true, result.getValue());
+		try {
+			result = instance.getElementFrom(MathUtil.ONE);
+			assertEquals(true, result.getValue());
+		} catch (UniCryptException ex) {
+			fail();
+		}
 
 	}
 
@@ -121,31 +133,23 @@ public class BooleanSetTest {
 	@Test
 	public void testGetElementInt() {
 
-		{
+		try {
 			BooleanSet instance = BooleanSet.getInstance();
 			BooleanElement expResult = instance.getElement(true);
 			BooleanElement result = instance.getElementFrom(1);
 			assertEquals(expResult, result);
+		} catch (Exception e) {
+			fail();
 		}
-		{
+		try {
 			BooleanSet instance = BooleanSet.getInstance();
 			BooleanElement expResult = instance.getElement(false);
 			BooleanElement result = instance.getElementFrom(0);
 			assertEquals(expResult, result);
+		} catch (Exception e) {
+			fail();
 		}
 
-		{
-			BooleanSet instance = BooleanSet.getInstance();
-			// BooleanElement result = instance.getElementFrom(2);
-			// assertNull(result);
-
-		}
-		{
-			BooleanSet instance = BooleanSet.getInstance();
-			// BooleanElement result = instance.getElementFrom(-1);
-			// assertNull(result);
-
-		}
 	}
 
 	/**
@@ -204,17 +208,17 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetRandomElement2() {
-		RandomByteSequence random = CounterModeRandomByteSequence.getInstance();
-//		System.out.println("getRandomElement");
-		int counter = 0;
-		while (BooleanSet.getInstance().getRandomElement(random).getValue() && counter++ < 100);
-		if (counter >= 100) {
-			Assert.fail();
+		DeterministicRandomByteSequence random = CTR_DRBG.getFactory().getInstance().getRandomByteSequence();
+		boolean result = true;
+		for (BooleanElement element : BooleanSet.getInstance().getRandomElements(random).limit(100)) {
+			result = result && element.getValue();
 		}
-		while (!(BooleanSet.getInstance().getRandomElement(random).getValue()) && counter++ < 100);
-		if (counter >= 100) {
-			Assert.fail();
+		Assert.assertFalse(result);
+		result = false;
+		for (BooleanElement element : BooleanSet.getInstance().getRandomElements(random).limit(100)) {
+			result = result || element.getValue();
 		}
+		Assert.assertTrue(result);
 
 	}
 

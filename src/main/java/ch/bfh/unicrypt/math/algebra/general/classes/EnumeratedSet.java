@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,18 +41,22 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  * @param <V>
  */
 public class EnumeratedSet<V>
@@ -101,9 +105,16 @@ public class EnumeratedSet<V>
 	}
 
 	@Override
-	protected EnumeratedSetElement<V> abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		int index = randomByteSequence.getRandomNumberGenerator().nextInt(this.getOrder().intValue() - 1);
-		return this.abstractGetElement(this.valueMap.get(index));
+	protected Sequence<EnumeratedSetElement<V>> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		return randomByteSequence.getRandomIntegerSequence(this.getOrder().intValue() - 1).map(
+			   new Mapping<Integer, EnumeratedSetElement<V>>() {
+
+			@Override
+			public EnumeratedSetElement<V> apply(Integer index) {
+				return abstractGetElement(valueMap.get(index));
+			}
+
+		});
 	}
 
 	@Override
@@ -124,16 +135,22 @@ public class EnumeratedSet<V>
 	}
 
 	public static <V> EnumeratedSet<V> getInstance(V... values) {
-		if (values == null || values.length == 0) {
-			throw new IllegalArgumentException();
+		if (values == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (values.length == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, values);
 		}
 		// both maps are needed for efficiency reasons
 		Map<Integer, V> valueMap = new HashMap<>();
 		Map<V, Integer> indexMap = new HashMap<>();
 		int index = 0;
 		for (V value : values) {
-			if (value == null || valueMap.containsValue(value)) {
-				throw new IllegalArgumentException();
+			if (value == null) {
+				throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, values);
+			}
+			if (valueMap.containsValue(value)) {
+				throw new UniCryptRuntimeException(ErrorCode.DUPLICATE_VALUE, values, value);
 			}
 			valueMap.put(index, value);
 			indexMap.put(value, index);

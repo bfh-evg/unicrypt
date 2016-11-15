@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -46,6 +46,8 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracl
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -58,12 +60,11 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
  *
- * @see [ASM10] Proof-of-Knowledge of Representation of Committed Value and Its Applications
+ * @see "[ASM10] Proof-of-Knowledge of Representation of Committed Value and Its Applications"
  * <p>
  * @author philipp
  */
@@ -101,8 +102,8 @@ public class DoubleDiscreteLogProofSystem
 		if (pedersenCS == null) {
 			throw new IllegalArgumentException();
 		}
-		SigmaChallengeGenerator challengeGenerator =
-			   RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+		SigmaChallengeGenerator challengeGenerator
+			   = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return DoubleDiscreteLogProofSystem.getInstance(challengeGenerator, pedersenCS, generalizedPedersenCS, k);
 	}
 
@@ -114,18 +115,18 @@ public class DoubleDiscreteLogProofSystem
 		}
 		// TBD: Check instance of ZModPrime or check whether order is prime and store a Z_p and Z_q as ZMod
 		// instead of ZModPrime
-		if (!(pedersenCS.getCyclicGroup().getZModOrder() instanceof ZModPrime) ||
-			   !(generalizedPedersenCS.getCyclicGroup().getZModOrder() instanceof ZModPrime)) {
+		if (!(pedersenCS.getCyclicGroup().getZModOrder() instanceof ZModPrime)
+			   || !(generalizedPedersenCS.getCyclicGroup().getZModOrder() instanceof ZModPrime)) {
 			throw new IllegalArgumentException();
 		}
 		BigInteger p = pedersenCS.getCyclicGroup().getOrder();
 		BigInteger q = generalizedPedersenCS.getCyclicGroup().getOrder();
 		// p = γq+1
-		if (!p.subtract(BigInteger.ONE).gcd(q).equals(q)) {
+		if (!p.subtract(MathUtil.ONE).gcd(q).equals(q)) {
 			throw new IllegalArgumentException();
 		}
 		// 2^k < p
-		if (p.compareTo(BigInteger.valueOf(2).pow(k)) < 1) {
+		if (p.compareTo(MathUtil.powerOfTwo(k)) < 1) {
 			throw new IllegalArgumentException();
 		}
 		if (!challengeGenerator.getChallengeSpace().isEquivalent(pedersenCS.getMessageSpace())) {
@@ -181,7 +182,7 @@ public class DoubleDiscreteLogProofSystem
 
 	private Function getRepresentationFunction() {
 		return ((ProductFunction) ((CompositeFunction) this.generalizedPedersenCS.getCommitmentFunction())
-																								.getAt(0)).getAt(0);
+			   .getAt(0)).getAt(0);
 	}
 
 	@Override
@@ -204,7 +205,8 @@ public class DoubleDiscreteLogProofSystem
 			rhoSVs[i] = this.Z_q.getRandomElement(randomByteSequence);
 			rhoRVs[i] = this.Z_p.getRandomElement(randomByteSequence);
 
-			T1Vs[i] = this.pedersenCS.commit(this.Z_p.getElement(repF.apply(rhoMVs[i]).convertToBigInteger()), rhoRVs[i]);
+			T1Vs[i] = this.pedersenCS.commit(this.Z_p.getElement(repF.apply(rhoMVs[i]).convertToBigInteger()),
+											 rhoRVs[i]);
 			T2Vs[i] = this.generalizedPedersenCS.commit(rhoMVs[i], rhoSVs[i]);
 		}
 
@@ -280,10 +282,11 @@ public class DoubleDiscreteLogProofSystem
 				v = v && T1.getAt(i).isEquivalent(this.pedersenCS.commit(x, zRV.getAt(i)));
 			} else {
 				v = v && T1.getAt(i).isEquivalent(C.selfApply(x).apply(this.pedersenCS.getRandomizationGenerator()
-																							.selfApply(zRV.getAt(i))));
+					   .selfApply(zRV.getAt(i))));
 			}
 		}
 
 		return v;
 	}
+
 }

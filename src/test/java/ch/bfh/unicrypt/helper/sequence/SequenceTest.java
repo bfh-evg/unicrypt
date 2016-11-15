@@ -41,18 +41,23 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
+import org.junit.Assert;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class SequenceTest {
 
 	@Test
 	public void testIteration() {
 
-		Sequence<Integer> seq = Sequence.getInstance(2, new UnaryOperator<Integer>() {
+		Sequence<Integer> seq = Sequence.getInstance(2, new Mapping<Integer, Integer>() {
 
 			@Override
 			public Integer apply(Integer value) {
@@ -60,15 +65,37 @@ public class SequenceTest {
 			}
 
 		});
-		seq = seq.limit(12);
-		for (Integer i : seq) {
-//			System.out.println(i);
-		}
-		ExtendedIterator<Integer> iterator = seq.iterator();
-//		System.out.println(iterator.next(5));
-//		System.out.println(iterator.next(10));
-//		System.out.println(iterator.next());
+		SequenceIterator<Integer> iterator = seq.iterator();
+		Assert.assertEquals(2, (int) iterator.next());
+		Assert.assertEquals(4, (int) iterator.next());
+		Assert.assertEquals(6, (int) iterator.next());
+		Assert.assertEquals(8, (int) iterator.next());
+		Assert.assertTrue(seq.isInfinite());
+	}
 
+	@Test
+	public void testCountFindGetMatch() {
+		Predicate<Integer> pred = new Predicate<Integer>() {
+
+			@Override
+			public boolean test(Integer value) {
+				return value > 10 && value < 15;
+			}
+		};
+		Sequence<Integer> seq = IntegerSequence.getInstance(1, 20);
+
+		Assert.assertEquals(4, seq.count(pred));
+
+		Assert.assertEquals(11, (int) seq.find(pred));
+		Assert.assertEquals(14, (int) seq.find(pred, 3));
+		Assert.assertEquals(null, seq.find(pred, 5));
+
+		Assert.assertEquals(1, (int) seq.get());
+		Assert.assertEquals(4, (int) seq.get(3));
+		Assert.assertEquals(null, seq.find(pred, 25));
+
+		assertFalse(seq.matchAll(pred));
+		assertTrue(seq.matchAny(pred));
 	}
 
 }

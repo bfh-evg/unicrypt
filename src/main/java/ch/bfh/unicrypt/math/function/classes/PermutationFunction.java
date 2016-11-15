@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,7 +41,10 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Permutation;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -50,14 +53,12 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface represents the concept of a function f:X^n x Z->X^n, where Z is a permutation group of size n. Calling
  * the function permutes the given input tuple element of X^n according to the permutation element given as a second
  * argument. The output of the function is the permuted tuple element.
  * <p>
- * <p/>
  * @see PermutationGroup
  * <p>
  * @author R. Haenni
@@ -66,6 +67,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class PermutationFunction
 	   extends AbstractFunction<PermutationFunction, ProductSet, Pair, ProductSet, Tuple> {
+
 	private static final long serialVersionUID = 1L;
 
 	private PermutationFunction(final ProductSet domain, final ProductSet coDomain) {
@@ -75,16 +77,12 @@ public class PermutationFunction
 	/**
 	 * Returns the permutation group of size n, which is need to conduct the actual permutation.
 	 * <p>
-	 * <p/>
 	 * @return The permutation group
 	 */
 	public PermutationGroup getPermutationGroup() {
 		return (PermutationGroup) this.getDomain().getAt(1);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Tuple abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
 		final Tuple elements = (Tuple) element.getFirst();
@@ -96,23 +94,20 @@ public class PermutationFunction
 		return this.getCoDomain().getElement(result);
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the general constructor of this class, which construct a permutation function from a given group and for
 	 * the specified arity.
 	 * <p>
-	 * <p/>
 	 * @param set   The given group
 	 * @param arity The arity of the tuple elements to permute
-	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
-	 * @throws IllegalArgumentException if {@code arity} is negative
+	 * @return Returns an instance of this class
 	 */
 	public static PermutationFunction getInstance(final Set set, final int arity) {
-		if (set == null || arity < 0) {
-			throw new IllegalArgumentException();
+		if (set == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (arity < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);
 		}
 		return PermutationFunction.getInstance(ProductSet.getInstance(set, arity));
 	}
@@ -121,14 +116,15 @@ public class PermutationFunction
 	 * This is a special constructor of this class, which deals with the particular case, where a product group is given
 	 * from the beginning.
 	 * <p>
-	 * <p/>
 	 * @param productSet The given power group
-	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
+	 * @return Returns an instance of this class
 	 */
 	public static PermutationFunction getInstance(final ProductSet productSet) {
-		if (productSet == null || !productSet.isUniform()) {
-			throw new IllegalArgumentException();
+		if (productSet == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (!productSet.isUniform()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, productSet);
 		}
 		return new PermutationFunction(ProductSet.getInstance(productSet,
 															  PermutationGroup.getInstance(productSet.getArity())),

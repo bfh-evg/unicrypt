@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,14 +41,18 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
 import ch.bfh.unicrypt.helper.factorization.SpecialFactorization;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -58,7 +62,6 @@ import java.math.BigInteger;
  * Euler totient function. The order m=|G_m| is the product of all given prime factors of phi(n). If all prime factors
  * of phi(n) are given, which implies m=phi(n), then G_m is the parent group Z*_n.
  * <p>
- * <p/>
  * @see "Handbook of Applied Cryptography, Fact 2.132"
  * @see "Handbook of Applied Cryptography, Definition 2.100"
  * @see "Handbook of Applied Cryptography, Definition 2.166"
@@ -72,22 +75,21 @@ public class GStarMod
 
 	private static final long serialVersionUID = 1L;
 
-	private final BigInteger modulus;
-	private final SpecialFactorization moduloFactorization;
+	protected final BigInteger modulus;
+	private final SpecialFactorization modulusFactorization;
 	private final Factorization orderFactorization;
 	private ZStarMod superGroup;
 
-	protected GStarMod(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
+	protected GStarMod(SpecialFactorization modulusFactorization, Factorization orderFactorization) {
 		super(BigInteger.class);
-		this.modulus = moduloFactorization.getValue();
-		this.moduloFactorization = moduloFactorization;
+		this.modulus = modulusFactorization.getValue();
+		this.modulusFactorization = modulusFactorization;
 		this.orderFactorization = orderFactorization;
 	}
 
 	/**
-	 * Returns the modulus if this group.
+	 * Returns the modulus of this group.
 	 * <p>
-	 * <p/>
 	 * @return The modulus
 	 */
 	public final BigInteger getModulus() {
@@ -98,17 +100,15 @@ public class GStarMod
 	 * Returns a (possibly incomplete) prime factorization the modulus if this group. An incomplete factorization
 	 * implies that the group order is unknown in such a case.
 	 * <p>
-	 * <p/>
 	 * @return The prime factorization
 	 */
-	public final SpecialFactorization getModuloFactorization() {
-		return this.moduloFactorization;
+	public final SpecialFactorization getModulusFactorization() {
+		return this.modulusFactorization;
 	}
 
 	/**
 	 * Returns prime factorization of the group order phi(n) of Z*_n.
 	 * <p>
-	 * <p/>
 	 * @return The prime factorization of the group order
 	 */
 	public final Factorization getOrderFactorization() {
@@ -117,36 +117,31 @@ public class GStarMod
 
 	public final ZStarMod getZStarMod() {
 		if (this.superGroup == null) {
-			this.superGroup = ZStarMod.getInstance(this.getModuloFactorization());
+			this.superGroup = ZStarMod.getInstance(this.getModulusFactorization());
 		}
 		return this.superGroup;
 	}
 
-	public final boolean contains(long integerValue) {
-		return this.contains(BigInteger.valueOf(integerValue));
+	public final boolean contains(long value) {
+		return this.contains(BigInteger.valueOf(value));
 	}
 
-	public final GStarModElement getElement(long integerValue) {
-		return this.getElement(BigInteger.valueOf(integerValue));
+	public final GStarModElement getElement(long value) {
+		return this.getElement(BigInteger.valueOf(value));
 	}
 
 	/**
 	 * Returns the quotient k=phi(n)/m of the orders of the two involved groups.
 	 * <p>
-	 * <p/>
 	 * @return The quotient of the two orders.
 	 */
 	public BigInteger getCoFactor() {
 		return this.getZStarMod().getOrder().divide(this.getOrder());
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
-	protected GStarModElement defaultSelfApplyAlgorithm(final GStarModElement element, final BigInteger posAmount) {
-		return this.abstractGetElement(element.getValue().modPow(posAmount, this.modulus));
+	protected GStarModElement defaultSelfApplyAlgorithm(final GStarModElement element, final BigInteger posExponent) {
+		return this.abstractGetElement(element.getValue().modPow(posExponent, this.modulus));
 	}
 
 	@Override
@@ -154,16 +149,12 @@ public class GStarMod
 		return this.getModulus().toString() + "," + this.getOrder().toString();
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected boolean abstractContains(final BigInteger value) {
 		return value.signum() > 0
 			   && value.compareTo(this.modulus) < 0
 			   && MathUtil.areRelativelyPrime(value, this.modulus)
-			   && value.modPow(this.getOrder(), this.modulus).equals(BigInteger.ONE);
+			   && value.modPow(this.getOrder(), this.modulus).equals(MathUtil.ONE);
 	}
 
 	@Override
@@ -177,17 +168,15 @@ public class GStarMod
 	}
 
 	@Override
-	protected GStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
-		ZStarModElement randomElement = this.getZStarMod().getRandomElement(randomByteSequence);
-		return this.getElement(randomElement.power(this.getCoFactor()).convertToBigInteger());
-// VERSION WITH OPTIMIZED EFFICIENCY BUT LACK OF INDEPENDENCE
-//    if (this.getOrder().compareTo(this.getCoFactor()) > 0) { // choose between the faster method
-//      // Method 1
-//      ZStarModElement randomElement = this.getZStarMod().getRandomElement(random);
-//      return this.getElement(randomElement.power(this.getCoFactor()));
-//    }
-//    // Method 2
-//    return this.getDefaultGenerator().power(this.getZModOrder().getRandomElement(random));
+	protected Sequence<GStarModElement> abstractGetRandomElements(final RandomByteSequence randomByteSequence) {
+		return this.getZStarMod().abstractGetRandomElements(randomByteSequence).map(
+			   new Mapping<ZStarModElement, GStarModElement>() {
+
+			@Override
+			public GStarModElement apply(ZStarModElement element) {
+				return abstractGetElement(element.power(getCoFactor()).getValue());
+			}
+		});
 	}
 
 	@Override
@@ -197,7 +186,7 @@ public class GStarMod
 
 	@Override
 	protected GStarModElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElement(MathUtil.ONE);
 	}
 
 	@Override
@@ -210,36 +199,36 @@ public class GStarMod
 		return this.abstractGetElement(element.getValue().modInverse(this.modulus));
 	}
 
-	/**
-	 * See http://en.wikipedia.org/wiki/Schnorr_group
-	 * <p>
-	 * <p/>
-	 * @return
-	 */
 	@Override
 	protected GStarModElement abstractGetDefaultGenerator() {
-		BigInteger alpha = BigInteger.ZERO;
+		// see http://en.wikipedia.org/wiki/Schnorr_group
+		BigInteger alpha = MathUtil.ZERO;
 		GStarModElement element;
 		do {
 			do {
-				alpha = alpha.add(BigInteger.ONE);
+				alpha = alpha.add(MathUtil.ONE);
 			} while (!MathUtil.areRelativelyPrime(alpha, this.getModulus()));
 			element = this.abstractGetElement(alpha.modPow(this.getCoFactor(), this.modulus));
 		} while (!this.isGenerator(element)); // this test could be skipped for a prime order
 		return element;
 	}
 
-	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81 (the implemented)
-	// method is a mix between 4.80 and 4.81
+	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
+	// the implemented method is a mix between 4.80 and 4.81
 	// See also http://en.wikipedia.org/wiki/Schnorr_group
 	@Override
-	protected boolean abstractIsGenerator(GStarModElement element) {
-		for (final BigInteger prime : this.getOrderFactorization().getPrimeFactors()) {
-			if (element.selfApply(this.getOrder().divide(prime)).isEquivalent(this.getIdentityElement())) {
-				return false;
+	protected boolean defaultIsGenerator(GStarModElement element) {
+		// in case of a prime order subgroup, every element is a generator (except the identity element)
+		if (this.orderFactorization.isPrime()) {
+			return true;
+		} else {
+			for (final BigInteger prime : this.orderFactorization.getPrimeFactors()) {
+				if (element.selfApply(this.getOrder().divide(prime)).isEquivalent(this.getIdentityElement())) {
+					return false;
+				}
 			}
+			return true;
 		}
-		return true;
 	}
 
 	@Override
@@ -256,23 +245,18 @@ public class GStarMod
 		return hash;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the general static factory method for this class.
 	 * <p>
-	 * <p/>
-	 * @param moduloFactorization
+	 * @param modulusFactorization
 	 * @param orderFactorization
-	 * @return
-	 * @throws IllegalArgumentException if {@code moduloFactorization} or {@code orderFactorization} is null
-	 * @throws IllegalArgumentException if the value of {@code orderFactorization} does not divide phi(n)
+	 * @return returns an instance of GStarMod
 	 */
-	public static GStarMod getInstance(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
-		GStarMod group = new GStarMod(moduloFactorization, orderFactorization);
-		if (!group.getOrder().mod(orderFactorization.getValue()).equals(BigInteger.ZERO)) {
-			throw new IllegalArgumentException();
+	public static GStarMod getInstance(SpecialFactorization modulusFactorization, Factorization orderFactorization) {
+		GStarMod group = new GStarMod(modulusFactorization, orderFactorization);
+		if (!group.getOrder().mod(orderFactorization.getValue()).equals(MathUtil.ZERO)) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, modulusFactorization,
+											   orderFactorization);
 		}
 		return group;
 	}

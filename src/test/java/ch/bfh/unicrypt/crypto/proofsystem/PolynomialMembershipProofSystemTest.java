@@ -43,7 +43,8 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PolynomialMembershipProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -52,8 +53,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -127,7 +126,8 @@ public class PolynomialMembershipProofSystemTest {
 	@Test
 	public void testPolynomialMembershipProofSystem3() {
 
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
+		final RandomByteSequence deterministicRandomByteSequence = DeterministicRandomByteSequence.getInstance();
+
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZModPrime Z_q = (ZModPrime) G_q.getZModOrder();
 
@@ -138,16 +138,14 @@ public class PolynomialMembershipProofSystemTest {
 
 		Element[] nonMem = new Element[]{Z_q.getElement(BigInteger.valueOf(21)), Z_q.getElement(BigInteger.valueOf(43)), Z_q.getElement(BigInteger.valueOf(18))};
 
-		for (int i = 0; i < nonMem.length; i++) {
-			Element u = nonMem[i];
-
-			Element r0 = Z_q.getRandomElement(randomGenerator);
+		for (Element u : nonMem) {
+			Element r0 = Z_q.getRandomElement(deterministicRandomByteSequence);
 			Element cu = pedersenCS.commit(u, r0);
 
 			Tuple secretInput = Tuple.getInstance(u, r0);
 			Element publicInput = cu;
 
-			Tuple proof = pmps.generate(secretInput, publicInput, randomGenerator);
+			Tuple proof = pmps.generate(secretInput, publicInput, deterministicRandomByteSequence);
 			boolean verify = pmps.verify(proof, publicInput);
 
 			assertTrue(!verify);

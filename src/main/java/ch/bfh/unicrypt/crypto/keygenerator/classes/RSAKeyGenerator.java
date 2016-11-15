@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,8 +42,9 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
@@ -56,7 +57,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class RSAKeyGenerator
 	   extends AbstractKeyPairGenerator<ZMod, ZModElement, ZMod, ZModElement> {
@@ -64,8 +65,8 @@ public class RSAKeyGenerator
 	private final ZMod zMod;
 	private ZStarMod zStarMod;
 
-	protected RSAKeyGenerator(ZMod zMod, StringToByteArray converter) {
-		super(zMod, zMod, converter);
+	protected RSAKeyGenerator(ZMod zMod) {
+		super(zMod, zMod);
 		this.zMod = zMod;
 	}
 
@@ -76,7 +77,7 @@ public class RSAKeyGenerator
 				this.zStarMod = ((ZModPrimePair) this.zMod).getZStarModOrder().getZStarModOrder();
 			} else {
 				// keys can only be generated if p and q are known
-				throw new UnsupportedOperationException();
+				throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 			}
 		}
 		return this.zStarMod;
@@ -98,14 +99,10 @@ public class RSAKeyGenerator
 	}
 
 	public static RSAKeyGenerator getInstance(ZMod zMod) {
-		return RSAKeyGenerator.getInstance(zMod, StringToByteArray.getInstance());
-	}
-
-	public static RSAKeyGenerator getInstance(ZMod zMod, StringToByteArray converter) {
-		if (zMod == null || converter == null) {
+		if (zMod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new RSAKeyGenerator(zMod, converter);
+		return new RSAKeyGenerator(zMod);
 	}
 
 }

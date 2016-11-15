@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,6 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.factorization.PrimePair;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -48,28 +51,16 @@ import java.util.Map;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ZStarModPrimePair
 	   extends ZStarMod {
 
-	private final static Map<BigInteger, ZStarModPrimePair> instances = new HashMap<>();
+	private final static Map<BigInteger, ZStarModPrimePair> INSTANCES = new HashMap<>();
 	private static final long serialVersionUID = 1L;
 
 	protected ZStarModPrimePair(PrimePair primePair) {
 		super(primePair);
-	}
-
-	public static ZStarModPrimePair getInstance(final PrimePair primePair) {
-		if (primePair == null) {
-			throw new IllegalArgumentException();
-		}
-		ZStarModPrimePair instance = ZStarModPrimePair.instances.get(primePair.getValue());
-		if (instance == null) {
-			instance = new ZStarModPrimePair(primePair);
-			ZStarModPrimePair.instances.put(primePair.getValue(), instance);
-		}
-		return instance;
 	}
 
 	public static ZStarModPrimePair getInstance(final long prime1, final long prime2) {
@@ -77,7 +68,32 @@ public class ZStarModPrimePair
 	}
 
 	public static ZStarModPrimePair getInstance(final BigInteger prime1, final BigInteger prime2) {
-		return ZStarModPrimePair.getInstance(PrimePair.getInstance(prime1, prime2));
+		if (prime1 == null || prime2 == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, prime1, prime2);
+		}
+		BigInteger value = prime1.multiply(prime2);
+		ZStarModPrimePair instance = ZStarModPrimePair.INSTANCES.get(value);
+		if (instance == null) {
+			instance = new ZStarModPrimePair(PrimePair.getInstance(prime1, prime2));
+			ZStarModPrimePair.INSTANCES.put(value, instance);
+		}
+		return instance;
+	}
+
+	public static ZStarModPrimePair getInstance(Prime prime1, Prime prime2) {
+		return new ZStarModPrimePair(PrimePair.getInstance(prime1, prime2));
+	}
+
+	public static ZStarModPrimePair getInstance(final PrimePair primePair) {
+		if (primePair == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		ZStarModPrimePair instance = ZStarModPrimePair.INSTANCES.get(primePair.getValue());
+		if (instance == null) {
+			instance = new ZStarModPrimePair(primePair);
+			ZStarModPrimePair.INSTANCES.put(primePair.getValue(), instance);
+		}
+		return instance;
 	}
 
 }

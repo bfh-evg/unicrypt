@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,7 +41,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptException;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Polynomial;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
@@ -50,13 +57,11 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class PolynomialField
 	   extends PolynomialRing
@@ -100,18 +105,57 @@ public class PolynomialField
 	}
 
 	@Override
-	public PolynomialElement getRandomElement(int degree, RandomByteSequence randomByteSequence) {
+	protected Converter<Polynomial<? extends DualisticElement<BigInteger>>, BigInteger>
+		   abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<Polynomial<? extends DualisticElement<BigInteger>>>(null) {
+
+			@Override
+			protected BigInteger abstractConvert(Polynomial<? extends DualisticElement<BigInteger>> polynomial) {
+				int degree = getDegree();
+				BigInteger[] values = new BigInteger[degree];
+				for (int i = 0; i < degree; i++) {
+					values[i] = polynomial.getCoefficient(i).convertToBigInteger();
+				}
+				return MathUtil.pair(values);
+			}
+
+			@Override
+			protected Polynomial<? extends DualisticElement<BigInteger>> abstractReconvert(BigInteger value) {
+				BigInteger[] bigIntegers = MathUtil.unpair(value, getDegree());
+				DualisticElement[] elements = new DualisticElement[bigIntegers.length];
+				int i = 0;
+				for (BigInteger bigInteger : bigIntegers) {
+					try {
+						elements[i] = getSemiRing().getElementFrom(bigInteger);
+					} catch (UniCryptException exception) {
+						throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, exception, value);
+					}
+					i++;
+				}
+				Polynomial<? extends DualisticElement<BigInteger>> polynomial
+					   = Polynomial.<DualisticElement<BigInteger>>getInstance(elements,
+																			  getSemiRing().getZeroElement(),
+																			  getSemiRing().getOneElement());
+				return polynomial;
+			}
+		};
+	}
+
+	@Override
+	// TODO Generalize to getRandomElements by replacing HybridRandomByteSequence by RandomByteSequence
+	public PolynomialElement getRandomElement(int degree, HybridRandomByteSequence randomByteSequence) {
 		if (degree >= this.getDegree()) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, degree);
 		}
 		return super.getRandomElement(degree, randomByteSequence);
 	}
 
 	@Override
+	// TODO Generalize to getRandomElements by replacing HybridRandomByteSequence by RandomByteSequence
 	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero,
-		   RandomByteSequence randomByteSequence) {
+		   HybridRandomByteSequence randomByteSequence) {
 		if (degree >= this.getDegree()) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, degree);
 		}
 		return super.getRandomMonicElement(degree, a0NotZero, randomByteSequence);
 	}
@@ -124,7 +168,7 @@ public class PolynomialField
 	@Override
 	public MultiplicativeGroup<Polynomial<? extends DualisticElement<BigInteger>>> getMultiplicativeGroup() {
 		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact 2.229/2.230)
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UniCryptRuntimeException(ErrorCode.NOT_YET_IMPLEMENTED, this);
 	}
 
 	@Override
@@ -136,14 +180,15 @@ public class PolynomialField
 			return this.getZeroElement();
 		}
 		final PolynomialRing ring
-			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.
+					  getSemiRing());
 		PolynomialElement result;
 		if (this.isBinary()) {
-			result = ring.getElementUnchecked(multiplyBinary(polynomial1, polynomial2));
+			result = ring.abstractGetElement(multiplyBinary(polynomial1, polynomial2));
 		} else {
-			result = ring.getElementUnchecked(multiplyNonBinary(polynomial1, polynomial2));
+			result = ring.abstractGetElement(multiplyNonBinary(polynomial1, polynomial2));
 		}
-		return this.getElement(this.mod(result).getValue());
+		return this.getElement(this.modulo(result).getValue());
 	}
 
 	@Override
@@ -151,41 +196,66 @@ public class PolynomialField
 		return this.multiply(element1, this.oneOver(element2));
 	}
 
-	/**
-	 * oneOver.
-	 * <p>
-	 * Compute using extended Euclidean algorithm for polynomial (Algorithm 2.226)
-	 * <p>
-	 * <p>
-	 * @param element
-	 * @return
-	 */
+	@Override
+	public final PolynomialElement nthRoot(Element element, long n) {
+		return this.nthRoot(element, BigInteger.valueOf(n));
+	}
+
+	@Override
+	public final PolynomialElement nthRoot(Element element, Element<BigInteger> n) {
+		if (n == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		return this.nthRoot(element, n.getValue());
+	}
+
+	@Override
+	public final PolynomialElement nthRoot(Element element, BigInteger n) {
+		if (n == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (n.signum() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, n);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		if (((ZModElement) element).isZero()) {
+			return this.getZeroElement();
+		}
+		if (!this.isFinite() || !this.hasKnownOrder()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		boolean positive = n.signum() > 0;
+		n = n.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		PolynomialElement result = this.defaultPowerAlgorithm((PolynomialElement) element, n);
+		if (positive) {
+			return result;
+		}
+		return this.invert(result);
+	}
+
+	@Override
+	public final PolynomialElement squareRoot(Element element) {
+		return this.nthRoot(element, MathUtil.TWO);
+	}
+
 	@Override
 	public PolynomialElement oneOver(Element element) {
-
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
-
-		if (element.isEquivalent(this.getZeroElement())) {
-			throw new UnsupportedOperationException();
+		if (((PolynomialElement) element).isZero()) {
+			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this, element);
 		}
-
+		// see extended Euclidean algorithm for polynomials (Algorithm 2.226)
 		Triple euclid = this.extendedEuclidean((PolynomialElement) element, this.irreduciblePolynomial);
 		return this.getElement(((PolynomialElement) euclid.getSecond()).getValue());
 
 	}
 
-	/**
-	 * Mod. g(x) mod irreduciblePolynomial = h(x)
-	 * <p>
-	 * Z_p must be a field.
-	 * <p>
-	 * <p>
-	 * @param g g(x) in Z_p[x]
-	 * @return h(x) in Z_p[x]
-	 */
-	private PolynomialElement mod(PolynomialElement g) {
+	// g(x) mod this = h(x)
+	private PolynomialElement modulo(PolynomialElement g) {
 		if (g.getValue().getDegree() < this.getDegree()) {
 			return g;
 		}
@@ -193,81 +263,17 @@ public class PolynomialField
 		return (PolynomialElement) longDiv.getSecond();
 	}
 
-	/**
-	 * Computes a solution for the quadratic equation z²+z=b for any polynomial basis. Source: AMERICAN NATIONAL
-	 * STANDARD X9.62 D.1.6
-	 * <p>
-	 * @param b
-	 * @return PolynomialElement z which is a solution for the quadratic equation z²+z=b
-	 */
-	public PolynomialElement solveQuadradicEquation(PolynomialElement b) {
-		PolynomialElement y = this.getZeroElement();
-		PolynomialElement z = this.getZeroElement();
-
-		while (y.isEquivalent(this.getZeroElement())) {
-
-			PolynomialElement r = this.getRandomElement(this.getDegree() - 1);
-			z = this.getZeroElement();
-			PolynomialElement w = b;
-			int m = this.getDegree();
-
-			for (int i = 1; i < m; i++) {
-
-				PolynomialElement w2 = w.square();
-				z = z.square().add(w2.multiply(r));
-				w = w2.add(b);
-			}
-
-			y = z.square().add(z);
-			if (!w.isEquivalent(this.getZeroElement())) {
-				throw new IllegalArgumentException("No solution for quadratic equation was found");
-			}
-
-		}
-
-		return z;
-	}
-
-	/**
-	 * Test if there is a solution for the quadratic equation z²+z=b for any polynomial basis. Source: AMERICAN NATIONAL
-	 * STANDARD X9.62 D.1.6
-	 * <p>
-	 * @param b
-	 * @return true/false
-	 */
-	public boolean hasQuadradicEquationSolution(PolynomialElement b) {
-		PolynomialElement y = this.getZeroElement();
-		PolynomialElement z;
-
-		while (y.equals(this.getZeroElement())) {
-
-			PolynomialElement r = this.getRandomElement(this.getDegree() - 1);
-			z = this.getZeroElement();
-			PolynomialElement w = b;
-			int m = this.getDegree();
-
-			for (int i = 1; i <= m - 1; i++) {
-				z = z.square().add(w.square().multiply((r)));
-				w = w.square().add(b);
-			}
-
-			y = z.square().add(z);
-			if (!w.equals(this.getZeroElement())) {
-				return false;
-			}
-
-		}
-
-		return true;
-	}
-
 	public static <V> PolynomialField getInstance(PrimeField primeField, int degree) {
 		return getInstance(primeField, degree, HybridRandomByteSequence.getInstance());
 	}
 
-	public static <V> PolynomialField getInstance(PrimeField primeField, int degree, RandomByteSequence randomByteSequence) {
-		if (primeField == null || degree < 1) {
-			throw new IllegalArgumentException();
+	public static <V> PolynomialField getInstance(PrimeField primeField, int degree,
+		   HybridRandomByteSequence randomByteSequence) {
+		if (primeField == null || randomByteSequence == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primeField, randomByteSequence);
+		}
+		if (degree < 1) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_DEGREE, degree);
 		}
 		PolynomialRing ring = PolynomialRing.getInstance(primeField);
 		PolynomialElement irreduciblePolynomial = ring.findIrreduciblePolynomial(degree, randomByteSequence);
@@ -275,12 +281,12 @@ public class PolynomialField
 	}
 
 	public static PolynomialField getInstance(PrimeField primeField, PolynomialElement irreduciblePolynomial) {
-		if (primeField == null
-			   || irreduciblePolynomial == null
-			   || !irreduciblePolynomial.getSet().getSemiRing()
-			   .isEquivalent(primeField)
-			   || !irreduciblePolynomial.isIrreducible()) {
-			throw new IllegalArgumentException();
+		if (primeField == null || irreduciblePolynomial == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, primeField, irreduciblePolynomial);
+		}
+		if (!irreduciblePolynomial.getSet().getSemiRing().isEquivalent(primeField) || !irreduciblePolynomial.
+			   isIrreducible()) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, primeField, irreduciblePolynomial);
 		}
 		return new PolynomialField(primeField, irreduciblePolynomial);
 	}

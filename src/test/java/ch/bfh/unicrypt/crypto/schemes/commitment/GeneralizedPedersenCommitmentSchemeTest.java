@@ -42,14 +42,14 @@
 package ch.bfh.unicrypt.crypto.schemes.commitment;
 
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -57,7 +57,7 @@ import org.junit.Test;
 public class GeneralizedPedersenCommitmentSchemeTest {
 
 	final static int P = 23;
-	final private CyclicGroup G_q;
+	final private GStarModSafePrime G_q;
 	final private ZMod Z_q;
 
 	public GeneralizedPedersenCommitmentSchemeTest() {
@@ -68,7 +68,7 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 	@Test
 	public void testGeneralizedPedersenCommitment2() {
 
-		ReferenceRandomByteSequence rrs = PseudoRandomOracle.getInstance().query(ByteArray.getInstance("X".getBytes()));
+		DeterministicRandomByteSequence rrs = RandomOracle.getInstance().query(ByteArray.getInstance("X".getBytes()));
 		// System.out.println("-->g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4
 		// System.out.println("-->g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16  3
 		// System.out.println("-->g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4  9
@@ -77,14 +77,13 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 		Tuple messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3));
 		Element r = Z_q.getElement(2);
 		Element c = gpcs.commit(messages, r);   // c = g1^m1 * g2^m2 * g0^r = 3^1 * 9^3 * 4^2 = 3 * 16 * 16 = 9
-		Element verification = G_q.getIndependentGenerator(1, rrs).selfApply(Z_q.getElement(1)).apply(
-			   G_q.getIndependentGenerator(2, rrs).selfApply(Z_q.getElement(3))).apply(
-					  G_q.getIndependentGenerator(0, rrs).selfApply(Z_q.getElement(2)));
+		Element verification = G_q.getIndependentGenerators(rrs).get(1).selfApply(Z_q.getElement(1)).apply(
+			   G_q.getIndependentGenerators(rrs).get(2).selfApply(Z_q.getElement(3))).apply(
+					  G_q.getIndependentGenerators(rrs).get(0).selfApply(Z_q.getElement(2)));
 		assertTrue(c.isEquivalent(verification));
 
-		rrs.reset();
-		Element randomizationGenerator = G_q.getIndependentGenerator(0, rrs);
-		Tuple messageGenerators = Tuple.getInstance(G_q.getIndependentGenerator(1, rrs), G_q.getIndependentGenerator(2, rrs));
+		Element randomizationGenerator = G_q.getIndependentGenerators(rrs).get(0);
+		Tuple messageGenerators = Tuple.getInstance(G_q.getIndependentGenerators(rrs).get(1), G_q.getIndependentGenerators(rrs).get(2));
 		gpcs = GeneralizedPedersenCommitmentScheme.getInstance(randomizationGenerator, messageGenerators);
 		Element cc = gpcs.commit(messages, r);
 		assertEquals(c, cc);
@@ -93,7 +92,7 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 	@Test
 	public void testGeneralizedPedersenCommitment4() {
 
-		ReferenceRandomByteSequence rrs = PseudoRandomOracle.getInstance().query(ByteArray.getInstance("X".getBytes()));
+		DeterministicRandomByteSequence rrs = RandomOracle.getInstance().query(ByteArray.getInstance("X".getBytes()));
 		// System.out.println("-->g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4
 		// System.out.println("-->g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16  3
 		// System.out.println("-->g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4  9
@@ -104,22 +103,21 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 		Tuple messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5));
 		Element r = Z_q.getElement(3);
 		Element c = gpcs.commit(messages, r); // c = 3^1 * 9^3 * 8^4 * 18^5 * 4^3 = 3 * 16 * 2 * 3 * 18 = 9
-		Element verification = G_q.getIndependentGenerator(1, rrs).selfApply(Z_q.getElement(1)).apply(
-			   G_q.getIndependentGenerator(2, rrs).selfApply(Z_q.getElement(3))).apply(
-					  G_q.getIndependentGenerator(3, rrs).selfApply(Z_q.getElement(4))).apply(
-					  G_q.getIndependentGenerator(4, rrs).selfApply(Z_q.getElement(5))).apply(
-					  G_q.getIndependentGenerator(0, rrs).selfApply(Z_q.getElement(3)));
+		Element verification = G_q.getIndependentGenerators(rrs).get(1).selfApply(Z_q.getElement(1)).apply(
+			   G_q.getIndependentGenerators(rrs).get(2).selfApply(Z_q.getElement(3))).apply(
+					  G_q.getIndependentGenerators(rrs).get(3).selfApply(Z_q.getElement(4))).apply(
+					  G_q.getIndependentGenerators(rrs).get(4).selfApply(Z_q.getElement(5))).apply(
+					  G_q.getIndependentGenerators(rrs).get(0).selfApply(Z_q.getElement(3)));
 		assertTrue(c.isEquivalent(verification));
 
-		rrs.reset();
-		Element randomizationGenerator = G_q.getIndependentGenerator(0, rrs);
-		Tuple messageGenerators = Tuple.getInstance(G_q.getIndependentGenerator(1, rrs), G_q.getIndependentGenerator(2, rrs), G_q.getIndependentGenerator(3, rrs), G_q.getIndependentGenerator(4, rrs));
+		Element randomizationGenerator = G_q.getIndependentGenerators(rrs).get(0);
+		Tuple messageGenerators = Tuple.getInstance(G_q.getIndependentGenerators(rrs).get(1), G_q.getIndependentGenerators(rrs).get(2), G_q.getIndependentGenerators(rrs).get(3), G_q.getIndependentGenerators(rrs).get(4));
 		gpcs = GeneralizedPedersenCommitmentScheme.getInstance(randomizationGenerator, messageGenerators);
 		Element cc = gpcs.commit(messages, r);
 		assertEquals(c, cc);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = UniCryptRuntimeException.class)
 	public void testGeneralizedPedersenCommitment_Exception() {
 		// Commitment size does not match with number of messages
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 3);

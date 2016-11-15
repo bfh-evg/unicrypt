@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
@@ -53,14 +51,11 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link AdditiveElement}.
  * <p>
- * TODO
+ * @param <S> The generic type of the {@link AdditiveSemiGroup} of this element
+ * @param <E> The generic type of this element
+ * @param <V> The generic type of the value stored in this element
  * <p>
- * @param <S> Generic type of {@link AdditiveSemiGroup} of this element
- * @param <E> Generic type of the element
- * @param <V> Generic type of value stored in the element and the elements of the additive semigroup
- * @see Element
- * <p>
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E extends AdditiveElement<V>, V>
 	   extends AbstractElement<S, E, V>
@@ -74,54 +69,57 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E 
 
 	@Override
 	public final E add(final Element element) {
-		return (E) this.getSet().add(this, element);
+		return this.apply(element);
 	}
 
 	@Override
-	public final E subtract(final Element element) {
-		if (this.getSet().isGroup()) {
-			AdditiveGroup group = ((AdditiveGroup) this.getSet());
-			return (E) group.subtract(this, element);
-		}
-		throw new UnsupportedOperationException();
+	public final E times(final Element<BigInteger> factor) {
+		return this.selfApply(factor);
 	}
 
 	@Override
-	public final E times(final BigInteger amount) {
-		return (E) this.getSet().times(this, amount);
+	public final E times(final long factor) {
+		return this.selfApply(factor);
 	}
 
 	@Override
-	public final E times(final Element<BigInteger> amount) {
-		return (E) this.getSet().times(this, amount);
-	}
-
-	@Override
-	public final E times(final long amount) {
-		return (E) this.getSet().times(this, amount);
+	public final E times(final BigInteger factor) {
+		return this.selfApply(factor);
 	}
 
 	@Override
 	public final E timesTwo() {
-		return (E) this.getSet().timesTwo(this);
-	}
-
-	@Override
-	public final E negate() {
-		if (this.getSet().isGroup()) {
-			AdditiveGroup group = ((AdditiveGroup) this.getSet());
-			return (E) group.invert(this);
-		}
-		throw new UnsupportedOperationException();
+		return this.selfApply();
 	}
 
 	@Override
 	public boolean isZero() {
-		if (this.getSet().isMonoid()) {
-			AdditiveMonoid monoid = ((AdditiveMonoid) this.getSet());
-			return monoid.isZeroElement(this);
-		}
-		throw new UnsupportedOperationException();
+		return this.isIdentity();
+	}
+
+	@Override
+	public final E negate() {
+		return this.invert();
+	}
+
+	@Override
+	public final E subtract(final Element element) {
+		return this.applyInverse(element);
+	}
+
+	@Override
+	public final E divide(long divisor) {
+		return this.invertSelfApply(divisor);
+	}
+
+	@Override
+	public final E divide(BigInteger divisor) {
+		return this.invertSelfApply(divisor);
+	}
+
+	@Override
+	public final E halve() {
+		return this.invertSelfApply();
 	}
 
 }

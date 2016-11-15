@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,13 +41,16 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ByteArrayElement
 	   extends AbstractConcatenativeElement<ByteArrayMonoid, ByteArrayElement, ByteArray>
@@ -60,8 +63,19 @@ public class ByteArrayElement
 	}
 
 	@Override
-	public int getLength() {
+	public final int getLength() {
 		return this.value.getLength();
+	}
+
+	public FiniteByteArrayElement getFiniteByteArrayElement() {
+		return FiniteByteArrayElement.getInstance(this.value);
+	}
+
+	public static ByteArrayElement getInstance(ByteArray byteArray) {
+		if (byteArray == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		return ByteArrayMonoid.getInstance().getElement(byteArray);
 	}
 
 }

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,18 +41,21 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
-import ch.bfh.unicrypt.helper.math.Alphabet;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.StringToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.StringToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.Alphabet;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class StringMonoid
 	   extends AbstractConcatenativeMonoid<StringElement, String> {
@@ -101,16 +104,16 @@ public class StringMonoid
 	}
 
 	@Override
-	protected StringElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException();
+	protected Sequence<StringElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override
 	protected final StringElement abstractGetRandomElement(int length, RandomByteSequence randomByteSequence) {
 		char[] chars = new char[length];
 		for (int i = 0; i < length; i++) {
-			chars[i] = this.getAlphabet().getCharacter(randomByteSequence.getRandomNumberGenerator()
-				   .nextInt(this.getAlphabet().getSize() - 1));
+			chars[i] = this.getAlphabet().getCharacter(randomByteSequence.getRandomIntegerSequence(this.getAlphabet().
+				   getSize() - 1).get());
 		}
 		return this.abstractGetElement(new String(chars));
 	}
@@ -130,16 +133,20 @@ public class StringMonoid
 		return 1;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
+	public static StringMonoid getInstance() {
+		return StringMonoid.getInstance(Alphabet.getInstance());
+	}
+
 	public static StringMonoid getInstance(Alphabet alphabet) {
 		return StringMonoid.getInstance(alphabet, 1);
 	}
 
 	public static StringMonoid getInstance(Alphabet alphabet, int blockLength) {
-		if (alphabet == null || blockLength < 1) {
-			throw new IllegalArgumentException();
+		if (alphabet == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (blockLength < 1) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH);
 		}
 		return new StringMonoid(alphabet, blockLength);
 	}

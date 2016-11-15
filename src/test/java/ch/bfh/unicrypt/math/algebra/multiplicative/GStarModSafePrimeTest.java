@@ -41,69 +41,34 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.UniCryptException;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import java.math.BigInteger;
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class GStarModSafePrimeTest {
 
 	@Test
-	public void testIteration() {
-		GStarModSafePrime set = GStarModSafePrime.getInstance(BigInteger.valueOf(23));
-		for (Element element : set.getElements()) {
-//			System.out.println(element);
+	public void testConversion() {
+		for (int prime : new int[]{5, 7, 11, 23}) {
+			GStarModSafePrime group = GStarModSafePrime.getInstance(prime);
+			for (GStarModElement e : group.getElements()) {
+				assertEquals(e, group.getElement(e.getValue()));
+				try {
+					assertEquals(e, group.getElementFrom(e.convertToBigInteger()));
+					assertEquals(e, group.getElementFrom(e.convertToString()));
+					assertEquals(e, group.getElementFrom(e.convertToByteArray()));
+				} catch (UniCryptException ex) {
+					fail();
+				}
+			}
 		}
-	}
-
-	@Test
-	public void testGetIndependentGenerators1() {
-		ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
-		GStarModSafePrime set = GStarModSafePrime.getInstance(BigInteger.valueOf(23));
-		Element g1 = set.getIndependentGenerator(3, rrs);
-		Element g2 = set.getIndependentGenerator(5, rrs);
-		Element g3 = set.getIndependentGenerator(2, rrs);
-		Tuple gs1 = set.getIndependentGenerators(20, rrs);
-		Assert.assertTrue(gs1.getAt(3).isEquivalent(g1));
-		Assert.assertTrue(gs1.getAt(5).isEquivalent(g2));
-		Assert.assertTrue(gs1.getAt(2).isEquivalent(g3));
-		Tuple gs2 = set.getIndependentGenerators(2, 10, rrs);
-		Assert.assertTrue(gs2.getAt(1).isEquivalent(g1));
-		Assert.assertTrue(gs2.getAt(3).isEquivalent(g2));
-		Assert.assertTrue(gs2.getAt(0).isEquivalent(g3));
-//		System.out.println(g1);
-//		System.out.println(g2);
-//		System.out.println(g3);
-//		System.out.println("Generators:");
-//		for (int i = 0; i < gs1.length; i++) {
-//			System.out.println(gs1[i]);
-//		}
-	}
-
-	@Test
-	public void testGetIndependentGenerators2() {
-		ReferenceRandomByteSequence rrs = PseudoRandomOracle.getInstance().query(ByteArray.getInstance(new byte[]{2, 5}));
-		GStarModSafePrime set = GStarModSafePrime.getInstance(BigInteger.valueOf(23));
-		Element g1 = set.getIndependentGenerator(3, rrs);
-		Element g2 = set.getIndependentGenerator(5, rrs);
-		Element g3 = set.getIndependentGenerator(2, rrs);
-		Tuple gs1 = set.getIndependentGenerators(20, rrs);
-		Assert.assertTrue(gs1.getAt(3).isEquivalent(g1));
-		Assert.assertTrue(gs1.getAt(5).isEquivalent(g2));
-		Assert.assertTrue(gs1.getAt(2).isEquivalent(g3));
-		Tuple gs2 = set.getIndependentGenerators(2, 10, rrs);
-		Assert.assertTrue(gs2.getAt(1).isEquivalent(g1));
-		Assert.assertTrue(gs2.getAt(3).isEquivalent(g2));
-		Assert.assertTrue(gs2.getAt(0).isEquivalent(g3));
 	}
 
 }

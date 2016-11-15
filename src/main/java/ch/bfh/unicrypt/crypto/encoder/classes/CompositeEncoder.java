@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -61,6 +61,21 @@ public class CompositeEncoder
 
 	protected CompositeEncoder(ImmutableArray<Encoder> encoders) {
 		this.encoders = encoders;
+	}
+
+	public static CompositeEncoder getInstance(DenseArray<Encoder> encoders) {
+		if (encoders == null || encoders.getLength() == 0) {
+			throw new IllegalArgumentException();
+		}
+		return new CompositeEncoder(encoders);
+	}
+
+	public static CompositeEncoder getInstance(Encoder... encoders) {
+		return CompositeEncoder.getInstance(DenseArray.getInstance(encoders));
+	}
+
+	public static CompositeEncoder getInstance(Encoder encoder, int length) {
+		return CompositeEncoder.getInstance(DenseArray.getInstance(encoder, length));
 	}
 
 	@Override
@@ -267,21 +282,6 @@ public class CompositeEncoder
 			decodingFunctions[length - i - 1] = this.encoders.getAt(i).getDecodingFunction();
 		}
 		return CompositeFunction.getInstance(decodingFunctions);
-	}
-
-	public static CompositeEncoder getInstance(DenseArray<Encoder> encoders) {
-		if (encoders == null || encoders.getLength() == 0) {
-			throw new IllegalArgumentException();
-		}
-		return new CompositeEncoder(encoders);
-	}
-
-	public static CompositeEncoder getInstance(Encoder... encoders) {
-		return CompositeEncoder.getInstance(DenseArray.getInstance(encoders));
-	}
-
-	public static CompositeEncoder getInstance(Encoder encoder, int length) {
-		return CompositeEncoder.getInstance(DenseArray.getInstance(encoder, length));
 	}
 
 }

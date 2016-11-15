@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,20 +41,20 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.interfaces;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public interface RandomizedEncryptionScheme
 	   extends AsymmetricEncryptionScheme {
 
 	/**
 	 *
-	 * @return
+	 * @return Returns the randomization space
 	 */
 	public Set getRandomizationSpace();
 
@@ -63,7 +63,7 @@ public interface RandomizedEncryptionScheme
 	 * @param encryptionKey
 	 * @param message
 	 * @param randomByteSequence
-	 * @return
+	 * @return Returns the encrypted message
 	 */
 	public Element encrypt(Element encryptionKey, Element message, RandomByteSequence randomByteSequence);
 
@@ -72,7 +72,7 @@ public interface RandomizedEncryptionScheme
 	 * @param decryptionKey
 	 * @param message
 	 * @param randomization
-	 * @return
+	 * @return Returns the encrypted message
 	 */
 	public Element encrypt(Element decryptionKey, Element message, Element randomization);
 

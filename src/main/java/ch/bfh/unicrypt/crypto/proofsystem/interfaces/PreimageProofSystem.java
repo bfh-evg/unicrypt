@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -43,6 +43,14 @@ package ch.bfh.unicrypt.crypto.proofsystem.interfaces;
 
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
+/**
+ * This interface represents the concept of a preimage proof system. A preimage proof is a sigma proof where the prover
+ * proves knowledge of the preimage x of a homomorphic one-way function f (the proof function) for a given image y.
+ * <p>
+ * ZKP [x : y = f(x)]
+ * <p>
+ * @author P. Locher
+ */
 public interface PreimageProofSystem
 	   extends ProofSystem {
 

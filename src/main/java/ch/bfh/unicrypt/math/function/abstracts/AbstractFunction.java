@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,21 +41,22 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This abstract class contains default implementations for most methods of type {@link Function}. For most classes
  * implementing {@link Function}, it is sufficient to inherit from {@link AbstractFunction} and to implement the single
- * abstract method {@link abstractApply(Element element, Random random)}.
+ * abstract method {@link #abstractApply(Element, RandomByteSequence) }.
  * <p>
- * <p/>
  * @param <F>
  * @param <D>
  * @param <DE>
@@ -65,10 +66,10 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractFunction<F extends Function, D extends Set, DE extends Element, C extends Set,
-	   CE extends Element>
+public abstract class AbstractFunction<F extends Function, D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends UniCrypt
 	   implements Function {
+
 	private static final long serialVersionUID = 1L;
 
 	private final D domain;
@@ -92,7 +93,7 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 	@Override
 	public final CE apply(final Element element, RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (this.getDomain().contains(element)) {
 			return this.abstractApply((DE) element, randomByteSequence);
@@ -111,7 +112,7 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 		if (this.getDomain().isProduct()) {
 			return this.apply(((ProductSet) this.getDomain()).getElement(elements), randomByteSequence);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, elements);
 	}
 
 	@Override
@@ -137,7 +138,7 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 	@Override
 	public final boolean isEquivalent(final Function function) {
 		if (function == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (this == function) {
 			return true;
@@ -164,10 +165,6 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 		return this.getDomain() + " => " + this.getCoDomain();
 	}
 
-	//
-	// The following protected methods are default implementations for sets.
-	// They may need to be changed in certain sub-classes.
-	//
 	protected boolean defaultIsCompound() {
 		return false;
 	}
@@ -176,23 +173,8 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 		return true;
 	}
 
-	//
-	// The following protected abstract method must be implemented in every direct
-	// sub-class
-	//
-	/**
-	 * This abstract method is the main method to implement in each sub-class of {@link AbstractFunction}. The validity
-	 * of the two parameters has already been tested.
-	 * <p>
-	 * <p/>
-	 * @see apply(Element, Random)
-	 * @see Group#apply(Element[])
-	 * @see Element#apply(Element)
-	 * <p>
-	 * @param element            The given input element
-	 * @param randomByteSequence Either {@code null} or a given random generator
-	 * @return The resulting output element
-	 */
+	// this abstract method is the main method to implement in each sub-class
+	// the validity of the two parameters has already been tested.
 	protected abstract CE abstractApply(DE element, RandomByteSequence randomByteSequence);
 
 }

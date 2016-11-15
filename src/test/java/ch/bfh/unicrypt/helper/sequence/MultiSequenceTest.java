@@ -48,27 +48,34 @@ import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class MultiSequenceTest {
 
-	Sequence<Integer> s1 = IntegerSequence.getInstance(1, 5);
-	Sequence<Integer> s2 = IntegerSequence.getInstance(3, 5);
-	Sequence<Integer> s3 = IntegerSequence.getInstance(4, 8);
-	MultiSequence<Integer> ss = MultiSequence.getInstance(s1, s1, s2, s3);
-
 	@Test
 	public void testAppend() {
-		for (Integer i : ss.flatten()) {
-//			System.out.println(i);
+		Sequence<Integer> s0 = Sequence.getInstance();
+		Sequence<Integer> s1 = IntegerSequence.getInstance(1, 5);
+		Sequence<Integer> s2 = IntegerSequence.getInstance(3, 5);
+		Sequence<Integer> s3 = IntegerSequence.getInstance(4, 8);
+		MultiSequence<Integer> ss = MultiSequence.getInstance(s1, s1, s0, s2, s3);
+
+		Sequence<Integer> seq = ss.flatten();
+		assertEquals(18, seq.getLength().intValue());
+		assertEquals(s1, seq.limit(5));
+		assertEquals(s1, seq.skip(5).limit(5));
+		assertEquals(s2, seq.skip(5).skip(5).limit(3));
+		assertEquals(s3, seq.skip(5).skip(5).skip(3));
+		int i = 0;
+		for (Integer integer : seq) {
+			i++;
 		}
+		assertEquals(18, i);
+		assertEquals(0, MultiSequence.getInstance().getLength().intValue());
 	}
 
 	@Test
 	public void testJoin() {
-		for (DenseArray<Integer> i : ss.join()) {
-//			System.out.println(i);
-		}
 		Sequence<Integer> it0 = Sequence.getInstance();
 		Sequence<Integer> it1 = IntegerSequence.getInstance(0, 5);
 		Sequence<Integer> it2 = IntegerSequence.getInstance(0, 4);
@@ -122,10 +129,15 @@ public class MultiSequenceTest {
 	}
 
 	@Test
-	public void testMerge() {
+	public void testCombine() {
+		Sequence<Integer> s1 = IntegerSequence.getInstance(1, 5);
+		Sequence<Integer> s2 = IntegerSequence.getInstance(3, 5);
+		Sequence<Integer> s3 = IntegerSequence.getInstance(4, 8);
+		MultiSequence<Integer> ss = MultiSequence.getInstance(s1, s1, s2, s3);
 		for (DenseArray<Integer> i : ss.combine()) {
-//			System.out.println(i);
+			assertEquals(4, i.getLength());
 		}
+		assertEquals(3, ss.combine().getLength().intValue());
 	}
 
 }

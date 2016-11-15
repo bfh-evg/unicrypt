@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
 import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
 import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
@@ -49,8 +51,8 @@ import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
-import ch.bfh.unicrypt.helper.sequence.Mapping;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -60,7 +62,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class Tuple
 	   extends AbstractElement<ProductSet, Tuple, DenseArray<Element>>
@@ -68,8 +70,8 @@ public class Tuple
 
 	private static final long serialVersionUID = 1L;
 
-	protected Tuple(final ProductSet set, final DenseArray<Element> elements) {
-		super(set, elements);
+	protected Tuple(final ProductSet set, final DenseArray<? extends Element> elements) {
+		super(set, (DenseArray<Element>) elements);
 	}
 
 	public int getArity() {
@@ -144,14 +146,14 @@ public class Tuple
 	@Override
 	public Element getAt(int... indices) {
 		if (indices == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		Element element = this;
 		for (final int index : indices) {
 			if (element.isTuple()) {
 				element = ((Tuple) element).getAt(index);
 			} else {
-				throw new IllegalArgumentException();
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, indices, index);
 			}
 		}
 		return element;
@@ -311,11 +313,10 @@ public class Tuple
 	 * <p/>
 	 * @param elements The array of input elements
 	 * @return The corresponding tuple element
-	 * @throws IllegalArgumentException if {@code elements} is null or contains null
 	 */
-	public static Tuple getInstance(DenseArray<Element> elements) {
+	public static Tuple getInstance(DenseArray<? extends Element> elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		ProductSet productSet;
 		if (elements.isUniform() && !elements.isEmpty()) {
@@ -330,6 +331,10 @@ public class Tuple
 		return Tuple.getInstance(productSet, elements);
 	}
 
+	public static Tuple getInstance(Sequence<? extends Element> elements) {
+		return Tuple.getInstance(DenseArray.getInstance(elements));
+	}
+
 	public static Tuple getInstance(Element... elements) {
 		return Tuple.getInstance(DenseArray.getInstance(elements));
 	}
@@ -339,7 +344,7 @@ public class Tuple
 	}
 
 	// helper method to distinguish between pairs, triples and tuples
-	private static Tuple getInstance(ProductSet productSet, DenseArray<Element> elements) {
+	private static Tuple getInstance(ProductSet productSet, DenseArray<? extends Element> elements) {
 		if (elements.getLength() == 1) {
 			return new Singleton(productSet, elements);
 		}

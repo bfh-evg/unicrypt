@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -45,7 +45,9 @@ import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -55,12 +57,10 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
 
 /**
  *
- * @see [BG13] Zero-Knowledge Argument for Polynomial Evaluation with Application to Blacklists
+ * @see "[BG13] Zero-Knowledge Argument for Polynomial Evaluation with Application to Blacklists"
  * <p>
  * @author philipp
  */
@@ -292,7 +292,7 @@ public class PolynomialEvaluationProofSystem
 		for (int i = 0; i < this.d; i++) {
 			v = v && cxVs[i + 1].apply(cV.getAt(i).selfApply(fBarV.getAt(i).invert())
 				   .apply(cfuV.getAt(i))).isEquivalent(
-						  this.pedersenCS.commit(zModPrime.getZeroElement(), xiBarV.getAt(i)));
+				   this.pedersenCS.commit(this.zModPrime.getZeroElement(), xiBarV.getAt(i)));
 		}
 
 		Element left = publicInput.getSecond().selfApply(challenge.power(this.d + 1));
@@ -314,9 +314,11 @@ public class PolynomialEvaluationProofSystem
 	private PolynomialElement xPoly;
 
 	private Tuple computeDeltas(Tuple uV, Tuple fV) {
+		PolynomialSemiRing polynomialSemiRing = this.polynomial.getSet();
 		PolynomialElement[] result = new PolynomialElement[1];
-		xPoly = polynomial.getSet().getElement(BigInteger.ZERO, BigInteger.ONE);
-		Node1 root = new Node1(this.d + 1, 0, this.polynomial.getSet().getOneElement(), uV, fV, result);
+		this.xPoly = polynomialSemiRing.getElement(polynomialSemiRing.getSemiRing().getZeroElement(),
+												   polynomialSemiRing.getSemiRing().getOneElement());
+		createTree1(this.d + 1, 0, this.polynomial.getSet().getOneElement(), uV, fV, result);
 
 		Element[] dVs = new Element[this.d + 1];
 		for (int i = 0; i < dVs.length; i++) {
@@ -325,28 +327,25 @@ public class PolynomialEvaluationProofSystem
 		return Tuple.getInstance(dVs);
 	}
 
-	private class Node1 {
+	public void createTree1(int level, int degree, PolynomialElement poly, Tuple uV, Tuple fV,
+		   PolynomialElement[] result) {
+		if (level == 0) {
+			if (degree == 0) {
+				result[0] = poly;
+			}
+			result[0] = result[0].add(poly.times(polynomial.getValue().getCoefficient(degree)));
+		} else {
+			// right node
+			createTree1(level - 1, degree, poly.multiply(xPoly), uV, fV, result);
 
-		public Node1(int level, int degree, PolynomialElement poly, Tuple uV, Tuple fV, PolynomialElement[] result) {
-			if (level == 0) {
-				if (degree == 0) {
-					result[0] = poly;
-				}
-				result[0] = result[0].add(poly.times(polynomial.getValue().getCoefficient(degree)));
-			} else {
-				// right node
-				Node1 right = new Node1(level - 1, degree, poly.multiply(xPoly), uV, fV, result);
-
-				// left node
-				int nextDegree = degree + (int) Math.pow(2, level - 1);
-				if (nextDegree <= polynomial.getValue().getDegree()) {
-					PolynomialElement yPoly
-						   = polynomial.getSet().getElement(Tuple.getInstance(fV.getAt(level - 1), uV.getAt(level - 1)));
-					Node1 left = new Node1(level - 1, nextDegree, poly.multiply(yPoly), uV, fV, result);
-				}
+			// left node
+			int nextDegree = degree + (int) Math.pow(2, level - 1);
+			if (nextDegree <= polynomial.getValue().getDegree()) {
+				PolynomialElement yPoly
+					   = polynomial.getSet().getElement(Tuple.getInstance(fV.getAt(level - 1), uV.getAt(level - 1)));
+				createTree1(level - 1, nextDegree, poly.multiply(yPoly), uV, fV, result);
 			}
 		}
-
 	}
 
 	//================================================================
@@ -354,28 +353,24 @@ public class PolynomialEvaluationProofSystem
 	//-------------------------------------------
 	private Element computeDeltaBar(Tuple fBarV, Element x) {
 		DualisticElement[] result = new DualisticElement[]{this.zModPrime.getZeroElement()};
-		Node2 root = new Node2(this.d + 1, 0, this.zModPrime.getOneElement(), fBarV, x, result);
+		createTree2(this.d + 1, 0, this.zModPrime.getOneElement(), fBarV, x, result);
 		return result[0];
 	}
 
-	private class Node2 {
+	public void createTree2(int level, int degree, DualisticElement value, Tuple fBarV, Element x,
+		   DualisticElement[] result) {
+		if (level == 0) {
+			result[0] = result[0].add(value.multiply(polynomial.getValue().getCoefficient(degree)));
+		} else {
+			// right node
+			createTree2(level - 1, degree, value.multiply(x), fBarV, x, result);
 
-		public Node2(int level, int degree, DualisticElement value, Tuple fBarV, Element x, DualisticElement[] result) {
-			if (level == 0) {
-				result[0] = result[0].add(value.multiply(polynomial.getValue().getCoefficient(degree)));
-			} else {
-				// right node
-				Node2 right = new Node2(level - 1, degree, value.multiply(x), fBarV, x, result);
-
-				// left node
-				int nextDegree = degree + (int) Math.pow(2, level - 1);
-				if (nextDegree <= polynomial.getValue().getDegree()) {
-					Node2 left
-						   = new Node2(level - 1, nextDegree, value.multiply(fBarV.getAt(level - 1)), fBarV, x, result);
-				}
+			// left node
+			int nextDegree = degree + (int) Math.pow(2, level - 1);
+			if (nextDegree <= polynomial.getValue().getDegree()) {
+				createTree2(level - 1, nextDegree, value.multiply(fBarV.getAt(level - 1)), fBarV, x, result);
 			}
 		}
-
 	}
 
 }

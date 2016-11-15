@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,13 +41,15 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a function, which is derived from another function with a product (or power)
@@ -62,23 +64,13 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class PartiallyAppliedFunction
 	   extends AbstractFunction<PartiallyAppliedFunction, ProductSet, Tuple, Set, Element> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final Function parentFunction;
 	private final Element parameter;
 	private final int index;
 
-	/**
-	 * This is the default constructor of this class. It derives from a given function a new function, in which one
-	 * input element is fixed to a given element and thus expects one input element less.
-	 * <p>
-	 * @param parentFunction The given function
-	 * @param parameter      The given parameter to fix
-	 * @param index          The index of the parameter to fix
-	 * @throws IllegalArgumentException  if the {@code function} is null or not a ProductGroup
-	 * @throws IndexOutOfBoundsException if the {@code index} is negative or > the arity of the function's domain
-	 * @throws IllegalArgumentException  if the {@code element} is not an element of the corresponding group
-	 */
 	private PartiallyAppliedFunction(final ProductSet domain, final Set coDomain, final Function parentFunction,
 		   final Element parameter, final int index) {
 		super(domain, coDomain);
@@ -106,8 +98,7 @@ public class PartiallyAppliedFunction
 	}
 
 	/**
-	 * Returns the index of the parameter that has been fixed to derive {@code this} function from the parent
-	 * function.
+	 * Returns the index of the parameter that has been fixed to derive {@code this} function from the parent function.
 	 * <p>
 	 * @return The index of the input element
 	 */
@@ -122,9 +113,6 @@ public class PartiallyAppliedFunction
 			   && this.getIndex() == other.getIndex();
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Element abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
 		int arity = element.getArity();
@@ -140,9 +128,6 @@ public class PartiallyAppliedFunction
 		return this.getParentFunction().apply(allElements, randomByteSequence);
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the default constructor of this class. It derives from a given function a new function, in which one
 	 * input element is fixed to a given element and thus expects one input element less.
@@ -150,22 +135,25 @@ public class PartiallyAppliedFunction
 	 * @param parentFunction
 	 * @param element        The given parameter to fix
 	 * @param index          The index of the parameter to fix
-	 * @return
-	 * @throws IllegalArgumentException  if the {@code function} is null or not a ProductGroup
-	 * @throws IndexOutOfBoundsException if the {@code index} is negative or > the arity of the function's domain
-	 * @throws IllegalArgumentException  if the {@code element} is not an element of the corresponding group
+	 * @return Returns an instance of this class
 	 */
 	public static PartiallyAppliedFunction getInstance(final Function parentFunction, final Element element,
 		   final int index) {
-		if (parentFunction == null || !parentFunction.getDomain().isProduct()) {
-			throw new IllegalArgumentException();
+		if (parentFunction == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (!parentFunction.getDomain().isProduct()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, parentFunction);
 		}
 		ProductSet domain = (ProductSet) parentFunction.getDomain();
+		if (index < 0 || index >= domain.getArity()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, domain, index);
+		}
 		if (!domain.getAt(index).contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, parentFunction, element);
 		}
 		return new PartiallyAppliedFunction(domain.removeAt(index), parentFunction.getCoDomain(), parentFunction,
-			   element, index);
+											element, index);
 	}
 
 }

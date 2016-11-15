@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.math;
 
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.factorization.Factorization;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -62,6 +64,10 @@ public final class MathUtil {
 	public static final BigInteger TWO = BigInteger.valueOf(2);
 	public static final BigInteger THREE = BigInteger.valueOf(3);
 	public static final BigInteger FOUR = BigInteger.valueOf(4);
+	public static final BigInteger FIVE = BigInteger.valueOf(5);
+	public static final BigInteger SIX = BigInteger.valueOf(6);
+	public static final BigInteger SEVEN = BigInteger.valueOf(7);
+	public static final BigInteger EIGHT = BigInteger.valueOf(8);
 
 	private static final byte[] BIT_MASKS = new byte[Byte.SIZE];
 	private static final byte[] BIT_MASKS_INV = new byte[Byte.SIZE];
@@ -74,22 +80,21 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Returns the value obtained from applying the Euler totient function to a positive integer. For computing the
-	 * result efficiently, the complete set of prime factors of the input value must be specified.
+	 * Returns the value obtained from applying the Euler totient function to a positive integer {@code n}. For
+	 * computing the result efficiently, the factorization of {@code n} must be specified.
 	 * <p>
-	 * @param value        The input value
-	 * @param primeFactors The prime factors of {@code value}
-	 * @return the result of applying the Euler totient function to {@code value}
+	 * @param factorization The factorization of {@code n}
+	 * @return The result of applying the Euler totient function to {@code n}
 	 * @see "Handbook of Applied Cryptography, Fact 2.101 (iii)"
 	 */
-	public static BigInteger eulerFunction(final BigInteger value, final BigInteger... primeFactors) {
+	public static BigInteger eulerFunction(final Factorization factorization) {
 		BigInteger product1 = ONE;
 		BigInteger product2 = ONE;
-		for (final BigInteger primeFactor : primeFactors) {
+		for (final BigInteger primeFactor : factorization.getPrimeFactors()) {
 			product1 = product1.multiply(primeFactor);
 			product2 = product2.multiply(primeFactor.subtract(ONE));
 		}
-		return value.multiply(product2).divide(product1);
+		return factorization.getValue().multiply(product2).divide(product1);
 	}
 
 	/**
@@ -210,7 +215,7 @@ public final class MathUtil {
 	 * Removes duplicates from a BigInteger array
 	 * <p>
 	 * @param values An array of BigInteger values
-	 * @return the same array of BigInteger values without duplicates
+	 * @return The same array of BigInteger values without duplicates
 	 */
 	public static BigInteger[] removeDuplicates(final BigInteger... values) {
 		final HashSet<BigInteger> hashSet = new HashSet<>(Arrays.asList(values));
@@ -249,8 +254,17 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Computes the elegant pairing function for a given list of non-negative {@code int} values. This is a convenience
-	 * method for {@link MathUtil#pairWithSize(java.math.BigInteger...)}.
+	 * Returns 0 for the special case of an empty list.
+	 * <p>
+	 * @return 0
+	 */
+	public static BigInteger pair() {
+		return MathUtil.ZERO;
+	}
+
+	/**
+	 * Computes the elegant pairing function for a given list of non-negative {@code long} values. This is a convenience
+	 * method for {@link MathUtil#pair(java.math.BigInteger...)}.
 	 * <p>
 	 * @param values The given values
 	 * @return The result of applying the elegant pairing function
@@ -290,6 +304,31 @@ public final class MathUtil {
 			newValues[length / 2] = values[length - 1];
 		}
 		return pair(newValues);
+	}
+
+	/**
+	 * Returns 0 for the special case of an empty list.
+	 * <p>
+	 * @return 0
+	 */
+	public static BigInteger pairWithSize() {
+		return MathUtil.ZERO;
+	}
+
+	/**
+	 * Computes the elegant pairing function for a given list of non-negative {@code long} values. This is a convenience
+	 * method for {@link MathUtil#pairWithSize(java.math.BigInteger...)}.
+	 * <p>
+	 * @param values The given values
+	 * @return The result of applying the elegant pairing function
+	 * @see MathUtil#pair(java.math.BigInteger...)
+	 */
+	public static BigInteger pairWithSize(long... values) {
+		BigInteger[] bigIntegers = new BigInteger[values.length];
+		for (int i = 0; i < values.length; i++) {
+			bigIntegers[i] = BigInteger.valueOf(values[i]);
+		}
+		return MathUtil.pairWithSize(bigIntegers);
 	}
 
 	/**
@@ -370,6 +409,17 @@ public final class MathUtil {
 		}
 		BigInteger[] values = unpair(value.subtract(ONE));
 		return unpair(values[0], values[1].intValue() + 1);
+	}
+
+	/**
+	 * Applies the folding function to a given value of type {@code long}. This is a convenience method for
+	 * {@link MathUtil#fold(java.math.BigInteger)}.
+	 * <p>
+	 * @param value The given long value
+	 * @return The result of applying the folding function
+	 */
+	public static BigInteger fold(long value) {
+		return fold(BigInteger.valueOf(value));
 	}
 
 	/**
@@ -506,8 +556,7 @@ public final class MathUtil {
 		BigInteger q = p.subtract(ONE).divide(TWO);
 
 		// finding q
-		while (q.mod(TWO)
-			   .equals(ZERO)) {
+		while (q.mod(TWO).equals(ZERO)) {
 			q = q.divide(TWO);
 			s = s.add(ONE);
 		}
@@ -547,7 +596,30 @@ public final class MathUtil {
 		return x.modPow(p.subtract(ONE).divide(TWO), p).equals(ONE);
 	}
 
-	// Bit operations on byte
+	/**
+	 * Converts the 8 rightmost bits of an integer into a byte.
+	 * <p>
+	 * @param integer The given integer
+	 * @return The corresponding byte
+	 */
+	public static byte getByte(int integer) {
+		return (byte) (integer & 0xFF);
+	}
+
+	/**
+	 * Converts an integer into a byte array in big-endian byte order.
+	 * <p>
+	 * @param integer The given integer
+	 * @return The corresponding byte array
+	 */
+	public static ByteArray getByteArray(int integer) {
+		byte byte0 = MathUtil.getByte(integer);
+		byte byte1 = MathUtil.getByte(integer >>> Byte.SIZE);
+		byte byte2 = MathUtil.getByte(integer >>> 2 * Byte.SIZE);
+		byte byte3 = MathUtil.getByte(integer >>> 3 * Byte.SIZE);
+		return ByteArray.getInstance(byte3, byte2, byte1, byte0);
+	}
+
 	/**
 	 * Returns the {@code i}-th bit of a byte.
 	 * <p>
@@ -681,7 +753,7 @@ public final class MathUtil {
 	 */
 	public static int modulo(int x, int y) {
 		y = Math.abs(y);
-		return ((x % y) + y) % y;
+		return (x % y + y) % y;
 	}
 
 	/**
@@ -733,6 +805,42 @@ public final class MathUtil {
 			return divideUp(x.negate(), y.negate());
 		}
 		return divide(x.add(y).subtract(ONE), y);
+	}
+
+	/**
+	 * Computes the Legendre symbol {@code (a/n)} of a non-negative integer {@code a>=0} and a prime number {@code p>2}.
+	 * <p>
+	 * @param a The given integer
+	 * @param p The given odd prime number
+	 * @return The Legendre symbol {@code (a/n)}
+	 */
+	public static int legendreSymbol(BigInteger a, BigInteger p) {
+
+		a = a.mod(p);
+
+		BigInteger t = MathUtil.ONE;
+		while (!a.equals(MathUtil.ZERO)) {
+			while (a.mod(MathUtil.TWO).equals(MathUtil.ZERO)) {
+				a = a.divide(MathUtil.TWO);
+
+				if (p.mod(MathUtil.EIGHT).equals(MathUtil.THREE) || p.mod(MathUtil.EIGHT).equals(MathUtil.FIVE)) {
+					t = t.negate();
+				}
+			}
+			BigInteger tmp = a;
+			a = p;
+			p = tmp;
+
+			if (a.mod(MathUtil.FOUR).equals(MathUtil.THREE) && p.mod(MathUtil.FOUR).equals(MathUtil.THREE)) {
+				t = t.negate();
+			}
+			a = a.mod(p);
+		}
+		if (p.equals(MathUtil.ONE)) {
+			return t.intValue();
+		} else {
+			return 0;
+		}
 	}
 
 }

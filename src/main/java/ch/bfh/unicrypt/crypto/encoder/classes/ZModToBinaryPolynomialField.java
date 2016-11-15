@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -44,13 +44,13 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BitArrayToBigInteger;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -63,10 +63,8 @@ import java.math.BigInteger;
 public class ZModToBinaryPolynomialField
 	   extends AbstractEncoder<ZMod, ZModElement, PolynomialField, PolynomialElement> {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -4567955434932946745L;
+
 	private final ZMod zMod;
 	private final PolynomialField binaryPolynomialField;
 	private final BitArrayToBigInteger bitToBigIntConverter;
@@ -94,13 +92,8 @@ public class ZModToBinaryPolynomialField
 		return new ZModToBinaryPolynomialField(zMod, binaryPolynomialField);
 	}
 
-	class EncodingFunction
+	private class EncodingFunction
 		   extends AbstractFunction<EncodingFunction, ZMod, ZModElement, PolynomialField, PolynomialElement> {
-
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = -4841419729018910939L;
 
 		protected EncodingFunction(final ZMod domain, final PolynomialField coDomain) {
 			super(domain, coDomain);
@@ -117,11 +110,6 @@ public class ZModToBinaryPolynomialField
 
 	class DecodingFunction
 		   extends AbstractFunction<DecodingFunction, PolynomialField, PolynomialElement, ZMod, ZModElement> {
-
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 8382498527678953467L;
 
 		protected DecodingFunction(final PolynomialField domain, final ZMod coDomain) {
 			super(domain, coDomain);

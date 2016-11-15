@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -51,9 +53,9 @@ import java.math.BigInteger;
  * This abstract class provides a basis implementation for objects of type {@link PrimeField}.
  * <p>
  * @param <E> Generic type of the elements of this prime field
- * @param <M> Generic type of the {@link MultplicativeCyclicGroup} of this prime field
+ * @param <M> Generic type of the {@link MultiplicativeCyclicGroup} of this prime field
  * @param <V> Generic type of values stored in the elements of this prime field
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public abstract class AbstractPrimeField<E extends DualisticElement<V>, M extends MultiplicativeCyclicGroup, V>
 	   extends AbstractCyclicRing<E, V>
@@ -62,7 +64,6 @@ public abstract class AbstractPrimeField<E extends DualisticElement<V>, M extend
 	private static final long serialVersionUID = 1L;
 
 	private M multiplicativeGroup;
-	private BigInteger characteristic;
 
 	protected AbstractPrimeField(Class<?> valueClass) {
 		super(valueClass);
@@ -70,11 +71,11 @@ public abstract class AbstractPrimeField<E extends DualisticElement<V>, M extend
 
 	@Override
 	public final BigInteger getCharacteristic() {
-		return this.characteristic;
+		return this.getOrder();
 	}
 
 	@Override
-	public M getMultiplicativeGroup() {
+	public final M getMultiplicativeGroup() {
 		if (this.multiplicativeGroup == null) {
 			this.multiplicativeGroup = this.abstractGetMultiplicativeGroup();
 		}
@@ -82,22 +83,21 @@ public abstract class AbstractPrimeField<E extends DualisticElement<V>, M extend
 	}
 
 	@Override
-	public E divide(Element element1, Element element2) {
+	public final E divide(Element element1, Element element2) {
 		return this.multiply(element1, this.oneOver(element2));
 	}
 
 	@Override
-	public E oneOver(Element element) {
+	public final E oneOver(Element element) {
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
-		if (element.isEquivalent(this.getZeroElement())) {
-			throw new UnsupportedOperationException();
+		if (((E) element).isZero()) {
+			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this, element);
 		}
 		return this.abstractOneOver((E) element);
 	}
 
-	// The following protected abstract methods must be implemented in every direct sub-class.
 	protected abstract E abstractOneOver(E element);
 
 	protected abstract M abstractGetMultiplicativeGroup();

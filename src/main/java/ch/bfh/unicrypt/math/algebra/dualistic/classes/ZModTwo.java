@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -46,14 +46,17 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ZModTwo
 	   extends ZModPrime {
 
+	private static final long serialVersionUID = 1L;
+
 	public static final ZModElement ZERO = ZModTwo.getInstance().getElement(0);
 	public static final ZModElement ONE = ZModTwo.getInstance().getElement(1);
-	private static final long serialVersionUID = 1L;
+
+	private static ZModTwo instance;
 
 	protected ZModTwo() {
 		super(Prime.getInstance(2));
@@ -70,10 +73,6 @@ public class ZModTwo
 	public ZModElement not(Element element) {
 		return this.negate(element);
 	}
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static ZModTwo instance;
 
 	/**
 	 * This factory method returns the singleton object of this class.

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,27 +41,32 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.factorization.Prime;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
- * @author rolfhaenni
+ * Inherits from ZStarMod but not from AbstractCyclicGroup. Therefore, the additional methods from AbstractCyclicGroup
+ * need to be implemented.
+ * <p>
+ * @author R. Haenni
  */
 public class ZStarModPrime
 	   extends ZStarMod
 	   implements MultiplicativeCyclicGroup<BigInteger> {
 
-	private final static Map<BigInteger, ZStarModPrime> instances = new HashMap<>();
 	private static final long serialVersionUID = 1L;
+	private final static Map<BigInteger, ZStarModPrime> INSTANCES = new HashMap<>();
 
 	protected ZStarModPrime(Prime modulus) {
 		super(modulus);
@@ -69,98 +74,63 @@ public class ZStarModPrime
 
 	@Override
 	public ZStarModElement getDefaultGenerator() {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+		// finding a generator requires the factorization of p-1
+		// given the factorization of p-1, finding the generator is still difficuclt
+		throw new UniCryptRuntimeException(ErrorCode.NOT_YET_IMPLEMENTED, this);
 	}
 
 	@Override
-	public ZStarModElement getRandomGenerator() {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+	public final Sequence<ZStarModElement> getIndependentGenerators() {
+		return this.getIndependentGenerators(DeterministicRandomByteSequence.getInstance());
 	}
 
 	@Override
-	public ZStarModElement getRandomGenerator(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+	public final Sequence<ZStarModElement> getIndependentGenerators(
+		   DeterministicRandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
 
 	@Override
-	public ZStarModElement getIndependentGenerator(int index) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+	public final ZStarModElement getRandomGenerator() {
+		return this.getRandomGenerators().get();
 	}
 
 	@Override
-	public ZStarModElement getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+	public final ZStarModElement getRandomGenerator(RandomByteSequence randomByteSequence) {
+		return this.getRandomGenerators(randomByteSequence).get();
 	}
 
 	@Override
-	public Tuple getIndependentGenerators(int maxIndex) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+	public final Sequence<ZStarModElement> getRandomGenerators() {
+		return this.getRandomGenerators(HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
-	public Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+	public final Sequence<ZStarModElement> getRandomGenerators(RandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
 
-	@Override
-	public Tuple getIndependentGenerators(int minIndex, int maxIndex) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
-	}
+	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
+	protected Sequence<ZStarModElement> defaultGetRandomGenerators(RandomByteSequence randomByteSequence) {
+		return this.abstractGetRandomElements(randomByteSequence).filter(new Predicate<ZStarModElement>() {
 
-	@Override
-	public Tuple getIndependentGenerators(int minIndex, int maxIndex,
-		   ReferenceRandomByteSequence referenceRandomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
+			@Override
+			public boolean test(ZStarModElement value) {
+				return isGenerator(value);
+			}
+
+		});
 	}
 
 	@Override
 	public boolean isGenerator(Element element) {
-		throw new UnsupportedOperationException("Not supported yet.");
-		// TODO: Implement method.
-	}
-
-	@Override
-	protected Sequence<ZStarModElement> defaultGetElements() {
-		return super.defaultGetElements();
-// same code as in AbstractCyclicGroup
-//		final ZStarModPrime group = this;
-//		return Sequence.getInstance(this.getDefaultGenerator(), new UnaryOperator<ZStarModElement>() {
-//
-//			@Override
-//			public ZStarModElement apply(ZStarModElement element) {
-//				return group.apply(group.getDefaultGenerator(), element);
-//			}
-//
-//		}).limit(new Predicate<ZStarModElement>() {
-//
-//			@Override
-//			public boolean test(ZStarModElement element) {
-//
-//				return group.getIdentityElement().equals(element);
-//			}
-//
-//		});
-	}
-
-	public static ZStarModPrime getInstance(final Prime modulus) {
-		if (modulus == null) {
-			throw new IllegalArgumentException();
-		}
-		ZStarModPrime instance = ZStarModPrime.instances.get(modulus.getValue());
-		if (instance == null) {
-			instance = new ZStarModPrime(modulus);
-			ZStarModPrime.instances.put(modulus.getValue(), instance);
-		}
-		return instance;
+		throw new UniCryptRuntimeException(ErrorCode.NOT_YET_IMPLEMENTED, this);
 	}
 
 	public static ZStarModPrime getInstance(final long modulus) {
@@ -168,7 +138,27 @@ public class ZStarModPrime
 	}
 
 	public static ZStarModPrime getInstance(final BigInteger modulus) {
-		return ZStarModPrime.getInstance(Prime.getInstance(modulus));
+		if (modulus == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		ZStarModPrime instance = ZStarModPrime.INSTANCES.get(modulus);
+		if (instance == null) {
+			instance = new ZStarModPrime(Prime.getInstance(modulus));
+			ZStarModPrime.INSTANCES.put(modulus, instance);
+		}
+		return instance;
+	}
+
+	public static ZStarModPrime getInstance(final Prime modulus) {
+		if (modulus == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		ZStarModPrime instance = ZStarModPrime.INSTANCES.get(modulus.getValue());
+		if (instance == null) {
+			instance = new ZStarModPrime(modulus);
+			ZStarModPrime.INSTANCES.put(modulus.getValue(), instance);
+		}
+		return instance;
 	}
 
 	public static ZStarModPrime getFirstInstance(int bitLength) {

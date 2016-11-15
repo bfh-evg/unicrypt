@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,27 +41,26 @@
  */
 package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.SecretKeyGenerator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
+import ch.bfh.unicrypt.helper.random.password.PasswordRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.RandomFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.OutputFeedbackRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Element>
-	   extends AbstractKeyGenerator
+	   extends UniCrypt
 	   implements SecretKeyGenerator {
 
 	private final KS secretKeySpace;
 	private Function secretKeyGenerationFunction; // with singleton domain
 
-	protected AbstractSecretKeyGenerator(final KS secretKeySpace, StringToByteArray converter) {
-		super(converter);
+	protected AbstractSecretKeyGenerator(final KS secretKeySpace) {
 		this.secretKeySpace = secretKeySpace;
 	}
 
@@ -76,14 +75,11 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 	}
 
 	@Override
-	public KE generateSecretKey(RandomByteSequence randomByteSequence) {
-		return (KE) this.getSecretKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(),
-																randomByteSequence);
-	}
-
-	@Override
 	public KE generateSecretKey(String password) {
-		return this.generateSecretKey(password, ByteArray.getInstance());
+		if (password == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.generateSecretKey(PasswordRandomByteSequence.getInstance(password));
 	}
 
 	@Override
@@ -91,16 +87,16 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 		if (password == null || salt == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArray seed = converter.convert(password).append(salt);
-		//Here we use a random byte sequence generator that is deterministic and feeds itsself with its output.
-		//According to http://en.wikipedia.org/wiki/PBKDF2 the feedback should at least be repeated 1000 times.
-		OutputFeedbackRandomByteSequence pseudoRandomByteSequence = OutputFeedbackRandomByteSequence.getInstance(seed);
-		for (int i = 0; i < 1000; i++) {
-			pseudoRandomByteSequence.setSeed(
-				   pseudoRandomByteSequence.getNextByteArray(
-						  pseudoRandomByteSequence.getForwardSecurityInBytes()));
+		return this.generateSecretKey(PasswordRandomByteSequence.getInstance(password, salt));
+	}
+
+	@Override
+	public KE generateSecretKey(RandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new IllegalArgumentException();
 		}
-		return this.generateSecretKey(pseudoRandomByteSequence);
+		return (KE) this.getSecretKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(),
+																randomByteSequence);
 	}
 
 	@Override

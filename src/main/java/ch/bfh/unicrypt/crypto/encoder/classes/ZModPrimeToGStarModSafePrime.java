@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
@@ -49,7 +51,6 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 public class ZModPrimeToGStarModSafePrime
@@ -59,6 +60,13 @@ public class ZModPrimeToGStarModSafePrime
 
 	protected ZModPrimeToGStarModSafePrime(GStarModSafePrime gStarModSafePrime) {
 		this.gStarModSafePrime = gStarModSafePrime;
+	}
+
+	public static ZModPrimeToGStarModSafePrime getInstance(GStarModSafePrime gStarModSafePrime) {
+		if (gStarModSafePrime == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ZModPrimeToGStarModSafePrime(gStarModSafePrime);
 	}
 
 	public GStarModSafePrime getGStarModSafePrime() {
@@ -75,14 +83,7 @@ public class ZModPrimeToGStarModSafePrime
 		return new DecodingFunction(this.gStarModSafePrime, this.gStarModSafePrime.getZModOrder());
 	}
 
-	public static ZModPrimeToGStarModSafePrime getInstance(GStarModSafePrime gStarModSafePrime) {
-		if (gStarModSafePrime == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ZModPrimeToGStarModSafePrime(gStarModSafePrime);
-	}
-
-	static class EncodingFunction
+	private static class EncodingFunction
 		   extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, GStarModSafePrime, GStarModElement> {
 
 		protected EncodingFunction(final ZModPrime domain, final GStarMod coDomain) {
@@ -92,7 +93,7 @@ public class ZModPrimeToGStarModSafePrime
 		@Override
 		protected GStarModElement abstractApply(final ZModElement element,
 			   final RandomByteSequence randomByteSequence) {
-			final BigInteger value = element.getValue().add(BigInteger.ONE);
+			final BigInteger value = element.getValue().add(MathUtil.ONE);
 			final GStarModSafePrime coDomain = this.getCoDomain();
 			if (coDomain.contains(value)) {
 				return coDomain.getElement(value);
@@ -102,7 +103,7 @@ public class ZModPrimeToGStarModSafePrime
 
 	}
 
-	static class DecodingFunction
+	private static class DecodingFunction
 		   extends AbstractFunction<DecodingFunction, GStarModSafePrime, GStarModElement, ZModPrime, ZModElement> {
 
 		protected DecodingFunction(final GStarMod domain, final ZModPrime coDomain) {
@@ -115,9 +116,9 @@ public class ZModPrimeToGStarModSafePrime
 			final BigInteger value = element.getValue();
 			final GStarModSafePrime domain = this.getDomain();
 			if (value.compareTo(domain.getOrder()) <= 0) {
-				return this.getCoDomain().getElement(value.subtract(BigInteger.ONE));
+				return this.getCoDomain().getElement(value.subtract(MathUtil.ONE));
 			}
-			return this.getCoDomain().getElement((domain.getModulus().subtract(value)).subtract(BigInteger.ONE));
+			return this.getCoDomain().getElement(domain.getModulus().subtract(value).subtract(MathUtil.ONE));
 		}
 
 	}

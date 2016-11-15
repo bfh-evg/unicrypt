@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,13 +41,16 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
+import java.math.BigInteger;
+
 /**
  * This interface represents the mathematical concept of a group. A group is a monoid for which inverse elements exist
  * for all elements in the group. It is therefore implemented as a specialization of {@link Monoid}.
  * <p>
  *
- * @param <V> Generic type of the values representing the elements of a group
+ * @param <V> The generic type of the values representing the elements of a group
  * @see "Handbook of Applied Cryptography, Definition 2.162"
+ * @see Element
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -57,20 +60,61 @@ public interface Group<V>
 	   extends Monoid<V> {
 
 	/**
-	 * Computes and returns the inverse of a given group element.
+	 * Computes and returns the inverse of the given group element.
 	 * <p>
-	 * @param element A given element
-	 * @return The inverse element of the input element
+	 * @param element The given element
+	 * @return The inverse of the given element
 	 */
 	public Element<V> invert(Element element);
 
 	/**
-	 * Applies the binary operation to the first and the inverse of the second given group element.
+	 * Applies the binary operation to the first and the inverse of the second element.
 	 * <p>
 	 * @param element1 The first element
 	 * @param element2 The second element
 	 * @return The result of applying the group operation to the the first and the inverse of the second element
 	 */
 	public Element<V> applyInverse(Element element1, Element element2);
+
+	/**
+	 * Inverts applying the binary operation repeatedly to {@code amount} many instances of a given input element. To
+	 * perform this operation, the group order must be known and {@code amount} must be relatively prime to the order.
+	 * This is a convenient method for {@link Group#invertSelfApply(Element, BigInteger)}.
+	 * <p>
+	 * @param element The given input element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of inverting the application of the operation multiple times to the input element
+	 */
+	public Element<V> invertSelfApply(Element element, long amount);
+
+	/**
+	 * Inverts applying the binary operation repeatedly to {@code amount} many instances of a given input element. To
+	 * perform this operation, the group order must be known and {@code amount} must be relatively prime to the order.
+	 * <p>
+	 * @param element The given input element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of inverting the application of the operation multiple times to the input element
+	 */
+	public Element<V> invertSelfApply(Element element, BigInteger amount);
+
+	/**
+	 * Same as {@link Group#invertSelfApply(Element, BigInteger)}, except that the amount is given as an instance of
+	 * {@code Element<BigInteger>}, from which a {@code BigInteger} value can be extracted using
+	 * {@link Element#getValue()}.
+	 * <p>
+	 * @param element The given input element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of inverting the application of the operation multiple times to the input element
+	 */
+	public Element<V> invertSelfApply(Element element, Element<BigInteger> amount);
+
+	/**
+	 * Inverts applying the binary operation to two instances of a given element. This is equivalent to
+	 * {@link Group#invertSelfApply(Element, long)} for {@code amount=2}.
+	 * <p>
+	 * @param element The given input element
+	 * @return The result of inverting the application of the operation to two instances of the input element
+	 */
+	public Element<V> invertSelfApply(Element element);
 
 }

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.aggregator.classes;
 
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.sequence.ExtendedIterator;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -131,8 +131,8 @@ public class ByteArrayAggregator
 		return new Sequence<ByteArray>() {
 
 			@Override
-			public ExtendedIterator<ByteArray> iterator() {
-				return new ExtendedIterator<ByteArray>() {
+			public SequenceIterator<ByteArray> iterator() {
+				return new SequenceIterator<ByteArray>() {
 
 					private int currentIndex = PREFIX_LENGTH;
 
@@ -142,7 +142,7 @@ public class ByteArrayAggregator
 					}
 
 					@Override
-					public ByteArray next() {
+					public ByteArray abstractNext() {
 						ByteArray prefix = value.extract(this.currentIndex, PREFIX_LENGTH);
 						int byteLength = new BigInteger(1, prefix.removePrefix(1).getBytes()).intValue();
 						ByteArray next = value.extract(this.currentIndex, PREFIX_LENGTH + byteLength);

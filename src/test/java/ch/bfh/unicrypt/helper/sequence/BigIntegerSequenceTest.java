@@ -49,12 +49,12 @@ import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class BigIntegerSequenceTest {
 
 	@Test
-	public void generalTest() {
+	public void generalTest1() {
 		BigIntegerSequence s0 = BigIntegerSequence.getInstance(0, -3);
 		BigIntegerSequence s1 = BigIntegerSequence.getInstance(3, 2);
 		BigIntegerSequence s2 = BigIntegerSequence.getInstance(2, 2);
@@ -80,6 +80,26 @@ public class BigIntegerSequenceTest {
 			assertEquals(j, i.intValue());
 			j++;
 		}
+
+	}
+
+	@Test
+	public void generalTest2() {
+		BigIntegerSequence s0 = BigIntegerSequence.getInstance(0);
+		BigIntegerSequence s1 = BigIntegerSequence.getInstance(1);
+		BigIntegerSequence s2 = BigIntegerSequence.getInstance(2);
+		BigIntegerSequence s3 = BigIntegerSequence.getInstance(3);
+
+		assertEquals(1, s0.getLength().intValue());
+		assertEquals(1, s1.getLength().intValue());
+		assertEquals(2, s2.getLength().intValue());
+		assertEquals(4, s3.getLength().intValue());
+		int j = 4;
+		for (BigInteger i : s3) {
+			assertEquals(j, i.intValue());
+			j++;
+		}
+
 	}
 
 }

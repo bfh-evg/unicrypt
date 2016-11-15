@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,19 +41,24 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptException;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class FiniteByteArraySet
 	   extends AbstractSet<FiniteByteArrayElement, ByteArray> {
@@ -113,19 +118,28 @@ public class FiniteByteArraySet
 	@Override
 	protected BigInteger abstractGetOrder() {
 		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
-		BigInteger order = BigInteger.ONE;
+		BigInteger order = MathUtil.ONE;
 		for (int i = 0; i < this.maxLength - this.minLength; i++) {
-			order = order.multiply(size).add(BigInteger.ONE);
+			order = order.multiply(size).add(MathUtil.ONE);
 		}
 		return order.multiply(size.pow(this.minLength));
 	}
 
 	@Override
-	protected FiniteByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		// this seems to be unnecessarly complicated, but is needed to generate shorter
-		// byte arrays with equal probability
-		return this.getElementFrom(randomByteSequence.getRandomNumberGenerator()
-			   .nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
+	protected Sequence<FiniteByteArrayElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE)).map(
+			   new Mapping<BigInteger, FiniteByteArrayElement>() {
+
+			@Override
+			public FiniteByteArrayElement apply(BigInteger value) {
+				try {
+					return getElementFrom(value);
+				} catch (UniCryptException exception) {
+					throw new UniCryptRuntimeException(ErrorCode.IMPOSSIBLE_STATE, exception, this, value);
+				}
+			}
+
+		});
 	}
 
 	@Override
@@ -142,16 +156,13 @@ public class FiniteByteArraySet
 		return hash;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	public static FiniteByteArraySet getInstance(final int maxLength) {
 		return FiniteByteArraySet.getInstance(0, maxLength);
 	}
 
 	public static FiniteByteArraySet getInstance(final int minLength, final int maxLength) {
 		if (minLength < 0 || maxLength < minLength) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, minLength, maxLength);
 		}
 		if (minLength == maxLength) {
 			return FixedByteArraySet.getInstance(minLength);
@@ -164,15 +175,18 @@ public class FiniteByteArraySet
 	}
 
 	public static FiniteByteArraySet getInstance(final BigInteger minOrder, int minLength) {
-		if (minOrder == null || minOrder.signum() < 0 || minLength < 0) {
-			throw new IllegalArgumentException();
+		if (minOrder == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (minOrder.signum() < 0 || minLength < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, minOrder, minLength);
 		}
 		int maxLength = minLength;
 		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
 		BigInteger order1 = size.pow(minLength);
-		BigInteger order2 = BigInteger.ONE;
+		BigInteger order2 = MathUtil.ONE;
 		while (order1.multiply(order2).compareTo(minOrder) < 0) {
-			order2 = order2.multiply(size).add(BigInteger.ONE);
+			order2 = order2.multiply(size).add(MathUtil.ONE);
 			maxLength++;
 		}
 		if (minLength == maxLength) {

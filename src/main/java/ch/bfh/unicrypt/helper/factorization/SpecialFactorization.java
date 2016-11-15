@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -62,7 +62,7 @@ public class SpecialFactorization
 
 	private static final long serialVersionUID = 1L;
 
-	protected SpecialFactorization(BigInteger value, BigInteger[] primeFactors, int[] exponents) {
+	protected SpecialFactorization(BigInteger value, BigInteger[] primeFactors, Integer[] exponents) {
 		super(value, primeFactors, exponents);
 	}
 
@@ -125,21 +125,21 @@ public class SpecialFactorization
 			}
 		}
 		if (exponent == 1 && !timesTwo) {
-			if (MathUtil.isPrime(primeFactor.subtract(BigInteger.ONE).divide(MathUtil.TWO))) {
+			if (MathUtil.isPrime(primeFactor.subtract(MathUtil.ONE).divide(MathUtil.TWO))) {
 				return new SafePrime(primeFactor);
 			}
 			return new Prime(primeFactor);
 		}
 		BigInteger[] primeFactors;
-		int[] exponents;
+		Integer[] exponents;
 		BigInteger value = primeFactor.pow(exponent);
 		if (timesTwo) {
 			primeFactors = new BigInteger[]{primeFactor, MathUtil.TWO};
-			exponents = new int[]{exponent, 1};
+			exponents = new Integer[]{exponent, 1};
 			value = value.multiply(MathUtil.TWO);
 		} else {
 			primeFactors = new BigInteger[]{primeFactor};
-			exponents = new int[]{exponent};
+			exponents = new Integer[]{exponent};
 		}
 		return new SpecialFactorization(value, primeFactors, exponents);
 	}
@@ -150,7 +150,7 @@ public class SpecialFactorization
 	 * @return The prime factor
 	 */
 	public BigInteger getPrimeFactor() {
-		return this.primeFactors[0];
+		return this.primeFactors.getAt(0);
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class SpecialFactorization
 	 * @return The exponent
 	 */
 	public int getExponent() {
-		return this.exponents[0];
+		return this.exponents.getAt(0);
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class SpecialFactorization
 	 * @return The flag
 	 */
 	public boolean timesTwo() {
-		return this.primeFactors.length == 2;
+		return this.primeFactors.getLength() == 2;
 	}
 
 }

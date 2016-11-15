@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,10 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.BinaryOperator;
-import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Operator;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
@@ -54,9 +57,10 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link SemiRing}.
  * <p>
- * @param <E> Generic type of the elements of this semiring
- * @param <V> Generic type of values stored in the elements of this semiring
- * @author rolfhaenni
+ * @param <E> The generic type of the elements of this semiring
+ * @param <V> The generic type of the values stored in the elements of this semiring
+ * <p>
+ * @author R. Haenni
  */
 public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	   extends AbstractAdditiveMonoid<E, V>
@@ -64,7 +68,8 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 
 	private static final long serialVersionUID = 1L;
 
-	private E one;
+	// the identity element of the multiplication
+	private E oneElement;
 
 	protected AbstractSemiRing(Class<?> valueClass) {
 		super(valueClass);
@@ -73,7 +78,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	@Override
 	public E multiply(Element element1, Element element2) {
 		if (!this.contains(element1) || !this.contains(element2)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element1, element2);
 		}
 		return this.abstractMultiply((E) element1, (E) element2);
 	}
@@ -81,46 +86,50 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	@Override
 	public E multiply(Element... elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		return this.defaultMultiply(Sequence.getInstance(elements));
+		return this.defaultMultiply(Sequence.getInstance(elements).filter(Predicate.NOT_NULL));
 	}
 
 	@Override
 	public E multiply(ImmutableArray<Element> elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
+		// no filtering of null values required
 		return this.defaultMultiply(Sequence.getInstance(elements));
 	}
 
 	@Override
 	public E multiply(Sequence<Element> elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		return this.defaultMultiply(elements);
+		return this.defaultMultiply(elements.filter(Predicate.NOT_NULL));
 	}
 
 	@Override
-	public E power(Element element, BigInteger amount) {
-		if (!this.contains(element) || (amount == null)) {
-			throw new IllegalArgumentException();
-		}
-		return this.defaultPower((E) element, amount);
+	public E power(Element element, long exponent) {
+		return this.power(element, BigInteger.valueOf(exponent));
 	}
 
 	@Override
-	public E power(Element element, Element<BigInteger> amount) {
-		if (amount == null) {
-			throw new IllegalArgumentException();
+	public E power(Element element, BigInteger exponent) {
+		if (exponent == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		return this.power(element, amount.getValue());
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, exponent);
+		}
+		return this.defaultPower((E) element, exponent);
 	}
 
 	@Override
-	public E power(Element element, long amount) {
-		return this.power(element, BigInteger.valueOf(amount));
+	public E power(Element element, Element<BigInteger> exponent) {
+		if (exponent == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		return this.power(element, exponent.getValue());
 	}
 
 	@Override
@@ -129,19 +138,22 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	}
 
 	@Override
-	public E productOfPowers(Element[] elements, BigInteger[] amounts) {
-		if ((elements == null) || (amounts == null) || (elements.length != amounts.length)) {
-			throw new IllegalArgumentException();
+	public E productOfPowers(Element[] elements, BigInteger[] exponents) {
+		if (elements == null || exponents == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements, exponents);
 		}
-		return this.defaultProductOfPowers(elements, amounts);
+		if (elements.length != exponents.length) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, this, elements, exponents);
+		}
+		return this.defaultProductOfPowers(elements, exponents);
 	}
 
 	@Override
 	public E getOneElement() {
-		if (this.one == null) {
-			this.one = this.abstractGetOne();
+		if (this.oneElement == null) {
+			this.oneElement = this.abstractGetOne();
 		}
-		return this.one;
+		return this.oneElement;
 	}
 
 	@Override
@@ -151,7 +163,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 
 	protected E defaultMultiply(final Sequence<Element> elements) {
 		final SemiRing<V> semiGroup = this;
-		return (E) elements.filter(Predicate.NOT_NULL).reduce(new BinaryOperator<Element>() {
+		return (E) elements.reduce(new Operator<Element>() {
 
 			@Override
 			public Element apply(Element element1, Element element2) {
@@ -160,47 +172,44 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 		}, this.getOneElement());
 	}
 
-	protected E defaultPower(E element, BigInteger amount) {
-		if (amount.signum() < 0) {
-			throw new IllegalArgumentException();
+	// this method is overridden in AbstractField
+	protected E defaultPower(E element, BigInteger exponent) {
+		if (exponent.signum() < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, exponent);
 		}
-		if (amount.signum() == 0) {
+		if (exponent.signum() == 0) {
 			return this.getOneElement();
 		}
-		return this.defaultPowerAlgorithm(element, amount);
+		return this.defaultPowerAlgorithm(element, exponent);
 	}
 
-	protected E defaultPowerAlgorithm(E element, BigInteger posAmount) {
+	protected E defaultPowerAlgorithm(E element, BigInteger posExponent) {
 		E result = element;
-		for (int i = posAmount.bitLength() - 2; i >= 0; i--) {
+		for (int i = posExponent.bitLength() - 2; i >= 0; i--) {
 			result = this.abstractMultiply(result, result);
-			if (posAmount.testBit(i)) {
+			if (posExponent.testBit(i)) {
 				result = this.abstractMultiply(result, element);
 			}
 		}
 		return result;
 	}
 
-	protected E defaultProductOfPowers(final Element[] elements, final BigInteger[] amounts) {
+	protected E defaultProductOfPowers(final Element[] elements, final BigInteger[] exponents) {
 		if (elements.length == 0) {
 			return this.getOneElement();
 		}
 		Element[] results = new Element[elements.length];
 		for (int i = 0; i < elements.length; i++) {
-			results[i] = this.power(elements[i], amounts[i]);
+			results[i] = this.power(elements[i], exponents[i]);
 		}
 		return this.multiply(results);
 	}
 
 	@Override
 	protected BigInteger defaultGetOrderLowerBound() {
-		return BigInteger.valueOf(2);
+		return MathUtil.TWO;
 	}
 
-	//
-	// The following protected abstract method must be implemented in every
-	// direct sub-class.
-	//
 	protected abstract E abstractMultiply(E element1, E element2);
 
 	protected abstract E abstractGetOne();

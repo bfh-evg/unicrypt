@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,12 +41,15 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptException;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.TrivialConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the the concept of a function f:X->Y, which outputs the element of Y that corresponds to the
@@ -70,7 +73,8 @@ public class ConvertFunction
 
 	};
 
-	private ConvertFunction(final Set domain, final Set coDomain, Converter domainConverter, Converter coDomainConverter) {
+	private ConvertFunction(final Set domain, final Set coDomain, Converter domainConverter,
+		   Converter coDomainConverter) {
 		super(domain, coDomain);
 		this.domainConverter = domainConverter;
 		this.coDomainConverter = coDomainConverter;
@@ -79,37 +83,43 @@ public class ConvertFunction
 	@Override
 	protected Element abstractApply(Element element, RandomByteSequence randomByteSequence) {
 		Object value = element.convertTo(this.domainConverter);
-		Element result = this.getCoDomain().getElementFrom(value, this.coDomainConverter);
-		if (result == null) {
-			throw new IllegalArgumentException();
+		Element result;
+		try {
+			result = this.getCoDomain().getElementFrom(value, this.coDomainConverter);
+		} catch (UniCryptException exception) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, exception, element);
 		}
 		return result;
 	}
 
 	public static <V> ConvertFunction getInstance(Set<V> domain, Set<V> coDomain) {
 		if (domain == null || coDomain == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, domain, coDomain);
 		}
-		return new ConvertFunction(domain, coDomain, TrivialConverter.<V>getInstance(), TrivialConverter.<V>getInstance());
+		return new ConvertFunction(domain, coDomain, TrivialConverter.<V>getInstance(), TrivialConverter.
+								   <V>getInstance());
 	}
 
-	public static <V, W> ConvertFunction getInstance(final Set<V> domain, final Set<W> coDomain, Converter<V, W> converter) {
+	public static <V, W> ConvertFunction getInstance(final Set<V> domain, final Set<W> coDomain,
+		   Converter<V, W> converter) {
 		if (domain == null || coDomain == null || converter == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, domain, coDomain, converter);
 		}
 		return new ConvertFunction(domain, coDomain, converter, TrivialConverter.<W>getInstance());
 	}
 
-	public static <V, W, X> ConvertFunction getInstance(Set<V> domain, Set<W> domainConverter, Converter<V, X> converter1, Converter<W, X> coDomainConverter) {
-		if (domain == null || domainConverter == null || converter1 == null || coDomainConverter == null) {
-			throw new IllegalArgumentException();
+	public static <V, W, X> ConvertFunction getInstance(Set<V> domain, Set<W> coDomain, Converter<V, X> domainConverter,
+		   Converter<W, X> coDomainConverter) {
+		if (domain == null || coDomain == null || domainConverter == null || coDomainConverter == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, domain, coDomain, domainConverter,
+											   coDomainConverter);
 		}
-		return new ConvertFunction(domain, domainConverter, converter1, coDomainConverter);
+		return new ConvertFunction(domain, coDomain, domainConverter, coDomainConverter);
 	}
 
 	public static ConvertFunction getInstance(Set domain, Set coDomain, Mode mode) {
 		if (domain == null || coDomain == null || mode == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, domain, coDomain, mode);
 		}
 		Converter converter1;
 		Converter converter2;
@@ -127,7 +137,7 @@ public class ConvertFunction
 				converter2 = coDomain.getByteArrayConverter();
 				break;
 			default:
-				throw new IllegalStateException();
+				throw new UniCryptRuntimeException(ErrorCode.IMPOSSIBLE_STATE, mode);
 		}
 		return new ConvertFunction(domain, coDomain, converter1, converter2);
 	}

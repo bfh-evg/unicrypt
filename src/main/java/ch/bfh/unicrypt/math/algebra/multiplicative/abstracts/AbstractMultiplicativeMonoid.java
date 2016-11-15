@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -50,11 +50,12 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMono
 import java.math.BigInteger;
 
 /**
- * This abstract class provides a basis implementation for objects of type {@link MulitplicativeMonoid}.
+ * This abstract class provides a basis implementation for objects of type {@link MultiplicativeMonoid}.
  * <p>
- * @param <E> Generic type of the elements of this monoid
- * @param <V> Generic type of values stored in the elements of this monoid
- * @author
+ * @param <E> The generic type of the elements of this monoid
+ * @param <V> The generic type of the values stored in the elements of this monoid
+ * <p>
+ * @author R. Haenni
  */
 public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement<V>, V>
 	   extends AbstractMonoid<E, V>
@@ -87,18 +88,18 @@ public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeEleme
 	}
 
 	@Override
-	public final E power(final Element element, final BigInteger amount) {
-		return this.selfApply(element, amount);
+	public final E power(final Element element, final long exponent) {
+		return this.selfApply(element, exponent);
 	}
 
 	@Override
-	public final E power(final Element element, final Element<BigInteger> amount) {
-		return this.selfApply(element, amount);
+	public final E power(final Element element, final BigInteger exponent) {
+		return this.selfApply(element, exponent);
 	}
 
 	@Override
-	public final E power(final Element element, final long amount) {
-		return this.selfApply(element, amount);
+	public final E power(final Element element, final Element<BigInteger> exponent) {
+		return this.selfApply(element, exponent);
 	}
 
 	@Override
@@ -107,8 +108,8 @@ public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeEleme
 	}
 
 	@Override
-	public final E productOfPowers(Element[] elements, BigInteger[] amounts) {
-		return this.multiSelfApply(elements, amounts);
+	public final E productOfPowers(Element[] elements, BigInteger[] exponents) {
+		return this.multiSelfApply(elements, exponents);
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,25 +42,25 @@
 package ch.bfh.unicrypt.crypto.keygenerator.interfaces;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public interface SecretKeyGenerator
 	   extends KeyGenerator {
 
 	public Element generateSecretKey();
 
-	public Element generateSecretKey(RandomByteSequence randomByteSequence);
-
 	public Element generateSecretKey(String password);
 
 	public Element generateSecretKey(String password, ByteArray salt);
+
+	public Element generateSecretKey(RandomByteSequence randomByteSequence);
 
 	public Function getSecretKeyGenerationFunction();
 

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,27 +42,27 @@
 package ch.bfh.unicrypt.crypto.keygenerator.interfaces;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public interface KeyPairGenerator
 	   extends KeyGenerator {
 
 	public Element generatePrivateKey();
 
-	public Element generatePrivateKey(RandomByteSequence randomByteSequence);
-
 	public Element generatePrivateKey(String password);
 
 	public Element generatePrivateKey(String password, ByteArray salt);
+
+	public Element generatePrivateKey(RandomByteSequence randomByteSequence);
 
 	public Element generatePublicKey(Element privateKey);
 
@@ -70,11 +70,11 @@ public interface KeyPairGenerator
 
 	public Pair generateKeyPair();
 
-	public Pair generateKeyPair(RandomByteSequence randomByteSequence);
-
 	public Pair generateKeyPair(String password);
 
 	public Pair generateKeyPair(String password, ByteArray salt);
+
+	public Pair generateKeyPair(RandomByteSequence randomByteSequence);
 
 	public ProductSet getKeyPairSpace();
 

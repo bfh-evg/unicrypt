@@ -45,7 +45,7 @@ import org.junit.Test;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class FixedStringSetTest {
 
@@ -69,7 +69,7 @@ public class FixedStringSetTest {
 //		System.out.println(set.getElement("0110").getValue());
 //		System.out.println(set.getElement("0111").getValue());
 //		System.out.println(set.getElement("1111").getValue());
-//		for (BigInteger i = BigInteger.ZERO; i.compareTo(BigInteger.valueOf(15)) <= 0; i = i.add(BigInteger.ONE)) {
+//		for (BigInteger i = MathUtil.ZERO; i.compareTo(BigInteger.valueOf(15)) <= 0; i = i.add(MathUtil.ONE)) {
 //			System.out.println(set.getElement(i));
 //		}
 //		System.out.println(set.getOrder());

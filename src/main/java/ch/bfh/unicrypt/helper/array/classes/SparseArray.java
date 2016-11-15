@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -43,12 +43,13 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * This class is a default implementation of the {@link ImmutableArray} interface. It is optimized for sparse arrays
@@ -57,7 +58,7 @@ import java.util.Map;
  * spareness of the array is high.
  * <p>
  * @see DenseArray
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the values in the immutable array
  */
@@ -138,8 +139,9 @@ public class SparseArray<V>
 			throw new IllegalArgumentException();
 		}
 		Map<Integer, V> newMap = new HashMap();
-		for (Integer i : map.keySet()) {
-			V value = map.get(i);
+		for (Entry<Integer, V> entry : map.entrySet()) {
+			int i = entry.getKey();
+			V value = entry.getValue();
 			if (value == null || i < 0 || i >= length) {
 				throw new IllegalArgumentException();
 			}
@@ -211,11 +213,10 @@ public class SparseArray<V>
 			return super.defaultGetIndices(value);
 		}
 		List<Integer> result = new LinkedList<>();
-		for (Integer i : this.map.keySet()) {
-			if (i >= this.rangeOffset && i < this.rangeOffset + this.rangeLength) {
-				if (this.map.get(i).equals(value)) {
-					result.add(this.getIndex(i));
-				}
+		for (Entry<Integer, V> entry : this.map.entrySet()) {
+			int i = entry.getKey();
+			if (i >= this.rangeOffset && i < this.rangeOffset + this.rangeLength && entry.getValue().equals(value)) {
+				result.add(this.getIndex(i));
 			}
 		}
 		return Sequence.getInstance(result);
@@ -228,11 +229,11 @@ public class SparseArray<V>
 			return super.defaultGetIndicesExcept(value);
 		}
 		List<Integer> result = new LinkedList<>();
-		for (Integer i : this.map.keySet()) {
-			if (i >= this.rangeOffset && i < this.rangeOffset + this.length - this.header - this.trailer) {
-				if (!this.map.get(i).equals(this.defaultValue)) {
-					result.add(this.getIndex(i));
-				}
+		for (Entry<Integer, V> entry : this.map.entrySet()) {
+			int i = entry.getKey();
+			if (i >= this.rangeOffset && i < this.rangeOffset + this.length - this.header - this.trailer
+				   && !entry.getValue().equals(this.defaultValue)) {
+				result.add(this.getIndex(i));
 			}
 		}
 		return Sequence.getInstance(result);

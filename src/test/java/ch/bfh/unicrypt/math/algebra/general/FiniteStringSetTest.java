@@ -47,7 +47,7 @@ import org.junit.Test;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class FiniteStringSetTest {
 
@@ -75,7 +75,7 @@ public class FiniteStringSetTest {
 //		System.out.println(set.getElement("0111").getValue());
 //		System.out.println(set.getElement("1111").getValue());
 //		System.out.println(set.getElement("00000").getValue());
-//		for (BigInteger i = BigInteger.ZERO; i.compareTo(BigInteger.valueOf(24)) <= 0; i = i.add(BigInteger.ONE)) {
+//		for (BigInteger i = MathUtil.ZERO; i.compareTo(BigInteger.valueOf(24)) <= 0; i = i.add(MathUtil.ONE)) {
 //			System.out.println(set.getElement(i));
 //		}
 //		System.out.println(set.getOrder());

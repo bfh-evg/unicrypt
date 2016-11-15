@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,33 +41,33 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.util.Arrays;
 
 /**
  * This class represents the concept of a generalized identity function f:X->X^n with f(x)=(x,...,x) for all elements x
  * in X. This class represents the concept of an identity function f:X->X with f(x)=x for all elements x in X.
- * <p/>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
  */
 public class MultiIdentityFunction
 	   extends AbstractFunction<MultiIdentityFunction, Set, Element, ProductSet, Tuple> {
+
 	private static final long serialVersionUID = 1L;
 
 	private MultiIdentityFunction(final Set domain, final ProductSet coDomain) {
 		super(domain, coDomain);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Tuple abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
 		final Element[] elements = new Element[this.getCoDomain().getArity()];
@@ -75,9 +75,6 @@ public class MultiIdentityFunction
 		return this.getCoDomain().getElement(elements);
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	public static MultiIdentityFunction getInstance(final Set set) {
 		return MultiIdentityFunction.getInstance(set, 1);
 	}
@@ -85,16 +82,17 @@ public class MultiIdentityFunction
 	/**
 	 * This is the default constructor for this class. It creates a generalized identity function for a given group,
 	 * which reproduces the input value multiple time.
-	 * <p/>
+	 * <p>
 	 * @param set   The given set
 	 * @param arity The arity of the output element
-	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
-	 * @throws IllegalArgumentException if {@code arity} is negative
+	 * @return Returns an instance of this class
 	 */
 	public static MultiIdentityFunction getInstance(final Set set, final int arity) {
-		if (set == null || arity < 0) {
-			throw new IllegalArgumentException();
+		if (set == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (arity < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, arity);
 		}
 		return new MultiIdentityFunction(set, ProductSet.getInstance(set, arity));
 	}

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,24 +41,27 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
  * This class represents the the concept of a function f:XxZ->Y, where Z is an atomic group. The second input element
  * can thus be transformed into an integer value z, which determines the number of times the group operation is applied
  * to the first input element.
- * <p/>
+ * <p>
  * @see Group#selfApply(Element, Element)
  * @see Element#selfApply(Element)
- * <p/>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -80,20 +83,16 @@ public class SelfApplyFunction
 		return element1.selfApply(element2.getValue());
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is a special constructor, where the group of the second parameter is selected automatically from the given
 	 * group.
-	 * <p/>
+	 * <p>
 	 * @param semiGroup The underlying group
-	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
+	 * @return Returns an instance of this class
 	 */
 	public static SelfApplyFunction getInstance(final SemiGroup semiGroup) {
 		if (semiGroup == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		if (semiGroup.isFinite() && semiGroup.hasKnownOrder()) {
 			return SelfApplyFunction.getInstance(semiGroup, semiGroup.getZModOrder());
@@ -105,16 +104,14 @@ public class SelfApplyFunction
 	 * This is the general constructor of this class. The first parameter is the group on which it operates, and the
 	 * second parameter is the atomic group, from which an element is needed to determine the number of times the group
 	 * operation is applied.
-	 * <p/>
+	 * <p>
 	 * @param semiGroup The underlying group
 	 * @param amountSet
-	 * @return
-	 * @throws IllegalArgumentException if {@code group} is null
-	 * @throws IllegalArgumentException if {@code amountGroup} is negative
+	 * @return Returns an instance of this class
 	 */
 	public static SelfApplyFunction getInstance(final SemiGroup semiGroup, final Set<BigInteger> amountSet) {
 		if (semiGroup == null || amountSet == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, semiGroup, amountSet);
 		}
 		return new SelfApplyFunction(ProductSet.getInstance(semiGroup, amountSet), semiGroup);
 	}

@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.converter.biginteger;
 
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BooleanToBigInteger;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import org.junit.Assert;
 import static org.junit.Assert.fail;
@@ -49,7 +50,7 @@ import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class BooleanToBigIntegerTest {
 
@@ -58,10 +59,10 @@ public class BooleanToBigIntegerTest {
 
 		BooleanToBigInteger converter = BooleanToBigInteger.getInstance();
 
-		Assert.assertEquals(BigInteger.ZERO, converter.convert(false));
-		Assert.assertEquals(BigInteger.ONE, converter.convert(true));
-		Assert.assertFalse(converter.reconvert(BigInteger.ZERO));
-		Assert.assertTrue(converter.reconvert(BigInteger.ONE));
+		Assert.assertEquals(MathUtil.ZERO, converter.convert(false));
+		Assert.assertEquals(MathUtil.ONE, converter.convert(true));
+		Assert.assertFalse(converter.reconvert(MathUtil.ZERO));
+		Assert.assertTrue(converter.reconvert(MathUtil.ONE));
 		try {
 			converter.reconvert(BigInteger.valueOf(-1));
 			fail();

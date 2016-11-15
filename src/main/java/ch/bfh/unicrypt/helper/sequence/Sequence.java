@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,10 +41,15 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
+import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.helper.sequence.functions.Operator;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Iterator;
@@ -63,8 +68,15 @@ public abstract class Sequence<V>
 	   extends UniCrypt
 	   implements Iterable<V> {
 
-	protected static final BigInteger INFINITE = BigInteger.valueOf(-1);
-	protected static final BigInteger UNKNOWN = BigInteger.valueOf(-2);
+	/**
+	 * A constant value representing an infinite sequence length.
+	 */
+	public static final BigInteger INFINITE = BigInteger.valueOf(-1);
+
+	/**
+	 * A constant value representing an unknown sequence length.
+	 */
+	public static final BigInteger UNKNOWN = BigInteger.valueOf(-2);
 
 	// the length of the sequence
 	protected BigInteger length;
@@ -77,19 +89,42 @@ public abstract class Sequence<V>
 		this.length = length;
 	}
 
+	@Override
+	public abstract SequenceIterator<V> iterator();
+
+	/**
+	 * Checks if the sequence is empty. If this is the case, {@link Sequence#iterator()}{@code .hasNext()} returns
+	 * {@code false}.
+	 * <p>
+	 * @return {@code true} if the sequence is empty, {@code false} otherwise
+	 */
 	public final boolean isEmpty() {
-		return this.length.equals(MathUtil.ZERO) || (this.length.equals(Sequence.UNKNOWN) && !this.iterator().hasNext());
+		return this.length.equals(MathUtil.ZERO) || (this.length.equals(Sequence.UNKNOWN)
+			   && !this.iterator().hasNext());
 	}
 
+	/**
+	 * Checks if the sequence is infinitely long. If this is the case, {@link Sequence#iterator()}{@code .hasNext()}
+	 * returns {@code false}.
+	 * <p>
+	 * @return {@code true} if the sequence is empty, {@code false} otherwise
+	 */
 	public final boolean isInfinite() {
 		return this.length.equals(Sequence.INFINITE);
 	}
 
-	// possibly expensive
+	/**
+	 * Returns the length of this sequence, which could possibly be {@link Sequence#INFINITE}. If the length of the
+	 * sequence is finite, but unknown at the moment of calling this method, it is computed by iterating through the
+	 * sequence. In that case, calling this method is expensive.
+	 * <p>
+	 * @return The length of the sequence
+	 */
 	public final BigInteger getLength() {
 		if (this.length.equals(Sequence.UNKNOWN)) {
 			long counter = 0;
-			for (V value : this) {
+			for (Iterator<V> it = this.iterator(); it.hasNext();) {
+				it.next();
 				counter++;
 			}
 			this.length = BigInteger.valueOf(counter);
@@ -97,12 +132,19 @@ public abstract class Sequence<V>
 		return this.length;
 	}
 
+	/**
+	 * Counts the number of values in the sequence satisfying the given predicate. An exception is thrown if the
+	 * sequence is infinite.
+	 * <p>
+	 * @param predicate The given predicate
+	 * @return The number of values satisfying the predicate
+	 */
 	public final long count(Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
 		}
 		if (this.isInfinite()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		long counter = 0;
 		for (V value : this) {
@@ -113,44 +155,85 @@ public abstract class Sequence<V>
 		return counter;
 	}
 
-	public final V find() {
-		return this.find(1);
+	/**
+	 * Returns the first value of the sequence, or {@code null} if the sequence is empty.
+	 * <p>
+	 * @return The first value
+	 */
+	public final V get() {
+		return this.get(0);
 	}
 
-	public final V find(long n) {
-		if (n < 1) {
+	/**
+	 * Returns the {@code n}-th value of the sequence, or {@code null} if the sequence is shorter than {@code n}.
+	 * <p>
+	 * @param n The position of the value in the sequence
+	 * @return The {@code n}-th value
+	 */
+	public final V get(long n) {
+		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
 		for (V value : this) {
-			n--;
 			if (n == 0) {
 				return value;
 			}
+			n--;
 		}
 		return null;
-
 	}
 
+	/**
+	 * Creates a new dense array from a given finite sequence of values. Null values are eliminated and the total length
+	 * is restricted to {@link Integer#MAX_VALUE}.
+	 * <p>
+	 * @return The new dense array
+	 */
+	public DenseArray<V> getAll() {
+		if (this.isInfinite()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		return DenseArray.<V>getInstance(this);
+	}
+
+	/**
+	 * Returns the first value of the sequence satisfying the given predicate, or {@code null} if no such value exists.
+	 * <p>
+	 * @param predicate The given predicate
+	 * @return The first value satisfying the predicate
+	 */
 	public final V find(Predicate<? super V> predicate) {
-		return this.find(predicate, 1);
+		return this.find(predicate, 0);
 	}
 
+	/**
+	 * Returns the {@code n}-th value of the sequence satisfying the given predicate, or {@code null} if no such value
+	 * exists.
+	 * <p>
+	 * @param predicate The given predicate
+	 * @param n         The position in the sequence of values satisfying the predicate
+	 * @return The {@code n}-th value satisfying the predicate
+	 */
 	public final V find(Predicate<? super V> predicate, long n) {
-		if (predicate == null || n < 1) {
+		if (predicate == null) {
 			throw new IllegalArgumentException();
 		}
-		for (V value : this.filter(predicate)) {
-			n--;
-			if (n == 0) {
-				return value;
-			}
-		}
-		return null;
+		return this.filter(predicate).get(n);
 	}
 
+	/**
+	 * Checks if all values in the sequence satisfy the given predicate. An exception is thrown if the sequence is
+	 * infinite.
+	 * <p>
+	 * @param predicate The given predicate
+	 * @return {@code true}, if the predicate matches for all values, {@code false} otherwise
+	 */
 	public final boolean matchAll(Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
+		}
+		if (this.isInfinite()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		for (V value : this) {
 			if (!predicate.test(value)) {
@@ -160,9 +243,19 @@ public abstract class Sequence<V>
 		return true;
 	}
 
+	/**
+	 * Checks if at least one value in the sequence satisfies the given predicate. An exception is thrown if the
+	 * sequence is infinite.
+	 * <p>
+	 * @param predicate The given predicate
+	 * @return {@code true}, if the predicate matches for at least one value, {@code false} otherwise
+	 */
 	public final boolean matchAny(Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
+		}
+		if (this.isInfinite()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		for (V value : this) {
 			if (predicate.test(value)) {
@@ -172,12 +265,19 @@ public abstract class Sequence<V>
 		return false;
 	}
 
-	public final V reduce(BinaryOperator<V> operation) {
+	/**
+	 * Applies an associative operation to all values in the sequence. If the sequence contains a single value, the
+	 * single value is returned. If the sequence is empty or infinite, an exception is thrown.
+	 * <p>
+	 * @param operation The associative operation
+	 * @return The result of applying the operation to all values
+	 */
+	public final V reduce(Operator<V> operation) {
 		if (operation == null) {
 			throw new IllegalArgumentException();
 		}
-		if (this.isEmpty()) {
-			throw new UnsupportedOperationException();
+		if (this.isEmpty() || this.isInfinite()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		Iterator<V> iterator = this.iterator();
 		V result = iterator.next();
@@ -187,9 +287,21 @@ public abstract class Sequence<V>
 		return result;
 	}
 
-	public final V reduce(BinaryOperator<V> operation, V identity) {
+	/**
+	 * Applies an associative operation to all values in the sequence. If the sequence contains a single value, the
+	 * single value is returned. If the sequence is empty, the given identity value is returned. If the sequence is
+	 * infinite, an exception is thrown.
+	 * <p>
+	 * @param operation The associative operation
+	 * @param identity  The identity value
+	 * @return The result of applying the operation to all values
+	 */
+	public final V reduce(Operator<V> operation, V identity) {
 		if (operation == null || identity == null) {
 			throw new IllegalArgumentException();
+		}
+		if (this.isInfinite()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		Iterator<V> iterator = this.iterator();
 		V result = identity;
@@ -199,6 +311,13 @@ public abstract class Sequence<V>
 		return result;
 	}
 
+	/**
+	 * Returns the sequence of values obtained from applying a mapping to all values of this sequence.
+	 * <p>
+	 * @param <W>     The type of the new sequence
+	 * @param mapping The given mapping
+	 * @return The new sequence
+	 */
 	public final <W> Sequence<W> map(final Mapping<? super V, ? extends W> mapping) {
 		if (mapping == null) {
 			throw new IllegalArgumentException();
@@ -207,8 +326,8 @@ public abstract class Sequence<V>
 		return new Sequence<W>(source.length) {
 
 			@Override
-			public ExtendedIterator<W> iterator() {
-				return new ExtendedIterator<W>() {
+			public SequenceIterator<W> iterator() {
+				return new SequenceIterator<W>() {
 
 					private final Iterator<V> iterator = source.iterator();
 
@@ -218,7 +337,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public W next() {
+					public W abstractNext() {
 						return mapping.apply(this.iterator.next());
 					}
 				};
@@ -227,6 +346,12 @@ public abstract class Sequence<V>
 		};
 	}
 
+	/**
+	 * Returns the sequence of all values satisfying the given predicate.
+	 * <p>
+	 * @param predicate The given predicate
+	 * @return The new sequence
+	 */
 	public final Sequence<V> filter(final Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
@@ -235,10 +360,10 @@ public abstract class Sequence<V>
 		return new Sequence<V>(Sequence.UNKNOWN) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 
-					private final ExtendedIterator<V> iterator = source.iterator();
+					private final SequenceIterator<V> iterator = source.iterator();
 					private V nextValue = null;
 					private boolean terminated = false;
 
@@ -259,7 +384,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						V result = this.nextValue;
 						this.nextValue = null;
 						return result;
@@ -271,10 +396,22 @@ public abstract class Sequence<V>
 
 	}
 
+	/**
+	 * Returns a sequence consisting of the values of this sequence, truncated to be no longer than {@code maxLength}.
+	 * <p>
+	 * @param maxLength The maximal length
+	 * @return The truncated sequence
+	 */
 	public final Sequence<V> limit(final long maxLength) {
 		return this.limit(BigInteger.valueOf(maxLength));
 	}
 
+	/**
+	 * Returns a sequence consisting of the values of this sequence, truncated to be no longer than {@code maxLength}.
+	 * <p>
+	 * @param maxLength The maximal length
+	 * @return The truncated sequence
+	 */
 	public final Sequence<V> limit(final BigInteger maxLength) {
 		if (maxLength == null || maxLength.signum() < 0) {
 			throw new IllegalArgumentException();
@@ -291,8 +428,8 @@ public abstract class Sequence<V>
 		return new Sequence<V>(newLength) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 
 					private final Iterator<V> iterator = source.iterator();
 					private BigInteger counter = MathUtil.ZERO;
@@ -303,7 +440,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						this.counter = this.counter.add(MathUtil.ONE);
 						return this.iterator.next();
 					}
@@ -314,7 +451,14 @@ public abstract class Sequence<V>
 		};
 	}
 
-	public Sequence<V> limit(final Predicate<V> predicate) {
+	/**
+	 * Returns a sequence consisting of the values of this sequence, truncated up to the first value satisfying the
+	 * given predicate.
+	 * <p>
+	 * @param predicate The given predicate
+	 * @return The truncated sequence
+	 */
+	public final Sequence<V> limit(final Predicate<V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
 		}
@@ -322,10 +466,10 @@ public abstract class Sequence<V>
 		return new Sequence<V>(Sequence.UNKNOWN) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 
-					private final ExtendedIterator<V> iterator = source.iterator();
+					private final SequenceIterator<V> iterator = source.iterator();
 					private boolean found = false;
 
 					@Override
@@ -334,7 +478,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						V value = iterator.next();
 						if (predicate.test(value)) {
 							this.found = true;
@@ -346,11 +490,22 @@ public abstract class Sequence<V>
 		};
 	}
 
-	public Sequence<V> skip() {
+	/**
+	 * Returns a sequence consisting of the values of this sequence, except for the first one.
+	 * <p>
+	 * @return The new sequence with 1 skipped value
+	 */
+	public final Sequence<V> skip() {
 		return this.skip(1);
 	}
 
-	public Sequence<V> skip(final long n) {
+	/**
+	 * Returns a sequence consisting of the values of this sequence, except for the first {@code n} values.
+	 * <p>
+	 * @param n The number of values to skip
+	 * @return The new sequence with {@code n} skipped values
+	 */
+	public final Sequence<V> skip(final int n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -364,32 +519,43 @@ public abstract class Sequence<V>
 		return new Sequence<V>(newLength) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				ExtendedIterator<V> iterator = source.iterator();
+			public SequenceIterator<V> iterator() {
+				SequenceIterator<V> iterator = source.iterator();
 				iterator.skip(n);
 				return iterator;
 			}
 		};
 	}
 
-	public final Sequence<DenseArray<V>> group(final long groupLength) {
-		if (groupLength < 1) {
+	/**
+	 * Returns a new sequence consisting of the values grouped into groups of size {@code groupLength}. The groups of
+	 * values are returned as immutable arrays. The last group may be shorter than {@code groupLength}.
+	 * <p>
+	 * @param groupLength The length of the groups
+	 * @return The sequence of groups
+	 */
+	public Sequence<? extends ImmutableArray<V>> group(final int groupLength) {
+		if (groupLength < 0) {
 			throw new IllegalArgumentException();
 		}
 		BigInteger newLength;
-		if (this.length.equals(Sequence.UNKNOWN) || this.length.equals(Sequence.INFINITE)) {
-			newLength = this.length;
+		if (groupLength == 0) {
+			newLength = Sequence.INFINITE;
 		} else {
-			newLength = MathUtil.divideUp(this.length, BigInteger.valueOf(groupLength));
+			if (this.length.equals(Sequence.UNKNOWN) || this.length.equals(Sequence.INFINITE)) {
+				newLength = this.length;
+			} else {
+				newLength = MathUtil.divideUp(this.length, BigInteger.valueOf(groupLength));
+			}
 		}
 		final Sequence<V> source = this;
-		return new Sequence<DenseArray<V>>(newLength) {
+		return new Sequence<ImmutableArray<V>>(newLength) {
 
 			@Override
-			public ExtendedIterator<DenseArray<V>> iterator() {
-				return new ExtendedIterator<DenseArray<V>>() {
+			public SequenceIterator<ImmutableArray<V>> iterator() {
+				return new SequenceIterator<ImmutableArray<V>>() {
 
-					private final Iterator<V> iterator = source.iterator();
+					private final SequenceIterator<V> iterator = source.iterator();
 
 					@Override
 					public boolean hasNext() {
@@ -397,14 +563,8 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public DenseArray<V> next() {
-						long i = 0;
-						DenseArray<V> result = DenseArray.getInstance();
-						while (i < groupLength && this.iterator.hasNext()) {
-							result = result.add(this.iterator.next());
-							i++;
-						}
-						return result;
+					public ImmutableArray<V> abstractNext() {
+						return this.iterator.next(groupLength);
 					}
 
 				};
@@ -414,21 +574,52 @@ public abstract class Sequence<V>
 
 	}
 
-	public Sequence<V> conc(final Sequence<V> other) {
+	/**
+	 * Returns the concatenation of this sequence with another sequence.
+	 * <p>
+	 * @param other The other sequence
+	 * @return The concatenation of the two sequences
+	 * @see MultiSequence#flatten()
+	 */
+	public final Sequence<V> conc(final Sequence<V> other) {
 		return MultiSequence.getInstance(this, other).flatten();
 	}
 
-	public Sequence<DenseArray<V>> combine(final Sequence<V> other) {
+	/**
+	 * Returns a sequence of pairs of values. The first value in each pair is taken from this sequence, and the second
+	 * from the other sequence, one after another. The length of the new sequence corresponds to the minimal length of
+	 * the two sequences.
+	 * <p>
+	 * @param other The other sequence
+	 * @return The combination of the two sequences
+	 * @see MultiSequence#combine()
+	 */
+	public final Sequence<DenseArray<V>> combine(final Sequence<V> other) {
 		return MultiSequence.getInstance(this, other).combine();
 	}
 
-	public Sequence<DenseArray<V>> join(final Sequence<V> other) {
+	/**
+	 * Returns the sequence of all pairs of values by taking he first value from this sequence and the second from the
+	 * other sequence. The length of the new sequence the product of the lengths of the two sequences.
+	 * <p>
+	 * @param other The other sequence
+	 * @return The join of the two sequences
+	 * @see MultiSequence#join()
+	 */
+	public final Sequence<DenseArray<V>> join(final Sequence<V> other) {
 		return MultiSequence.getInstance(this, other).join();
 	}
 
-	@Override
-	public abstract ExtendedIterator<V> iterator();
-
+	/**
+	 * Returns a new finite sequence consisting of the values contained in the input array. Using this method requires
+	 * some care, since the input array is not checked for {@code null} values. If necessary, a filter using
+	 * {@link Predicate#NOT_NULL} can be applied to the resulting sequence to eliminate {@code null} values. The
+	 * resulting sequence is also not safe against modifications in the input array.
+	 * <p>
+	 * @param <V>    The type of the new sequence
+	 * @param source The given array
+	 * @return The new sequence
+	 */
 	public static <V> Sequence<V> getInstance(final V... source) {
 		if (source == null) {
 			throw new IllegalArgumentException();
@@ -436,8 +627,8 @@ public abstract class Sequence<V>
 		return new Sequence<V>(BigInteger.valueOf(source.length)) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 					private int pos = 0;
 
 					@Override
@@ -446,7 +637,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						return source[this.pos++];
 					}
 
@@ -455,6 +646,16 @@ public abstract class Sequence<V>
 		};
 	}
 
+	/**
+	 * Returns a new finite sequence consisting of the values contained in the given collection. Using this method
+	 * requires some care, since the collection is not checked for {@code null} values. If necessary, a filter using
+	 * {@link Predicate#NOT_NULL} can be applied to the resulting sequence to eliminate {@code null} values. The
+	 * resulting sequence is also not safe against modifications in the given collection.
+	 * <p>
+	 * @param <V>    The type of the new sequence
+	 * @param source The given collection
+	 * @return The new sequence
+	 */
 	public static <V> Sequence<V> getInstance(final Collection<V> source) {
 		if (source == null) {
 			throw new IllegalArgumentException();
@@ -462,20 +663,27 @@ public abstract class Sequence<V>
 		return new Sequence<V>(BigInteger.valueOf(source.size())) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return ExtendedIterator.getInstance(source.iterator());
+			public SequenceIterator<V> iterator() {
+				return SequenceIterator.getInstance(source.iterator());
 			}
 		};
 	}
 
+	/**
+	 * Returns a new finite sequence consisting of the values contained in the given immutable array.
+	 * <p>
+	 * @param <V>    The type of the new sequence
+	 * @param source The given immutable array
+	 * @return The new sequence
+	 */
 	public static <V> Sequence<V> getInstance(final ImmutableArray<V> source) {
 		if (source == null) {
 			throw new IllegalArgumentException();
 		}
 		return new Sequence<V>() {
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 					private int currentIndex = 0;
 
 					@Override
@@ -484,7 +692,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						return source.getAt(this.currentIndex++);
 					}
 				};
@@ -493,17 +701,26 @@ public abstract class Sequence<V>
 
 	}
 
-	public static <V> Sequence<V> getInstance(final V startValue, final UnaryOperator<V> operator) {
-		if (startValue == null || operator == null) {
+	/**
+	 * Returns a new infinite sequence consisting of the values obtained from applying a mapping repeatedly to a given
+	 * starting value. The first value in the sequence is the starting value.
+	 * <p>
+	 * @param <V>        The type of the new sequence
+	 * @param startValue The starting value
+	 * @param mapping    The mapping applied repeatedly to the starting value
+	 * @return The new sequence
+	 */
+	public static <V> Sequence<V> getInstance(final V startValue, final Mapping<V, V> mapping) {
+		if (startValue == null || mapping == null) {
 			throw new IllegalArgumentException();
 		}
 		return new Sequence<V>(Sequence.INFINITE) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 
-					V currentValue = startValue;
+					private V currentValue = startValue;
 
 					@Override
 					public boolean hasNext() {
@@ -511,9 +728,9 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						V nextValue = this.currentValue;
-						this.currentValue = operator.apply(this.currentValue);
+						this.currentValue = mapping.apply(this.currentValue);
 						return nextValue;
 					}
 				};
@@ -529,13 +746,16 @@ public abstract class Sequence<V>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
+		if (this == obj) {
+			return true;
 		}
-		if (this.getClass() != obj.getClass()) {
+		if (obj == null || !(obj instanceof Sequence)) {
 			return false;
 		}
 		final Sequence<?> other = (Sequence<?>) obj;
+		if (this.isInfinite() || other.isInfinite()) {
+			return false;
+		}
 		Iterator<V> it1 = this.iterator();
 		Iterator<?> it2 = other.iterator();
 		while (it1.hasNext() && it2.hasNext()) {
@@ -544,6 +764,20 @@ public abstract class Sequence<V>
 			}
 		}
 		return !it1.hasNext() && !it2.hasNext();
+	}
+
+	@Override
+	protected String defaultToStringContent() {
+		if (this.isInfinite()) {
+			return "INFINITE";
+		}
+		String str = "";
+		String delimiter = "";
+		for (V value : this) {
+			str = str + delimiter + value;
+			delimiter = ", ";
+		}
+		return "[" + str + "]";
 	}
 
 }

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -52,7 +52,7 @@ import java.math.BigInteger;
  * Linear Time".
  * <p>
  * @see Permutation#getRank()
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class PermutationToBigInteger
@@ -84,7 +84,7 @@ public class PermutationToBigInteger
 
 	@Override
 	protected boolean defaultIsValidInput(Permutation permutation) {
-		return (permutation.getSize() == this.size);
+		return permutation.getSize() == this.size;
 	}
 
 	@Override

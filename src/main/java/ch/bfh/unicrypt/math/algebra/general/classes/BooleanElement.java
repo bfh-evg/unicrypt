@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -46,16 +46,29 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class BooleanElement
 	   extends AbstractElement<BooleanSet, BooleanElement, Boolean>
 
 	   implements Element<Boolean> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected BooleanElement(final BooleanSet set, final Boolean bit) {
 		super(set, bit);
+	}
+
+	public boolean isTrue() {
+		return this.value;
+	}
+
+	public boolean isFalse() {
+		return !this.value;
+	}
+
+	public static BooleanElement getInstance(boolean bit) {
+		return BooleanSet.getInstance().getElement(bit);
 	}
 
 }

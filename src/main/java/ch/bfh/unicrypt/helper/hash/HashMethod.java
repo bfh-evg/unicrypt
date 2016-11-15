@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -126,7 +126,8 @@ public class HashMethod<V>
 	}
 
 	// Case 3: CAH (convert, aggregate, hash)
-	protected HashMethod(HashAlgorithm hashAlgorithm, Converter<V, ByteArray> converter, Aggregator<ByteArray> aggregator) {
+	protected HashMethod(HashAlgorithm hashAlgorithm, Converter<V, ByteArray> converter,
+		   Aggregator<ByteArray> aggregator) {
 		this.hashAlgorithm = hashAlgorithm;
 		this.converter = converter;
 		this.valueAggregator = null; // valueAggregator is not needed in CAH
@@ -225,7 +226,8 @@ public class HashMethod<V>
 	 * @param converter     The given ByteArray converter
 	 * @return The new hash method
 	 */
-	public static <V> HashMethod<V> getInstance(HashAlgorithm hashAlgorithm, Aggregator<V> aggregator, Converter<V, ByteArray> converter) {
+	public static <V> HashMethod<V> getInstance(HashAlgorithm hashAlgorithm, Aggregator<V> aggregator,
+		   Converter<V, ByteArray> converter) {
 		if (hashAlgorithm == null || aggregator == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
@@ -255,7 +257,8 @@ public class HashMethod<V>
 	 * @param aggregator    The given byte array aggregator
 	 * @return The new hash method
 	 */
-	public static <V> HashMethod<V> getInstance(HashAlgorithm hashAlgorithm, Converter<V, ByteArray> converter, Aggregator<ByteArray> aggregator) {
+	public static <V> HashMethod<V> getInstance(HashAlgorithm hashAlgorithm, Converter<V, ByteArray> converter,
+		   Aggregator<ByteArray> aggregator) {
 		if (hashAlgorithm == null || aggregator == null || converter == null) {
 			throw new IllegalArgumentException();
 		}

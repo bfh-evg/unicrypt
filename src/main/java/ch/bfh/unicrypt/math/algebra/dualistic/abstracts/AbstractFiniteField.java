@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -49,17 +49,19 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link FiniteField}.
  * <p>
- * @param <E> Generic type of the elements of this finite field
- * @param <M> Generic type of the {@link MultplicativeGroup} of this finite field
- * @param <V> Generic type of values stored in the elements of this finite field
- * @author rolfhaenni
+ * @param <E> The generic type of the elements of this finite field
+ * @param <V> The generic type of the values stored in the elements of this finite field
+ * @param <M> The generic type of the multiplicative group of this finite field
+ * <p>
+ * @author R. Haenni
  */
-public abstract class AbstractFiniteField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V>
+public abstract class AbstractFiniteField<E extends DualisticElement<V>, M extends MultiplicativeGroup<V>, V>
 	   extends AbstractField<E, M, V>
 	   implements FiniteField<V> {
 
 	private static final long serialVersionUID = 1L;
 
+	// the charcteristic of this finite field
 	private BigInteger characteristic;
 
 	protected AbstractFiniteField(Class<?> valueClass) {
@@ -74,7 +76,6 @@ public abstract class AbstractFiniteField<E extends DualisticElement<V>, M exten
 		return this.characteristic;
 	}
 
-	// The following protected abstract method must be implemented in every direct sub-class.
 	protected abstract BigInteger abstractGetCharacteristic();
 
 }

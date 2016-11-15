@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,21 +41,42 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ZElement
 	   extends AbstractDualisticElement<Z, ZElement, BigInteger>
 	   implements DualisticElement<BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected ZElement(final Z z, final BigInteger value) {
 		super(z, value);
+	}
+
+	public NElement getNElement() {
+		if (this.value.signum() < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		return NElement.getInstance(this.value);
+	}
+
+	public static ZElement getInstance(long value) {
+		return ZElement.getInstance(BigInteger.valueOf(value));
+	}
+
+	public static ZElement getInstance(BigInteger value) {
+		if (value == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		return Z.getInstance().getElement(value);
 	}
 
 }

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
  * the first and then by the second converter. In the reverse process, the value is first processed by the second and
  * then by the first converter.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The input type (of the first converter)
  * @param <X> The common output/input type of the two converters
@@ -81,7 +81,8 @@ public class CompositeConverter<V, X, W>
 	 * @param converter2 The second converter
 	 * @return The new composite converter
 	 */
-	public static <V, X, W> CompositeConverter<V, X, W> getInstance(Converter<V, X> converter1, Converter<X, W> converter2) {
+	public static <V, X, W> CompositeConverter<V, X, W> getInstance(Converter<V, X> converter1,
+		   Converter<X, W> converter2) {
 		if (converter1 == null || converter2 == null) {
 			throw new IllegalArgumentException();
 		}

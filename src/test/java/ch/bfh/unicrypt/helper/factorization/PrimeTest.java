@@ -50,7 +50,7 @@ import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class PrimeTest {
 
@@ -59,13 +59,14 @@ public class PrimeTest {
 		for (int i = 0; i < 100; i++) {
 			if (MathUtil.isPrime(i)) {
 				Prime p = Prime.getInstance(i);
+				assertTrue(p.isPrime());
 				assertEquals(i, p.getValue().intValue());
 				assertEquals(i, p.getPrimeFactor().intValue());
-				assertEquals(i, p.getPrimeFactors()[0].intValue());
-				assertEquals(1, p.getPrimeFactors().length);
+				assertEquals(i, p.getPrimeFactors().getAt(0).intValue());
+				assertEquals(1, p.getPrimeFactors().getLength());
 				assertEquals(1, p.getExponent());
-				assertEquals(1, p.getExponents()[0]);
-				assertEquals(1, p.getExponents().length);
+				assertEquals((Integer) 1, p.getExponents().getAt(0));
+				assertEquals(1, p.getExponents().getLength());
 				assertEquals(p, Prime.getInstance(BigInteger.valueOf(i)));
 			} else {
 				try {
@@ -96,18 +97,22 @@ public class PrimeTest {
 		}
 		for (int i = 1; i < 10; i++) {
 			Prime p = Prime.getRandomInstance(2);
+			assertTrue(p.isPrime());
 			assertTrue(p.getValue().intValue() == 2 || p.getValue().intValue() == 3);
 		}
 		for (int i = 1; i < 10; i++) {
 			Prime p = Prime.getRandomInstance(3);
+			assertTrue(p.isPrime());
 			assertTrue(p.getValue().intValue() == 5 || p.getValue().intValue() == 7);
 		}
 		for (int i = 1; i < 10; i++) {
 			Prime p = Prime.getRandomInstance(4);
+			assertTrue(p.isPrime());
 			assertTrue(p.getValue().intValue() == 11 || p.getValue().intValue() == 13);
 		}
 		for (int i = 1; i < 20; i++) {
 			Prime p = Prime.getRandomInstance(5);
+			assertTrue(p.isPrime());
 			assertTrue(p.getValue().intValue() == 17 || p.getValue().intValue() == 19 || p.getValue().intValue() == 23 || p.getValue().intValue() == 29 || p.getValue().intValue() == 31);
 		}
 	}

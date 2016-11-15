@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.converter.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.sequence.Mapping;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Node;
@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.helper.tree.Tree;
 /**
  * This abstract class serves as a base implementation of the {@link Converter} interface.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The input type
  * @param <W> The output type
@@ -137,12 +137,12 @@ public abstract class AbstractConverter<V, W>
 
 	@Override
 	public final boolean isValidInput(V value) {
-		return (value != null) && this.defaultIsValidInput(value);
+		return value != null && this.defaultIsValidInput(value);
 	}
 
 	@Override
 	public final boolean isValidOutput(W value) {
-		return (value != null) && this.defaultIsValidOutput(value);
+		return value != null && this.defaultIsValidOutput(value);
 	}
 
 	@Override

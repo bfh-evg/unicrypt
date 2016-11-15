@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,14 +41,16 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a product function f:(X_1x...xX_n)->(Y_1x...xY_n). It consists of multiple
@@ -62,6 +64,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public final class SharedDomainFunction
 	   extends AbstractCompoundFunction<SharedDomainFunction, Set, Element, ProductSet, Tuple> {
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -71,15 +74,11 @@ public final class SharedDomainFunction
 	 * @param domain
 	 * @param coDomain
 	 * @param functions
-	 * @throws IllegalArgumentException if {@code functions} is null or contains null
 	 */
 	protected SharedDomainFunction(final Set domain, ProductSet coDomain, DenseArray<Function> functions) {
 		super(domain, coDomain, functions);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Tuple abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
 		final Element[] elements = new Element[this.getArity()];
@@ -99,12 +98,12 @@ public final class SharedDomainFunction
 		return SharedDomainFunction.class;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	public static SharedDomainFunction getInstance(DenseArray<Function> functions) {
-		if (functions == null || functions.getLength() == 0) {
-			throw new IllegalArgumentException();
+		if (functions == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (functions.getLength() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, functions);
 		}
 		Set domain;
 		ProductSet coDomain;
@@ -119,7 +118,7 @@ public final class SharedDomainFunction
 				if (domain == null) {
 					domain = nextDomain;
 				} else if (!domain.isEquivalent(nextDomain)) {
-					throw new IllegalArgumentException();
+					throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, domain, nextDomain);
 				}
 				coDomains[i] = functions.getAt(i).getCoDomain();
 			}

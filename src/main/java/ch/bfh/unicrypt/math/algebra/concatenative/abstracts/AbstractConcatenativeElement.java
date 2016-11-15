@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,22 +41,24 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
 
 /**
  * This abstract class provides a basis implementation for objects of type {@link ConcatenativeElement}.
  * <p>
- * @param <S> Generic type of the {@link ConcatenativeSemiGroup} of this element
- * @param <E> Generic type of this element
- * @param <V> Generic type of value stored in this element
- * @author rolfhaennip
+ * @param <S> The generic type of the {@link ConcatenativeSemiGroup} of this element
+ * @param <E> The generic type of this element
+ * @param <V> The generic type of the value stored in this element
+ * <p>
+ * @author R. Haenni
  */
 public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup<V>, E extends ConcatenativeElement<V>, V>
 	   extends AbstractElement<S, E, V>
@@ -68,41 +70,26 @@ public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGr
 		super(semiGroup, value);
 	}
 
-	/**
-	 * @see Group#apply(Element, Element)
-	 */
 	@Override
 	public final E concatenate(final Element element) {
 		return (E) this.getSet().concatenate(this, element);
 	}
 
-	/**
-	 * @see Group#T(Element, BigInteger)
-	 */
 	@Override
 	public final E selfConcatenate(final BigInteger amount) {
 		return (E) this.getSet().selfConcatenate(this, amount);
 	}
 
-	/**
-	 * @see Group#selfApply(Element, Element)
-	 */
 	@Override
 	public final E selfConcatenate(final Element<BigInteger> amount) {
 		return (E) this.getSet().selfConcatenate(this, amount);
 	}
 
-	/**
-	 * @see Group#selfApply(Element, long)
-	 */
 	@Override
 	public final E selfConcatenate(final long amount) {
 		return (E) this.getSet().selfConcatenate(this, amount);
 	}
 
-	/**
-	 * @see Group#selfApply(Element)
-	 */
 	@Override
 	public final E selfConcatenate() {
 		return (E) this.getSet().selfConcatenate(this);
@@ -114,7 +101,7 @@ public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGr
 			ConcatenativeMonoid monoid = ((ConcatenativeMonoid) this.getSet());
 			return monoid.isEmptyElement(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 }

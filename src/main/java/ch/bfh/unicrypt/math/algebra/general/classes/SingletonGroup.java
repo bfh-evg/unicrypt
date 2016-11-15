@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,17 +41,22 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author rolfhaenni
+ * @author R. Haenni
  * <p>
  */
 public class SingletonGroup
@@ -103,13 +108,20 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected SingletonElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.element;
+	protected Sequence<SingletonElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		return Sequence.getInstance(this.element, new Mapping<SingletonElement, SingletonElement>() {
+
+								 @Override
+								 public SingletonElement apply(SingletonElement value) {
+									 return value;
+								 }
+
+							 });
 	}
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return BigInteger.ONE;
+		return MathUtil.ONE;
 	}
 
 	@Override
@@ -133,11 +145,6 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected boolean abstractIsGenerator(SingletonElement element) {
-		return true;
-	}
-
-	@Override
 	protected boolean abstractEquals(Set set) {
 		return this.getValue().equals(((SingletonGroup) set).getValue());
 	}
@@ -149,25 +156,22 @@ public class SingletonGroup
 		return hash;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static final Map<BigInteger, SingletonGroup> instances = new HashMap<>();
+	private static final Map<BigInteger, SingletonGroup> INSTANCES = new HashMap<>();
 
 	public static SingletonGroup getInstance(final BigInteger value) {
 		if (value == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		SingletonGroup instance = SingletonGroup.instances.get(value);
+		SingletonGroup instance = SingletonGroup.INSTANCES.get(value);
 		if (instance == null) {
 			instance = new SingletonGroup(value);
-			SingletonGroup.instances.put(value, instance);
+			SingletonGroup.INSTANCES.put(value, instance);
 		}
 		return instance;
 	}
 
 	public static SingletonGroup getInstance() {
-		return SingletonGroup.getInstance(BigInteger.ZERO);
+		return SingletonGroup.getInstance(MathUtil.ZERO);
 	}
 
 }

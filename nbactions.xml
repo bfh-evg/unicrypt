@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Generate report</actionName>
+            <displayName>Generate report</displayName>
+            <goals>
+                <goal>site</goal>
+            </goals>
+        </action>
+    </actions>

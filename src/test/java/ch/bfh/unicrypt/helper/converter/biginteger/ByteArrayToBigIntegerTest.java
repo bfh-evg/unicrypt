@@ -50,7 +50,7 @@ import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ByteArrayToBigIntegerTest {
 
@@ -101,7 +101,7 @@ public class ByteArrayToBigIntegerTest {
 
 	@Test
 	public void test_with_blockLenght_equals_2() {
-		ByteArrayToBigInteger converter = ByteArrayToBigInteger.getInstance(2);
+		ByteArrayToBigInteger converter = ByteArrayToBigInteger.getInstance(2, 0);
 		ByteArray[] bas = {ba0, ba21, ba22, ba23, ba24, ba41, ba42, ba43, ba44};
 		int o2 = 1;
 		int o4 = 1 + 65536;
@@ -124,7 +124,7 @@ public class ByteArrayToBigIntegerTest {
 
 	@Test
 	public void test_with_blockLenght_equals_3() {
-		ByteArrayToBigInteger converter = ByteArrayToBigInteger.getInstance(3);
+		ByteArrayToBigInteger converter = ByteArrayToBigInteger.getInstance(3, 0);
 		ByteArray[] bas = {ba0, ba31, ba32, ba33, ba34};
 		int o3 = 1;
 		long[] expected = {

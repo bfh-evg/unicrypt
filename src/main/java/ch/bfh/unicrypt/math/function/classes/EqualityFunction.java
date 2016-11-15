@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -48,19 +49,19 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a function, which tests the given input elements for equality. For this to work,
  * its domain is a power group and its co-domain the Boolean group. If all all input elements are equal, the function
- * outputs {@link BooleanGroup#TRUE}, and {@link BooleanGroup#FALSE} otherwise.
- * <p/>
+ * outputs {@link BooleanSet#TRUE}, and {@link BooleanSet#FALSE} otherwise.
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
 public class EqualityFunction
 	   extends AbstractFunction<EqualityFunction, ProductSet, Tuple, BooleanSet, BooleanElement> {
+
 	private static final long serialVersionUID = 1L;
 
 	private EqualityFunction(final ProductSet domain, final BooleanSet coDomain) {
@@ -86,7 +87,6 @@ public class EqualityFunction
 	 * <p/>
 	 * @param set The group on which this function operates
 	 * @return The resulting equality function
-	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static EqualityFunction getInstance(final Set set) {
 		return EqualityFunction.getInstance(set, 2);
@@ -99,8 +99,6 @@ public class EqualityFunction
 	 * @param set   The group on which this function operates
 	 * @param arity The number of input elements to compare
 	 * @return The resulting equality function
-	 * @throws IllegalArgumentException if {@code group} is null
-	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static EqualityFunction getInstance(final Set set, final int arity) {
 		return new EqualityFunction(ProductSet.getInstance(set, arity), BooleanSet.getInstance());

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import static org.junit.Assert.assertEquals;
@@ -60,7 +61,7 @@ public class ZTest {
 		try {
 			z.getRandomElement();
 			fail();
-		} catch (UnsupportedOperationException e) {
+		} catch (UniCryptRuntimeException e) {
 		}
 
 	}

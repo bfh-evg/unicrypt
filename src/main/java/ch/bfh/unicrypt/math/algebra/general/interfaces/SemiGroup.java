@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -49,8 +49,8 @@ import java.math.BigInteger;
  * This interface represents the mathematical concept of a semigroup. It defines a set of elements and an associative
  * (but not necessarily commutative) binary operation. It is implemented as a specialization of {@link Set}.
  * <p>
- * @param <V> Generic type of the values representing the elements of a semigroup
- * @see "Handbook of Applied Cryptography, Definition 2.162"
+ * @param <V> The generic type of the values representing the elements of a semigroup
+ * @see Element
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -60,91 +60,87 @@ public interface SemiGroup<V>
 	   extends Set<V> {
 
 	/**
-	 * Applies the binary operation to two elements (in the given order).
+	 * Applies the binary operation to two input elements (in the given order).
 	 * <p>
-	 * @param element1 The first element
-	 * @param element2 The second element
+	 * @param element1 The first input element
+	 * @param element2 The second input element
 	 * @return The result of applying the binary operation to the two input elements
 	 */
 	public Element<V> apply(Element element1, Element element2);
 
 	/**
-	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
-	 * as an array. If the array contains a single element, it is returned without applying the operation. If the given
-	 * collection is empty, an exception is thrown.
+	 * Applies the binary group operation sequentially to multiple input elements (in the given order). The elements are
+	 * given as an array.
 	 * <p>
-	 * @param elements A given array of elements
+	 * @param elements The given array of input elements
 	 * @return The result of applying the operation to the input elements
 	 */
 	public Element<V> apply(Element... elements);
 
 	/**
-	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
-	 * as an array. If the array contains a single element, it is returned without applying the operation. If the given
-	 * collection is empty, an exception is thrown.
+	 * Applies the binary group operation sequentially to multiple input elements (in the given order). The elements are
+	 * given as an immutable array.
 	 * <p>
-	 * @param elements A given array of elements
+	 * @param elements The given immutable array of input elements
 	 * @return The result of applying the operation to the input elements
 	 */
 	public Element<V> apply(ImmutableArray<Element> elements);
 
 	/**
-	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
-	 * as a sequence. If the collection contains a single element, it is returned without applying the operation. If the
-	 * given collection is empty, an exception is thrown.
+	 * Applies the binary group operation sequentially to multiple input elements (in the given order). The elements are
+	 * given as a sequence.
 	 * <p>
-	 * @param elements A given collection of elements
+	 * @param elements The given sequence of input elements
 	 * @return The result of applying the operation to the input elements
 	 */
 	public Element<V> apply(Sequence<Element> elements);
 
 	/**
-	 * Applies the binary operation repeatedly to {@code amount} many instances of a given element. If {@code amount=1},
-	 * the element is returned without applying the operation. If {@code amount<1}, an exception is thrown.
+	 * Applies the binary operation repeatedly to {@code amount} many instances of a given input element. This is a is a
+	 * convenient method for {@link SemiGroup#selfApply(Element, BigInteger)}.
 	 * <p>
-	 * @param element A given element
+	 * @param element The given input element
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying the operation multiple times to the input element
 	 */
 	public Element<V> selfApply(Element element, long amount);
 
 	/**
-	 * Applies the binary operation repeatedly to {@code amount} many instances of a given element. If {@code amount=1},
-	 * the element is returned without applying the operation. If {@code amount<1}, an exception is thrown.
+	 * Applies the binary operation repeatedly to {@code amount} many instances of a given input element.
 	 * <p>
-	 * @param element The given element
+	 * @param element The given input element
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying the operation multiple times to the input element
 	 */
 	public Element<V> selfApply(Element element, BigInteger amount);
 
 	/**
-	 * Same as {@link SemiGroup#selfApply(Element, BigInteger)}, except that the amount is given as an
-	 * {@link Element}{@code <BigInteger>}, from which a {@code BigInteger} value can be extracted using
+	 * Same as {@link SemiGroup#selfApply(Element, BigInteger)}, except that the amount is given as an instance of
+	 * {@code Element<BigInteger>}, from which a {@code BigInteger} value can be extracted using
 	 * {@link Element#getValue()}.
 	 * <p>
-	 * @param element A given element
+	 * @param element The given input element
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying the operation multiple times to the input element
 	 */
 	public Element<V> selfApply(Element element, Element<BigInteger> amount);
 
 	/**
-	 * Applies the group operation to two instances of a given element. This is equivalent to
+	 * Applies the binary operation to two instances of a given element. This is equivalent to
 	 * {@link SemiGroup#selfApply(Element, long)} for {@code amount=2}.
 	 * <p>
-	 * @param element A given element
-	 * @return The result of applying the group operation to the input element
+	 * @param element The given input element
+	 * @return The result of applying the operation to two instances of the input element
 	 */
 	public Element<V> selfApply(Element element);
 
 	/**
 	 * Applies the binary operation sequentially to the results of computing {@link #selfApply(Element, BigInteger)}
 	 * multiple times. This operation is sometimes called 'weighed sum' or 'product-of-powers', depending on whether the
-	 * operation is an addition or multiplication. If the two input lists are not of equal length, an exception is
+	 * operation is an addition or multiplication. If the two input arrays are not of equal length, an exception is
 	 * thrown.
 	 * <p>
-	 * @param elements A given array of elements
+	 * @param elements The given array of elements
 	 * @param amounts  Corresponding amounts
 	 * @return The result of this operation
 	 */

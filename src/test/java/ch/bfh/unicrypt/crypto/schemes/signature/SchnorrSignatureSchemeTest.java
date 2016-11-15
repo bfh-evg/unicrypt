@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.crypto.schemes.signature;
 
 import ch.bfh.unicrypt.crypto.schemes.signature.classes.SchnorrSignatureScheme;
-import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.factorization.SafePrime;
+import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -57,7 +57,7 @@ import org.junit.Test;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class SchnorrSignatureSchemeTest {
 
@@ -105,7 +105,7 @@ public class SchnorrSignatureSchemeTest {
 		Assert.assertTrue(result.getValue());
 
 		// Generate and verify the 100 first pairs from the signature space
-		for (Tuple falseSignature : schnorr.getSignatureSpace().getElements(100)) {
+		for (Tuple falseSignature : schnorr.getSignatureSpace().getElements().limit(100)) {
 			result = schnorr.verify(publicKey, message, falseSignature);
 			Assert.assertFalse(result.getValue());
 		}

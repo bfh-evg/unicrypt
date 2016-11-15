@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,47 +41,41 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface represents the the concept of a function f:X->X, which computes the inverse of the given input
  * element.
- * <p/>
+ * <p>
  * @see Group#invert(Element)
  * @see Element#invert()
- * <p/>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
  */
 public class InvertFunction
 	   extends AbstractFunction<InvertFunction, Group, Element, Group, Element> {
+
 	private static final long serialVersionUID = 1L;
 
 	private InvertFunction(final Group domain, Group coDomain) {
 		super(domain, coDomain);
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
 		return element.invert();
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the default constructor for this class. It creates an invert function for a given group.
-	 * <p/>
+	 * <p>
 	 * @param group The given Group
-	 * @return
-	 * @throws IllegalArgumentException if the group is null
+	 * @return Returns an instance of this class
 	 */
 	public static InvertFunction getInstance(final Group group) {
 		return new InvertFunction(group, group);

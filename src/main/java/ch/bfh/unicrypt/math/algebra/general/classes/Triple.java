@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,19 +41,21 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class Triple
 	   extends Tuple {
 
 	private static final long serialVersionUID = 1L;
 
-	protected Triple(final ProductSet set, final DenseArray<Element> elements) {
+	protected Triple(final ProductSet set, final DenseArray<? extends Element> elements) {
 		super(set, elements);
 	}
 
@@ -67,7 +69,7 @@ public class Triple
 
 	public static Triple getInstance(Element first, Element second, Element third) {
 		if (first == null || second == null || third == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, first, second, third);
 		}
 		DenseArray<Element> elements = DenseArray.getInstance(first, second, third);
 		return new Triple(ProductSet.getInstance(first.getSet(), second.getSet(), third.getSet()), elements);

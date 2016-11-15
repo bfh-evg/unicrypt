@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,121 +41,154 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
+import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
- * This interface provides the renaming of {@link SemiGroup} methods for the case of an additively written semigroup. No
- * functionality is added. Some return types are updated.
+ * This interface provides the renaming of some methods for the case of a additively written commutative
+ * {@link SemiGroup}. No functionality is added. Some return types are adjusted.
+ * <p>
+ * @param <V> The generic type of the values stored in the elements of this semigroup
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of this semigroup
  */
 public interface AdditiveSemiGroup<V>
 	   extends SemiGroup<V> {
 
 	/**
-	 * This method is a synonym for {@link SemiGroup#apply(Element, Element)}.
+	 * This method is a synonym for {@link SemiGroup#apply(Element, Element)}. It computes the sum of the two input
+	 * elements.
 	 * <p>
-	 * @param element1 the same as in {@link SemiGroup#apply(Element, Element)}
-	 * @param element2 the same as in {@link SemiGroup#apply(Element, Element)}
-	 * @return the same as in {@link SemiGroup#apply(Element, Element)}
+	 * @param element1 The first input element
+	 * @param element2 The second input element
+	 * @return The sum of the two input elements
+	 * @see SemiGroup#apply(Element, Element)
 	 */
 	public AdditiveElement<V> add(Element element1, Element element2);
 
 	/**
-	 * This method is a synonym for {@link SemiGroup#apply(Element...)}.
+	 * This method is a synonym for {@link SemiGroup#apply(Element...)}. It computes the sum of the input elements,
+	 * which are given as an array.
 	 * <p>
-	 * @param elements the same as in {@link SemiGroup#apply(Element...)}
-	 * @return the same as in {@link SemiGroup#apply(Element...)}
+	 * @param elements The given array of input elements
+	 * @return The sum of the input elements
+	 * @see SemiGroup#apply(Element...)
 	 */
 	public AdditiveElement<V> add(Element... elements);
 
+	/**
+	 * This method is a synonym for {@link SemiGroup#apply(ImmutableArray)}. It computes the sum of the input elements,
+	 * which are given as a immutable array.
+	 * <p>
+	 * @param elements The given immutable array of input elements
+	 * @return The sum of the input elements
+	 * @see SemiGroup#apply(ImmutableArray)
+	 */
 	public AdditiveElement<V> add(ImmutableArray<Element> elements);
 
+	/**
+	 * This method is a synonym for {@link SemiGroup#apply(Sequence)}. It computes the sum of the input elements, which
+	 * are given as a sequence.
+	 * <p>
+	 * @param elements The given sequence of input elements
+	 * @return The sum of the input elements
+	 * @see SemiGroup#apply(Sequence)
+	 */
 	public AdditiveElement<V> add(Sequence<Element> elements);
 
 	/**
-	 * This method is a synonym for {@link SemiGroup#selfApply(Element, BigInteger)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, long)}. It multiplies the given element by some
+	 * factor. This is a convenient method for {@link AdditiveSemiGroup#times(Element, BigInteger)}.
 	 * <p>
-	 * @param element the same as in {@link SemiGroup#selfApply(Element, BigInteger)}
-	 * @param amount  the same as in {@link SemiGroup#selfApply(Element, BigInteger)}
-	 * @return the same as in {@link SemiGroup#selfApply(Element, BigInteger)}
+	 * @param element The given input element
+	 * @param factor  The given factor
+	 * @return The input element multiplied by the factor
+	 * @see SemiGroup#selfApply(Element, long)
 	 */
-	public AdditiveElement<V> times(Element element, BigInteger amount);
+	public AdditiveElement<V> times(Element element, long factor);
 
 	/**
-	 * This method is a synonym for {@link SemiGroup#selfApply(Element, Element)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, BigInteger)}. It multiplies the given element by
+	 * some factor.
 	 * <p>
-	 * @param element the same as in {@link SemiGroup#selfApply(Element, Element)}
-	 * @param amount  the same as in {@link SemiGroup#selfApply(Element, Element)}
-	 * @return the same as in {@link SemiGroup#selfApply(Element, Element)}
+	 * @param element The given input element
+	 * @param factor  The given factor
+	 * @return The input element multiplied by the factor
+	 * @see SemiGroup#selfApply(Element, BigInteger)
 	 */
-	public AdditiveElement<V> times(Element element, Element<BigInteger> amount);
+	public AdditiveElement<V> times(Element element, BigInteger factor);
 
 	/**
-	 * This method is a synonym for {@link SemiGroup#selfApply(Element, long)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, Element)} and the same as
+	 * {@link AdditiveSemiGroup#times(Element, BigInteger)}, except that the factor is given as an instance of
+	 * {@code Element<BigInteger>}, from which a {@code BigInteger} factor can be extracted using
+	 * {@link Element#getValue()}.
 	 * <p>
-	 * @param element the same as in {@link SemiGroup#selfApply(Element, long)}
-	 * @param amount  the same as in {@link SemiGroup#selfApply(Element, long)}
-	 * @return the same as in {@link SemiGroup#selfApply(Element, long)}
+	 * @param element The given input element
+	 * @param factor  The given factor
+	 * @return The input element multiplied with the factor
+	 * @see SemiGroup#selfApply(Element, Element)
 	 */
-	public AdditiveElement<V> times(Element element, long amount);
+	public AdditiveElement<V> times(Element element, Element<BigInteger> factor);
 
 	/**
-	 * Applies the group operation to two instances of a given group element. This is equivalent to
-	 * {@code selfApply(element, 2)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element)}. It doubles the given input element.
 	 * <p>
-	 * @param element A given group element
-	 * @return The result of applying the group operation to the input element
-	 * @throws IllegalArgumentException if {@code element} does not belong to the group
+	 * @param element A given input element
+	 * @return The given input element multiplied by 2
+	 * @see SemiGroup#selfApply(Element)
 	 */
 	public AdditiveElement<V> timesTwo(Element element);
 
 	/**
-	 * Applies the binary operation pair-wise sequentially to the results of computing
-	 * {@link #selfApply(Element, BigInteger)} multiple times. In an additive group, this operation is sometimes called
-	 * 'weighed sum', and 'product-of-powers' in a multiplicative group.
+	 * This method is a synonym for {@link SemiGroup#multiSelfApply(Element[], BigInteger[])}. It computes the
+	 * 'sum-of-products' for given input elements and factors. If the two input arrays are not of equal length, an
+	 * exception is thrown.
 	 * <p>
 	 * @param elements A given array of elements
-	 * @param amounts  Corresponding amounts
-	 * @return The result of this operation
-	 * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the group
-	 * @throws IllegalArgumentException if {@code elements} and {@code amounts} have different lengths
+	 * @param factors  Corresponding factors
+	 * @return The resulting 'sum-of-factors'
+	 * @see SemiGroup#multiSelfApply(Element[], BigInteger[])
 	 */
-	public AdditiveElement<V> sumOfProducts(Element[] elements, BigInteger[] amounts);
+	public AdditiveElement<V> sumOfProducts(Element[] elements, BigInteger[] factors);
 
 	@Override
-	public <W> AdditiveElement<V> getElementFrom(W value, Converter<V, W> converter);
+	public <W> AdditiveElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;
 
 	@Override
-	public <W> AdditiveElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
+	public <W> AdditiveElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator)
+		   throws UniCryptException;
 
 	@Override
-	public <W> AdditiveElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+	public <W, X> AdditiveElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator,
+		   Converter<W, X> finalConverter) throws UniCryptException;
 
 	@Override
-	public AdditiveElement<V> getElementFrom(long integer);
+	public <W> AdditiveElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws UniCryptException;
 
 	@Override
-	public AdditiveElement<V> getElementFrom(BigInteger bigInteger);
+	public AdditiveElement<V> getElementFrom(long integer) throws UniCryptException;
 
 	@Override
-	public AdditiveElement<V> getElementFrom(ByteArray byteArray);
+	public AdditiveElement<V> getElementFrom(BigInteger bigInteger) throws UniCryptException;
 
 	@Override
-	public AdditiveElement<V> getElementFrom(String string);
+	public AdditiveElement<V> getElementFrom(ByteArray byteArray) throws UniCryptException;
+
+	@Override
+	public AdditiveElement<V> getElementFrom(String string) throws UniCryptException;
 
 	@Override
 	public AdditiveElement<V> getRandomElement();
@@ -167,13 +200,10 @@ public interface AdditiveSemiGroup<V>
 	public Sequence<? extends AdditiveElement<V>> getRandomElements();
 
 	@Override
-	public Sequence<? extends AdditiveElement<V>> getRandomElements(long n);
-
-	@Override
 	public Sequence<? extends AdditiveElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
 
 	@Override
-	public Sequence<? extends AdditiveElement<V>> getRandomElements(long n, RandomByteSequence randomByteSequence);
+	public Sequence<? extends AdditiveElement<V>> getElements();
 
 	@Override
 	public AdditiveElement<V> apply(Element element1, Element element2);
@@ -188,18 +218,18 @@ public interface AdditiveSemiGroup<V>
 	public AdditiveElement<V> apply(Sequence<Element> elements);
 
 	@Override
-	public AdditiveElement<V> selfApply(Element element, BigInteger amount);
+	public AdditiveElement<V> selfApply(Element element, long factor);
 
 	@Override
-	public AdditiveElement<V> selfApply(Element element, Element<BigInteger> amount);
+	public AdditiveElement<V> selfApply(Element element, BigInteger factor);
 
 	@Override
-	public AdditiveElement<V> selfApply(Element element, long amount);
+	public AdditiveElement<V> selfApply(Element element, Element<BigInteger> factor);
 
 	@Override
 	public AdditiveElement<V> selfApply(Element element);
 
 	@Override
-	public AdditiveElement<V> multiSelfApply(Element[] elements, BigInteger[] amounts);
+	public AdditiveElement<V> multiSelfApply(Element[] elements, BigInteger[] factors);
 
 }

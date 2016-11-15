@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,21 +41,23 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Polynomial;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class PolynomialRing
 	   extends PolynomialSemiRing
@@ -87,12 +89,53 @@ public class PolynomialRing
 		for (Integer i : polynomial.getCoefficientIndices()) {
 			coefficientMap.put(i, polynomial.getCoefficient(i).negate());
 		}
-		return this.getElementUnchecked(coefficientMap);
+		return this.abstractGetElement(coefficientMap);
 	}
 
 	@Override
 	public PolynomialElement applyInverse(Element element1, Element element2) {
 		return this.apply(element1, this.invert(element2));
+	}
+
+	@Override
+	public final PolynomialElement invertSelfApply(Element element, long amount) {
+		return this.invertSelfApply(element, BigInteger.valueOf(amount));
+	}
+
+	@Override
+	public final PolynomialElement invertSelfApply(Element element, Element<BigInteger> amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		return this.invertSelfApply(element, amount.getValue());
+	}
+
+	@Override
+	public final PolynomialElement invertSelfApply(Element element, BigInteger amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (amount.signum() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, amount);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		if (!this.isFinite() || !this.hasKnownOrder()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		boolean positiveAmount = amount.signum() > 0;
+		amount = amount.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		PolynomialElement result = this.defaultSelfApplyAlgorithm((PolynomialElement) element, amount);
+		if (positiveAmount) {
+			return result;
+		}
+		return this.invert(result);
+	}
+
+	@Override
+	public final PolynomialElement invertSelfApply(Element element) {
+		return this.invertSelfApply(element, MathUtil.TWO);
 	}
 
 	@Override
@@ -103,6 +146,21 @@ public class PolynomialRing
 	@Override
 	public PolynomialElement negate(Element element) {
 		return this.invert(element);
+	}
+
+	@Override
+	public final PolynomialElement divide(Element element, long amount) {
+		return this.invertSelfApply(element, amount);
+	}
+
+	@Override
+	public final PolynomialElement divide(Element element, BigInteger amount) {
+		return this.invertSelfApply(element, amount);
+	}
+
+	@Override
+	public final PolynomialElement halve(Element element) {
+		return this.invertSelfApply(element);
 	}
 
 	/**
@@ -118,13 +176,14 @@ public class PolynomialRing
 	 */
 	public PolynomialElement euclidean(PolynomialElement g, PolynomialElement h) {
 		if (!this.getSemiRing().isField()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		if (!this.contains(g) || !this.contains(h)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, g, h);
 		}
 		final PolynomialRing ring
-			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.
+					  getSemiRing());
 
 		while (!h.isEquivalent(ring.getZeroElement())) {
 			Pair div = longDivision(g, h);
@@ -153,13 +212,14 @@ public class PolynomialRing
 	 */
 	public Triple extendedEuclidean(PolynomialElement g, PolynomialElement h) {
 		if (!this.getSemiRing().isField()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		if (!this.contains(g) || !this.contains(h)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, g, h);
 		}
 		final PolynomialRing ring
-			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.
+					  getSemiRing());
 		final PolynomialElement zero = ring.getZeroElement();
 		final PolynomialElement one = ring.getOneElement();
 
@@ -212,15 +272,16 @@ public class PolynomialRing
 	 */
 	public Pair longDivision(PolynomialElement g, PolynomialElement h) {
 		if (!this.getSemiRing().isField()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
-		if (!this.contains(g) || !this.contains(h) || h.isEquivalent(this.getZeroElement())) {
-			throw new IllegalArgumentException();
+		if (!this.contains(g) || !this.contains(h) || this.isZeroElement(h)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, g, h);
 		}
 
 		// Create explicitly a ring to work in (the instance might be a field).
 		final PolynomialRing ring
-			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.
+					  getSemiRing());
 		final PolynomialElement zero = ring.getZeroElement();
 
 		PolynomialElement q = zero;
@@ -233,7 +294,7 @@ public class PolynomialRing
 			int i = r.getValue().getDegree() - h.getValue().getDegree();
 			HashMap map = new HashMap(1);
 			map.put(i, c);
-			t = ring.getElementUnchecked(map);
+			t = ring.abstractGetElement(map);
 			q = t.add(q);
 			r = r.subtract(t.multiply(h));
 		}
@@ -249,15 +310,19 @@ public class PolynomialRing
 	 * @return true if f(x) is irreducible over Z_p
 	 */
 	public boolean isIrreduciblePolynomial(PolynomialElement f) {
-		if (!this.getSemiRing().isField() || f != null && !f.getValue().isMonic()) {
-			throw new UnsupportedOperationException();
+		if (f == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (!this.contains(f)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, f);
+		}
+		if (!this.getSemiRing().isField() || !f.getValue().isMonic()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		final PolynomialRing ring
-			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
-		PolynomialElement x = ring.getElement(BigInteger.ZERO, BigInteger.ONE);
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.
+					  getSemiRing());
+		PolynomialElement x = ring.getElement(ring.getSemiRing().getZeroElement(), ring.getSemiRing().getOneElement());
 		PolynomialElement u = x;
 		PolynomialElement d;
 		int m = f.getValue().getDegree();
@@ -272,28 +337,23 @@ public class PolynomialRing
 		return true;
 	}
 
-	/**
-	 * Finds irreducible polynomial.
-	 * <p>
-	 * See Algorithm 4.70 Generating a random monic irreducible polynomial over Z_p<br>
-	 * See Fact 4.75
-	 * <p>
-	 * @param degree
-	 * @param randomByteSequence
-	 * @return f(x) in Z_p[x] irreducible over Z_p
-	 */
-	public PolynomialElement findIrreduciblePolynomial(int degree, RandomByteSequence randomByteSequence) {
-		if (!this.getSemiRing().isField()) {
-			throw new UnsupportedOperationException();
-		}
-		if (degree < 1 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
-		}
-		//
-		// TODO Search for irreducible trinomials if set is binary.
-		//      -> see Fact 4.75
-		//
+	public PolynomialElement findIrreduciblePolynomial(int degree) {
+		return this.findIrreduciblePolynomial(degree, HybridRandomByteSequence.getInstance());
+	}
 
+	// See Algorithm 4.70 Generating a random monic irreducible polynomial over Z_p, see Fact 4.75
+	// TODO Generalize to getRandomElements by replacing HybridRandomByteSequence by RandomByteSequence
+	public PolynomialElement findIrreduciblePolynomial(int degree, HybridRandomByteSequence randomByteSequence) {
+		if (!this.getSemiRing().isField()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		if (randomByteSequence == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (degree < 1) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_DEGREE, this, degree);
+		}
+		// TODO Search for irreducible trinomials if set is binary -> see Fact 4.75
 		PolynomialElement f;
 		do {
 			f = this.getRandomMonicElement(degree, true, randomByteSequence);
@@ -301,26 +361,15 @@ public class PolynomialRing
 		return f;
 	}
 
-	public PolynomialElement findIrreduciblePolynomial(int degree) {
-		return this.findIrreduciblePolynomial(degree, HybridRandomByteSequence.getInstance());
-	}
-
-	/**
-	 * Returns g(x)^k mod f(x) where g(x), f(x) in Z_p[x].
-	 * <p>
-	 * See Algorithm 2.227 Repeated square-and-multiply algorithm for exponentiation
-	 * <p>
-	 * @param g
-	 * @param k
-	 * @param f
-	 * @return
-	 */
+	// Returns g(x)^k mod f(x) where g(x), f(x) in Z_p[x].
+	// See Algorithm 2.227 Repeated square-and-multiply algorithm for exponentiation
 	private PolynomialElement squareAndMultiply(PolynomialElement g, BigInteger k, PolynomialElement f) {
 		if (k.signum() < 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, k);
 		}
 		final PolynomialRing ring
-			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.
+					  getSemiRing());
 		PolynomialElement s = ring.getOneElement();
 
 		if (k.signum() == 0) {
@@ -339,12 +388,9 @@ public class PolynomialRing
 		return s;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	public static PolynomialRing getInstance(Ring ring) {
 		if (ring == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new PolynomialRing(ring);
 	}

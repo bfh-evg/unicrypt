@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,11 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.BinaryOperator;
-import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Operator;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -53,7 +55,7 @@ import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ProductSemiGroup
 	   extends ProductSet
@@ -159,7 +161,7 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(Element element1, Element element2) {
 		if (!this.contains(element1) || !this.contains(element2)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element1, element2);
 		}
 		return this.abstractApply((Tuple) element1, (Tuple) element2);
 	}
@@ -167,7 +169,7 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(final Element... elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultApply(Sequence.getInstance(elements));
 	}
@@ -175,7 +177,7 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(final ImmutableArray<Element> elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultApply(Sequence.getInstance(elements));
 	}
@@ -183,35 +185,33 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(Sequence<Element> elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultApply(elements);
 	}
 
 	@Override
-	public final Tuple selfApply(Element element, BigInteger amount) {
-		if (!this.contains(element) || amount == null) {
-			throw new IllegalArgumentException();
-		}
-		Tuple tuple = (Tuple) element;
-		final Element[] results = new Element[this.getArity()];
-		for (int i : this.getAllIndices()) {
-			results[i] = tuple.getAt(i).selfApply(amount);
-		}
-		return this.abstractGetElement(DenseArray.getInstance(results));
+	public final Tuple selfApply(Element element, long amount) {
+		return this.selfApply(element, BigInteger.valueOf(amount));
 	}
 
 	@Override
 	public final Tuple selfApply(Element element, Element<BigInteger> amount) {
 		if (amount == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.selfApply(element, amount.getValue());
 	}
 
 	@Override
-	public final Tuple selfApply(Element element, long amount) {
-		return this.selfApply(element, BigInteger.valueOf(amount));
+	public final Tuple selfApply(Element element, BigInteger amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		return this.defaultSelfApply((Tuple) element, amount);
 	}
 
 	@Override
@@ -221,8 +221,11 @@ public class ProductSemiGroup
 
 	@Override
 	public final Tuple multiSelfApply(final Element[] elements, final BigInteger[] amounts) {
-		if ((elements == null) || (amounts == null) || (elements.length != amounts.length)) {
-			throw new IllegalArgumentException();
+		if (elements == null || amounts == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements, amounts);
+		}
+		if (elements.length != amounts.length) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, elements, amounts);
 		}
 		return this.defaultMultiSelfApply(elements, amounts);
 	}
@@ -237,7 +240,7 @@ public class ProductSemiGroup
 
 	protected Tuple defaultApply(final Sequence<Element> elements) {
 		final ProductSemiGroup semiGroup = this;
-		return (Tuple) elements.filter(Predicate.NOT_NULL).reduce(new BinaryOperator<Element>() {
+		return (Tuple) elements.filter(Predicate.NOT_NULL).reduce(new Operator<Element>() {
 
 			@Override
 			public Element apply(Element element1, Element element2) {
@@ -247,9 +250,17 @@ public class ProductSemiGroup
 		});
 	}
 
+	protected Tuple defaultSelfApply(Tuple tuple, BigInteger amount) {
+		final Element[] results = new Element[this.getArity()];
+		for (int i : this.getAllIndices()) {
+			results[i] = tuple.getAt(i).selfApply(amount);
+		}
+		return this.abstractGetElement(DenseArray.getInstance(results));
+	}
+
 	protected Tuple defaultMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {
 		if (elements.length == 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, elements, amounts);
 		}
 		Element[] results = new Element[elements.length];
 		for (int i = 0; i < elements.length; i++) {

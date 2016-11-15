@@ -48,7 +48,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class TreeTest {
 

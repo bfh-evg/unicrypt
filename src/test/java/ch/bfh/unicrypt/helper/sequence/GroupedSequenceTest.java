@@ -48,7 +48,7 @@ import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class GroupedSequenceTest {
 
@@ -63,10 +63,17 @@ public class GroupedSequenceTest {
 		Sequence<Integer> seq100 = IntegerSequence.getInstance(1, 100);
 
 		try {
-			seq100.group(0);
+			seq100.group(-1);
 			fail();
 		} catch (Exception e) {
 		}
+
+		Assert.assertTrue(seq0.group(0).isInfinite());
+		Assert.assertTrue(seq1.group(0).isInfinite());
+		Assert.assertTrue(seq9.group(0).isInfinite());
+		Assert.assertTrue(seq10.group(0).isInfinite());
+		Assert.assertTrue(seq11.group(0).isInfinite());
+		Assert.assertTrue(seq100.group(0).isInfinite());
 
 		Assert.assertEquals(0, seq0.group(1).getLength().intValue());
 		Assert.assertEquals(1, seq1.group(1).getLength().intValue());

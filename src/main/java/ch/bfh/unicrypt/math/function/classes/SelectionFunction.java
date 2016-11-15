@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,12 +41,14 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.util.Arrays;
 
 /**
@@ -59,6 +61,7 @@ import java.util.Arrays;
  */
 public class SelectionFunction
 	   extends AbstractFunction<SelectionFunction, ProductSet, Tuple, Set, Element> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final int[] indices;
@@ -69,7 +72,7 @@ public class SelectionFunction
 	}
 
 	public int[] getIndices() {
-		return this.indices;
+		return Arrays.copyOf(this.indices, this.indices.length);
 	}
 
 	@Override
@@ -77,17 +80,11 @@ public class SelectionFunction
 		return Arrays.equals(this.getIndices(), other.getIndices());
 	}
 
-	//
-	// The following protected method implements the abstract method from {@code AbstractFunction}
-	//
 	@Override
 	protected Element abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
-		return element.getAt(this.getIndices());
+		return element.getAt(this.indices);
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	/**
 	 * This is the general constructor of this class. The resulting function selects and returns in a hierarchy of tuple
 	 * elements the element that corresponds to a given sequence of indices (e.g., 0,3,2 for the third element in the
@@ -95,14 +92,11 @@ public class SelectionFunction
 	 * <p>
 	 * @param productSet The product group that defines the domain of the function
 	 * @param indices    The given sequence of indices
-	 * @return
-	 * @throws IllegalArgumentException  of {@code group} is null
-	 * @throws IllegalArgumentException  if {@code indices} is null or if its length exceeds the hierarchy's depth
-	 * @throws IndexOutOfBoundsException if {@code indices} contains an out-of-bounds index
+	 * @return Returns an instance of this class
 	 */
 	public static SelectionFunction getInstance(final ProductSet productSet, final int... indices) {
 		if (productSet == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new SelectionFunction(productSet, productSet.getAt(indices), indices);
 	}

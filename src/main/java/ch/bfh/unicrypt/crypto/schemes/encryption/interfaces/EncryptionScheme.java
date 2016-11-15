@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -48,47 +48,47 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public interface EncryptionScheme
-       extends Scheme {
+	   extends Scheme {
 
-  /**
-   *
-   * @return
-   */
-  public Set getEncryptionSpace();
+	/**
+	 *
+	 * @return Returns the encryption space
+	 */
+	public Set getEncryptionSpace();
 
-  /**
-   *
-   * @return
-   */
-  public Function getEncryptionFunction();
+	/**
+	 *
+	 * @return Returns the encryption function
+	 */
+	public Function getEncryptionFunction();
 
-  /**
-   *
-   * @return
-   */
-  public Function getDecryptionFunction();
+	/**
+	 *
+	 * @return Returns the decryption function
+	 */
+	public Function getDecryptionFunction();
 
-  /**
-   *
-   * @param encryptionKey
-   * @param message
-   * @return
-   */
-  public Element encrypt(Element encryptionKey, Element message);
+	/**
+	 *
+	 * @param encryptionKey
+	 * @param message
+	 * @return Returns the encrypted message
+	 */
+	public Element encrypt(Element encryptionKey, Element message);
 
-  /**
-   *
-   * @param decryptionKey
-   * @param encryption
-   * @return
-   */
-  public Element decrypt(Element decryptionKey, Element encryption);
+	/**
+	 *
+	 * @param decryptionKey
+	 * @param encryption
+	 * @return Returns the decrypted message
+	 */
+	public Element decrypt(Element decryptionKey, Element encryption);
 
-  public Set getEncryptionKeySpace();
+	public Set getEncryptionKeySpace();
 
-  public Set getDecryptionKeySpace();
+	public Set getDecryptionKeySpace();
 
 }

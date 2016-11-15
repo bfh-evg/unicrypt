@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -47,15 +47,24 @@ import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ZModElement
 	   extends AbstractDualisticElement<ZMod, ZModElement, BigInteger>
 	   implements DualisticElement<BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected ZModElement(final ZMod zMod, final BigInteger value) {
 		super(zMod, value);
+	}
+
+	public NElement getNElement() {
+		return NElement.getInstance(this.value);
+	}
+
+	public ZElement getZElement() {
+		return ZElement.getInstance(this.value);
 	}
 
 }

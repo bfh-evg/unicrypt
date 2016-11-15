@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,8 +41,10 @@
  */
 package ch.bfh.unicrypt.helper.factorization;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -57,16 +59,17 @@ import java.util.Arrays;
  */
 public class Factorization
 	   extends UniCrypt {
+
 	private static final long serialVersionUID = 1L;
 
 	protected final BigInteger value;
-	protected final BigInteger[] primeFactors;
-	protected final int[] exponents;
+	protected final ImmutableArray<BigInteger> primeFactors;
+	protected final ImmutableArray<Integer> exponents;
 
-	protected Factorization(BigInteger value, BigInteger[] primeFactors, int[] exponents) {
+	protected Factorization(BigInteger value, BigInteger[] primeFactors, Integer[] exponents) {
 		this.value = value;
-		this.primeFactors = primeFactors;
-		this.exponents = exponents;
+		this.primeFactors = DenseArray.getInstance(primeFactors);
+		this.exponents = DenseArray.getInstance(exponents);
 	}
 
 	/**
@@ -96,7 +99,7 @@ public class Factorization
 		if (primeFactors == null || exponents == null || primeFactors.length != exponents.length) {
 			throw new IllegalArgumentException();
 		}
-		BigInteger value = BigInteger.ONE;
+		BigInteger value = MathUtil.ONE;
 		for (int i = 0; i < primeFactors.length; i++) {
 			if (primeFactors[i] == null || !MathUtil.isPrime(primeFactors[i]) || exponents[i] < 1) {
 				throw new IllegalArgumentException();
@@ -105,7 +108,8 @@ public class Factorization
 		}
 		BigInteger[] newPrimeFactors = MathUtil.removeDuplicates(primeFactors);
 		int newLength = newPrimeFactors.length;
-		int[] newExponents = new int[newLength];
+		Integer[] newExponents = new Integer[newLength];
+		Arrays.fill(newExponents, 0);
 		for (int i = 0; i < newLength; i++) {
 			for (int j = 0; j < primeFactors.length; j++) {
 				if (newPrimeFactors[i].equals(primeFactors[j])) {
@@ -132,12 +136,21 @@ public class Factorization
 	}
 
 	/**
+	 * Checks if the factorization consists of a single prime number.
+	 *
+	 * @return {@code true} if the factorization consists of a single prime number, {@code false} otherwise
+	 */
+	public boolean isPrime() {
+		return this.primeFactors.getLength() == 1 && this.exponents.getAt(0) == 1;
+	}
+
+	/**
 	 * Returns an array containing the prime factors.
 	 * <p>
 	 * @return The prime factors
 	 */
-	public BigInteger[] getPrimeFactors() {
-		return this.primeFactors.clone();
+	public ImmutableArray<BigInteger> getPrimeFactors() {
+		return this.primeFactors;
 	}
 
 	/**
@@ -145,8 +158,8 @@ public class Factorization
 	 * <p>
 	 * @return The exponents
 	 */
-	public int[] getExponents() {
-		return this.exponents.clone();
+	public ImmutableArray<Integer> getExponents() {
+		return this.exponents;
 	}
 
 	@Override

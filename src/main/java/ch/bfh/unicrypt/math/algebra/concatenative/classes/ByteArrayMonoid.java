@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,25 +41,29 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ByteArrayMonoid
 	   extends AbstractConcatenativeMonoid<ByteArrayElement, ByteArray> {
 
 	private static final long serialVersionUID = 1L;
+	private static final Map<Integer, ByteArrayMonoid> INSTANCES = new HashMap<>();
 
 	private ByteArrayMonoid(int blockLength) {
 		super(ByteArray.class, blockLength);
@@ -79,10 +83,6 @@ public class ByteArrayMonoid
 		return ByteArrayToByteArray.getInstance();
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected BigInteger abstractGetOrder() {
 		return Set.INFINITE;
@@ -100,7 +100,7 @@ public class ByteArrayMonoid
 
 	@Override
 	protected Converter<ByteArray, BigInteger> abstractGetBigIntegerConverter() {
-		return ByteArrayToBigInteger.getInstance(this.blockLength);
+		return ByteArrayToBigInteger.getInstance(this.blockLength, 0);
 	}
 
 	@Override
@@ -109,8 +109,8 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected ByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException();
+	protected Sequence<ByteArrayElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override
@@ -133,11 +133,6 @@ public class ByteArrayMonoid
 		return 1;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static final Map<Integer, ByteArrayMonoid> instances = new HashMap<>();
-
 	public static ByteArrayMonoid getInstance() {
 		return ByteArrayMonoid.getInstance(1);
 	}
@@ -150,12 +145,12 @@ public class ByteArrayMonoid
 	 */
 	public static ByteArrayMonoid getInstance(int blockLength) {
 		if (blockLength < 1) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, blockLength);
 		}
-		ByteArrayMonoid instance = ByteArrayMonoid.instances.get(Integer.valueOf(blockLength));
+		ByteArrayMonoid instance = ByteArrayMonoid.INSTANCES.get(Integer.valueOf(blockLength));
 		if (instance == null) {
 			instance = new ByteArrayMonoid(blockLength);
-			ByteArrayMonoid.instances.put(blockLength, instance);
+			ByteArrayMonoid.INSTANCES.put(blockLength, instance);
 		}
 		return instance;
 	}

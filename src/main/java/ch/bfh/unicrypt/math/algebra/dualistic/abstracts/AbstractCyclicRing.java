@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,24 +41,27 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
-import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.UnaryOperator;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
- * This abstract class provides a basis implementation for objects of type {@link CyclicRing}.
+ * This abstract class provides a basis implementation for objects of type {@link CyclicRing}. It inherits from
+ * {@link AbstractRing}. Some methods from {@link AbstractCyclicGroup} must be re-implemented.
  * <p>
- * @param <E> Generic type of the elements of this cyclic ring
- * @param <V> Generic type of values stored in the elements of this cyclic ring
- * @author rolfhaenni
+ * @param <E> The generic type of the elements of this cyclic ring
+ * @param <V> The generic type of values stored in the elements of this cyclic ring
+ * <p>
+ * @author R. Haenni
  */
 public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 	   extends AbstractRing<E, V>
@@ -81,95 +84,72 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 	}
 
 	@Override
+	public final Sequence<E> getIndependentGenerators() {
+		return this.getIndependentGenerators(DeterministicRandomByteSequence.getInstance());
+	}
+
+	@Override
+	public final Sequence<E> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		return this.defaultGetRandomGenerators(randomByteSequence);
+	}
+
+	@Override
 	public final E getRandomGenerator() {
-		return this.defaultGetRandomGenerator(HybridRandomByteSequence.getInstance());
+		return this.getRandomGenerators().get();
 	}
 
 	@Override
 	public final E getRandomGenerator(RandomByteSequence randomByteSequence) {
+		return this.getRandomGenerators(randomByteSequence).get();
+	}
+
+	@Override
+	public final Sequence<E> getRandomGenerators() {
+		return this.getRandomGenerators(HybridRandomByteSequence.getInstance());
+	}
+
+	@Override
+	public final Sequence<E> getRandomGenerators(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		return this.defaultGetRandomGenerator(randomByteSequence);
-	}
-
-	@Override
-	public final E getIndependentGenerator(int index) {
-		return this.getIndependentGenerator(index, (ReferenceRandomByteSequence) null);
-	}
-
-	@Override
-	public final E getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		return (E) this.getIndependentGenerators(index, referenceRandomByteSequence).getAt(index);
-	}
-
-	@Override
-	public final Tuple getIndependentGenerators(int maxIndex) {
-		return this.getIndependentGenerators(maxIndex, (ReferenceRandomByteSequence) null);
-	}
-
-	@Override
-	public final Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		return this.getIndependentGenerators(0, maxIndex, referenceRandomByteSequence);
-	}
-
-	@Override
-	public final Tuple getIndependentGenerators(int minIndex, int maxIndex) {
-		return this.getIndependentGenerators(minIndex, maxIndex, (ReferenceRandomByteSequence) null);
-	}
-
-	@Override
-	public final Tuple getIndependentGenerators(int minIndex, int maxIndex,
-		   ReferenceRandomByteSequence referenceRandomByteSequence) {
-		if (minIndex < 0 || maxIndex < minIndex) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (referenceRandomByteSequence == null) {
-			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
-		}
-		// The following line is necessary for creating a generic array
-		Element[] generators = new Element[maxIndex - minIndex + 1];
-		for (int i = 0; i <= maxIndex; i++) {
-			E generator = this.defaultGetIndependentGenerator(referenceRandomByteSequence);
-			if (i >= minIndex) {
-				generators[i - minIndex] = generator;
-			}
-		}
-		return ProductSet.getInstance(this, generators.length).getElement(generators);
+		return this.defaultGetRandomGenerators(randomByteSequence);
 	}
 
 	@Override
 	public final boolean isGenerator(Element element) {
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		return this.abstractIsGenerator((E) element);
 	}
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-	protected E defaultGetRandomGenerator(RandomByteSequence randomByteSequence) {
-		E element;
-		do {
-			element = this.getRandomElement(randomByteSequence);
-		} while (!this.isGenerator(element));
-		return element;
-	}
+	protected Sequence<E> defaultGetRandomGenerators(RandomByteSequence randomByteSequence) {
+		return this.abstractGetRandomElements(randomByteSequence).filter(new Predicate<E>() {
 
-	protected E defaultGetIndependentGenerator(ReferenceRandomByteSequence referenceRandomByteSequence) {
-		return this.defaultGetRandomGenerator(referenceRandomByteSequence);
+			@Override
+			public boolean test(E value) {
+				return isGenerator(value);
+			}
+
+		});
 	}
 
 	@Override
 	protected Sequence<E> defaultGetElements() {
 		final AbstractCyclicRing<E, V> ring = this;
-		return Sequence.getInstance(this.getDefaultGenerator(), new UnaryOperator<E>() {
+		return Sequence.getInstance(this.getDefaultGenerator(), new Mapping<E, E>() {
 
-			@Override
-			public E apply(E element) {
-				return ring.apply(ring.getDefaultGenerator(), element);
-			}
+								 @Override
+								 public E apply(E element) {
+									 return ring.apply(ring.getDefaultGenerator(), element);
+								 }
 
-		}).limit(new Predicate<E>() {
+							 }).limit(new Predicate<E>() {
 
 			@Override
 			public boolean test(E element) {

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -54,7 +54,7 @@ import java.math.BigInteger;
  * length 6, 8, 10, ... are valid inputs. An unrestricted input corresponds to block length 1 and minimal number of
  * blocks 0.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class ByteArrayToBigInteger
@@ -73,7 +73,7 @@ public class ByteArrayToBigInteger
 
 	/**
 	 * Creates a new default {@link ByteArrayToBigInteger} converter with the block length set to 1 and the minimal
-	 * number of blocks set to 0.
+	 * number of blocks set to 0. This is the default converter for byte arrays of arbitrary length.
 	 * <p>
 	 * @return The new converter
 	 */
@@ -83,13 +83,13 @@ public class ByteArrayToBigInteger
 
 	/**
 	 * Creates a new {@link ByteArrayToBigInteger} converter for a given block length. The minimal number of blocks is
-	 * set to 0.
+	 * set to 1. The is the default converter for blocks of a fixed length.
 	 * <p>
 	 * @param blockLength The block length
 	 * @return The new converter
 	 */
 	public static ByteArrayToBigInteger getInstance(int blockLength) {
-		return ByteArrayToBigInteger.getInstance(blockLength, 0);
+		return ByteArrayToBigInteger.getInstance(blockLength, 1);
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class ByteArrayToBigInteger
 		BigInteger blockSize = MathUtil.powerOfTwo(this.blockLength * Byte.SIZE);
 
 		// compute the total number of shorter byte arrays
-		BigInteger result = BigInteger.ZERO;
+		BigInteger result = MathUtil.ZERO;
 		BigInteger multipleBlockSize = blockSize.pow(this.minBlocks);
 		for (int blocks = this.minBlocks; blocks < byteArray.getLength() / this.blockLength; blocks++) {
 			result = result.add(multipleBlockSize);

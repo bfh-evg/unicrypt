@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -50,24 +50,21 @@ import java.math.BigInteger;
 
 /**
  *
- * @author Christian Lutz
  * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public class ECPolynomialElement
-	   extends AbstractECElement<Polynomial<? extends DualisticElement<BigInteger>>,
-	   PolynomialElement, ECPolynomialElement> {
+	   extends AbstractECElement<Polynomial<? extends DualisticElement<BigInteger>>, PolynomialElement, ECPolynomialElement> {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
 
-	protected ECPolynomialElement(ECPolynomialField ecGroup, Point<PolynomialElement> value) {
-		super(ecGroup, value);
+	protected ECPolynomialElement(ECPolynomialField ec, Point<PolynomialElement> value) {
+		super(ec, value);
 	}
 
-	public ECPolynomialElement(ECPolynomialField ecGroup) {
-		super(ecGroup);
+	protected ECPolynomialElement(ECPolynomialField ec) {
+		super(ec);
 	}
 
 }

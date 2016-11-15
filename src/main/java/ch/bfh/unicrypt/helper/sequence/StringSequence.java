@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -101,7 +101,8 @@ public class StringSequence
 		this.escaped = false;
 	}
 
-	protected StringSequence(String string, char separator, char openingParentesis, char closingParenthesis, char escapeChar) {
+	protected StringSequence(String string, char separator, char openingParentesis, char closingParenthesis,
+		   char escapeChar) {
 		super(Sequence.UNKNOWN);
 		this.string = string;
 		this.separator = separator;
@@ -162,8 +163,8 @@ public class StringSequence
 	 */
 	public static StringSequence getInstance(String string, char separator, char openingParenthesis,
 		   char closingParenthesis) {
-		if (string == null || separator == openingParenthesis || separator == closingParenthesis
-			   || openingParenthesis == closingParenthesis) {
+		if (string == null || separator == openingParenthesis || separator == closingParenthesis ||
+			   openingParenthesis == closingParenthesis) {
 			throw new IllegalArgumentException();
 		}
 		return new StringSequence(string, separator, openingParenthesis, closingParenthesis);
@@ -182,10 +183,10 @@ public class StringSequence
 	 */
 	public static StringSequence getInstance(String string, char separator, char openingParenthesis,
 		   char closingParenthesis, char escapeChar) {
-		if (string == null || separator == openingParenthesis || separator == closingParenthesis
-			   || separator == escapeChar
-			   || openingParenthesis == closingParenthesis || openingParenthesis == escapeChar
-			   || closingParenthesis == escapeChar) {
+		if (string == null || separator == openingParenthesis || separator == closingParenthesis ||
+			   separator == escapeChar ||
+			   openingParenthesis == closingParenthesis || openingParenthesis == escapeChar ||
+			   closingParenthesis == escapeChar) {
 			throw new IllegalArgumentException();
 		}
 		return new StringSequence(string, separator, openingParenthesis, closingParenthesis, escapeChar);
@@ -240,8 +241,8 @@ public class StringSequence
 	}
 
 	@Override
-	public ExtendedIterator<String> iterator() {
-		return new ExtendedIterator<String>() {
+	public SequenceIterator<String> iterator() {
+		return new SequenceIterator<String>() {
 
 			private int currenIndex = -1;
 
@@ -251,7 +252,7 @@ public class StringSequence
 			}
 
 			@Override
-			public String next() {
+			public String abstractNext() {
 				this.currenIndex++;
 				int nextIndex = findNextSeparator(this.currenIndex);
 				String result = string.substring(this.currenIndex, nextIndex);
@@ -282,9 +283,9 @@ public class StringSequence
 			return false;
 		}
 		final StringSequence other = (StringSequence) obj;
-		return this.string.equals(other.string) && this.separator == other.separator
-			   && this.openingParenthesis == other.openingParenthesis
-			   && this.closingParenthesis == other.closingParenthesis && this.escapeChar == other.escapeChar;
+		return this.string.equals(other.string) && this.separator == other.separator &&
+			   this.openingParenthesis == other.openingParenthesis &&
+			   this.closingParenthesis == other.closingParenthesis && this.escapeChar == other.escapeChar;
 	}
 
 	@Override

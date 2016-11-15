@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,19 +41,21 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.BinaryOperator;
-import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Operator;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
 
 /**
- * This abstract class provides a basis implementation for objects of type {@link SemiGroup}.
+ * This abstract class provides a base implementation for the interface {@link SemiGroup}.
  * <p>
- * @param <E> Generic type of elements of this semigroup
- * @param <V> Generic type of values stored in the elements of this semigroup
+ * @param <E> The generic type of elements of this semigroup
+ * @param <V> The generic type of values stored in the elements of this semigroup
  * @see AbstractElement
  * <p>
  * @author R. Haenni
@@ -73,7 +75,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 	@Override
 	public final E apply(final Element element1, final Element element2) {
 		if (!this.contains(element1) || !this.contains(element2)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element1, element2);
 		}
 		return this.abstractApply((E) element1, (E) element2);
 	}
@@ -81,46 +83,50 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 	@Override
 	public final E apply(final Element... elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		return this.defaultApply(Sequence.getInstance(elements));
+		return this.defaultApply(Sequence.getInstance(elements).filter(Predicate.NOT_NULL));
 	}
 
 	@Override
 	public final E apply(final ImmutableArray<Element> elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
+		// no filtering of null value required
 		return this.defaultApply(Sequence.getInstance(elements));
 	}
 
 	@Override
 	public final E apply(final Sequence<Element> elements) {
 		if (elements == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		return this.defaultApply(elements);
-	}
-
-	@Override
-	public final E selfApply(final Element element, final BigInteger amount) {
-		if (!this.contains(element) || amount == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.defaultSelfApply((E) element, amount);
-	}
-
-	@Override
-	public final E selfApply(final Element element, final Element<BigInteger> amount) {
-		if (amount == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.selfApply(element, amount.getValue());
+		return this.defaultApply(elements.filter(Predicate.NOT_NULL));
 	}
 
 	@Override
 	public final E selfApply(final Element element, final long amount) {
 		return this.selfApply(element, BigInteger.valueOf(amount));
+	}
+
+	@Override
+	public final E selfApply(final Element element, final Element<BigInteger> amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		return this.selfApply(element, amount.getValue());
+	}
+
+	@Override
+	public final E selfApply(final Element element, final BigInteger amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		return this.defaultSelfApply((E) element, amount);
 	}
 
 	@Override
@@ -130,16 +136,19 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 
 	@Override
 	public final E multiSelfApply(final Element[] elements, final BigInteger[] amounts) {
-		if ((elements == null) || (amounts == null) || (elements.length != amounts.length)) {
-			throw new IllegalArgumentException();
+		if (elements == null || amounts == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, elements, amounts);
+		}
+		if (elements.length != amounts.length) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, this, elements, amounts);
 		}
 		return this.defaultMultiSelfApply(elements, amounts);
 	}
 
-	// This method is overriden in AbstractMonoid
+	// this method is overriden in AbstractMonoid
 	protected E defaultApply(final Sequence<Element> elements) {
 		final SemiGroup<V> semiGroup = this;
-		return (E) elements.filter(Predicate.NOT_NULL).reduce(new BinaryOperator<Element>() {
+		return (E) elements.reduce(new Operator<Element>() {
 
 			@Override
 			public Element apply(Element element1, Element element2) {
@@ -148,27 +157,30 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 		});
 	}
 
+	// this method is overriden in AbstractMonoid
 	protected E defaultSelfApply(E element, BigInteger amount) {
 		if (amount.signum() <= 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, amount);
 		}
 		return this.defaultSelfApplyAlgorithm(element, amount);
 	}
 
-	protected E defaultSelfApplyAlgorithm(E element, BigInteger posAmount) {
+	// this method is overriden in GStarMod, ZStarMod, ZMod, and PolynomialSemiRing
+	protected E defaultSelfApplyAlgorithm(E element, BigInteger positiveAmount) {
 		E result = element;
-		for (int i = posAmount.bitLength() - 2; i >= 0; i--) {
+		for (int i = positiveAmount.bitLength() - 2; i >= 0; i--) {
 			result = this.abstractApply(result, result);
-			if (posAmount.testBit(i)) {
+			if (positiveAmount.testBit(i)) {
 				result = this.abstractApply(result, element);
 			}
 		}
 		return result;
 	}
 
+	// this method is overriden in AbstractMonoid
 	protected E defaultMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {
 		if (elements.length == 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, elements, amounts);
 		}
 		Element[] results = new Element[elements.length];
 		for (int i = 0; i < elements.length; i++) {
@@ -177,10 +189,6 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 		return this.apply(results);
 	}
 
-	//
-	// The following protected abstract method must be implemented in every
-	// direct sub-class.
-	//
 	protected abstract E abstractApply(E element1, E element2);
 
 }

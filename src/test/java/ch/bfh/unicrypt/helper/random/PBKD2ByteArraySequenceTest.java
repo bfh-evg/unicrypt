@@ -1,0 +1,88 @@
+/*
+ * UniCrypt
+ *
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Security in the Information Society (RISIS), E-Voting Group (EVG)
+ *  Quellgasse 21, CH-2501 Biel, Switzerland
+ *
+ *  Licensed under Dual License consisting of:
+ *  1. GNU Affero General Public License (AGPL) v3
+ *  and
+ *  2. Commercial license
+ *
+ *
+ *  1. This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
+ *   accordance with the commercial license agreement provided with the
+ *   Software or, alternatively, in accordance with the terms contained in
+ *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
+ *   Security in the Information Society (RISIS), E-Voting Group (EVG)
+ *   Quellgasse 21, CH-2501 Biel, Switzerland.
+ *
+ *
+ *   For further information contact <e-mail: unicrypt@bfh.ch>
+ *
+ *
+ * Redistributions of files must retain the above copyright notice.
+ */
+package ch.bfh.unicrypt.helper.random;
+
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
+import ch.bfh.unicrypt.helper.random.password.PBKDF2;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ *
+ * @author R. Haenni
+ */
+public class PBKD2ByteArraySequenceTest {
+
+	@Test
+	public void hashMacSequenceTest() {
+		//
+		// Test vector from https://www.ietf.org/rfc/rfc6070.txt
+		//
+		//Input:
+		//P = "passwordPASSWORDpassword" (24 octets)
+		//S = "saltSALTsaltSALTsaltSALTsaltSALTsalt" (36 octets)
+		//c = 4096
+		//dkLen = 25
+		//
+		//Output:
+		//DK = 3d 2e ec 4f e4 1c 84 9b
+		//	80 c8 d8 36 62 c0 e4 4a
+		//	8b 29 1a 96 4c f2 f0 70
+		//	38                      (25 octets)
+		//
+		Converter<String, ByteArray> converter = StringToByteArray.getInstance();
+		ByteArray password = converter.convert("passwordPASSWORDpassword");
+		ByteArray salt = converter.convert("saltSALTsaltSALTsaltSALTsaltSALTsalt");
+
+		ByteArray expected = ByteArray.getInstance("3d|2e|ec|4f|e4|1c|84|9b|80|c8|d8|36|62|c0|e4|4a|8b|29|1a|96|4c|f2|f0|70|38".toUpperCase());
+		HashAlgorithm algo = HashAlgorithm.SHA1;
+
+		SequenceIterator si
+			   = PBKDF2.getFactory(algo, 4096).getInstance(password, salt).getRandomByteSequence().iterator();
+		Assert.assertEquals(expected, si.next(25));
+	}
+
+}

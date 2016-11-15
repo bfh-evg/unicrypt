@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
@@ -49,47 +51,44 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>  Type Finite Field of EC
+ * @param <V>  Type finite field of EC
  * @param <DE> Type of FiniteFieldElement
- * @param <EE>
+ * @param <EE> x
+ * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public class AbstractECElement<V, DE extends DualisticElement<V>, EE extends ECElement<V, DE>>
 	   extends AbstractAdditiveElement<EC<V, DE>, EE, Point<DE>>
 	   implements ECElement<V, DE> {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
+
+	// flag to distinguish the point of infinity from normal curve points
 	private final boolean infinity;
 
-	// the main constructor
 	protected AbstractECElement(AbstractSet<EE, Point<DE>> ecGroup, Point<DE> value) {
 		super(ecGroup, value);
 		this.infinity = false;
 	}
 
-	// special constructor is necessary for the additional point of infinity
 	protected AbstractECElement(AbstractSet<EE, Point<DE>> ecGroup) {
 		super(ecGroup, Point.<DE>getInstance());
 		this.infinity = true;
 	}
 
-	// additional convenience getter method to handle to point of infinity
 	@Override
 	public DE getX() {
 		if (this.infinity) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		return this.value.getX();
 	}
 
-	// additional convenience getter method to handle to point of infinity
 	@Override
 	public DE getY() {
 		if (this.infinity) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		return this.value.getY();
 	}

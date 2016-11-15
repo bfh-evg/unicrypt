@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,18 +41,19 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
- * This interface provides the renaming of some group operations for the case of a multiplicatively written
- * {@link CyclicGroup}. No functionality is added, only the return types are updated.
+ * This interface represents a multiplicatively written commutative {@link CyclicGroup}. No functionality is added. Some
+ * return types are adjusted.
+ * <p>
+ * @param <V> The generic type of the values stored in the elements of this cyclic group
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of this cyclic group
  */
 public interface MultiplicativeCyclicGroup<V>
 	   extends CyclicGroup<V>, MultiplicativeGroup<V> {
@@ -61,16 +62,10 @@ public interface MultiplicativeCyclicGroup<V>
 	public MultiplicativeElement<V> getDefaultGenerator();
 
 	@Override
-	public MultiplicativeElement<V> getRandomGenerator();
+	public Sequence<? extends MultiplicativeElement<V>> getIndependentGenerators();
 
 	@Override
-	public MultiplicativeElement<V> getRandomGenerator(RandomByteSequence randomByteSequence);
-
-	@Override
-	public MultiplicativeElement<V> getIndependentGenerator(int index);
-
-	@Override
-	public MultiplicativeElement<V> getIndependentGenerator(int index,
-		   ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Sequence<? extends MultiplicativeElement<V>> getIndependentGenerators(
+		   DeterministicRandomByteSequence randomByteSequence);
 
 }

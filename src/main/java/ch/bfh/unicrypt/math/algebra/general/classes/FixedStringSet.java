@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,15 +41,19 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Alphabet;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class FixedStringSet
 	   extends FiniteStringSet {
+
 	private static final long serialVersionUID = 1L;
 
 	private FixedStringSet(Alphabet alphabet, int length) {
@@ -60,20 +64,34 @@ public class FixedStringSet
 		return this.getMinLength();
 	}
 
+	public static FixedStringSet getInstance(final int length) {
+		return FixedStringSet.getInstance(Alphabet.getInstance(), length);
+	}
+
 	public static FixedStringSet getInstance(final Alphabet alphabet, final int length) {
-		if (alphabet == null || length < 0) {
-			throw new IllegalArgumentException();
+		if (alphabet == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (length < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, length);
 		}
 		return new FixedStringSet(alphabet, length);
 	}
 
-	public static FiniteStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder) {
-		if (alphabet == null || minOrder == null || minOrder.signum() < 0) {
-			throw new IllegalArgumentException();
+	public static FixedStringSet getInstance(final BigInteger minOrder) {
+		return FixedStringSet.getInstance(Alphabet.getInstance(), minOrder);
+	}
+
+	public static FixedStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder) {
+		if (alphabet == null || minOrder == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, alphabet, minOrder);
+		}
+		if (minOrder.signum() < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, minOrder);
 		}
 		int length = 0;
 		BigInteger size = BigInteger.valueOf(alphabet.getSize());
-		BigInteger order = BigInteger.ONE;
+		BigInteger order = MathUtil.ONE;
 		while (order.compareTo(minOrder) < 0) {
 			order = order.multiply(size);
 			length++;

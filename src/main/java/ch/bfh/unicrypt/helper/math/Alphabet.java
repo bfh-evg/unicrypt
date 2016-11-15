@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.helper.math;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -89,6 +91,15 @@ public class Alphabet
 		this.characters = null;
 		this.minChar = minChar;
 		this.maxChar = maxChar;
+	}
+
+	/**
+	 * Returns the default alphabet consisting of all unicode characters
+	 * <p>
+	 * @return The default alphabet
+	 */
+	public static Alphabet getInstance() {
+		return Alphabet.UNICODE_BMP;
 	}
 
 	/**
@@ -177,7 +188,7 @@ public class Alphabet
 	 */
 	public char getCharacter(int index) {
 		if (index < 0 || index >= this.getSize()) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 		}
 		if (this.characters == null) {
 			return (char) (this.minChar + index);
@@ -254,10 +265,6 @@ public class Alphabet
 				return getCharacter(this.currentIndex++);
 			}
 
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
 		};
 	}
 

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.math;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.factorization.Factorization;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
@@ -71,17 +71,16 @@ public class MathUtilTest {
 	@Test
 	public void testEulerFunction() {
 		// first 10 values with correct prime factors
-		Assert.assertEquals(MathUtil.eulerFunction(ONE, new BigInteger[]{}), ONE);
-		Assert.assertEquals(MathUtil.eulerFunction(TWO, new BigInteger[]{TWO}), ONE);
-		Assert.assertEquals(MathUtil.eulerFunction(THREE, new BigInteger[]{THREE}), TWO);
-		Assert.assertEquals(MathUtil.eulerFunction(FOUR, new BigInteger[]{TWO}), TWO);
-		Assert.assertEquals(MathUtil.eulerFunction(FIVE, new BigInteger[]{FIVE}), FOUR);
-		Assert.assertEquals(MathUtil.eulerFunction(SIX, new BigInteger[]{TWO, THREE}), TWO);
-		Assert.assertEquals(MathUtil.eulerFunction(SIX, TWO, THREE), TWO);
-		Assert.assertEquals(MathUtil.eulerFunction(SEVEN, new BigInteger[]{SEVEN}), SIX);
-		Assert.assertEquals(MathUtil.eulerFunction(EIGHT, new BigInteger[]{TWO}), FOUR);
-		Assert.assertEquals(MathUtil.eulerFunction(NINE, new BigInteger[]{THREE}), SIX);
-		Assert.assertEquals(MathUtil.eulerFunction(TEN, new BigInteger[]{TWO, FIVE}), FOUR);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance()), ONE);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(TWO)), ONE);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(THREE)), TWO);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(TWO, TWO)), TWO);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(FIVE)), FOUR);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(TWO, THREE)), TWO);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(SEVEN)), SIX);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(TWO, TWO, TWO)), FOUR);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(THREE, THREE)), SIX);
+		Assert.assertEquals(MathUtil.eulerFunction(Factorization.getInstance(TWO, FIVE)), FOUR);
 	}
 
 	@Test
@@ -222,6 +221,7 @@ public class MathUtilTest {
 
 	@Test
 	public void testPairUnPairWithSize() {
+		Assert.assertEquals(0, MathUtil.unpairWithSize(MathUtil.pairWithSize()).length);
 		for (int i = 0; i <= 5; i++) {
 			BigInteger bi = BigInteger.valueOf(i);
 			Assert.assertEquals(bi, MathUtil.unpairWithSize(MathUtil.pairWithSize(bi))[0]);
@@ -729,6 +729,27 @@ public class MathUtilTest {
 		Assert.assertEquals(-1, MathUtil.divideUp(3, n));
 		Assert.assertEquals(-2, MathUtil.divideUp(4, n));
 		Assert.assertEquals(-2, MathUtil.divideUp(5, n));
+	}
+
+	@Test
+	public void legendreSymbolTest() {
+		for (int p : new int[]{3, 5, 7, 11, 13, 17, 19, 23}) {
+			BigInteger bigP = BigInteger.valueOf(p);
+			BigInteger bigQ = bigP.subtract(ONE).divide(TWO);
+			for (int a = 0; a <= p; a++) {
+				BigInteger bigA = BigInteger.valueOf(a);
+				BigInteger bigR = bigA.modPow(bigQ, bigP);
+				int r;
+				if (bigR.equals(ONE)) {
+					r = 1;
+				} else if (bigR.equals(ZERO)) {
+					r = 0;
+				} else {
+					r = -1;
+				}
+				Assert.assertEquals(r, MathUtil.legendreSymbol(bigA, bigP));
+			}
+		}
 	}
 
 }

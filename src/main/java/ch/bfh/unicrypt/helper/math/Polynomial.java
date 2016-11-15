@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,7 +41,9 @@
  */
 package ch.bfh.unicrypt.helper.math;
 
+import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.array.classes.SparseArray;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
@@ -228,7 +230,7 @@ public class Polynomial<C>
 	 */
 	public C getCoefficient(int index) {
 		if (index < 0) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 		}
 		if (this.isBinary()) {
 			if (index < this.binaryCoefficients.getLength() && this.binaryCoefficients.getAt(index)) {
@@ -251,7 +253,7 @@ public class Polynomial<C>
 		if (this.isBinary()) {
 			return this.binaryCoefficients;
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	/**
@@ -314,7 +316,6 @@ public class Polynomial<C>
 	@Override
 	protected String defaultToStringContent() {
 		String result = "f(x)=";
-
 		String separator = "";
 		Sequence<Integer> indices = this.getCoefficientIndices();
 		if (indices.isEmpty()) {
@@ -338,8 +339,11 @@ public class Polynomial<C>
 	}
 
 	private String coefficientToString(C coefficient) {
-		if (coefficient instanceof Boolean) {
-			return coefficient == this.zeroCoefficient ? "0" : "1";
+		if (coefficient.equals(this.zeroCoefficient)) {
+			return "0";
+		}
+		if (coefficient.equals(this.oneCoefficient)) {
+			return "1";
 		}
 		return coefficient.toString();
 	}

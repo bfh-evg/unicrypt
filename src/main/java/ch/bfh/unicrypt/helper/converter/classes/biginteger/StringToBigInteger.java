@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,8 +41,9 @@
  */
 package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
-import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.math.Alphabet;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 
 /**
@@ -52,7 +53,7 @@ import java.math.BigInteger;
  * can be specified. Again, for blocks of length 2 and with a minimal number of blocks of 3, then only strings of length
  * 6, 8, 10, ... are valid inputs. An unrestricted input corresponds to block length 1 and minimal number of blocks 0.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class StringToBigInteger
@@ -127,14 +128,14 @@ public class StringToBigInteger
 		BigInteger blockSize = alphabetSize.pow(this.blockLength);
 
 		// compute the total number of shorter strings
-		BigInteger result1 = BigInteger.ZERO;
+		BigInteger result1 = MathUtil.ZERO;
 		BigInteger multipleBlockSize = blockSize.pow(this.minBlocks);
 		for (int i = this.minBlocks; i < string.length() / this.blockLength; i++) {
 			result1 = result1.add(multipleBlockSize);
 			multipleBlockSize = multipleBlockSize.multiply(blockSize);
 		}
 		// compute the rank of the string among all string of its length
-		BigInteger result2 = BigInteger.ZERO;
+		BigInteger result2 = MathUtil.ZERO;
 		for (int i = 0; i < string.length(); i++) {
 			int charIndex = this.alphabet.getIndex(string.charAt(i));
 			result2 = result2.multiply(alphabetSize).add(BigInteger.valueOf(charIndex));

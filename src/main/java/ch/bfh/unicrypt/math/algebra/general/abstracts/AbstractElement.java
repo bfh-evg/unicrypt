@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,7 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
@@ -62,14 +64,12 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import java.math.BigInteger;
 
 /**
- * This abstract class represents the concept an element in a mathematical group. It allows applying the group operation
- * and other methods from a {@link Group} in a convenient way. Most methods provided by {@link AbstractElement} have an
- * equivalent method in {@link Group}.
+ * This abstract class provides a base implementation for the interface {@link Element}.
  * <p>
- * @param <S> Generic type of {@link Set} of this element
- * @param <E> Generic type of this element
- * @param <V> Generic type of value stored in this element
- * @see Group
+ * @param <S> The generic type of {@link Set} of this element
+ * @param <E> The generic type of this element
+ * @param <V> The generic type of value stored in this element
+ * @see AbstractSet
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -114,21 +114,11 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 		return this instanceof Tuple;
 	}
 
-	/**
-	 * Returns the unique {@link Set} to which this element belongs
-	 * <p>
-	 * @return The element's set
-	 */
 	@Override
 	public final S getSet() {
 		return (S) this.set;
 	}
 
-	/**
-	 * Returns the positive BigInteger value that corresponds the element.
-	 * <p>
-	 * @return The corresponding BigInteger value
-	 */
 	@Override
 	public final V getValue() {
 		return this.value;
@@ -137,7 +127,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	@Override
 	public final <W> W convertTo(Converter<V, W> converter) {
 		if (converter == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return converter.convert(this.value);
 	}
@@ -145,15 +135,23 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	@Override
 	public final <W> W convertTo(ConvertMethod<W> convertMethod, Aggregator<W> aggregator) {
 		if (convertMethod == null || aggregator == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, convertMethod, aggregator);
 		}
 		return this.defaultConvertTo(convertMethod).aggregate(aggregator);
 	}
 
 	@Override
+	public <W, X> X convertTo(ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) {
+		if (convertMethod == null || aggregator == null || finalConverter == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, convertMethod, aggregator, finalConverter);
+		}
+		return finalConverter.convert(this.convertTo(convertMethod, aggregator));
+	}
+
+	@Override
 	public final <W> Tree<W> convertTo(final ConvertMethod<W> convertMethod) {
 		if (convertMethod == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		return this.defaultConvertTo(convertMethod);
 	}
@@ -181,123 +179,132 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	@Override
 	public <W> ByteArray getHashValue(ConvertMethod<W> convertMethod, HashMethod<W> hashMethod) {
 		if (convertMethod == null || hashMethod == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this, convertMethod, hashMethod);
 		}
 		return hashMethod.getHashValue(this.convertTo(convertMethod));
 	}
 
-	/**
-	 * @see Group#apply(Element, Element)
-	 */
 	@Override
 	public final E apply(final Element element) {
 		if (this.set.isSemiGroup()) {
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.apply(this, element);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#applyInverse(Element, Element)
-	 */
 	@Override
 	public final E applyInverse(final Element element) {
 		if (this.set.isGroup()) {
 			Group group = ((Group) this.set);
 			return (E) group.applyInverse(this, element);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#selfApply(Element, BigInteger)
-	 */
 	@Override
 	public final E selfApply(final BigInteger amount) {
 		if (this.set.isSemiGroup()) {
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this, amount);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#selfApply(Element, Element)
-	 */
 	@Override
 	public final E selfApply(final Element<BigInteger> amount) {
 		if (this.set.isSemiGroup()) {
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this, amount);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#selfApply(Element, long)
-	 */
 	@Override
 	public final E selfApply(final long amount) {
 		if (this.set.isSemiGroup()) {
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this, amount);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#selfApply(Element)
-	 */
 	@Override
 	public final E selfApply() {
 		if (this.set.isSemiGroup()) {
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#invert(Element)
-	 */
 	@Override
-	public final E invert() {
+	public final E invertSelfApply(long amount) {
 		if (this.set.isGroup()) {
 			Group group = ((Group) this.set);
-			return (E) group.invert(this);
+			return (E) group.invertSelfApply(this, amount);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see Group#isIdentityElement(Element)
-	 */
+	@Override
+	public final E invertSelfApply(BigInteger amount) {
+		if (this.set.isGroup()) {
+			Group group = ((Group) this.set);
+			return (E) group.invertSelfApply(this, amount);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	}
+
+	@Override
+	public final E invertSelfApply(Element<BigInteger> amount) {
+		if (this.set.isGroup()) {
+			Group group = ((Group) this.set);
+			return (E) group.invertSelfApply(this, amount);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	}
+
+	@Override
+	public final E invertSelfApply() {
+		if (this.set.isGroup()) {
+			Group group = ((Group) this.set);
+			return (E) group.invertSelfApply(this);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	}
+
 	@Override
 	public final boolean isIdentity() {
 		if (this.set.isMonoid()) {
 			Monoid monoid = ((Monoid) this.set);
 			return monoid.isIdentityElement(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
-	/**
-	 * @see CyclicGroup#isGenerator(Element)
-	 */
+	@Override
+	public final E invert() {
+		if (this.set.isGroup()) {
+			Group group = ((Group) this.set);
+			return (E) group.invert(this);
+		}
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+	}
+
 	@Override
 	public final boolean isGenerator() {
 		if (this.set.isCyclic()) {
 			CyclicGroup cyclicGroup = ((CyclicGroup) this.set);
 			return cyclicGroup.isGenerator(this);
 		}
-		throw new UnsupportedOperationException();
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override
 	public final boolean isEquivalent(final Element other) {
 		if (other == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
 		if (this == other) {
 			return true;

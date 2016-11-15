@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,160 +41,178 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 
+import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
- * This interface provides the renaming of some group operations for the case of an additively written
- * {@link SemiGroup}. Some return types are updated.
+ * This interface provides the renaming of some methods for a (non-commutative) {@link SemiGroup} with concatenation as
+ * binary operation. Elements of such semigroups have a length. In some concatenative semigroups, the length of the
+ * elements is restricted to a multiple of a fixed block length. The default block length is 1. Some additional methods
+ * are added to deal with the length of the elements and the block length of the semigroup. Some return types are
+ * adjusted.
+ * <p>
+ * @param <V> The generic type of the values stored in the elements of this semigroup
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of this semigroup
  */
 public interface ConcatenativeSemiGroup<V>
 	   extends SemiGroup<V> {
 
 	/**
-	 * Returns the blocklength of this concatenative semigroup.
+	 * Returns the block length of this concatenative semigroup.
 	 * <p>
-	 * @return the blocklength of this concatenative semigroup
+	 * @return The block length of this concatenative semigroup
 	 */
 	public int getBlockLength();
 
 	/**
-	 * Returns a random concatenative element with a given length.
+	 * Selects and returns a random semiring element of a given length. The element is selected uniformly at random
+	 * using the library's default random byte sequence.
 	 * <p>
 	 * @param length The given length
-	 * @return a random concatenative element
+	 * @return A random element of the given length
 	 */
 	public ConcatenativeElement<V> getRandomElement(int length);
 
 	/**
-	 * Returns a random concatenative element with a given length and a given {@link RandomByteSequence}.
+	 * Selects and returns a random semiring element of a given length. The element is selected uniformly at random
+	 * using a given random byte sequence.
 	 * <p>
 	 * @param length             The given length
-	 * @param randomByteSequence The given random Byte Sequence
-	 * @return a random concatenative element
+	 * @param randomByteSequence The given random byte sequence
+	 * @return A random element of the given length
 	 */
 	public ConcatenativeElement<V> getRandomElement(int length, RandomByteSequence randomByteSequence);
 
 	/**
-	 * This method is a synonym for {@link Group#apply(Element, Element)}.
+	 * This method is a synonym for {@link SemiGroup#apply(Element, Element)}. It concatenates the two input elements in
+	 * the given order .
 	 * <p>
-	 * @param element1 the same as in {@link Group#apply(Element, Element)}
-	 * @param element2 the same as in {@link Group#apply(Element, Element)}
-	 * @return the same as in {@link Group#apply(Element, Element)}
+	 * @param element1 The first input element
+	 * @param element2 The second input element
+	 * @return The concatenation of the two input elements
+	 * @see SemiGroup#apply(Element, Element)
 	 */
 	public ConcatenativeElement<V> concatenate(Element element1, Element element2);
 
 	/**
-	 * This method is a synonym for {@link Group#apply(Element...)}.
+	 * This method is a synonym for {@link SemiGroup#apply(Element...)}. It concatenates the input elements in the given
+	 * order from left to right. The input elements are given as an array.
 	 * <p>
-	 * @param elements the same as in {@link Group#apply(Element...)}
-	 * @return the same as in {@link Group#apply(Element...)}
+	 * @param elements The given array of input elements
+	 * @return The concatenation of the input elements
+	 * @see SemiGroup#apply(Element...)
 	 */
 	public ConcatenativeElement<V> concatenate(Element... elements);
 
+	/**
+	 * This method is a synonym for {@link SemiGroup#apply(ImmutableArray)}. It concatenates the input elements in the
+	 * given order from left to right. The input elements are given as a immutable array.
+	 * <p>
+	 * @param elements The given array of input elements
+	 * @return The concatenation of the input elements
+	 * @see SemiGroup#apply(ImmutableArray)
+	 */
 	public ConcatenativeElement<V> concatenate(ImmutableArray<Element> elements);
 
+	/**
+	 * This method is a synonym for {@link SemiGroup#apply(Sequence)}. It concatenates the input elements in the given
+	 * order from left to right. The input elements are given as a sequence.
+	 * <p>
+	 * @param elements The given array of input elements
+	 * @return The concatenation of the input elements
+	 * @see SemiGroup#apply(Sequence)
+	 */
 	public ConcatenativeElement<V> concatenate(Sequence<Element> elements);
 
 	/**
-	 * This method is a synonym for {@link Group#selfApply(Element, BigInteger)}.
+	 * Applies the concatenation operation repeatedly to {@code amount} many instances of a given input element. This is
+	 * a convenient method for {@link ConcatenativeSemiGroup#selfConcatenate(Element, BigInteger)}.
 	 * <p>
-	 * @param element the same as in {@link Group#selfApply(Element, BigInteger)}
-	 * @param amount  the same as in {@link Group#selfApply(Element, BigInteger)}
-	 * @return the same as in {@link Group#selfApply(Element, BigInteger)}
-	 */
-	public ConcatenativeElement<V> selfConcatenate(Element element, BigInteger amount);
-
-	/**
-	 * This method is a synonym for {@link Group#selfApply(Element, Element)}.
-	 * <p>
-	 * @param element the same as in {@link Group#selfApply(Element, Element)}
-	 * @param amount  the same as in {@link Group#selfApply(Element, Element)}
-	 * @return the same as in {@link Group#selfApply(Element, Element)}
-	 */
-	public ConcatenativeElement<V> selfConcatenate(Element element, Element<BigInteger> amount);
-
-	/**
-	 * This method is a synonym for {@link Group#selfApply(Element, long)}.
-	 * <p>
-	 * @param element the same as in {@link Group#selfApply(Element, long)}
-	 * @param amount  the same as in {@link Group#selfApply(Element, long)}
-	 * @return the same as in {@link Group#selfApply(Element, long)}
+	 * @param element The given input element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of applying concatenation multiple times to the input element
 	 */
 	public ConcatenativeElement<V> selfConcatenate(Element element, long amount);
 
 	/**
-	 * Applies the group operation to two instances of a given group element. This is equivalent to
-	 * {@code selfApply(element, 2)}.
+	 * Applies the concatenation operation repeatedly to {@code amount} many instances of a given input element.
 	 * <p>
-	 * @param element A given group element
-	 * @return The result of applying the group operation to the input element
-	 * @throws IllegalArgumentException if {@code element} is null or does not belong to the group
+	 * @param element The given input element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of applying concatenation multiple times to the input element
+	 */
+	public ConcatenativeElement<V> selfConcatenate(Element element, BigInteger amount);
+
+	/**
+	 * Same as {@link ConcatenativeSemiGroup#selfConcatenate(Element, BigInteger)}, except that the amount is given as
+	 * an instance of {@code Element<BigInteger>}, from which a {@code BigInteger} value can be extracted using
+	 * {@link Element#getValue()}.
+	 * <p>
+	 * @param element The given input element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of applying concatenation multiple times to the input element
+	 */
+	public ConcatenativeElement<V> selfConcatenate(Element element, Element<BigInteger> amount);
+
+	/**
+	 * Applies the concatenation operation to two instances of a given element. This is equivalent to
+	 * {@link ConcatenativeSemiGroup#selfConcatenate(Element, long)} for {@code amount=2}.
+	 * <p>
+	 * @param element The given input element
+	 * @return The result of applying the concatenation operation to two instances of the input element
 	 */
 	public ConcatenativeElement<V> selfConcatenate(Element element);
 
 	/**
-	 * Applies the binary operation pair-wise sequentially to the results of computing
-	 * {@link #selfApply(Element, BigInteger)} multiple times. In an additive group, this operation is sometimes called
-	 * 'weighed sum', and 'product-of-powers' in a multiplicative group.
+	 * Applies the concatenation operation sequentially to the results of computing
+	 * {@link #selfConcatenate(Element, BigInteger)} multiple times. If the two input arrays are not of equal length, an
+	 * exception is thrown.
 	 * <p>
-	 * @param elements A given array of elements
+	 * @param elements The given array of elements
 	 * @param amounts  Corresponding amounts
 	 * @return The result of this operation
-	 * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the group
-	 * @throws IllegalArgumentException if {@code elements} and {@code amounts} have different lengths
 	 */
 	public ConcatenativeElement<V> multiSelfConcatenate(Element[] elements, BigInteger[] amounts);
 
-	/**
-	 * Returns the identity element of this concatenative semigroup.
-	 * <p>
-	 * @return the identity element
-	 */
-	public ConcatenativeElement<V> getEmptyElement();
-
-	/**
-	 * Returns {@code true} if the given element is the identity element
-	 * <p>
-	 * @param element The given element
-	 * @return {@code true} if the given element is the identity element
-	 */
-	public boolean isEmptyElement(Element element);
+	@Override
+	public <W> ConcatenativeElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;
 
 	@Override
-	public <W> ConcatenativeElement<V> getElementFrom(W value, Converter<V, W> converter);
+	public <W> ConcatenativeElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator)
+		   throws UniCryptException;
 
 	@Override
-	public <W> ConcatenativeElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
+	public <W, X> ConcatenativeElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod,
+		   Aggregator<W> aggregator, Converter<W, X> finalConverter) throws UniCryptException;
 
 	@Override
-	public <W> ConcatenativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+	public <W> ConcatenativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) throws
+		   UniCryptException;
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(long integer);
+	public ConcatenativeElement<V> getElementFrom(long integer) throws UniCryptException;
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(BigInteger bigInteger);
+	public ConcatenativeElement<V> getElementFrom(BigInteger bigInteger) throws UniCryptException;
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(ByteArray byteArray);
+	public ConcatenativeElement<V> getElementFrom(ByteArray byteArray) throws UniCryptException;
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(String string);
+	public ConcatenativeElement<V> getElementFrom(String string) throws UniCryptException;
 
 	@Override
 	public ConcatenativeElement<V> getRandomElement();
@@ -206,13 +224,10 @@ public interface ConcatenativeSemiGroup<V>
 	public Sequence<? extends ConcatenativeElement<V>> getRandomElements();
 
 	@Override
-	public Sequence<? extends ConcatenativeElement<V>> getRandomElements(long n);
-
-	@Override
 	public Sequence<? extends ConcatenativeElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
 
 	@Override
-	public Sequence<? extends ConcatenativeElement<V>> getRandomElements(long n, RandomByteSequence randomByteSequence);
+	public Sequence<? extends ConcatenativeElement<V>> getElements();
 
 	@Override
 	public ConcatenativeElement<V> apply(Element element1, Element element2);

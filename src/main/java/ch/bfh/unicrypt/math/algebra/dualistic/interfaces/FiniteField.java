@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -44,20 +44,26 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 import java.math.BigInteger;
 
 /**
- * This interface represents the mathematical concept of a finite field. A finite field is a field that contains a
- * finite number of elements, called its order. It is implemented as a specialization of {@link Field}.
+ * This interface represents the mathematical concept of a finite field (also called Galois field). A finite field is a
+ * field that contains a finite number of elements. The order of a finite field is always {@code p^k}, where {@code k>0}
+ * a positive integer. The prime number {@code p} is called characteristic of the field.
  * <p>
- * @author rolfhaenni
- * @param <V>
+ * The finite field interface is implemented as a specialization of {@link Field} with an additional method for
+ * returning the characteristic of the field.
+ * <p>
+ * @param <V> The generic type of the values representing the elements of a finite field
+ * <p>
+ * @author R. Haenni
+ * <p>
+ * @see "Handbook of Applied Cryptography, Definition 2.208"
  */
 public interface FiniteField<V>
 	   extends Field<V> {
 
 	/**
-	 * Returns the characteristic of this field. The number of elements in a finite field is of the form pn, where p is
-	 * a prime number called the characteristic of the field, and n is a positive integer.
+	 * Returns the characteristic of this field.
 	 * <p>
-	 * @return the characteristic of this field
+	 * @return The characteristic of this field
 	 */
 	public BigInteger getCharacteristic();
 

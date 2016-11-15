@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,24 +41,27 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.factorization.SafePrime;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class GStarModSafePrime
 	   extends GStarModPrime {
 
-	private final static Map<BigInteger, GStarModSafePrime> instances = new HashMap<>();
 	private static final long serialVersionUID = 1L;
+	private final static Map<BigInteger, GStarModSafePrime> INSTANCES = new HashMap<>();
 
-	protected GStarModSafePrime(SafePrime modulo) {
-		super(modulo, Prime.getInstance(modulo.getValue().subtract(BigInteger.ONE).divide(BigInteger.valueOf(2))));
+	protected GStarModSafePrime(SafePrime modulus) {
+		super(modulus, Prime.getInstance(modulus.getValue().subtract(MathUtil.ONE).divide(MathUtil.TWO)));
 	}
 
 	@Override
@@ -66,16 +69,11 @@ public class GStarModSafePrime
 		return this.getModulus().toString();
 	}
 
-	public static GStarModSafePrime getInstance(final SafePrime modulo) {
-		if (modulo == null) {
-			throw new IllegalArgumentException();
-		}
-		GStarModSafePrime instance = GStarModSafePrime.instances.get(modulo.getValue());
-		if (instance == null) {
-			instance = new GStarModSafePrime(modulo);
-			GStarModSafePrime.instances.put(modulo.getValue(), instance);
-		}
-		return instance;
+	@Override
+	protected boolean abstractContains(final BigInteger value) {
+		return value.signum() > 0
+			   && value.compareTo(this.modulus) < 0
+			   && MathUtil.legendreSymbol(value, this.modulus) == 1;
 	}
 
 	public static GStarModSafePrime getInstance(final long modulus) {
@@ -83,7 +81,27 @@ public class GStarModSafePrime
 	}
 
 	public static GStarModSafePrime getInstance(final BigInteger modulus) {
-		return GStarModSafePrime.getInstance(SafePrime.getInstance(modulus));
+		if (modulus == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		GStarModSafePrime instance = GStarModSafePrime.INSTANCES.get(modulus);
+		if (instance == null) {
+			instance = new GStarModSafePrime(SafePrime.getInstance(modulus));
+			GStarModSafePrime.INSTANCES.put(modulus, instance);
+		}
+		return instance;
+	}
+
+	public static GStarModSafePrime getInstance(final SafePrime modulus) {
+		if (modulus == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		GStarModSafePrime instance = GStarModSafePrime.INSTANCES.get(modulus.getValue());
+		if (instance == null) {
+			instance = new GStarModSafePrime(modulus);
+			GStarModSafePrime.INSTANCES.put(modulus.getValue(), instance);
+		}
+		return instance;
 	}
 
 	public static GStarModSafePrime getFirstInstance(final int bitLength) {

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ConvertEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element> {
@@ -72,21 +72,6 @@ public class ConvertEncoder
 		this.coDomain = coDomain;
 		this.domainConverter = domainConverter;
 		this.coDomainConverter = coDomainConverter;
-	}
-
-	@Override
-	protected Function abstractGetEncodingFunction() {
-		return ConvertFunction.getInstance(this.domain, this.coDomain, this.domainConverter, this.coDomainConverter);
-	}
-
-	@Override
-	protected Function abstractGetDecodingFunction() {
-		return ConvertFunction.getInstance(this.coDomain, this.domain, this.coDomainConverter, this.domainConverter);
-	}
-
-	@Override
-	protected String defaultToStringContent() {
-		return this.domain.toString() + "," + this.coDomain.toString() + "," + this.domainConverter.toString() + "," + this.coDomainConverter.toString();
 	}
 
 	public static ConvertEncoder getInstance(Set domain, Set coDomain, Mode mode) {
@@ -117,7 +102,8 @@ public class ConvertEncoder
 		if (domain == null || coDomain == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ConvertEncoder(domain, coDomain, TrivialConverter.<V>getInstance(), TrivialConverter.<V>getInstance());
+		return new ConvertEncoder(domain, coDomain, TrivialConverter.<V>getInstance(),
+								  TrivialConverter.<V>getInstance());
 	}
 
 	public static <V, W> ConvertEncoder getInstance(Set<V> domain, Set<W> coDomain, Converter<V, W> converter) {
@@ -127,11 +113,28 @@ public class ConvertEncoder
 		return new ConvertEncoder(domain, coDomain, converter, TrivialConverter.<W>getInstance());
 	}
 
-	public static <V, W, X> ConvertEncoder getInstance(Set<V> domain, Set<W> coDomain, Converter<V, X> domainConverter, Converter<W, X> coDomainConverter) {
+	public static <V, W, X> ConvertEncoder getInstance(Set<V> domain, Set<W> coDomain, Converter<V, X> domainConverter,
+		   Converter<W, X> coDomainConverter) {
 		if (domain == null || coDomain == null || domainConverter == null || coDomainConverter == null) {
 			throw new IllegalArgumentException();
 		}
 		return new ConvertEncoder(domain, coDomain, domainConverter, coDomainConverter);
+	}
+
+	@Override
+	protected Function abstractGetEncodingFunction() {
+		return ConvertFunction.getInstance(this.domain, this.coDomain, this.domainConverter, this.coDomainConverter);
+	}
+
+	@Override
+	protected Function abstractGetDecodingFunction() {
+		return ConvertFunction.getInstance(this.coDomain, this.domain, this.coDomainConverter, this.domainConverter);
+	}
+
+	@Override
+	protected String defaultToStringContent() {
+		return this.domain.toString() + "," + this.coDomain.toString() + "," + this.domainConverter.toString() + ","
+			   + this.coDomainConverter.toString();
 	}
 
 }

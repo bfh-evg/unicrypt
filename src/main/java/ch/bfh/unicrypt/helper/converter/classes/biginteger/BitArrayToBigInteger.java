@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -50,7 +50,7 @@ import java.math.BigInteger;
 /**
  * The single instance of this class converts bit arrays into non-negative {@code BigInteger} values 0, 1, 2, ...
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class BitArrayToBigInteger
@@ -81,15 +81,15 @@ public class BitArrayToBigInteger
 
 	@Override
 	public BigInteger abstractConvert(BitArray bitarray) {
-		BigInteger value1 = MathUtil.powerOfTwo(bitarray.getLength()).subtract(BigInteger.ONE);
+		BigInteger value1 = MathUtil.powerOfTwo(bitarray.getLength()).subtract(MathUtil.ONE);
 		BigInteger value2 = new BigInteger(1, bitarray.reverse().getByteArray().reverse().getBytes());
 		return value1.add(value2);
 	}
 
 	@Override
 	public BitArray abstractReconvert(BigInteger value) {
-		int length = value.add(BigInteger.ONE).bitLength() - 1;
-		BigInteger value1 = MathUtil.powerOfTwo(length).subtract(BigInteger.ONE);
+		int length = value.add(MathUtil.ONE).bitLength() - 1;
+		BigInteger value1 = MathUtil.powerOfTwo(length).subtract(MathUtil.ONE);
 		BigInteger value2 = value.subtract(value1);
 		ByteArray byteArray = ByteArray.getInstance(value2.toByteArray()).removePrefix();
 		BitArray result = BitArray.getInstance(byteArray.reverse()).reverse();

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractSignatureSchem
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
@@ -84,8 +83,8 @@ public class RSASignatureScheme<MS extends Set>
 	}
 
 	@Override
-	protected RSAKeyGenerator abstractGetKeyPairGenerator(StringToByteArray converter) {
-		return RSAKeyGenerator.getInstance(this.zMod, converter);
+	protected RSAKeyGenerator abstractGetKeyPairGenerator() {
+		return RSAKeyGenerator.getInstance(this.zMod);
 	}
 
 	@Override
@@ -131,15 +130,16 @@ public class RSASignatureScheme<MS extends Set>
 											 convertFunction, moduloFunction);
 	}
 
-	public static RSASignatureScheme getInstance(ZMod zMod) {
+	public static RSASignatureScheme<ZMod> getInstance(ZMod zMod) {
 		return RSASignatureScheme.getInstance(zMod, zMod);
 	}
 
-	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZMod zMod) {
-		return RSASignatureScheme.getInstance(messageSpace, zMod, ConvertMethod.getInstance(), HashMethod.getInstance());
+	public static <MS extends Set> RSASignatureScheme<MS> getInstance(MS messageSpace, ZMod zMod) {
+		return RSASignatureScheme.getInstance(messageSpace, zMod, ConvertMethod.getInstance(),
+											  HashMethod.getInstance());
 	}
 
-	public static <MS extends Set, V> RSASignatureScheme
+	public static <MS extends Set, V> RSASignatureScheme<MS>
 		   getInstance(MS messageSpace, ZMod zMod, ConvertMethod<V> convertMethod, HashMethod<V> hashMethod) {
 		if (messageSpace == null || zMod == null || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
@@ -147,21 +147,21 @@ public class RSASignatureScheme<MS extends Set>
 		return new RSASignatureScheme(messageSpace, zMod, convertMethod, hashMethod);
 	}
 
-	public static RSASignatureScheme getInstance(ZModElement key) {
+	public static RSASignatureScheme<ZMod> getInstance(ZModElement key) {
 		if (key == null) {
 			throw new IllegalArgumentException();
 		}
 		return RSASignatureScheme.getInstance(key.getSet());
 	}
 
-	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZModElement key) {
+	public static <MS extends Set> RSASignatureScheme<MS> getInstance(MS messageSpace, ZModElement key) {
 		if (key == null) {
 			throw new IllegalArgumentException();
 		}
 		return RSASignatureScheme.getInstance(messageSpace, key.getSet());
 	}
 
-	public static <MS extends Set, V> RSASignatureScheme
+	public static <MS extends Set, V> RSASignatureScheme<MS>
 		   getInstance(MS messageSpace, ZModElement key, ConvertMethod<V> convertMethod, HashMethod<V> hashMethod) {
 		if (messageSpace == null || key == null || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
+import ch.bfh.unicrypt.UniCryptException;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
@@ -50,7 +52,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -80,13 +81,17 @@ public class PolynomialSemiRingTest {
 
 	@Test
 	public void testGetElementBigInteger() {
-		PolynomialElement p0 = ring0.getElement(BigInteger.valueOf(2), BigInteger.valueOf(3), BigInteger.valueOf(4), BigInteger.valueOf(2));
-		assertEquals(1, p0.getValue().getCoefficient(0).getValue().intValue());
-		assertEquals(-2, p0.getValue().getCoefficient(1).getValue().intValue());
+		try {
+			PolynomialElement p0 = ring0.getElementFrom(2, 3, 4, 2);
+			assertEquals(1, p0.getValue().getCoefficient(0).getValue().intValue());
+			assertEquals(-2, p0.getValue().getCoefficient(1).getValue().intValue());
 
-		PolynomialElement p1 = ring7.getElement(BigInteger.valueOf(2), BigInteger.valueOf(3), BigInteger.valueOf(4), BigInteger.valueOf(2));
-		assertEquals(2, p1.getValue().getCoefficient(0).getValue().intValue());
-		assertEquals(3, p1.getValue().getCoefficient(1).getValue().intValue());
+			PolynomialElement p1 = ring7.getElementFrom(2, 3, 4, 2);
+			assertEquals(2, p1.getValue().getCoefficient(0).getValue().intValue());
+			assertEquals(3, p1.getValue().getCoefficient(1).getValue().intValue());
+		} catch (UniCryptException ex) {
+			fail();
+		}
 	}
 
 	@Test
@@ -94,7 +99,7 @@ public class PolynomialSemiRingTest {
 		try {
 			PolynomialElement p = ring7.getElement(Tuple.getInstance(Z.getInstance().getElement(2), ZMod.getInstance(7).getElement(3)));
 			fail();
-		} catch (IllegalArgumentException e) {
+		} catch (UniCryptRuntimeException e) {
 		}
 
 		PolynomialElement p = ring0.getElement(Tuple.getInstance(z.getElement(0), z.getElement(1), z.getElement(2), z.getElement(3)));

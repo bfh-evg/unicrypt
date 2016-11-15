@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,15 +41,18 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
 
 /**
- * This abstract class provides a basis implementation for objects of type {@link Group}.
+ * This abstract class provides a base implementation for the interface {@link Group}.
  * <p>
- * @param <E> Generic type of elements of this group
- * @param <V> Generic type of values stored in the elements of this group
+ * @param <E> The generic type of elements of this group
+ * @param <V> The generic type of values stored in the elements of this group
  * @see AbstractElement
  * <p>
  * @author R. Haenni
@@ -69,7 +72,7 @@ public abstract class AbstractGroup<E extends Element<V>, V>
 	@Override
 	public final E invert(final Element element) {
 		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		return this.abstractInvert((E) element);
 	}
@@ -80,8 +83,52 @@ public abstract class AbstractGroup<E extends Element<V>, V>
 	}
 
 	@Override
+	public final E invertSelfApply(Element element, long amount) {
+		return this.invertSelfApply(element, BigInteger.valueOf(amount));
+	}
+
+	@Override
+	public final E invertSelfApply(Element element, Element<BigInteger> amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		return this.invertSelfApply(element, amount.getValue());
+	}
+
+	@Override
+	public final E invertSelfApply(Element element, BigInteger amount) {
+		if (amount == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (amount.signum() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, amount);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		if (!this.isFinite() || !this.hasKnownOrder()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		boolean positiveAmount = amount.signum() > 0;
+		amount = amount.abs().mod(this.getOrder());
+		if (!MathUtil.areRelativelyPrime(amount, this.getOrder())) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, amount);
+		}
+		E result = this.defaultSelfApplyAlgorithm((E) element, amount.modInverse(this.getOrder()));
+		if (positiveAmount) {
+			return result;
+		}
+		return this.invert(result);
+	}
+
+	@Override
+	public final E invertSelfApply(Element element) {
+		return this.invertSelfApply(element, MathUtil.TWO);
+	}
+
+	@Override
 	protected E defaultSelfApply(E element, BigInteger amount) {
-		boolean negAmount = (amount.signum() < 0);
+		boolean positiveAmount = amount.signum() > 0;
 		amount = amount.abs();
 		if (this.isFinite() && this.hasKnownOrder()) {
 			amount = amount.mod(this.getOrder());
@@ -90,15 +137,12 @@ public abstract class AbstractGroup<E extends Element<V>, V>
 			return this.getIdentityElement();
 		}
 		E result = this.defaultSelfApplyAlgorithm(element, amount);
-		if (negAmount) {
-			return this.invert(result);
+		if (positiveAmount) {
+			return result;
 		}
-		return result;
+		return this.invert(result);
 	}
 
-	//
-	// The following protected abstract method must be implemented in every direct sub-class.
-	//
 	protected abstract E abstractInvert(E element);
 
 }

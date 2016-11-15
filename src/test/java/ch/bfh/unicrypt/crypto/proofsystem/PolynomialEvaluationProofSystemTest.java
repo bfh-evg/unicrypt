@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PolynomialEvaluationProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
+import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -54,6 +55,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -75,7 +77,13 @@ public class PolynomialEvaluationProofSystemTest {
 
 		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(h, g);
 		PolynomialRing pr = PolynomialRing.getInstance(Z_q);
-		PolynomialElement poly = pr.getElement(BigInteger.valueOf(51), BigInteger.valueOf(115), BigInteger.valueOf(3), BigInteger.valueOf(0), BigInteger.valueOf(93));
+		PolynomialElement poly;
+		try {
+			poly = pr.getElementFrom(51, 115, 3, 0, 93);
+		} catch (UniCryptException ex) {
+			fail();
+			return;
+		}
 
 		ZModElement u = Z_q.getElement(BigInteger.valueOf(5));
 		Element v = poly.evaluate(u);
@@ -103,7 +111,13 @@ public class PolynomialEvaluationProofSystemTest {
 
 		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q);
 		PolynomialRing pr = PolynomialRing.getInstance(Z_q);
-		PolynomialElement poly = pr.getElement(BigInteger.valueOf(1), BigInteger.valueOf(15), BigInteger.valueOf(23), BigInteger.valueOf(45), BigInteger.valueOf(33), BigInteger.valueOf(11));
+		PolynomialElement poly;
+		try {
+			poly = pr.getElementFrom(1, 15, 23, 45, 33, 11);
+		} catch (UniCryptException ex) {
+			fail();
+			return;
+		}
 
 		ZModElement u = Z_q.getElement(BigInteger.valueOf(15));
 		Element v = poly.evaluate(u);

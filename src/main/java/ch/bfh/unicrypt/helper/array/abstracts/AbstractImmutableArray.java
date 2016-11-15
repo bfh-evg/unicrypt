@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,17 +42,19 @@
 package ch.bfh.unicrypt.helper.array.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.IntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 
 /**
  * This abstract class serves as a base implementation of the {@link ImmutableArray} interface.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <A> The type of a potential non-generic sub-class
  * @param <V> The generic type of the values in the immutable array
@@ -196,7 +198,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	@Override
 	public final V getAt(int index) {
 		if (index < 0 || index >= this.length) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 		}
 		return this.abstractGetAt(index);
 	}
@@ -302,7 +304,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	@Override
 	public final A insertAt(int index, V value) {
 		if (index < 0 || index > this.length) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 		}
 		if (value == null) {
 			throw new IllegalArgumentException();
@@ -323,7 +325,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	@Override
 	public final A replaceAt(int index, V value) {
 		if (index < 0 || index >= this.length) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
 		}
 		if (value == null) {
 			throw new IllegalArgumentException();

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -51,7 +51,7 @@ import java.math.BigInteger;
  * (upper-case or lower-case letters). Negative numbers are preceeded by the minus sign {@code '-'}. The default
  * conversion returns the decimal representation with digits {@code '0',...,'9'}.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @see Character#MIN_RADIX
  * @see Character#MAX_RADIX
@@ -131,6 +131,16 @@ public class BigIntegerToString
 			throw new IllegalArgumentException();
 		}
 		return new BigIntegerToString(radix, upperCase);
+	}
+
+	/**
+	 * This is a convenience method to allow inputs of type {@code long}.
+	 * <p>
+	 * @param value The given value
+	 * @return The resulting byte array
+	 */
+	public String convert(long value) {
+		return this.convert(BigInteger.valueOf(value));
 	}
 
 	@Override

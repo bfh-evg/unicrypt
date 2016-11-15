@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,22 +41,25 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
  * This abstract class provides a basis implementation for objects of type {@link ConcatenativeMonoid}.
  * <p>
- * @param <E> Generic type of the elements of this monoid
- * @param <V> Generic type of values stored in the elements of this monoid
- * @author
+ * @param <E> The generic type of the elements of this monoid
+ * @param <V> The generic type of the values stored in the elements of this monoid
+ * <p>
+ * @author R. Haenni
  */
 public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement<V>, V>
 	   extends AbstractMonoid<E, V>
@@ -64,6 +67,7 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 
 	private static final long serialVersionUID = 1L;
 
+	// the block length of this semigroup
 	protected final int blockLength;
 
 	protected AbstractConcatenativeMonoid(Class<?> valueClass, int blockLength) {
@@ -83,13 +87,14 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 
 	@Override
 	public final E getRandomElement(int length, RandomByteSequence randomByteSequence) {
-		if (length < 0 || length % this.getBlockLength() != 0 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
+		if (randomByteSequence == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (length < 0 || length % this.getBlockLength() != 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, this, length);
 		}
 		return this.abstractGetRandomElement(length, randomByteSequence);
 	}
-
-	protected abstract E abstractGetRandomElement(int length, RandomByteSequence randomByteSequence);
 
 	@Override
 	public final E concatenate(final Element element1, final Element element2) {
@@ -145,5 +150,7 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 	public boolean isEmptyElement(Element element) {
 		return this.isIdentityElement(element);
 	}
+
+	protected abstract E abstractGetRandomElement(int length, RandomByteSequence randomByteSequence);
 
 }

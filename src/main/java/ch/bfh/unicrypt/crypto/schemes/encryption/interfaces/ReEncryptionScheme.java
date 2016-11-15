@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,27 +41,27 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.interfaces;
 
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public interface ReEncryptionScheme
 	   extends RandomizedEncryptionScheme {
 
 	/**
 	 *
-	 * @return
+	 * @return Returns the identity function
 	 */
 	public Function getIdentityEncryptionFunction();
 
 	/**
 	 *
-	 * @return
+	 * @return Returns the re-encryption function
 	 */
 	public Function getReEncryptionFunction();
 
@@ -69,7 +69,7 @@ public interface ReEncryptionScheme
 	 *
 	 * @param encryptionKey
 	 * @param ciphertext
-	 * @return
+	 * @return Returns a re-encryption of the ciphertext
 	 */
 	public Element reEncrypt(final Element encryptionKey, final Element ciphertext);
 
@@ -78,7 +78,7 @@ public interface ReEncryptionScheme
 	 * @param encryptionKey
 	 * @param ciphertext
 	 * @param randomByteSequence
-	 * @return
+	 * @return Returns a re-encryption of the ciphertext
 	 */
 	public Element reEncrypt(final Element encryptionKey, final Element ciphertext,
 		   RandomByteSequence randomByteSequence);
@@ -88,20 +88,20 @@ public interface ReEncryptionScheme
 	 * @param encryptionKey
 	 * @param ciphertext
 	 * @param randomization
-	 * @return
+	 * @return Returns a re-encryption of the ciphertext
 	 */
 	public Element reEncrypt(final Element encryptionKey, final Element ciphertext, final Element randomization);
 
 	/**
 	 *
-	 * @return
+	 * @return Returns the message space
 	 */
 	@Override
 	public Monoid getMessageSpace();
 
 	/**
 	 *
-	 * @return
+	 * @return Return the encryption space
 	 */
 	@Override
 	public Monoid getEncryptionSpace();

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,12 +41,16 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -64,8 +68,9 @@ public class N
 	   extends AbstractSemiRing<NElement, BigInteger> {
 
 	private static final long serialVersionUID = 1L;
+	private static N instance;
 
-	public N() {
+	protected N() {
 		super(BigInteger.class);
 	}
 
@@ -77,19 +82,11 @@ public class N
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
-	protected NElement defaultSelfApply(NElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().multiply(amount));
+	protected NElement defaultSelfApply(NElement element, BigInteger factor) {
+		return this.abstractGetElement(element.getValue().multiply(factor));
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected NElement abstractApply(NElement element1, NElement element2) {
 		return this.abstractGetElement(element1.getValue().add(element2.getValue()));
@@ -97,7 +94,7 @@ public class N
 
 	@Override
 	protected NElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ZERO);
+		return this.abstractGetElement(MathUtil.ZERO);
 	}
 
 	@Override
@@ -107,7 +104,7 @@ public class N
 
 	@Override
 	protected NElement abstractGetOne() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElement(MathUtil.ONE);
 	}
 
 	@Override
@@ -131,8 +128,8 @@ public class N
 	}
 
 	@Override
-	protected NElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException();
+	protected Sequence<NElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 	}
 
 	@Override
@@ -144,11 +141,6 @@ public class N
 	protected int abstractHashCode() {
 		return 1;
 	}
-
-	//
-	// STATIC FACTORY METHODS
-	//
-	private static N instance;
 
 	/**
 	 * Returns the singleton object of this class.

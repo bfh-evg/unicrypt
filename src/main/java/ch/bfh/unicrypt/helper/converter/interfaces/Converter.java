@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.helper.tree.Tree;
  * the output type for which {@link Converter#isValidOutput(java.lang.Object)} returns {@code false} can not be
  * converted back.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * <p>
  * @param <V> The input type

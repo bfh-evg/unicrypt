@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.AndPreimageProofSystem;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -177,14 +178,14 @@ public class AndPreimageProofSystemTest {
 
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = UniCryptRuntimeException.class)
 	public void testPreimageAndProof_Exception() {
 		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f1, this.proverId);
 		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = UniCryptRuntimeException.class)
 	public void testPreimageAndProof_ExceptionWithArity() {
 		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f1, this.proverId);

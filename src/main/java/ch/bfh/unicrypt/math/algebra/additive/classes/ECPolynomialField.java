@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,83 +41,84 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.math.Polynomial;
+import ch.bfh.unicrypt.helper.sequence.BigIntegerSequence;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
+import ch.bfh.unicrypt.math.algebra.additive.parameters.ECParameters;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
- *
- * @author Christian Lutz
+ * y²+xy=x³+ax²+b
+ * <p>
+ * @author C. Lutz
+ * @author R. Haenni
  */
 public class ECPolynomialField
-	   extends AbstractEC<PolynomialField, Polynomial<? extends DualisticElement<BigInteger>>,
-	   PolynomialElement, ECPolynomialElement> {
+	   extends AbstractEC<PolynomialField, Polynomial<? extends DualisticElement<BigInteger>>, PolynomialElement, ECPolynomialElement> {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
 
-	public ECPolynomialField(PolynomialField finiteField, PolynomialElement a,
-		   PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
-		   BigInteger givenOrder, BigInteger coFactor) {
-		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
+	private final BigInteger traceA;
+
+	protected ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b,
+		   PolynomialElement gx, PolynomialElement gy, BigInteger subGroupOrder, BigInteger coFactor) {
+		super(finiteField, a, b, gx, gy, subGroupOrder, coFactor);
+		this.traceA = this.trace(a);
 	}
 
-	public ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b,
-		   BigInteger givenOrder, BigInteger coFactor) {
-		super(finiteField, a, b, givenOrder, coFactor);
-	}
-
-	/**
-	 * <p>Checks if an element x is a valid x-value of an element of the elliptic curve.
-	 * True only if trace(x+a+b/x^2)=0.<br>
-	 * Source: Quadratic Equations in Finite Fields of Characteristic 2 Klaus Pommerening</p>
-	 */
 	@Override
+	// see Gadiel Seroussi, "Compact Representation of Elliptic Curve Points over F_2^n", 1998, p.3
+	// see Brian King, "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)", 2009, p.172
 	protected boolean abstractContains(PolynomialElement x) {
-		DualisticElement<BigInteger> trace = traceGF2m(x.add(this.getA()).add(this.getB().divide(x.square())), this);
-		boolean e2 = trace.isEquivalent(ZModTwo.ZERO);
-		return e2;
+		// if x=0, then -(0,y)=(0,y) is possibly a point on the curve, but not in the prime order subgroup
+		if (x.isZero()) {
+			return false;
+		}
+		if (this.getCoFactor().intValue() == 2) {
+			// false if trace(x)≠trace(a) or trace(b/x²)≠0
+			if (!this.trace(x).equals(this.traceA) || !trace(this.getB().divide(x.square())).equals(MathUtil.ZERO)) {
+				return false;
+			}
+		}
+		if (this.getCoFactor().intValue() > 2) {
+			//TODO: test for subgroup membership missing
+		}
+		return true;
 	}
 
 	@Override
 	protected boolean abstractContains(PolynomialElement x, PolynomialElement y) {
-		PolynomialElement left = y.power(2).add(x.multiply(y));
-		PolynomialElement right = x.power(3).add(x.power(2).multiply(getA())).add(getB());
-		return left.isEquivalent(right);
+		// if x=0, then -(0,y)=(0,y) is possibly a point on the curve, but not in the prime order subgroup
+		if (x.isZero()) {
+			return false;
+		}
+		// y²+xy=x³+ax²+b <=> x³+ax²+b-(y²+xy)=0
+		if (!x.power(3).add(this.getA().multiply(x.power(2))).add(this.getB()).subtract(y.power(2).add(x.multiply(y))).
+			   isZero()) {
+			return false;
+		}
+		if (this.getCoFactor().intValue() == 2) {
+			// false if trace(x)≠trace(a)
+			if (!this.trace(x).equals(this.traceA)) {
+				return false;
+			}
+		}
+		if (this.getCoFactor().intValue() > 2) {
+			//TODO: test for subgroup membership missing
+		}
+		return true;
 	}
 
 	@Override
-	protected ECPolynomialElement abstractGetElement(
-		   Point<PolynomialElement> value) {
+	protected ECPolynomialElement abstractGetElement(Point<PolynomialElement> value) {
 		return new ECPolynomialElement(this, value);
-	}
-
-	/**
-	 * Return the two possible y-coordinates for a given valid x-coordinate
-	 * The procedure is described in "Mapping an Arbitrary Message to an
-	 * Elliptic Curve when Defined over GF (2 n )" p.172
-	 * <p>
-	 * @param x x-coordinate of point
-	 * @return
-	 */
-	public ECPolynomialElement[] getY(PolynomialElement x){
-		PolynomialElement t = x.add(this.getA()).add(this.getB().divide(x.square()));
-		PolynomialElement l = this.getFiniteField().solveQuadradicEquation(t);
-
-		ECPolynomialElement y1 = this.getElement(x, l.add(l.getSet().getOneElement()).multiply(x));
-		ECPolynomialElement y2 = y1.invert();
-		ECPolynomialElement[] y = {y1, y2};
-		return y;
 	}
 
 	@Override
@@ -126,190 +127,172 @@ public class ECPolynomialField
 	}
 
 	@Override
-	protected ECPolynomialElement abstractApply(ECPolynomialElement element1, ECPolynomialElement element2) {
-		if (element1.isZero()) {
-			return element2;
-		}
-		if (element2.isZero()) {
-			return element1;
-		}
-		if (element1.equals(element2.invert())) {
-			return this.getIdentityElement();
-		}
-		PolynomialElement s, rx, ry;
-		PolynomialElement px = element1.getX();
-		PolynomialElement py = element1.getY();
-		PolynomialElement qx = element2.getX();
-		PolynomialElement qy = element2.getY();
-		if (element1.equals(element2)) {
-			final PolynomialElement one = this.getFiniteField().getOneElement();
-			s = px.add(py.divide(px));
-			rx = s.square().add(s).add(this.getA());
-			ry = px.square().add((s.add(one)).multiply(rx));
+	protected ECPolynomialElement abstractAdd(PolynomialElement x1, PolynomialElement y1, PolynomialElement x2,
+		   PolynomialElement y2) {
+		// "SEC 1: Elliptic Curve Cryptography", Version 2.0, 2009 (Section 2.2.2, page 8)
+		PolynomialElement lambda, x, y;
+		if (x1.isEquivalent(x2)) { // testing only the x-coordinates is sufficient
+			// λ=x1+(y1/x1)
+			lambda = x1.add(y1.divide(x1));
+			// x=λ²+λ+a
+			x = lambda.square().add(lambda).add(this.getA());
+			// y=x1²+(λ+1)x
+			y = x1.square().add(lambda.add(this.getFiniteField().getOneElement()).multiply(x));
 		} else {
-			s = py.add(qy).divide(px.add(qx));
-			rx = s.square().add(s).add(px).add(qx).add(this.getA());
-			ry = s.multiply(px.add(rx)).add(rx).add(py);
+			// λ=(y1+y2)/(x1+x2)
+			lambda = y1.add(y2).divide(x1.add(x2));
+			// x=λ²+λ+a+x1+x2
+			x = lambda.square().add(lambda).add(this.getA().add(x1).add(x2));
+			// y=λ(x1+x)+x+y1
+			y = lambda.multiply(x1.add(x)).add(x).add(y1);
 		}
-		return this.abstractGetElement(Point.getInstance(rx, ry));
+		return this.abstractGetElement(Point.getInstance(x, y));
 	}
 
 	@Override
-	protected ECPolynomialElement abstractInvert(ECPolynomialElement element) {
-		if (element.isZero()) {
-			return this.getZeroElement();
-		}
-		return this.abstractGetElement(Point.getInstance(element.getX(), element.getY().add(element.getX())));
+	protected ECPolynomialElement abstractNegate(PolynomialElement x, PolynomialElement y) {
+		return this.abstractGetElement(Point.getInstance(x, y.add(x)));
 	}
 
 	@Override
-	protected ECPolynomialElement getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
-		// TODO Auto-generated method stub
-		return null;
+	protected PolynomialElement abstractGetY(PolynomialElement x) {
+		// computes one of the two y-coordinates for x≠0
+		// see B. King, "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)" p.172
+		PolynomialElement lambda = this.halfTrace(x.add(this.getA()).add(this.getB().divide(x.square())));
+		return lambda.multiply(x);
 	}
 
-	/**
-	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 21
-	 * <p>
-	 * @return True if curve parameters are valid
-	 * @throws Exception
-	 */
-	public boolean isValid() throws Exception {
-		boolean c2, c3, c4, c5, c6, c7, c8;
-		int m = this.getFiniteField().getDegree();
-		final BigInteger TWO = new BigInteger("2");
-
-		c2 = this.getFiniteField().isIrreduciblePolynomial(this.getFiniteField().getIrreduciblePolynomial());
-
-		c3 = this.getFiniteField().contains(getA());
-		c3 = c3 && this.getFiniteField().contains(getB());
-		c3 = c3 && this.getFiniteField().contains(this.getDefaultGenerator().getX());
-		c3 = c3 && this.getFiniteField().contains(this.getDefaultGenerator().getY());
-
-		c4 = !this.getB().equals(this.getFiniteField().getZeroElement());
-
-		c5 = this.contains(this.getDefaultGenerator());
-
-		c6 = MathUtil.isPrime(getOrder());
-
-		c7 = this.selfApply(this.getDefaultGenerator(), getOrder()).isEquivalent(this.getZeroElement());
-
-		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100")) < 0; i = i.add(BigInteger.ONE)) {
-			if (TWO.modPow(i, getOrder()).equals(BigInteger.ONE)) {
-				throw new Exception("Curve parameter not valid");
-			}
-		}
-
-		c8 = !getOrder().multiply(getCoFactor()).equals(TWO.pow(m));
-
-		return c2 && c3 && c4 && c5 && c6 && c7 && c8;
-	}
-
-	/**
-	 * Private method implements selfApply to check if a ECPolynomialElement is a valid generator
-	 * <p>
-	 * @param element
-	 * @param posAmount
-	 * @return
-	 */
-	private ECPolynomialElement selfApply(ECPolynomialElement element, BigInteger posAmount) {
-		ECPolynomialElement result = element;
-		for (int i = posAmount.bitLength() - 2; i >= 0; i--) {
-			result = result.add(result);
-			if (posAmount.testBit(i)) {
-				result = result.add(element);
-			}
-		}
-		return result;
-	}
-
-	//
-	// STATIC FACTORY METHODS
-	//
-	/**
-	 * Returns an elliptic curve over F2m y²+yx=x³+ax²+b if parameters are valid.
-	 * <p>
-	 * @param f          Finite field of type BinaryPolynomial
-	 * @param a          Element of f representing a in the curve equation
-	 * @param b          Element of f representing b in the curve equation
-	 * @param givenOrder Order of the the used subgroup
-	 * @param coFactor   Co-factor h*order= N -> total order of the group
-	 * @return
-	 * @throws Exception
-	 */
-	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b,
-		   BigInteger givenOrder, BigInteger coFactor) throws Exception {
-		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, givenOrder, coFactor);
-
-		if (newInstance.isValid()) {
-			return newInstance;
-		} else {
-			throw new Exception("Curve parameters not valid!");
-		}
-	}
-
-	/**
-	 * Returns an elliptic curve over Fp y²=x³+ax+b if parameters are valid.
-	 * <p>
-	 * @param f          Finite field of type ZModPrime
-	 * @param a          Element of F_p representing a in the curve equation
-	 * @param b          Element of F_p representing b in the curve equation
-	 * @param gx         x-coordinate of the generator
-	 * @param gy         y-coordinate of the generator
-	 * @param givenOrder Order of the the used subgroup
-	 * @param coFactor   Co-factor h*order= N -> total order of the group
-	 * @return
-	 * @throws Exception
-	 */
-	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b,
-		   PolynomialElement gx, PolynomialElement gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
-		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
-
-		if (newInstance.isValid()) {
-			return newInstance;
-		} else {
-			throw new Exception("Curve parameters not valid!");
-		}
-	}
-
-	public static ECPolynomialField getInstance(final StandardECPolynomialFieldParams params) throws Exception {
-		PolynomialField field;
-		PolynomialElement a, b, gx, gy;
-		BigInteger order, h;
-
-		field = params.getFiniteField();
-		a = params.getA();
-		b = params.getB();
-		gx = params.getGx();
-		gy = params.getGy();
-		order = params.getOrder();
-		h = params.getH();
-		return ECPolynomialField.getInstance(field, a, b, gx, gy, order, h);
-	}
-
-	/**
-	 * <p>Returns the trace of an polynomial of characteristic 2
-	 * Source;: Quadratic Equations in Finite Fields of
-	 * Characteristic 2 Klaus Pommerening
-	 * May 2000 – english version February 2012, Page 2</p>
-	 * <p>
-	 * @param x
-	 * @param ec
-	 * @return
-	 * </p>
-	 */
-	public static DualisticElement<BigInteger> traceGF2m(PolynomialElement x, ECPolynomialField ec) {
-		int deg = ec.getFiniteField().getDegree();
-		PolynomialElement trace=x;
-		PolynomialElement tmp=x;
-
+	// Returns the trace of a polynomial of characteristic 2
+	// see "IEEE Standard Specifications for Public-Key Cryptography, IEEE Std 1363-2000", 2000, A.4.5, p.89
+	private BigInteger trace(PolynomialElement x) {
+		int deg = this.getFiniteField().getDegree();
+		PolynomialElement trace = x;
 		for (int i = 1; i < deg; i++) {
-			tmp=tmp.square();
-			trace=trace.add(tmp);
+			x = x.square();
+			trace = trace.add(x);
 		}
+		return trace.getValue().getCoefficient(0).getValue();
+	}
 
-		DualisticElement<BigInteger> trace_Dualistic=trace.getValue().getCoefficient(0);
-		return trace_Dualistic;
+	// Returns the half-trace of a polynomial of characteristic 2 (only if the degree is odd)
+	// The result is a solution for the quadratic equation z²+z=x
+	// see "IEEE Standard Specifications for Public-Key Cryptography, IEEE Std 1363-2000", 2000, A.4.6, A.4.7, p.90
+	// see B. King, "Mapping an arbitrary message to an elliptic curve when defined over GF(2^n)", Section 2.2, p.170
+	private PolynomialElement halfTrace(PolynomialElement x) {
+		int deg = this.getFiniteField().getDegree();
+		PolynomialElement trace = x;
+		for (int i = 1; i <= (deg - 1) / 2; i++) {
+			x = x.square().square();
+			trace = trace.add(x);
+		}
+		return trace;
+	}
+
+	/**
+	 * Returns a subgroup of an elliptic curve E(F_p):y²+xy=x³+ax²+b over a polynomial field F_{2^n}. Checking the curve
+	 * parameters is done according to "SEC1: Elliptic Curve Cryptography", Version 2.0, 2009 (Section 3.1.2.2.1, page
+	 * 20).
+	 * <p>
+	 * @param securityLevel   Security level
+	 * @param polynomialField Finite field of type {@link PolynomialField}
+	 * @param a               Element of F_{2^n} representing the coefficient {@code a} in the curve equation
+	 * @param b               Element of F_{2^n} representing the coefficient {@code b} in the curve equation
+	 * @param gx              x-coordinate of the generator
+	 * @param gy              y-coordinate of the generator
+	 * @param subGroupOrder   Order of the the subgroup
+	 * @param coFactor        Co-factor of the subgroup
+	 * @return The resulting subgroup of the elliptic curve
+	 */
+	public static ECPolynomialField getInstance(int securityLevel, PolynomialField polynomialField, PolynomialElement a,
+		   PolynomialElement b, PolynomialElement gx, PolynomialElement gy, BigInteger subGroupOrder,
+		   BigInteger coFactor) {
+		return ECPolynomialField.getInstance(securityLevel, polynomialField, a, b, gx, gy, subGroupOrder, coFactor,
+											 false);
+	}
+
+	// a private helper method to include the possibility of test parameters which do not pass all tests
+	private static ECPolynomialField getInstance(int securityLevel, PolynomialField polynomialField,
+		   PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
+		   BigInteger subGroupOrder, BigInteger coFactor, boolean isTest) {
+		if (polynomialField == null || a == null || b == null || gx == null || gy == null || subGroupOrder == null
+			   || coFactor == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, polynomialField, a, b, gx, gy, subGroupOrder,
+											   coFactor);
+		}
+		int degree = polynomialField.getDegree();
+		BigInteger fieldOrder = polynomialField.getOrder();
+		// Test1
+		if (2 * securityLevel >= degree) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, securityLevel, degree);
+		}
+		// Test2: not necessary
+		// Test3a
+		if (!polynomialField.contains(a) || !polynomialField.contains(b)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, polynomialField, a, b);
+		}
+		// Test3b
+		if (!polynomialField.contains(gx) || !polynomialField.contains(gy)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, polynomialField, gx, gy);
+		}
+		// Test4
+		if (b.isZero()) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, b);
+		}
+		// Test5
+		if (!gx.power(3).add(a.multiply(gx.power(2))).add(b).subtract(gy.power(2).add(gx.multiply(gy))).isZero()) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, a, b, gx, gy);
+		}
+		// Test6
+		if (!MathUtil.isPrime(subGroupOrder)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
+		}
+		if (!isTest) {
+			// Test7a
+			if (coFactor.compareTo(MathUtil.powerOfTwo(securityLevel / 8)) > 0) {
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, coFactor);
+			}
+			// Test7b
+			if (!MathUtil.sqrt(fieldOrder.multiply(MathUtil.FOUR)).add(fieldOrder).add(MathUtil.ONE).divide(
+				   subGroupOrder).equals(coFactor)) {
+				throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, fieldOrder,
+												   subGroupOrder, coFactor);
+			}
+			// Test9a
+			for (BigInteger i : BigIntegerSequence.getInstance(1, 100 * degree - 1)) {
+				if (MathUtil.TWO.modPow(i, subGroupOrder).equals(MathUtil.ONE)) {
+					throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, i, subGroupOrder);
+				}
+			}
+		}
+		// Test9b
+		if (subGroupOrder.multiply(coFactor).equals(fieldOrder)) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, subGroupOrder, coFactor, degree);
+		}
+		ECPolynomialField instance = new ECPolynomialField(polynomialField, a, b, gx, gy, subGroupOrder, coFactor);
+		ECPolynomialElement generator = instance.getDefaultGenerator();
+		// Test8
+		if (!instance.defaultSelfApplyAlgorithm(generator, subGroupOrder).isZero()) {
+			throw new UniCryptRuntimeException(ErrorCode.INCOMPATIBLE_ARGUMENTS, generator, subGroupOrder, instance.
+											   defaultSelfApplyAlgorithm(generator, subGroupOrder));
+		}
+		return instance;
+	}
+
+	public static ECPolynomialField getInstance(final ECParameters<PolynomialField, PolynomialElement> parameters) {
+		if (parameters == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		return ECPolynomialField.getInstance(
+			   parameters.getSecurityLevel(),
+			   parameters.getFiniteField(),
+			   parameters.getA(),
+			   parameters.getB(),
+			   parameters.getGx(),
+			   parameters.getGy(),
+			   parameters.getSubGroupOrder(),
+			   parameters.getCoFactor(),
+			   parameters.isTest()
+		);
 	}
 
 }

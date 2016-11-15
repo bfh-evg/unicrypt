@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.OrProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SetMembershipProofSystem;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -59,13 +60,27 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
-//
-// setMembershipProofFunction: f(x,r)
-// deltaFunction: f(x,y)
-// preiamgeProofFunction: setMemebershipFunction_x(r) o deltaFunction_x(y)
-//
+/**
+ * This class is an abstract base implementation for validity proof systems. A validity proof system is used to proof
+ * that an encryption or commitment is indeed a valid encryption or commitment. 'Valid' means in this context, that the
+ * encrypted or committed value x belongs to a set of members M. In fact, a validity proof is a set membership proof
+ * implemented as a sigma proof.
+ * <p>
+ * The generic implementation uses internally an OR-proof. That is not very efficient (O(|M|)) but perfectly fine for
+ * small sets M. The generic implementation is based on the set-membership proof function f(x,r) and the so called delta
+ * function d(x,y). The resulting proof function is the composition of the two functions with fixed x:
+ * <center>preimage proof function: p_x(r) = f_x(r) o d_x(y)</center>
+ * The prover proves then knowledge of an r such that for one x ∈ M and for a given y p_x(r)=d_x(y) holds.
+ * <p>
+ * (The prover can't prove directly knowledge of an r such that f_x(r)=y as f_x(r) is not a homomorphic function.)
+ * <p>
+ * @see "CGS97"
+ * <p>
+ * @author P. Locher
+ * @param <PUS> The public input space.
+ * @param <PUE> The public input element.
+ */
 public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE extends Element>
 	   extends AbstractSigmaProofSystem<ProductSet, Pair, PUS, PUE>
 	   implements SetMembershipProofSystem {
@@ -144,7 +159,7 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 	@Override
 	protected Triple abstractGenerate(Pair privateInput, PUE publicInput, RandomByteSequence randomByteSequence) {
 		return this.getOrProofGenerator().generate(privateInput, this.createProofImages(publicInput),
-																 randomByteSequence);
+												   randomByteSequence);
 	}
 
 	@Override
@@ -153,6 +168,22 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 	}
 
 	public Pair createPrivateInput(Element secret, int index) {
+		return (Pair) this.getOrProofGenerator().createPrivateInput(secret, index);
+	}
+
+	public Pair createPrivateInput(Element secret, Element member) {
+		int index = -1;
+		int i = 0;
+		for (Element m : this.members.getElements()) {
+			if (m.equals(member)) {
+				index = i;
+				break;
+			}
+			i++;
+		}
+		if (index == -1) {
+			throw new IllegalArgumentException();
+		}
 		return (Pair) this.getOrProofGenerator().createPrivateInput(secret, index);
 	}
 
@@ -177,10 +208,10 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 
 		// proofFunction = composite( sharedDomainFunction(selction(0), setMembershipProofFunction), deltaFunction)
 		final ProductSet setMembershipPFDomain = (ProductSet) this.getSetMembershipProofFunction().getDomain();
-		final Function proofFunction =
-			   CompositeFunction.getInstance(SharedDomainFunction.getInstance(
+		final Function proofFunction
+			   = CompositeFunction.getInstance(SharedDomainFunction.getInstance(
 					  SelectionFunction.getInstance(setMembershipPFDomain, 0),
-							this.getSetMembershipProofFunction()), this.getDeltaFunction());
+					  this.getSetMembershipProofFunction()), this.getDeltaFunction());
 
 		// proofFunction_x = composite( multiIdentity(1), proofFunction.partiallyApply(x, 0))
 		final Function[] proofFunctions = new Function[this.members.getOrder().intValue()];
@@ -197,4 +228,5 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 	protected abstract Function abstractGetSetMembershipFunction();
 
 	protected abstract Function abstractGetDeltaFunction();
+
 }

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.aggregator.classes;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import java.math.BigInteger;
 
 /**
@@ -70,6 +71,16 @@ public class BigIntegerAggregator
 			BigIntegerAggregator.instance = new BigIntegerAggregator();
 		}
 		return BigIntegerAggregator.instance;
+	}
+
+	/**
+	 * This is a convenience method to allow inputs of type {@code long}.
+	 * <p>
+	 * @param value The given value
+	 * @return The resulting BigInteger tree
+	 */
+	public Tree<BigInteger> disaggregate(long value) {
+		return this.disaggregate(BigInteger.valueOf(value));
 	}
 
 	// leaves are marked with 0 bit

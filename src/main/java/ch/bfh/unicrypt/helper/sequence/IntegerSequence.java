@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -58,7 +58,7 @@ public class IntegerSequence
 	private final int from;
 	private final int to;
 
-	protected IntegerSequence(Integer from, Integer to) {
+	protected IntegerSequence(int from, int to) {
 		super(BigInteger.valueOf(Math.max(to - from + 1, 0)));
 		this.from = from;
 		this.to = to;
@@ -77,8 +77,8 @@ public class IntegerSequence
 	}
 
 	@Override
-	public ExtendedIterator<Integer> iterator() {
-		return new ExtendedIterator<Integer>() {
+	public SequenceIterator<Integer> iterator() {
+		return new SequenceIterator<Integer>() {
 			private int currentValue = from;
 
 			@Override
@@ -87,7 +87,7 @@ public class IntegerSequence
 			}
 
 			@Override
-			public Integer next() {
+			public Integer abstractNext() {
 				Integer value = currentValue;
 				this.currentValue = this.currentValue + 1;
 				return value;
@@ -109,17 +109,17 @@ public class IntegerSequence
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
+		if (getClass() == obj.getClass()) {
+			final IntegerSequence other = (IntegerSequence) obj;
+			if (!this.getLength().equals(other.getLength())) {
+				return false;
+			}
+			if (this.getLength().signum() == 0) {
+				return true;
+			}
+			return this.from == other.from;
 		}
-		final IntegerSequence other = (IntegerSequence) obj;
-		if (!this.getLength().equals(other.getLength())) {
-			return false;
-		}
-		if (this.getLength().signum() == 0) {
-			return true;
-		}
-		return (this.from == other.from);
+		return super.equals(obj);
 	}
 
 	@Override

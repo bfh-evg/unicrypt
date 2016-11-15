@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -45,54 +45,82 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- * This interface represents an additively written {@link Element}. No functionality is added. Some return types are
- * updated.
+ * This interface represents an {@link Element} of a semigroup with concatenation as binary operation. No functionality
+ * is added. Some return types are updated.
  * <p>
- * @author rolfhaenni
- * @param <V> Generic type of values of this element
+ * @param <V> The generic type of values stored in this element
+ * <p>
+ * <p>
+ * @author R. Haenni
  */
 public interface ConcatenativeElement<V>
 	   extends Element<V> {
 
 	/**
-	 *
-	 * @return
+	 * Returns the length of the element.
+	 * <p>
+	 * @return The length of the element
 	 */
 	public int getLength();
 
 	/**
-	 * @see Group#apply(Element, Element)
+	 * This method is a synonym for {@link Element#apply(Element)}. It concatenates this element with the given element.
+	 * <p>
+	 * @param element The given element
+	 * @return The concatenation of the two elements
+	 * @see Element#apply(Element)
 	 */
 	public ConcatenativeElement<V> concatenate(Element element);
 
 	/**
-	 * @see Group#selfApply(Element, BigInteger)
-	 */
-	public ConcatenativeElement<V> selfConcatenate(BigInteger amount);
-
-	/**
-	 * @see Group#selfApply(Element, Element)
-	 */
-	public ConcatenativeElement<V> selfConcatenate(Element<BigInteger> amount);
-
-	/**
-	 * @see Group#selfApply(Element, long)
+	 * This method is a synonym for {@link Element#selfApply(long)}. It applies the concatenation operation multiple
+	 * times to this element. This is a convenient method for {@link ConcatenativeElement#selfConcatenate(BigInteger)}.
+	 * <p>
+	 * @param amount The given amount
+	 * @return The result of applying concatenation multiple times to this element
+	 * @see Element#selfApply(long)
 	 */
 	public ConcatenativeElement<V> selfConcatenate(long amount);
 
 	/**
-	 * @see Group#selfApply(Element)
+	 * This method is a synonym for {@link Element#selfApply(BigInteger)}. It applies the concatenation operation
+	 * multiple times to this element.
+	 * <p>
+	 * @param amount The given amount
+	 * @return The result of applying concatenation multiple times to this element
+	 */
+	public ConcatenativeElement<V> selfConcatenate(BigInteger amount);
+
+	/**
+	 * This method is a synonym for {@link Element#selfApply(Element)} and the same as
+	 * {@link ConcatenativeElement#selfConcatenate(BigInteger)}, except that the exponent is given as an instance of
+	 * {@code Element<BigInteger>}, from which a {@code BigInteger} exponent can be extracted using
+	 * {@link Element#getValue()}.
+	 * <p>
+	 * @param amount The given amount
+	 * @return The result of applying concatenation multiple times to this element
+	 */
+	public ConcatenativeElement<V> selfConcatenate(Element<BigInteger> amount);
+
+	/**
+	 * This method is a synonym for {@link Element#selfApply()}. It concatenates this element with itself.
+	 * <p>
+	 * @return The concatenated with itself
+	 * @see Element#selfApply()
 	 */
 	public ConcatenativeElement<V> selfConcatenate();
 
 	/**
-	 *
-	 * @return
+	 * This method is a synonym for {@link Element#isIdentity()}. Returns {@code true} if the element is the empty
+	 * element of length 0. Throws an exception if the method is called for an element not belonging to a monoid.
+	 * <p>
+	 * @return {@code true} if this element is the empty element, {@code false} otherwise
+	 * @see Element#isIdentity()
 	 */
 	public boolean isEmptyElement();
 
 	@Override
-	public ConcatenativeSemiGroup getSet();
+	public ConcatenativeSemiGroup<V> getSet();
 
 	@Override
 	public ConcatenativeElement<V> apply(Element element);

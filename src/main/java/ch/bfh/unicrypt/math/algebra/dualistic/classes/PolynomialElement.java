@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -51,7 +53,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class PolynomialElement
 	   extends AbstractDualisticElement<PolynomialSemiRing, PolynomialElement, Polynomial<? extends DualisticElement<BigInteger>>> {
@@ -64,10 +66,12 @@ public class PolynomialElement
 	}
 
 	public DualisticElement<BigInteger> evaluate(DualisticElement element) {
-		if (element == null || !this.getSet().getSemiRing().contains(element)) {
-			throw new IllegalArgumentException();
+		if (element == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-
+		if (!this.getSet().getSemiRing().contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, element);
+		}
 		if (this.getSet().isBinary()) {
 			SemiRing semiRing = this.getSet().getSemiRing();
 			if (semiRing.getZeroElement().isEquivalent(element)) {
@@ -77,8 +81,7 @@ public class PolynomialElement
 					   ? semiRing.getZeroElement() : semiRing.getOneElement();
 			}
 		}
-
-		// TBD! (n*x^2 < q*x^3    with x = log(modulus), n = order of poly and q = number of non-zero terms in poly)
+		// TBD! (n*x^2 < q*x^3 with x = log(modulus), n = order of poly and q = number of non-zero terms in poly)
 		int n = this.value.getDegree();
 		int q = this.value.countCoefficients();
 		if (n > 0 && ((double) q / n) < 0.01) {
@@ -101,34 +104,40 @@ public class PolynomialElement
 	}
 
 	public Pair getPoint(DualisticElement element) {
-		if (element == null || !this.getSet().getSemiRing().contains(element)) {
-			throw new IllegalArgumentException();
+		if (element == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (!this.getSet().getSemiRing().contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, element);
 		}
 		return Pair.getInstance(element, this.evaluate(element));
 	}
 
 	public boolean isIrreducible() {
 		if (!this.getSet().isRing()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		return ((PolynomialRing) this.getSet()).isIrreduciblePolynomial(this);
 	}
 
-	public PolynomialElement reduce(DualisticElement<BigInteger> value) {
+	public PolynomialElement reduce(DualisticElement<BigInteger> element) {
 		if (!this.getSet().getSemiRing().isField()) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
-		if (value == null || !this.getSet().getSemiRing().contains(value)) {
-			throw new IllegalArgumentException();
+		if (element == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (!this.getSet().getSemiRing().contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.ELEMENT_CONSTRUCTION_FAILURE, this, element);
 		}
 		HashMap map = new HashMap();
 		for (int i = 0; i <= this.value.getDegree(); i++) {
 			DualisticElement<BigInteger> c = this.value.getCoefficient(i);
 			if (!c.isZero()) {
-				map.put(i, c.divide(value));
+				map.put(i, c.divide(element));
 			}
 		}
-		return this.getSet().getElementUnchecked(map);
+		return this.getSet().abstractGetElement(map);
 	}
 
 }

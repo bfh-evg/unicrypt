@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -46,8 +46,8 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
  * element. It is therefore implemented as a specialization of {@link SemiGroup}.
  * <p>
  *
- * @param <V> Generic type of the values representing the elements of a monoid
- * @see "Handbook of Applied Cryptography, Definition 2.162"
+ * @param <V> The generic type of the values representing the elements of a monoid
+ * @see Element
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig

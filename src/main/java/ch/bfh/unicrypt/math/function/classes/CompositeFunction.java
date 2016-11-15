@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,12 +41,14 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a composite function f:X_1->Y_n. It consists of multiple internal functions
@@ -60,6 +62,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public final class CompositeFunction
 	   extends AbstractCompoundFunction<CompositeFunction, Set, Element, Set, Element> {
+
 	private static final long serialVersionUID = 1L;
 
 	private CompositeFunction(Set domain, Set coDomain, final DenseArray<Function> functions) {
@@ -67,7 +70,7 @@ public final class CompositeFunction
 	}
 
 	@Override
-	protected final Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
+	protected Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
 		Element result = element;
 		for (Function function : this) {
 			result = function.apply(result, randomByteSequence);
@@ -91,23 +94,24 @@ public final class CompositeFunction
 	 * <p>
 	 * @param functions The given array of functions
 	 * @return The resulting composite function
-	 * @throws IllegalArgumentException if {@code functions} is null, contains null, or is empty
-	 * @throws IllegalArgumentException if the domain of a function is different from the co-domain of the previous
-	 *                                  function
 	 */
 	public static CompositeFunction getInstance(final DenseArray<Function> functions) {
-		if (functions == null || functions.getLength() == 0) {
-			throw new IllegalArgumentException();
+		if (functions == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (functions.getLength() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, functions);
 		}
 		int arity = functions.getLength();
 		if (functions.isUniform()) {
 			if (arity > 1 && !functions.getFirst().getDomain().isEquivalent(functions.getFirst().getCoDomain())) {
-				throw new IllegalArgumentException();
+				throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, functions);
 			}
 		} else {
 			for (int i = 1; i < arity; i++) {
 				if (!(functions.getAt(i - 1).getCoDomain().isEquivalent(functions.getAt(i).getDomain()))) {
-					throw new IllegalArgumentException();
+					throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, functions.getAt(i - 1).getCoDomain(),
+													   functions.getAt(i).getDomain());
 				}
 			}
 		}

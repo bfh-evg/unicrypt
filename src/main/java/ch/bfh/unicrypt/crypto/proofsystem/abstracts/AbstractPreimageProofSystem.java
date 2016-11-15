@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.PreimageProofSystem;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
@@ -50,15 +51,34 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
-public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE extends Element, PUS extends SemiGroup,
-	   PUE extends Element, F extends Function>
+/**
+ * The abstract implementation of the {@link PreimageProofSystem}. It is a full implementation of the proof system.
+ * Subclasses have to care only about the concrete instantiation, which is based on the proof function and the challenge
+ * generator.
+ * <p>
+ * @author P. Locher
+ * @param <PRS> The private input space.
+ * @param <PRE> The private input element.
+ * @param <PUS> The public input space.
+ * @param <PUE> The public input element.
+ * @param <F>   The proof function.
+ */
+public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE extends Element, PUS extends SemiGroup, PUE extends Element, F extends Function>
 	   extends AbstractSigmaProofSystem<PRS, PRE, PUS, PUE>
 	   implements PreimageProofSystem {
 
+	/**
+	 * Holds the proof function.
+	 */
 	private final F preimageProofFunction;
 
+	/**
+	 * Constructor. A preimage proof system which is defined by its proof function and challenge generator.
+	 * <p>
+	 * @param challengeGenerator The challenge generator.
+	 * @param function           The proof function.
+	 */
 	protected AbstractPreimageProofSystem(final SigmaChallengeGenerator challengeGenerator, final F function) {
 		super(challengeGenerator);
 		this.preimageProofFunction = function;
@@ -128,7 +148,7 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 	}
 
 	/**
-	 * Checks whether the challenge space of the challenge generator does match with the proof function.
+	 * Checks whether the challenge space of the challenge generator does match the domain of the proof function.
 	 * <p>
 	 * @param challengeGenerator The challenge generator
 	 * @param proofFunction      The proof function
@@ -137,9 +157,10 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 	 */
 	protected static boolean checkChallengeSpace(final SigmaChallengeGenerator challengeGenerator,
 		   final Function proofFunction) {
-		return (proofFunction == null || challengeGenerator == null
+		return proofFunction == null || challengeGenerator == null
 			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()).isEquivalent(challengeGenerator
-					  .getChallengeSpace()));
+					  .getChallengeSpace());
 
 	}
+
 }

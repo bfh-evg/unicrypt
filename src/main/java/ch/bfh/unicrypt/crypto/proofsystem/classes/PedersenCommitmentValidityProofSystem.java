@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -45,13 +45,12 @@ import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractValidityProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
@@ -59,49 +58,28 @@ import ch.bfh.unicrypt.math.function.classes.InvertFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
+/**
+ * This class implements the validity proof system for Pedersen commitments: ZKP[(m,r) : y=com(m,r) ∧ m ∈ M] where com
+ * creates a Pedersen commitment and M is the set of permitted messages.
+ * <p>
+ * The class only provides instantiation functions and methods to get the setMembershipFunction and deltaFunction.
+ * Everything else is implemented in the superclass {@link AbstractValidityProofSystem}.
+ * <p>
+ * @author P. Locher
+ */
 public class PedersenCommitmentValidityProofSystem
 	   extends AbstractValidityProofSystem<CyclicGroup, Element> {
 
+	/**
+	 * The Pedersen commitment scheme.
+	 */
 	private final PedersenCommitmentScheme pedersenCS;
 
 	protected PedersenCommitmentValidityProofSystem(final SigmaChallengeGenerator challengeGenerator,
 		   final PedersenCommitmentScheme pedersenCS, final Subset messages) {
 		super(challengeGenerator, messages);
 		this.pedersenCS = pedersenCS;
-	}
-
-	public static PedersenCommitmentValidityProofSystem getInstance(final PedersenCommitmentScheme pedersenCS,
-		   final Subset messages) {
-		return PedersenCommitmentValidityProofSystem.getInstance(pedersenCS, messages, (Element) null);
-	}
-
-	public static PedersenCommitmentValidityProofSystem getInstance(final PedersenCommitmentScheme pedersenCS,
-		   final Subset messages, final Element proverId) {
-		SigmaChallengeGenerator challengeGenerator
-			   = PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																							  messages.getOrder().intValue(), proverId);
-		return PedersenCommitmentValidityProofSystem.getInstance(challengeGenerator, pedersenCS, messages);
-	}
-
-	public static PedersenCommitmentValidityProofSystem
-		   getInstance(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS,
-				  final Subset messages) {
-		if (challengeGenerator == null || pedersenCS == null || messages == null
-			   || messages.getOrder().intValue() < 1) {
-			throw new IllegalArgumentException();
-		}
-
-		final Set codomain
-			   = ProductGroup.getInstance(pedersenCS.getCommitmentFunction().getCoDomain(),
-										  messages.getOrder().intValue());
-		if (!ZMod.getInstance(pedersenCS.getCyclicGroup().getOrder())
-			   .isEquivalent(challengeGenerator.getChallengeSpace())) {
-			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
-		}
-		return new PedersenCommitmentValidityProofSystem(challengeGenerator, pedersenCS, messages);
 	}
 
 	@Override
@@ -112,7 +90,8 @@ public class PedersenCommitmentValidityProofSystem
 	@Override
 	protected Function abstractGetDeltaFunction() {
 		final ProductSet deltaFunctionDomain = ProductSet.getInstance(this.pedersenCS.getMessageSpace(),
-																	  this.getSetMembershipProofFunction().getCoDomain());
+																	  this.getSetMembershipProofFunction()
+																			 .getCoDomain());
 		final Function deltaFunction = CompositeFunction.getInstance(
 			   SharedDomainFunction.getInstance(
 					  SelectionFunction.getInstance(deltaFunctionDomain, 1),
@@ -124,24 +103,57 @@ public class PedersenCommitmentValidityProofSystem
 		return deltaFunction;
 	}
 
+	public static PedersenCommitmentValidityProofSystem getInstance(final PedersenCommitmentScheme pedersenCS,
+		   final Subset messages) {
+		return PedersenCommitmentValidityProofSystem.getInstance(pedersenCS, messages, (Element) null);
+	}
+
+	public static PedersenCommitmentValidityProofSystem getInstance(final PedersenCommitmentScheme pedersenCS,
+		   final Subset messages, final Element proverId) {
+		SigmaChallengeGenerator challengeGenerator
+			   = PedersenCommitmentValidityProofSystem.
+					  createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);
+		return PedersenCommitmentValidityProofSystem.getInstance(challengeGenerator, pedersenCS, messages);
+	}
+
+	public static PedersenCommitmentValidityProofSystem
+		   getInstance(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS,
+				  final Subset messages) {
+		if (challengeGenerator == null || pedersenCS == null || messages == null
+			   || messages.getOrder().intValue() < 1) {
+			throw new IllegalArgumentException();
+		}
+
+		if (!ZMod.getInstance(pedersenCS.getCyclicGroup().getOrder())
+			   .isEquivalent(challengeGenerator.getChallengeSpace())) {
+			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
+		}
+		return new PedersenCommitmentValidityProofSystem(challengeGenerator, pedersenCS, messages);
+	}
+
 	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages) {
+		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS,
+				  final int numberOfMessages) {
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																							numberOfMessages, PseudoRandomOracle.getInstance());
+																							numberOfMessages,
+																							RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
 				  final Element proverId) {
 		return PedersenCommitmentValidityProofSystem
-			   .createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, proverId, PseudoRandomOracle.getInstance());
+			   .createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, proverId,
+													   RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
 				  final RandomOracle randomOracle) {
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																							numberOfMessages, (Element) null, randomOracle);
+																							numberOfMessages,
+																							(Element) null,
+																							randomOracle);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator

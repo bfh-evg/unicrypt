@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -47,66 +47,73 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
+ * This interface represents an element of an EC group with addition as binary operation. No functionality is added.
  * Some return types are updated.
  * <p>
- * @author rolfhaenni
- * @param <V>
- * @param <DE>
+ * @param <V>  The generic type of the values stored in the elements of the underlying finite field
+ * @param <DE> The generic type of the dualistic elements of the underlying finite field
+ * <p>
+ * @author C. Lutz
+ * @author R. Haenni
+ * @see EC
  */
 public interface ECElement<V, DE extends DualisticElement<V>>
 	   extends AdditiveElement<Point<DE>> {
 
 	/**
-	 * @see Group#apply(Element, Element)
+	 * Returns the x-coordinate of the element. Throws an exception if the element is the identity element (point of
+	 * infinity) of the elliptic curve.
+	 * <p>
+	 * @return The x-coordinate
 	 */
+	public DE getY();
+
+	/**
+	 * Returns the y-coordinate of the element. Throws an exception if the element is the identity element (point of
+	 * infinity) of the elliptic curve.
+	 * <p>
+	 * @return The y-coordinate
+	 */
+	public DE getX();
+
+	@Override
 	public ECElement<V, DE> add(Element element);
 
-	/**
-	 * @see Group#applyInverse(Element, Element)
-	 */
-	public ECElement<V, DE> subtract(Element element);
+	@Override
+	public ECElement<V, DE> times(BigInteger factor);
 
-	/**
-	 * @see Group#selfApply(Element, BigInteger)
-	 */
-	public ECElement<V, DE> times(BigInteger amount);
+	@Override
+	public ECElement<V, DE> times(Element<BigInteger> factor);
 
-	/**
-	 * @see Group#selfApply(Element, Element)
-	 */
-	public ECElement<V, DE> times(Element<BigInteger> amount);
+	@Override
+	public ECElement<V, DE> times(long factor);
 
-	/**
-	 * @see Group#selfApply(Element, long)
-	 */
-	public ECElement<V, DE> times(long amount);
-
-	/**
-	 * @see Group#selfApply(Element)
-	 */
+	@Override
 	public ECElement<V, DE> timesTwo();
 
-	/**
-	 * @see Group#negate(Element)
-	 */
+	@Override
+	public boolean isZero();
+
+	@Override
 	public ECElement<V, DE> negate();
 
-	public boolean isZero();
+	@Override
+	public ECElement<V, DE> subtract(Element element);
+
+	@Override
+	public EC<V, DE> getSet();
 
 	@Override
 	public ECElement<V, DE> apply(Element element);
 
 	@Override
-	public ECElement<V, DE> applyInverse(Element element);
+	public ECElement<V, DE> selfApply(long factor);
 
 	@Override
-	public ECElement<V, DE> selfApply(BigInteger amount);
+	public ECElement<V, DE> selfApply(BigInteger factor);
 
 	@Override
-	public ECElement<V, DE> selfApply(Element<BigInteger> amount);
-
-	@Override
-	public ECElement<V, DE> selfApply(long amount);
+	public ECElement<V, DE> selfApply(Element<BigInteger> factor);
 
 	@Override
 	public ECElement<V, DE> selfApply();
@@ -114,8 +121,7 @@ public interface ECElement<V, DE extends DualisticElement<V>>
 	@Override
 	public ECElement<V, DE> invert();
 
-	public DE getY();
-
-	public DE getX();
+	@Override
+	public ECElement<V, DE> applyInverse(Element element);
 
 }

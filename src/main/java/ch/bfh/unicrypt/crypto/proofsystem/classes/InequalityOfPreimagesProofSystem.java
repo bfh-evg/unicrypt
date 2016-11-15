@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -45,6 +45,8 @@ import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SigmaProofSystem;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -62,14 +64,15 @@ import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 //
 // @see [cs03] Camenisch, J. & Shoup, V., 2003. Practical verifiable encryption and decryption of discrete logarithms.
 //             -> 5 Proving the Inequality of Discrete Logarithms
 //
+/**
+ *
+ * @author P. Locher
+ */
 public class InequalityOfPreimagesProofSystem
 	   extends AbstractProofSystem<SemiGroup, Element, ProductGroup, Pair, Set, Pair> {
 
@@ -93,7 +96,7 @@ public class InequalityOfPreimagesProofSystem
 		   final Function secondFunction) {
 		SigmaChallengeGenerator challengeGenerator
 			   = InequalityOfPreimagesProofSystem
-			   .createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId);
+					  .createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId);
 		return InequalityOfPreimagesProofSystem.getInstance(challengeGenerator, firstFunction, secondFunction);
 	}
 
@@ -106,7 +109,6 @@ public class InequalityOfPreimagesProofSystem
 			throw new IllegalArgumentException();
 		}
 
-		ProductSet codomain = ProductSet.getInstance(secondFunction.getCoDomain(), firstFunction.getCoDomain());
 		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(),
 														  secondFunction.getDomain()).getMinimalOrder());
 		if (!cs.isEquivalent(challengeGenerator.getChallengeSpace())) {
@@ -245,14 +247,15 @@ public class InequalityOfPreimagesProofSystem
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction) {
 		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
-																					   PseudoRandomOracle.getInstance());
+																					   RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
 				  final Element proverId) {
 		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
-																					   proverId, PseudoRandomOracle.getInstance());
+																					   proverId,
+																					   RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator

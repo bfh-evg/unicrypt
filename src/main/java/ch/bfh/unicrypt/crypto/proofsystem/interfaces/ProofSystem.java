@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,10 +41,18 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem.interfaces;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
+/**
+ * This interface represents the concept of a proof system. In general, a proof system allows the generation and the
+ * verification of a proof of knowledge. Meaning that a prover proves knowledge of a private value which is related, in
+ * any way, to a public value. Based on the proof, a verifier can be convinced that the prover indeed knows the private
+ * value belonging to the given public value.
+ * <p>
+ * @author P. Locher
+ */
 public interface ProofSystem {
 
 	public Element generate(Element privateInput, Element publicInput);

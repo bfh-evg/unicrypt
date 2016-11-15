@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -59,8 +59,8 @@ public class FiatShamirChallengeGenerator
 	private final HashMethod hashMethod;
 	private final Converter<ByteArray, BigInteger> converter;
 
-	protected FiatShamirChallengeGenerator(ZMod challengeSpace, Element proverId, ConvertMethod convertMethod, HashMethod hashMethod,
-		   Converter<ByteArray, BigInteger> converter) {
+	protected FiatShamirChallengeGenerator(ZMod challengeSpace, Element proverId, ConvertMethod convertMethod,
+		   HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
 		super(challengeSpace, proverId);
 		this.convertMethod = convertMethod;
 		this.hashMethod = hashMethod;
@@ -82,7 +82,8 @@ public class FiatShamirChallengeGenerator
 	@Override
 	protected ZModElement abstractAbstractGenerate(Element input) {
 		ByteArray hashedInput = input.getHashValue(this.getConvertMethod(), this.hashMethod);
-		return this.getChallengeSpace().getElement(this.converter.convert(hashedInput).mod(this.challengeSpace.getModulus()));
+		return this.getChallengeSpace().getElement(this.converter.convert(hashedInput).
+			   mod(this.challengeSpace.getModulus()));
 	}
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace) {
@@ -93,17 +94,19 @@ public class FiatShamirChallengeGenerator
 		ConvertMethod<ByteArray> convertMethod = ConvertMethod.getInstance();
 		HashMethod<ByteArray> hashMethod = HashMethod.getInstance();
 		int hashLength = hashMethod.getHashAlgorithm().getByteLength();
-		Converter<ByteArray, BigInteger> converter = ByteArrayToBigInteger.getInstance(hashLength, 1);
+		Converter<ByteArray, BigInteger> converter = ByteArrayToBigInteger.getInstance(hashLength);
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, proverId, convertMethod, hashMethod, converter);
 	}
 
-	public static <V> FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, ConvertMethod<V> convertMethod, HashMethod<V> hashMethod,
-		   Converter<ByteArray, BigInteger> converter) {
-		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null, convertMethod, hashMethod, converter);
+	public static <V> FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, ConvertMethod<V> convertMethod,
+		   HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter) {
+		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null, convertMethod,
+														hashMethod, converter);
 
 	}
 
-	public static <V> FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId, ConvertMethod<V> convertMethod, HashMethod<V> hashMethod,
+	public static <V> FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId,
+		   ConvertMethod<V> convertMethod, HashMethod<V> hashMethod,
 		   Converter<ByteArray, BigInteger> converter) {
 		if (challengeSpace == null || convertMethod == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();

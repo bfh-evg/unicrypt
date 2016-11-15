@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -46,6 +46,9 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracl
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SetMembershipProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -60,11 +63,10 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
- * @see [BG13] Zero-Knowledge Argument for Polynomial Evaluation with Application to Blacklists
+ * @see "[BG13] Zero-Knowledge Argument for Polynomial Evaluation with Application to Blacklists"
  * <p>
  * @author philipp
  */
@@ -86,8 +88,8 @@ public class PolynomialMembershipProofSystem
 			roots[i++] = member;
 		}
 
-		PolynomialElement polynomial =
-			   PolynomialSemiRing.getInstance((ZModPrime) members.getSuperset())
+		PolynomialElement polynomial
+			   = PolynomialSemiRing.getInstance((ZModPrime) members.getSuperset())
 					  .getElementByRoots(Tuple.getInstance(roots));
 		this.pepsi = PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
@@ -101,8 +103,8 @@ public class PolynomialMembershipProofSystem
 
 	public static final PolynomialMembershipProofSystem getInstance(final Subset members,
 		   final PedersenCommitmentScheme pedersenCS) {
-		SigmaChallengeGenerator challengeGenerator =
-			   RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+		SigmaChallengeGenerator challengeGenerator
+			   = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialMembershipProofSystem.getInstance(challengeGenerator, members, pedersenCS);
 	}
 
@@ -125,14 +127,14 @@ public class PolynomialMembershipProofSystem
 
 	public static final PolynomialMembershipProofSystem getInstance(final PolynomialElement polynomial,
 		   final PedersenCommitmentScheme pedersenCS) {
-		SigmaChallengeGenerator challengeGenerator =
-			   RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+		SigmaChallengeGenerator challengeGenerator
+			   = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialMembershipProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 
 	public static final PolynomialMembershipProofSystem
-	   getInstance(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial,
-			  final PedersenCommitmentScheme pedersenCS) {
+		   getInstance(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial,
+				  final PedersenCommitmentScheme pedersenCS) {
 
 		if (challengeGenerator == null || polynomial == null || pedersenCS == null) {
 			throw new IllegalArgumentException();
@@ -182,11 +184,10 @@ public class PolynomialMembershipProofSystem
 
 	@Override
 	public Subset getMembers() {
-
 		// In case, the proof system has been created directly by the representing polynomial
 		// -> May comupte the roots from the polynomial...?
 		if (this.members == null) {
-			throw new UnsupportedOperationException();
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		return this.members;
 	}
@@ -204,7 +205,7 @@ public class PolynomialMembershipProofSystem
 
 		return this.pepsi.generate(
 			   Tuple.getInstance(secretInput.getFirst(), v, secretInput.getSecond(), t),
-			   Pair.getInstance(publicInput, cv));
+			   Pair.getInstance(publicInput, cv), randomByteSequence);
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -43,40 +43,106 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import java.math.BigInteger;
 
 /**
- * This interface provides the renaming of one group operation for the case of a multiplicatively written {@link Group}.
- * No functionality is added. Some return types are updated.
+ * This interface provides the renaming of some methods for the case of a multiplicatively written commutative
+ * {@link Group}. No functionality is added. Some return types are adjusted.
+ * <p>
+ * @param <V> The generic type of the values stored in the elements of this group
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of this group
  */
 public interface MultiplicativeGroup<V>
 	   extends Group<V>, MultiplicativeMonoid<V> {
 
 	/**
-	 * This method is a synonym for {@link #Group.applyInverse(Element, Element)}.
+	 * This method is a synonym for {@link Group#invert(Element)}. It computes the multiplicative inverse of the given
+	 * element.
 	 * <p>
-	 * @param element1 the same as in {@link #Group.applyInverse(Element, Element)}
-	 * @param element2 the same as in {@link #Group.applyInverse(Element, Element)}
-	 * @return the same as in {@link #Group.applyInverse(Element, Element)}
+	 * @param element The given element
+	 * @return The multiplicative inverse of the given element
+	 * @see Group#invert(Element)
+	 */
+	public MultiplicativeElement<V> oneOver(Element element);
+
+	/**
+	 * This method is a synonym for {@link Group#applyInverse(Element, Element)}. It computes the division of the first
+	 * element over the second element.
+	 * <p>
+	 * @param element1 The first given element
+	 * @param element2 The second given element
+	 * @return The first element divided over the second element
+	 * @see Group#applyInverse(Element, Element)
 	 */
 	public MultiplicativeElement<V> divide(Element element1, Element element2);
 
 	/**
-	 * TODO This method is a synonym for {@link #Group.inverse(Element, Element)}.
+	 * This method is a synonym for {@link Group#invertSelfApply(Element, long)}. It computes the nth root of the given
+	 * element. To perform this operation, the group order must be known and {@code amount} must be relatively prime to
+	 * the order. This is a convenient method for {@link MultiplicativeGroup#nthRoot(Element, BigInteger)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.inverse(Element, Element)}
-	 * @return the same as in {@link #Group.inverse(Element, Element)}
+	 * @param element The given input element
+	 * @param n       The given degree of the root
+	 * @return The nth root of the input element
+	 * @see Group#invertSelfApply(Element, long)
 	 */
-	public MultiplicativeElement<V> oneOver(Element element);
+	public MultiplicativeElement<V> nthRoot(Element element, long n);
+
+	/**
+	 * This method is a synonym for {@link Group#invertSelfApply(Element, BigInteger)}. It computes the nth root of the
+	 * given element. To perform this operation, the group order must be known and {@code amount} must be relatively
+	 * prime to the order.
+	 * <p>
+	 * @param element The given input element
+	 * @param n       The given degree of the root
+	 * @return The nth root of the input element
+	 * @see Group#invertSelfApply(Element, BigInteger)
+	 */
+	public MultiplicativeElement<V> nthRoot(Element element, BigInteger n);
+
+	/**
+	 * This method is a synonym for {@link Group#invertSelfApply(Element, Element)} and the same as
+	 * {@link MultiplicativeGroup#nthRoot(Element, BigInteger)}, except that the degree of the root is given as an
+	 * instance of {@code Element<BigInteger>}, from which a {@code BigInteger} degree can be extracted using
+	 * {@link Element#getValue()}.
+	 * <p>
+	 * @param element The given input element
+	 * @param n       The given degree of the root
+	 * @return The nth root of the input element
+	 * @see Group#invertSelfApply(Element, Element)
+	 */
+	public MultiplicativeElement<V> nthRoot(Element element, Element<BigInteger> n);
+
+	/**
+	 * This method is a synonym for {@link Group#invertSelfApply(Element)} and the same as
+	 * {@link Group#invertSelfApply(Element, long)} for {@code n=2}. It computes the square root of the given input
+	 * element.
+	 * <p>
+	 * @param element A given input element
+	 * @return The square root of the input element
+	 * @see Group#invertSelfApply(Element)
+	 */
+	public MultiplicativeElement<V> squareRoot(Element element);
 
 	@Override
 	public MultiplicativeElement<V> invert(Element element);
 
 	@Override
 	public MultiplicativeElement<V> applyInverse(Element element1, Element element2);
+
+	@Override
+	public MultiplicativeElement<V> invertSelfApply(Element element, long amount);
+
+	@Override
+	public MultiplicativeElement<V> invertSelfApply(Element element, Element<BigInteger> amount);
+
+	@Override
+	public MultiplicativeElement<V> invertSelfApply(Element element, BigInteger amount);
+
+	@Override
+	public MultiplicativeElement<V> invertSelfApply(Element element);
 
 }

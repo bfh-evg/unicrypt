@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,13 +41,15 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a constant function with no input. When the function is called, it returns
@@ -59,6 +61,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class ConstantFunction
 	   extends AbstractFunction<ConstantFunction, SingletonGroup, SingletonElement, Set, Element> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final Element element;
@@ -68,7 +71,6 @@ public class ConstantFunction
 	 * called.
 	 * <p>
 	 * @param element The constant output value of the function
-	 * @throws IllegalArgumentException if {@code element} is null
 	 */
 	private ConstantFunction(Set coDomain, Element element) {
 		super(SingletonGroup.getInstance(), coDomain);
@@ -100,11 +102,10 @@ public class ConstantFunction
 	 * <p>
 	 * @param element The given element
 	 * @return The constant function
-	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static ConstantFunction getInstance(final Element element) {
 		if (element == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new ConstantFunction(element.getSet(), element);
 	}
@@ -118,7 +119,7 @@ public class ConstantFunction
 	 */
 	public static ConstantFunction getInstance(final Monoid monoid) {
 		if (monoid == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
 		return new ConstantFunction(monoid, monoid.getIdentityElement());
 	}

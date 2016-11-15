@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.math;
 
-import ch.bfh.unicrypt.helper.math.Polynomial;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -205,7 +205,7 @@ public class PolynomialTest {
 		try {
 			p1.getCoefficients();
 			fail();
-		} catch (UnsupportedOperationException e) {
+		} catch (UniCryptRuntimeException e) {
 		}
 		assertEquals(BitArray.getInstance(), p4.getCoefficients());
 		assertEquals(BitArray.getInstance("1101"), p5.getCoefficients());

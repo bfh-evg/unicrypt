@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -52,6 +52,11 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
+/**
+ * This class covers the equality-composition of preimage proofs: ZKP[x : y1=f1(x) ∧...∧ yN=fN(x)].
+ * <p>
+ * @author P. Locher
+ */
 public class EqualityPreimageProofSystem
 	   extends AbstractPreimageProofSystem<SemiGroup, Element, ProductSemiGroup, Tuple, SharedDomainFunction> {
 
@@ -66,20 +71,20 @@ public class EqualityPreimageProofSystem
 
 	public static EqualityPreimageProofSystem getInstance(final Element proverId,
 		   final SharedDomainFunction proofFunction) {
-		if (proofFunction == null || proofFunction.getArity() < 1 || !proofFunction.getDomain().isSemiGroup() ||
-			   !proofFunction.getCoDomain().isSemiGroup()) {
+		if (proofFunction == null || proofFunction.getArity() < 1 || !proofFunction.getDomain().isSemiGroup()
+			   || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException("Domain and codomain of each proof function must be semi groups!");
 		}
-		SigmaChallengeGenerator challengeGenerator =
-			   RandomOracleSigmaChallengeGenerator.getInstance(
+		SigmaChallengeGenerator challengeGenerator
+			   = RandomOracleSigmaChallengeGenerator.getInstance(
 					  ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()), proverId);
 		return new EqualityPreimageProofSystem(challengeGenerator, proofFunction);
 	}
 
 	public static EqualityPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator,
 		   final SharedDomainFunction proofFunction) {
-		if (proofFunction == null || proofFunction.getArity() < 1 || !proofFunction.getDomain().isSemiGroup() ||
-			   !proofFunction.getCoDomain().isSemiGroup()) {
+		if (proofFunction == null || proofFunction.getArity() < 1 || !proofFunction.getDomain().isSemiGroup()
+			   || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException("Domain and codomain of each proof function must be semi groups!");
 		}
 		if (EqualityPreimageProofSystem.checkChallengeSpace(challengeGenerator, proofFunction)) {
@@ -102,4 +107,5 @@ public class EqualityPreimageProofSystem
 		SharedDomainFunction proofFunction = SharedDomainFunction.getInstance(proofFunctions);
 		return EqualityPreimageProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
+
 }

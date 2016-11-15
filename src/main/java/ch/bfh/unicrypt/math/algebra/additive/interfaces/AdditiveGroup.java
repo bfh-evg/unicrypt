@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -43,41 +43,64 @@ package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import java.math.BigInteger;
 
 /**
- * This interface represents an additively written {link Group}. It provides the renaming of one group operation. No
- * functionality is added. Some return types are updated.
+ * This interface provides the renaming of some methods for the case of a additively written commutative {@link Group}.
+ * No functionality is added. Some return types are adjusted.
+ * <p>
+ * @param <V> The generic type of the values stored in the elements of this group
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of the group
  */
 public interface AdditiveGroup<V>
 	   extends Group<V>, AdditiveMonoid<V> {
 
 	/**
-	 * This method is a synonym for {@link Group#applyInverse(Element, Element)}.
+	 * This method is a synonym for {@link Group#invert(Element)}. It computes the additive inverse of the given
+	 * element.
 	 * <p>
-	 * @param element1 the same as in {@link Group#applyInverse(Element, Element)}
-	 * @param element2 the same as in {@link Group#applyInverse(Element, Element)}
-	 * @return the same as in {@link Group#applyInverse(Element, Element)}
-	 * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the group
+	 * @param element The given element
+	 * @return The additive inverse of the given element
+	 * @see Group#invert(Element)
+	 */
+	public AdditiveElement<V> negate(Element element);
+
+	/**
+	 * This method is a synonym for {@link Group#applyInverse(Element, Element)}. It subtracts the second element from
+	 * the first element.
+	 * <p>
+	 * @param element1 The first given element
+	 * @param element2 The second given element
+	 * @return The second element subtracted from the first element
+	 * @see Group#applyInverse(Element, Element)
 	 */
 	public AdditiveElement<V> subtract(Element element1, Element element2);
 
-	/**
-	 * Computes and returns the inverse of a given group element.
-	 * <p>
-	 * @param element The given element
-	 * @return The inverse element of the input element
-	 */
-	public AdditiveElement<V> negate(Element element);
+	public AdditiveElement<V> divide(Element element, long divisor);
+
+	public AdditiveElement<V> divide(Element element, BigInteger divisor);
+
+	public AdditiveElement<V> halve(Element element);
 
 	@Override
 	public AdditiveElement<V> invert(Element element);
 
 	@Override
 	public AdditiveElement<V> applyInverse(Element element1, Element element2);
+
+	@Override
+	public AdditiveElement<V> invertSelfApply(Element element, long amount);
+
+	@Override
+	public AdditiveElement<V> invertSelfApply(Element element, BigInteger amount);
+
+	@Override
+	public AdditiveElement<V> invertSelfApply(Element element, Element<BigInteger> amount);
+
+	@Override
+	public AdditiveElement<V> invertSelfApply(Element element);
 
 }

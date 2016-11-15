@@ -44,8 +44,7 @@ package ch.bfh.unicrypt.helper.hash;
 import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
-import ch.bfh.unicrypt.helper.tree.Leaf;
-import ch.bfh.unicrypt.helper.tree.Node;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import java.math.BigInteger;
 import org.junit.Assert;
@@ -53,11 +52,11 @@ import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class BigIntegerHashMethodTest {
 
-	BigInteger bigint1 = BigInteger.ZERO;
+	BigInteger bigint1 = MathUtil.ZERO;
 	BigInteger bigint2 = BigInteger.valueOf(10);
 
 	Tree<BigInteger> t1 = Tree.getInstance(bigint1);

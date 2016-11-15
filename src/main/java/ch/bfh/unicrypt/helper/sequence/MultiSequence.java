@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,18 +42,23 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.math.BigInteger;
 import java.util.Iterator;
 
 /**
- *
- * @author rolfhaenni
- * @param <V>
+ * This class is a collector class for multiple sequences of the same type {@code V}. Its main purpose is to provide
+ * different methods for merging the sequences into a new sequences. Technically, an instance of this class is a
+ * sequence of sequences of type {@code V}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic
  */
 public class MultiSequence<V>
 	   extends Sequence<Sequence<V>> {
 
-	Sequence<Sequence<V>> sequences;
+	private Sequence<Sequence<V>> sequences;
 
 	protected MultiSequence(Sequence<Sequence<V>> sequences) {
 		super(sequences.getLength());
@@ -61,29 +66,37 @@ public class MultiSequence<V>
 	}
 
 	@Override
-	public ExtendedIterator<Sequence<V>> iterator() {
+	public SequenceIterator<Sequence<V>> iterator() {
 		return this.sequences.iterator();
 	}
 
+	/**
+	 * Creates a new sequence of type {@code V}, which contains all the values of all sequences of this instance in the
+	 * given order. This operation is equivalent to calling {@link Sequence#conc(Sequence)} repeatedly to all sequences.
+	 * The length of the new sequence is the sum of the lengths of the given sequences.
+	 * <p>
+	 * @return The new flattened sequence
+	 * @see Sequence#conc(Sequence)
+	 */
 	public Sequence<V> flatten() {
 		if (this.sequences.isEmpty()) {
 			return Sequence.getInstance();
 		}
-		final Sequence<V> first = sequences.find();
+		final Sequence<V> first = sequences.get();
 		final Sequence<V> rest = MultiSequence.getInstance(sequences.skip()).flatten();
 		BigInteger newLength;
-		if (this.length.equals(Sequence.INFINITE) || rest.length.equals(Sequence.INFINITE)) {
+		if (first.length.equals(Sequence.INFINITE) || rest.length.equals(Sequence.INFINITE)) {
 			newLength = Sequence.INFINITE;
-		} else if (this.length.equals(Sequence.UNKNOWN) || rest.length.equals(Sequence.UNKNOWN)) {
+		} else if (first.length.equals(Sequence.UNKNOWN) || rest.length.equals(Sequence.UNKNOWN)) {
 			newLength = Sequence.UNKNOWN;
 		} else {
-			newLength = this.length.add(rest.length);
+			newLength = first.length.add(rest.length);
 		}
 		return new Sequence<V>(newLength) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 
 					private final Iterator<V> iterator1 = first.iterator();
 					private final Iterator<V> iterator2 = rest.iterator();
@@ -94,7 +107,7 @@ public class MultiSequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						if (this.iterator1.hasNext()) {
 							return this.iterator1.next();
 						}
@@ -105,13 +118,21 @@ public class MultiSequence<V>
 		};
 	}
 
+	/**
+	 * Creates a new sequence of combined values, one from each sequence of this instance. The combined values are
+	 * returned as immutable arrays. The first array consists of all first values of the given sequences, the second one
+	 * all the second values, etc. The length of the new sequence corresponds to the minimal length of the given
+	 * sequences. All other values are discarded.
+	 * <p>
+	 * @return The new combined sequence
+	 */
 	public Sequence<DenseArray<V>> combine() {
 		if (this.sequences.isEmpty()) {
 			return new Sequence<DenseArray<V>>(Sequence.INFINITE) {
 
 				@Override
-				public ExtendedIterator iterator() {
-					return new ExtendedIterator<DenseArray<V>>() {
+				public SequenceIterator iterator() {
+					return new SequenceIterator<DenseArray<V>>() {
 
 						@Override
 						public boolean hasNext() {
@@ -119,7 +140,7 @@ public class MultiSequence<V>
 						}
 
 						@Override
-						public DenseArray<V> next() {
+						public DenseArray<V> abstractNext() {
 							return DenseArray.<V>getInstance();
 						}
 
@@ -128,7 +149,7 @@ public class MultiSequence<V>
 
 			};
 		}
-		final Sequence<V> first = sequences.find();
+		final Sequence<V> first = sequences.get();
 		final Sequence<DenseArray<V>> rest = MultiSequence.getInstance(sequences.skip()).combine();
 		BigInteger newLength;
 		if (first.length.equals(Sequence.UNKNOWN) || rest.length.equals(Sequence.UNKNOWN)) {
@@ -143,8 +164,8 @@ public class MultiSequence<V>
 		return new Sequence<DenseArray<V>>(newLength) {
 
 			@Override
-			public ExtendedIterator<DenseArray<V>> iterator() {
-				return new ExtendedIterator<DenseArray<V>>() {
+			public SequenceIterator<DenseArray<V>> iterator() {
+				return new SequenceIterator<DenseArray<V>>() {
 
 					private final Iterator<V> firstIterator = first.iterator();
 					private final Iterator<DenseArray<V>> restIterator = rest.iterator();
@@ -155,7 +176,7 @@ public class MultiSequence<V>
 					}
 
 					@Override
-					public DenseArray<V> next() {
+					public DenseArray<V> abstractNext() {
 						return restIterator.next().insert(firstIterator.next());
 					}
 				};
@@ -163,11 +184,18 @@ public class MultiSequence<V>
 		};
 	}
 
+	/**
+	 * Creates a new sequence which contains all combinations of values from the sequences of this instance. These
+	 * combinations are returned as immutable arrays. The length of the new sequences is the product of the lengths of
+	 * all given sequences.
+	 * <p>
+	 * @return The new joined sequence
+	 */
 	public Sequence<DenseArray<V>> join() {
 		if (this.sequences.isEmpty()) {
 			return Sequence.<DenseArray<V>>getInstance(DenseArray.<V>getInstance());
 		}
-		final Sequence<V> first = sequences.find();
+		final Sequence<V> first = sequences.get();
 		final Sequence<DenseArray<V>> rest = MultiSequence.getInstance(sequences.skip()).join();
 		BigInteger newLength;
 		if (first.length.equals(Sequence.INFINITE) || rest.length.equals(Sequence.INFINITE)) {
@@ -180,8 +208,8 @@ public class MultiSequence<V>
 		return new Sequence<DenseArray<V>>(newLength) {
 
 			@Override
-			public ExtendedIterator<DenseArray<V>> iterator() {
-				return new ExtendedIterator() {
+			public SequenceIterator<DenseArray<V>> iterator() {
+				return new SequenceIterator() {
 
 					private Iterator<V> firstIterator = first.iterator();
 					private final Iterator<DenseArray<V>> restIterator = rest.iterator();
@@ -193,7 +221,7 @@ public class MultiSequence<V>
 					}
 
 					@Override
-					public DenseArray<V> next() {
+					public DenseArray<V> abstractNext() {
 						DenseArray<V> result = restItem.insert(this.firstIterator.next());
 						if (!this.firstIterator.hasNext() && this.restIterator.hasNext()) {
 							this.restItem = this.restIterator.next();
@@ -207,10 +235,24 @@ public class MultiSequence<V>
 		};
 	}
 
+	/**
+	 * Returns a new {@link MultiSequence} instance consisting of multiple sequences.
+	 * <p>
+	 * @param <V>       The type of the values in the sequences
+	 * @param sequences The given sequences
+	 * @return The new {@link MultiSequence} instance
+	 */
 	public static <V> MultiSequence<V> getInstance(Sequence<V>... sequences) {
 		return MultiSequence.getInstance(Sequence.getInstance(sequences));
 	}
 
+	/**
+	 * Returns a new {@link MultiSequence} instance from a sequence of sequences.
+	 * <p>
+	 * @param <V>       The type of the values in the sequences
+	 * @param sequences The given sequence of sequences
+	 * @return The new {@link MultiSequence} instance
+	 */
 	public static <V> MultiSequence<V> getInstance(Sequence<Sequence<V>> sequences) {
 		return new MultiSequence<>(sequences.filter(Predicate.NOT_NULL));
 	}

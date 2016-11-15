@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,11 +42,12 @@
 package ch.bfh.unicrypt.helper.math;
 
 import ch.bfh.unicrypt.UniCrypt;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Instances of this class represent permutations {@code p:{0,...,size-1}->{0,...,size-1}} of a given {@code size}.
@@ -142,37 +143,6 @@ public class Permutation
 	}
 
 	/**
-	 * Creates a random permutation of a given size using the library's default source of randomness.
-	 * <p>
-	 * @param size The size of the permutation
-	 * @return The new permutation
-	 */
-	public static Permutation getRandomInstance(int size) {
-		return Permutation.getRandomInstance(size, HybridRandomByteSequence.getInstance());
-	}
-
-	/**
-	 * Creates a random permutation of a given size using a given source of randomness.
-	 * <p>
-	 * @param size               The size of the permutation
-	 * @param randomByteSequence The given source of randomness
-	 * @return The new permutation
-	 */
-	public static Permutation getRandomInstance(int size, RandomByteSequence randomByteSequence) {
-		if (size < 0 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
-		}
-		int[] permutationVector = new int[size];
-		int randomIndex;
-		for (int i = 0; i < size; i++) {
-			randomIndex = randomByteSequence.getRandomNumberGenerator().nextInt(i);
-			permutationVector[i] = permutationVector[randomIndex];
-			permutationVector[randomIndex] = i;
-		}
-		return new Permutation(permutationVector);
-	}
-
-	/**
 	 * Returns the size of the permutation, which corresponds to the length of the corresponding permutation vector.
 	 * <p>
 	 * @return The size of the permutation
@@ -206,11 +176,10 @@ public class Permutation
 	 * <p>
 	 * @param value The given input value
 	 * @return The permuted value
-	 * @throws IndexOutOfBoundsException if {@code value} is negative or greater than {@code getSize()-1}
 	 */
 	public int permute(int value) {
 		if (value < 0 || value >= this.getSize()) {
-			throw new IndexOutOfBoundsException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, value);
 		}
 		return this.permutationVector[value];
 	}
@@ -272,13 +241,12 @@ public class Permutation
 
 			@Override
 			public Integer next() {
+				if (!this.hasNext()) {
+					throw new NoSuchElementException();
+				}
 				return permutationVector[this.currentIndex++];
 			}
 
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
 		};
 	}
 
@@ -303,7 +271,7 @@ public class Permutation
 
 	private static BigInteger computeRank(int n, int[] permutation, int[] invertedPermutation) {
 		if (n <= 1) {
-			return BigInteger.ZERO;
+			return MathUtil.ZERO;
 		}
 		int s = permutation[n - 1];
 		swap(permutation, n - 1, invertedPermutation[n - 1]);

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.factorization.PrimePair;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrimePair;
@@ -50,12 +52,14 @@ import java.util.Map;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ZModPrimePair
 	   extends ZMod {
 
-	private PrimePair primePair;
+	private static final Map<BigInteger, ZModPrimePair> INSTANCES = new HashMap<>();
+
+	private final PrimePair primePair;
 
 	protected ZModPrimePair(PrimePair primePair) {
 		super(primePair.getValue());
@@ -64,14 +68,6 @@ public class ZModPrimePair
 
 	public PrimePair getPrimePair() {
 		return this.primePair;
-	}
-
-	public BigInteger getFirstPrime() {
-		return this.getPrimePair().getSmallerPrimeFactor();
-	}
-
-	public BigInteger getSecondPrime() {
-		return this.getPrimePair().getLargerPrimeFactor();
 	}
 
 	@Override
@@ -84,30 +80,37 @@ public class ZModPrimePair
 		return ZStarModPrimePair.getInstance(this.getPrimePair());
 	}
 
-	private static final Map<BigInteger, ZModPrimePair> instances = new HashMap<>();
-
-	public static ZModPrimePair getInstance(final PrimePair primePair) {
-		if (primePair == null) {
-			throw new IllegalArgumentException();
-		}
-		ZModPrimePair instance = ZModPrimePair.instances.get(primePair.getValue());
-		if (instance == null) {
-			instance = new ZModPrimePair(primePair);
-			ZModPrimePair.instances.put(primePair.getValue(), instance);
-		}
-		return instance;
-	}
-
 	public static ZModPrimePair getInstance(final long prime1, final long prime2) {
 		return ZModPrimePair.getInstance(BigInteger.valueOf(prime1), BigInteger.valueOf(prime2));
 	}
 
 	public static ZModPrimePair getInstance(BigInteger prime1, BigInteger prime2) {
-		return ZModPrimePair.getInstance(PrimePair.getInstance(prime1, prime2));
+		if (prime1 == null || prime2 == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, prime1, prime2);
+		}
+		BigInteger value = prime1.multiply(prime2);
+		ZModPrimePair instance = ZModPrimePair.INSTANCES.get(value);
+		if (instance == null) {
+			instance = new ZModPrimePair(PrimePair.getInstance(prime1, prime2));
+			ZModPrimePair.INSTANCES.put(value, instance);
+		}
+		return instance;
 	}
 
 	public static ZModPrimePair getInstance(Prime prime1, Prime prime2) {
 		return new ZModPrimePair(PrimePair.getInstance(prime1, prime2));
+	}
+
+	public static ZModPrimePair getInstance(final PrimePair primePair) {
+		if (primePair == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		ZModPrimePair instance = ZModPrimePair.INSTANCES.get(primePair.getValue());
+		if (instance == null) {
+			instance = new ZModPrimePair(primePair);
+			ZModPrimePair.INSTANCES.put(primePair.getValue(), instance);
+		}
+		return instance;
 	}
 
 }

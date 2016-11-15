@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -47,11 +47,16 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import java.math.BigInteger;
 
 /**
- * TODO A dualistic element can be understood as an element that can be additive or multiplicative. It is implemented as
- * a specialization of {@link Element}. Some return types are updated.
+ * This interface represents an element of a semigroup, ring, or field. It is called "dualistic" due to the two
+ * conceptually contrasted aspects of the two operations of addition and multiplication.
  * <p>
- * @author rolfhaenni
- * @param <V> Generic type of values stored in this element
+ * The interface is implemented as a specialization of both {@link AdditiveElement} and {@link MultiplicativeElement}.
+ * No functionality is added. Some return types are updated.
+ * <p>
+ * @param <V> The generic type of values stored in this element
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
  */
 public interface DualisticElement<V>
 	   extends AdditiveElement<V>, MultiplicativeElement<V> {
@@ -66,16 +71,28 @@ public interface DualisticElement<V>
 	public DualisticElement<V> applyInverse(Element element);
 
 	@Override
-	public DualisticElement<V> selfApply(BigInteger amount);
+	public DualisticElement<V> selfApply(long factor);
 
 	@Override
-	public DualisticElement<V> selfApply(Element<BigInteger> amount);
+	public DualisticElement<V> selfApply(BigInteger factor);
 
 	@Override
-	public DualisticElement<V> selfApply(long amount);
+	public DualisticElement<V> selfApply(Element<BigInteger> factor);
 
 	@Override
 	public DualisticElement<V> selfApply();
+
+	@Override
+	public DualisticElement<V> invertSelfApply(long amount);
+
+	@Override
+	public DualisticElement<V> invertSelfApply(BigInteger amount);
+
+	@Override
+	public DualisticElement<V> invertSelfApply(Element<BigInteger> amount);
+
+	@Override
+	public DualisticElement<V> invertSelfApply();
 
 	@Override
 	public DualisticElement<V> invert();
@@ -84,42 +101,63 @@ public interface DualisticElement<V>
 	public DualisticElement<V> add(Element element);
 
 	@Override
-	public DualisticElement<V> subtract(Element element);
+	public DualisticElement<V> times(long factor);
 
 	@Override
-	public DualisticElement<V> times(BigInteger amount);
+	public DualisticElement<V> times(BigInteger factor);
 
 	@Override
-	public DualisticElement<V> times(Element<BigInteger> amount);
-
-	@Override
-	public DualisticElement<V> times(long amount);
+	public DualisticElement<V> times(Element<BigInteger> factor);
 
 	@Override
 	public DualisticElement<V> timesTwo();
 
 	@Override
+	public DualisticElement<V> divide(long divisor);
+
+	@Override
+	public DualisticElement<V> divide(BigInteger divisor);
+
+	@Override
+	public DualisticElement<V> halve();
+
+	@Override
 	public DualisticElement<V> negate();
+
+	@Override
+	public DualisticElement<V> subtract(Element element);
 
 	@Override
 	public DualisticElement<V> multiply(Element element);
 
 	@Override
-	public DualisticElement<V> divide(Element element);
+	public DualisticElement<V> power(long exponent);
 
 	@Override
-	public DualisticElement<V> power(BigInteger amount);
+	public DualisticElement<V> power(BigInteger exponent);
 
 	@Override
-	public DualisticElement<V> power(Element<BigInteger> amount);
-
-	@Override
-	public DualisticElement<V> power(long amount);
+	public DualisticElement<V> power(Element<BigInteger> exponent);
 
 	@Override
 	public DualisticElement<V> square();
 
 	@Override
+	public DualisticElement<V> nthRoot(long n);
+
+	@Override
+	public DualisticElement<V> nthRoot(BigInteger n);
+
+	@Override
+	public DualisticElement<V> nthRoot(Element<BigInteger> n);
+
+	@Override
+	public DualisticElement<V> squareRoot();
+
+	@Override
 	public DualisticElement<V> oneOver();
+
+	@Override
+	public DualisticElement<V> divide(Element element);
 
 }

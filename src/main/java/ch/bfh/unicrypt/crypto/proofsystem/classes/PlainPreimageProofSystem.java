@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -48,6 +48,12 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
+/**
+ * This class covers the simplest case of a preimage proof system: ZKP[x : y=f(x)]. The function f can be any function
+ * as long as it is a one-way group homomorphism.
+ * <p>
+ * @author P. Locher
+ */
 public class PlainPreimageProofSystem
 	   extends AbstractPreimageProofSystem<SemiGroup, Element, SemiGroup, Element, Function> {
 
@@ -60,8 +66,8 @@ public class PlainPreimageProofSystem
 	}
 
 	public static PlainPreimageProofSystem getInstance(final Element proverId, final Function proofFunction) {
-		SigmaChallengeGenerator challengeGenerator =
-			   RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+		SigmaChallengeGenerator challengeGenerator
+			   = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return PlainPreimageProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
@@ -77,4 +83,5 @@ public class PlainPreimageProofSystem
 
 		return new PlainPreimageProofSystem(challengeGenerator, proofFunction);
 	}
+
 }

@@ -50,7 +50,7 @@ import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class PermutationToBigIntegerTest {
 
@@ -62,11 +62,11 @@ public class PermutationToBigIntegerTest {
 		for (int i = 0; i <= maxSize; i++) {
 			PermutationToBigInteger converter = PermutationToBigInteger.getInstance(i);
 
-			BigInteger value = BigInteger.ZERO;
-			BigInteger maxValue = MathUtil.factorial(i).subtract(BigInteger.ONE);
+			BigInteger value = MathUtil.ZERO;
+			BigInteger maxValue = MathUtil.factorial(i).subtract(MathUtil.ONE);
 			while (value.compareTo(maxValue) <= 0) {
 				Assert.assertEquals(value, converter.convert(converter.reconvert(value)));
-				value = value.add(BigInteger.ONE);
+				value = value.add(MathUtil.ONE);
 			}
 			try {
 				converter.reconvert(BigInteger.valueOf(-1));

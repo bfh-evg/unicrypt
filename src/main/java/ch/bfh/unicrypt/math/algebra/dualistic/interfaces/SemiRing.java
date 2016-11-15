@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,52 +41,72 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
+import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
- * TODO This interface represents the mathematical concept of a semiring. A semiring is a monoid with a second
- * associative compositions: the first binary operation is called "addition" and is commutative and the second binary
- * operation is called "multiplication". It is implemented as a specialization of {@link Monoid}. Some return types are
- * updated.
+ * This interface represents the mathematical concept of a mathematical semiring. A semiring is a set of elements
+ * equipped with two binary operations. The first operation is called "addition" and the second "multiplication". The
+ * set together with addition forms a commutative monoid, whereas the set together with multiplication forms a (not
+ * necessarily commutative) monoid. Additionally, multiplication is distributive with respect to addition. The identity
+ * element of the addition is called zero, and the identity element of the multiplication is called one.
  * <p>
- * @author rolfhaenni
- * @param <V> Generic type of values stored in the elements of this semiring
+ * The semiring interface is implemented as a specialization of {@link AdditiveMonoid} and {@link MultiplicativeMonoid}.
+ * The neutral method names inherited from {@link SemiGroup}, for example {@code apply} or {@code selfApply}, are
+ * interpreted additively. No functionality is added.
+ * <p>
+ * The elements of a semiring are called "dualistic" (something conceptually divided into two contrasted aspects), see
+ * {@link DualisticElement}. The return types are adjusted accordingly.
+ * <p>
+ * @param <V> The generic type of the values representing the elements of a ring
+ * <p>
+ * @author R. Haenni
+ * <p>
+ * @see AdditiveMonoid
+ * @see MultiplicativeMonoid
+ * @see DualisticElement
  */
 public interface SemiRing<V>
 	   extends AdditiveMonoid<V>, MultiplicativeMonoid<V> {
 
 	@Override
-	public <W> DualisticElement<V> getElementFrom(W value, Converter<V, W> converter);
+	public <W> DualisticElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;
 
 	@Override
-	public <W> DualisticElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
+	public <W> DualisticElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator)
+		   throws UniCryptException;
 
 	@Override
-	public <W> DualisticElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+	public <W, X> DualisticElement<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator,
+		   Converter<W, X> finalConverter) throws UniCryptException;
 
 	@Override
-	public DualisticElement<V> getElementFrom(long integer);
+	public <W> DualisticElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod)
+		   throws UniCryptException;
 
 	@Override
-	public DualisticElement<V> getElementFrom(BigInteger bigInteger);
+	public DualisticElement<V> getElementFrom(long integer) throws UniCryptException;
 
 	@Override
-	public DualisticElement<V> getElementFrom(ByteArray byteArray);
+	public DualisticElement<V> getElementFrom(BigInteger bigInteger) throws UniCryptException;
 
 	@Override
-	public DualisticElement<V> getElementFrom(String string);
+	public DualisticElement<V> getElementFrom(ByteArray byteArray) throws UniCryptException;
+
+	@Override
+	public DualisticElement<V> getElementFrom(String string) throws UniCryptException;
 
 	@Override
 	public DualisticElement<V> getRandomElement();
@@ -98,13 +118,10 @@ public interface SemiRing<V>
 	public Sequence<? extends DualisticElement<V>> getRandomElements();
 
 	@Override
-	public Sequence<? extends DualisticElement<V>> getRandomElements(long n);
-
-	@Override
 	public Sequence<? extends DualisticElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
 
 	@Override
-	public Sequence<? extends DualisticElement<V>> getRandomElements(long n, RandomByteSequence randomByteSequence);
+	public Sequence<? extends DualisticElement<V>> getElements();
 
 	@Override
 	public DualisticElement<V> apply(Element element1, Element element2);
@@ -119,19 +136,19 @@ public interface SemiRing<V>
 	public DualisticElement<V> apply(Sequence<Element> elements);
 
 	@Override
-	public DualisticElement<V> selfApply(Element element, BigInteger amount);
+	public DualisticElement<V> selfApply(Element element, long factor);
 
 	@Override
-	public DualisticElement<V> selfApply(Element element, Element<BigInteger> amount);
+	public DualisticElement<V> selfApply(Element element, BigInteger factor);
 
 	@Override
-	public DualisticElement<V> selfApply(Element element, long amount);
+	public DualisticElement<V> selfApply(Element element, Element<BigInteger> factor);
 
 	@Override
 	public DualisticElement<V> selfApply(Element element);
 
 	@Override
-	public DualisticElement<V> multiSelfApply(Element[] elements, BigInteger[] amounts);
+	public DualisticElement<V> multiSelfApply(Element[] elements, BigInteger[] factors);
 
 	@Override
 	public DualisticElement<V> getIdentityElement();
@@ -149,19 +166,19 @@ public interface SemiRing<V>
 	public DualisticElement<V> add(Sequence<Element> elements);
 
 	@Override
-	public DualisticElement<V> times(Element element, BigInteger amount);
+	public DualisticElement<V> times(Element element, long factor);
 
 	@Override
-	public DualisticElement<V> times(Element element, Element<BigInteger> amount);
+	public DualisticElement<V> times(Element element, BigInteger factor);
 
 	@Override
-	public DualisticElement<V> times(Element element, long amount);
+	public DualisticElement<V> times(Element element, Element<BigInteger> factor);
 
 	@Override
 	public DualisticElement<V> timesTwo(Element element);
 
 	@Override
-	public DualisticElement<V> sumOfProducts(Element[] elements, BigInteger[] amounts);
+	public DualisticElement<V> sumOfProducts(Element[] elements, BigInteger[] factors);
 
 	@Override
 	public DualisticElement<V> getZeroElement();
@@ -179,19 +196,19 @@ public interface SemiRing<V>
 	public DualisticElement<V> multiply(Sequence<Element> elements);
 
 	@Override
-	public DualisticElement<V> power(Element element, BigInteger amount);
+	public DualisticElement<V> power(Element element, long exponent);
 
 	@Override
-	public DualisticElement<V> power(Element element, Element<BigInteger> amount);
+	public DualisticElement<V> power(Element element, BigInteger exponent);
 
 	@Override
-	public DualisticElement<V> power(Element element, long amount);
+	public DualisticElement<V> power(Element element, Element<BigInteger> exponent);
 
 	@Override
 	public DualisticElement<V> square(Element element);
 
 	@Override
-	public DualisticElement<V> productOfPowers(Element[] elements, BigInteger[] amounts);
+	public DualisticElement<V> productOfPowers(Element[] elements, BigInteger[] exponents);
 
 	@Override
 	public DualisticElement<V> getOneElement();

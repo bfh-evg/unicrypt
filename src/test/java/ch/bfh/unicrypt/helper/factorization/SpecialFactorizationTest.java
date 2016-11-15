@@ -49,7 +49,7 @@ import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class SpecialFactorizationTest {
 
@@ -63,8 +63,8 @@ public class SpecialFactorizationTest {
 					assertEquals(BigInteger.valueOf(i), f.getPrimeFactor());
 					assertEquals(e, f.getExponent());
 					assertEquals(false, f.timesTwo());
-					assertEquals(1, f.getPrimeFactors().length);
-					assertEquals(1, f.getExponents().length);
+					assertEquals(1, f.getPrimeFactors().getLength());
+					assertEquals(1, f.getExponents().getLength());
 					assertEquals(SpecialFactorization.getInstance(BigInteger.valueOf(i), e, false), f);
 					if (MathUtil.isSafePrime(f.getValue())) {
 						assertEquals(SafePrime.class, f.getClass());
@@ -93,13 +93,13 @@ public class SpecialFactorizationTest {
 					if (i == 2) {
 						assertEquals(false, f.timesTwo());
 						assertEquals(e + 1, f.getExponent());
-						assertEquals(1, f.getPrimeFactors().length);
-						assertEquals(1, f.getExponents().length);
+						assertEquals(1, f.getPrimeFactors().getLength());
+						assertEquals(1, f.getExponents().getLength());
 					} else {
 						assertEquals(true, f.timesTwo());
 						assertEquals(e, f.getExponent());
-						assertEquals(2, f.getPrimeFactors().length);
-						assertEquals(2, f.getExponents().length);
+						assertEquals(2, f.getPrimeFactors().getLength());
+						assertEquals(2, f.getExponents().getLength());
 					}
 					assertEquals(SpecialFactorization.getInstance(BigInteger.valueOf(i), e, true), f);
 				} else {

@@ -50,7 +50,7 @@ import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class SafePrimeTest {
 
@@ -59,13 +59,14 @@ public class SafePrimeTest {
 		for (int i = 0; i < 100; i++) {
 			if (MathUtil.isSafePrime(i)) {
 				SafePrime p = SafePrime.getInstance(i);
+				assertTrue(p.isPrime());
 				assertEquals(i, p.getValue().intValue());
 				assertEquals(i, p.getPrimeFactor().intValue());
-				assertEquals(i, p.getPrimeFactors()[0].intValue());
-				assertEquals(1, p.getPrimeFactors().length);
+				assertEquals(i, p.getPrimeFactors().getAt(0).intValue());
+				assertEquals(1, p.getPrimeFactors().getLength());
 				assertEquals(1, p.getExponent());
-				assertEquals(1, p.getExponents()[0]);
-				assertEquals(1, p.getExponents().length);
+				assertEquals((Integer) 1, p.getExponents().getAt(0));
+				assertEquals(1, p.getExponents().getLength());
 				assertEquals(p, SafePrime.getInstance(BigInteger.valueOf(i)));
 			} else {
 				try {
@@ -101,18 +102,22 @@ public class SafePrimeTest {
 		}
 		for (int i = 1; i < 10; i++) {
 			SafePrime p = SafePrime.getRandomInstance(3);
+			assertTrue(p.isPrime());
 			assertTrue(p.getValue().intValue() == 5 || p.getValue().intValue() == 7);
 		}
 		for (int i = 1; i < 10; i++) {
 			SafePrime p = SafePrime.getRandomInstance(4);
+			assertTrue(p.isPrime());
 			assertTrue(p.getValue().intValue() == 11);
 		}
 		for (int i = 1; i < 10; i++) {
 			SafePrime p = SafePrime.getRandomInstance(5);
+			assertTrue(p.isPrime());
 			assertTrue(p.getValue().intValue() == 23);
 		}
 		for (int i = 1; i < 10; i++) {
 			SafePrime p = SafePrime.getRandomInstance(6);
+			assertTrue(p.isPrime());
 			assertTrue(p.getValue().intValue() == 47 || p.getValue().intValue() == 59);
 		}
 	}

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,19 +41,37 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 
 /**
- * This interface represents an additively written {@link Monoid}. No functionality is added, only the return types are
- * updated.
+ * This interface provides the renaming of some methods for a (non-commutative) {@link Monoid} with concatenation as
+ * binary operation. The identity element is an empty element of length 0. No functionality is added. Some return types
+ * are updated.
+ * <p>
+ * @param <V> The generic type of the values stored in the elements of this monoid
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of this monoid
  */
 public interface ConcatenativeMonoid<V>
 	   extends Monoid<V>, ConcatenativeSemiGroup<V> {
+
+	/**
+	 * Returns the monoid's unique identity element, an empty element of length 0.
+	 * <p>
+	 * @return The empty element
+	 */
+	public ConcatenativeElement<V> getEmptyElement();
+
+	/**
+	 * Checks if a given element is the empty element.
+	 * <p>
+	 * @param element The given element
+	 * @return {@code true} if {@code element} is the empty element, {@code false} otherwise
+	 */
+	public boolean isEmptyElement(Element element);
 
 	@Override
 	public ConcatenativeElement<V> getIdentityElement();

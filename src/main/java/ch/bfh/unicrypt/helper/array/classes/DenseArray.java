@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -43,8 +43,8 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.util.Collection;
 
 /**
@@ -52,10 +52,10 @@ import java.util.Collection;
  * no designated default value exists, arrays with almost no equal values, or arrays with only equal values. Internally,
  * the values are either stored in an ordinary (possibly empty) array or as an array of length 1 together with the full
  * length of the immutable array (all elements are equal in that case). The implementation is optimized to provide O(1)
- * running times for most operations.
+ * running times for most operations. The maximal length of the array is {@link Integer#MAX_VALUE}.
  * <p>
  * @see SparseArray
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the values in the immutable array
  */
@@ -81,35 +81,42 @@ public class DenseArray<V>
 	}
 
 	/**
-	 * Creates a new dense array from a given Java array of values. The Java array is copied for internal storage. The
-	 * length and the indices of the values of the resulting dense array correspond to the given Java array.
+	 * Creates a new dense array from a given Java array of values. The Java array is copied for internal storage. Null
+	 * values are eliminated.
 	 * <p>
 	 * @param <V>    The generic type of the new array
 	 * @param values The Java array of values
 	 * @return The new sparse array
-	 * @see SparseArray#getInstance(Object, Object...)
 	 */
 	public static <V> DenseArray<V> getInstance(V... values) {
 		return DenseArray.getInstance(Sequence.getInstance(values));
 	}
 
+	/**
+	 * Creates a new dense array from a given Java collection. The values in the collection are copied for internal
+	 * storage. Null values are eliminated and the total length is restricted to {@link Integer#MAX_VALUE}.
+	 * <p>
+	 * @param <V>    The generic type of the new array
+	 * @param values The Java array of values
+	 * @return The new sparse array
+	 */
 	public static <V> DenseArray<V> getInstance(Collection<V> values) {
 		return DenseArray.getInstance(Sequence.getInstance(values));
 	}
 
 	/**
-	 * Creates a new dense array from a given sequence of values. The sequence is transformed into a Java array for
-	 * internal storage. Null values are eliminated.
+	 * Creates a new dense array from a given finite sequence of values. The sequence is transformed into a Java array
+	 * for internal storage. Null values are eliminated and the total length is restricted to {@link Integer#MAX_VALUE}.
 	 * <p>
 	 * @param <V>    The generic type of the new array
 	 * @param values The given sequence of values
 	 * @return The new dense array
 	 */
-	public static <V> DenseArray<V> getInstance(Sequence<V> values) {
+	public static <V> DenseArray<V> getInstance(Sequence<? extends V> values) {
 		if (values == null || values.isInfinite()) {
 			throw new IllegalArgumentException();
 		}
-		values = values.filter(Predicate.NOT_NULL);
+		values = values.filter(Predicate.NOT_NULL).limit(Integer.MAX_VALUE);
 		Object[] array = new Object[values.getLength().intValue()];
 		int i = 0;
 		for (V value : values) {
@@ -120,8 +127,8 @@ public class DenseArray<V>
 
 	/**
 	 * Creates a new dense array of a given length. All its values are identical to the given value. This method is
-	 * similar to {@link SparseArray#getInstance(java.lang.Object, int)}, except that a dense array is created instead
-	 * of a sparse array.
+	 * similar to {@link SparseArray#getInstance(Object, int)}, except that a dense array is created instead of a sparse
+	 * array.
 	 * <p>
 	 * @param <V>       The generic type of the new array
 	 * @param fillValue The value included in the new array
@@ -147,7 +154,7 @@ public class DenseArray<V>
 	@Override
 	protected DenseArray<V> abstractExtract(int index, int length) {
 		int offset = this.rangeOffset + (this.reverse ? this.length - index - length : index);
-		return new DenseArray<V>(this.values, length, offset, this.reverse);
+		return new DenseArray<>(this.values, length, offset, this.reverse);
 	}
 
 	@Override
@@ -159,7 +166,7 @@ public class DenseArray<V>
 		for (int i : other.getAllIndices()) {
 			result[this.length + i] = other.getAt(i);
 		}
-		return new DenseArray<V>(result);
+		return new DenseArray<>(result);
 	}
 
 	@Override
@@ -173,7 +180,7 @@ public class DenseArray<V>
 			}
 		}
 		result[index] = newObject;
-		return new DenseArray<V>(result);
+		return new DenseArray<>(result);
 	}
 
 	@Override
@@ -183,12 +190,12 @@ public class DenseArray<V>
 			result[i] = this.abstractGetAt(i);
 		}
 		result[index] = newObject;
-		return new DenseArray<V>(result);
+		return new DenseArray<>(result);
 	}
 
 	@Override
 	protected DenseArray<V> abstractReverse() {
-		return new DenseArray<V>(this.values, this.length, this.rangeOffset, !this.reverse);
+		return new DenseArray<>(this.values, this.length, this.rangeOffset, !this.reverse);
 	}
 
 	@Override

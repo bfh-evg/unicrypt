@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,6 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -50,17 +53,19 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link Field}.
  * <p>
- * @param <E> Generic type of elements of this field
- * @param <M> Generic type of the {@link MultiplicativeGroup} of this field
- * @param <V> Generic type of values stored in the elements of this field
- * @author rolfhaenni
+ * @param <E> The generic type of the elements of this field
+ * @param <V> The generic type of the values stored in the elements of this field
+ * @param <M> The generic type of the multiplicative group of this field
+ * <p>
+ * @author R. Haenni
  */
-public abstract class AbstractField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V>
+public abstract class AbstractField<E extends DualisticElement<V>, M extends MultiplicativeGroup<V>, V>
 	   extends AbstractRing<E, V>
 	   implements Field<V> {
 
 	private static final long serialVersionUID = 1L;
 
+	// the multiplicative group of this field
 	private M multiplicativeGroup;
 
 	protected AbstractField(Class<?> valueClass) {
@@ -68,11 +73,22 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 	}
 
 	@Override
-	public M getMultiplicativeGroup() {
+	public final M getMultiplicativeGroup() {
 		if (this.multiplicativeGroup == null) {
 			this.multiplicativeGroup = this.abstractGetMultiplicativeGroup();
 		}
 		return this.multiplicativeGroup;
+	}
+
+	@Override
+	public final E oneOver(Element element) {
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		if (((E) element).isZero()) {
+			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this, element);
+		}
+		return this.abstractOneOver((E) element);
 	}
 
 	@Override
@@ -81,47 +97,71 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 	}
 
 	@Override
-	public final E oneOver(Element element) {
-		if (!this.contains(element)) {
-			throw new IllegalArgumentException();
-		}
-		if (((E) element).isZero()) {
-			throw new UnsupportedOperationException();
-		}
-		return this.abstractOneOver((E) element);
+	public final E nthRoot(Element element, long n) {
+		return this.nthRoot(element, BigInteger.valueOf(n));
 	}
 
 	@Override
-	protected E defaultPower(E element, BigInteger amount) {
+	public final E nthRoot(Element element, Element<BigInteger> n) {
+		if (n == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		return this.nthRoot(element, n.getValue());
+	}
+
+	@Override
+	public final E nthRoot(Element element, BigInteger n) {
+		if (n == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
+		}
+		if (n.signum() == 0) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, this, n);
+		}
+		if (!this.contains(element)) {
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
+		}
+		if (((E) element).isZero()) {
+			return this.getZeroElement();
+		}
+		if (!this.isFinite() || !this.hasKnownOrder()) {
+			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
+		}
+		boolean positive = n.signum() > 0;
+		n = n.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		E result = this.defaultPowerAlgorithm((E) element, n);
+		if (positive) {
+			return result;
+		}
+		return this.invert(result);
+	}
+
+	@Override
+	public final E squareRoot(Element element) {
+		return this.nthRoot(element, MathUtil.TWO);
+	}
+
+	@Override
+	protected E defaultPower(E element, BigInteger exponent) {
 		if (element.isZero()) {
 			return element;
 		}
-		boolean negAmount = (amount.signum() < 0);
-		amount = amount.abs();
+		boolean negExponent = exponent.signum() < 0;
+		exponent = exponent.abs();
 		if (this.isFinite() && this.hasKnownOrder()) {
-			amount = amount.mod(this.getOrder().subtract(BigInteger.ONE));
+			exponent = exponent.mod(this.getOrder().subtract(MathUtil.ONE));
 		}
-		if (amount.signum() == 0) {
+		if (exponent.signum() == 0) {
 			return this.getOneElement();
 		}
-		E result = this.defaultPowerAlgorithm(element, amount);
-		if (negAmount) {
+		E result = this.defaultPowerAlgorithm(element, exponent);
+		if (negExponent) {
 			return this.oneOver(result);
 		}
 		return result;
 	}
 
-	/**
-	 *
-	 * @param element
-	 * @return
-	 */
-	protected abstract E abstractOneOver(E element);
-
-	/**
-	 *
-	 * @return
-	 */
 	protected abstract M abstractGetMultiplicativeGroup();
+
+	protected abstract E abstractOneOver(E element);
 
 }

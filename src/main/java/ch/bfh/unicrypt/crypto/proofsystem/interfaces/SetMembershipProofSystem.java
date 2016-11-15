@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -44,6 +44,15 @@ package ch.bfh.unicrypt.crypto.proofsystem.interfaces;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
+/**
+ * This interface represents the concept of a set membership proof system. A set membership proof proves knowledge of a
+ * value x such that x belongs to a set of members M and x is the preimage of a one-way function f for the image y. The
+ * function f is usually a commitment or encryption.
+ * <p>
+ * ZKP [x : y = f(x) ∧ x ∈ M]
+ * <p>
+ * @author P. Locher
+ */
 public interface SetMembershipProofSystem
 	   extends ProofSystem {
 

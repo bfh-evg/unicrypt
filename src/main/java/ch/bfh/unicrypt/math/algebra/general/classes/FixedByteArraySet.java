@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,16 +41,20 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class FixedByteArraySet
 	   extends FiniteByteArraySet {
@@ -66,32 +70,41 @@ public class FixedByteArraySet
 	}
 
 	@Override
-	protected FiniteByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		// this imlementation is more efficient than the one from the parent class
-		return this.abstractGetElement(ByteArray.getRandomInstance(this.getLength(), randomByteSequence));
+	protected Sequence<FiniteByteArrayElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
+		return randomByteSequence.group(this.getLength()).map(new Mapping<ByteArray, FiniteByteArrayElement>() {
+
+			@Override
+			public FiniteByteArrayElement apply(ByteArray value) {
+				return abstractGetElement(value);
+			}
+
+		});
 	}
 
-	private static final Map<Integer, FixedByteArraySet> instances = new HashMap<>();
+	private static final Map<Integer, FixedByteArraySet> INSTANCES = new HashMap<>();
 
 	public static FixedByteArraySet getInstance(final int length) {
 		if (length < 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, length);
 		}
-		FixedByteArraySet instance = FixedByteArraySet.instances.get(Integer.valueOf(length));
+		FixedByteArraySet instance = FixedByteArraySet.INSTANCES.get(Integer.valueOf(length));
 		if (instance == null) {
 			instance = new FixedByteArraySet(length);
-			FixedByteArraySet.instances.put(length, instance);
+			FixedByteArraySet.INSTANCES.put(length, instance);
 		}
 		return instance;
 	}
 
 	public static FixedByteArraySet getInstance(final BigInteger minOrder) {
-		if (minOrder == null || minOrder.signum() < 0) {
-			throw new IllegalArgumentException();
+		if (minOrder == null) {
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
+		}
+		if (minOrder.signum() < 0) {
+			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE, minOrder);
 		}
 		int length = 0;
 		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
-		BigInteger order = BigInteger.ONE;
+		BigInteger order = MathUtil.ONE;
 		while (order.compareTo(minOrder) < 0) {
 			order = order.multiply(size);
 			length++;

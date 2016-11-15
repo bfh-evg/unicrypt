@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,19 +41,20 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
- * This interface represents the concept a cyclic group. Every element of a cyclic group can be written as a power of
- * some particular element in multiplicative notation, or as a multiple of the element in additive notation. Such an
- * element is called generator of the group. For every positive integer there is exactly one cyclic group (up to
+ * This interface represents the mathematical concept a cyclic group. Every element of a cyclic group can be written as
+ * a power of some particular element in multiplicative notation, or as a multiple of the element in additive notation.
+ * Such an element is called generator of the group. For every positive integer there is exactly one cyclic group (up to
  * isomorphism) with that order, and there is exactly one infinite cyclic group. This interface extends {@link Group}
  * with additional methods for dealing with generators. Each implementing class must provide a default generator.
  * <p>
- * @param <V> Generic type of the values representing the elements of a cyclic group
+ * @param <V> The generic type of the values representing the elements of a cyclic group
  * @see "Handbook of Applied Cryptography, Definition 2.167"
+ * @see Element
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -63,82 +64,64 @@ public interface CyclicGroup<V>
 	   extends Group<V> {
 
 	/**
-	 * TODO Returns a default generator of this cyclic group.
+	 * Returns a default generator of the cyclic group.
 	 * <p>
 	 * @return The default generator
 	 */
 	public Element<V> getDefaultGenerator();
 
 	/**
-	 * TODO Returns a randomly selected generator of this cyclic group using the default random generator.
+	 * Derives and returns a sequence of independent generators from the library's default deterministic random byte
+	 * sequence.
 	 * <p>
-	 * @return The randomly selected generator
+	 * @return A sequence of independent generators
+	 */
+	public Sequence<? extends Element<V>> getIndependentGenerators();
+
+	/**
+	 * Derives and returns a sequence of independent generators from a given deterministic random byte sequence.
+	 * <p>
+	 * @param randomByteSequence The given deterministic random byte sequence.
+	 * @return A sequence of independent generators
+	 */
+	public Sequence<? extends Element<V>> getIndependentGenerators(DeterministicRandomByteSequence randomByteSequence);
+
+	/**
+	 * Derives and returns a random generator from the library's default random byte sequence. It is selected uniformly
+	 * at random from the set of all generators.
+	 * <p>
+	 * @return A random generator
 	 */
 	public Element<V> getRandomGenerator();
 
 	/**
-	 * TODO Returns a randomly selected generator of this cyclic group using a given random generator.
+	 * Derives and returns a random generator from the given random byte sequence. It is selected uniformly at random
+	 * from the set of all generators.
 	 * <p>
-	 * @param randomByteSequence
-	 * @return The randomly selected generator
+	 * @param randomByteSequence The given random byte sequence
+	 * @return A random generator
 	 */
 	public Element<V> getRandomGenerator(RandomByteSequence randomByteSequence);
 
 	/**
-	 * TODO
+	 * Derives and returns a sequence of random generators from the library's default random byte sequence. The random
+	 * generators are selected uniformly at random from the set of all generators.
 	 * <p>
-	 * @param index
-	 * @return
+	 * @return The sequence of random generators
 	 */
-	public Element<V> getIndependentGenerator(int index);
+	public Sequence<? extends Element<V>> getRandomGenerators();
 
 	/**
-	 * TODO
+	 * Derives and returns a sequence of random generators from the given random byte sequence. The random generators
+	 * are selected uniformly at random from the set of all generators.
 	 * <p>
-	 * @param index
-	 * @param referenceRandomByteSequence
-	 * @return
+	 * @param randomByteSequence The given random byte sequence
+	 * @return The sequence of random generators
 	 */
-	public Element<V> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Sequence<? extends Element<V>> getRandomGenerators(RandomByteSequence randomByteSequence);
 
 	/**
-	 * TODO
-	 * <p>
-	 * @param maxIndex
-	 * @return
-	 */
-	public Tuple getIndependentGenerators(int maxIndex);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @param maxIndex
-	 * @param referenceRandomByteSequence
-	 * @return
-	 */
-	public Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @param minIndex
-	 * @param maxIndex
-	 * @return
-	 */
-	public Tuple getIndependentGenerators(int minIndex, int maxIndex);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @param minIndex
-	 * @param maxIndex
-	 * @param referenceRandomByteSequence
-	 * @return
-	 */
-	public Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
-
-	/**
-	 * TODO Checks if a given element is a generator of this cyclic group.
+	 * Checks if the given element is a generator of the cyclic group.
 	 * <p>
 	 * @param element The given element
 	 * @return {@code true} if the element is a generator, {@code false} otherwise

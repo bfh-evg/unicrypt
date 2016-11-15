@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,18 +41,21 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.helper.sequence.BinaryOperator;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Operator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
 
 /**
- * This abstract class provides a basis implementation for objects of type {@link Monoid}.
+ * This abstract class provides a base implementation for the interface {@link Monoid}.
  * <p>
- * @param <E> Generic type of elements of this monoid
- * @param <V> Generic type of values stored in the elements of this monoid
+ * @param <E> The generic type of elements of this monoid
+ * @param <V> The generic type of values stored in the elements of this monoid
  * @see AbstractElement
  * <p>
  * @author R. Haenni
@@ -84,19 +87,15 @@ public abstract class AbstractMonoid<E extends Element<V>, V>
 		return element.isEquivalent(this.getIdentityElement());
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
 	protected BigInteger defaultGetOrderLowerBound() {
-		return BigInteger.ONE;
+		return MathUtil.ONE;
 	}
 
 	@Override
 	protected E defaultApply(final Sequence<Element> elements) {
 		final SemiGroup<V> monoid = this;
-		return (E) elements.reduce(new BinaryOperator<Element>() {
+		return (E) elements.reduce(new Operator<Element>() {
 
 			@Override
 			public Element apply(Element element1, Element element2) {
@@ -108,7 +107,7 @@ public abstract class AbstractMonoid<E extends Element<V>, V>
 	@Override
 	protected E defaultSelfApply(E element, BigInteger amount) {
 		if (amount.signum() < 0) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, amount);
 		}
 		if (amount.signum() == 0) {
 			return this.getIdentityElement();
@@ -124,9 +123,6 @@ public abstract class AbstractMonoid<E extends Element<V>, V>
 		return super.defaultMultiSelfApply(elements, amounts);
 	}
 
-	//
-	// The following protected abstract method must be implemented in every direct sub-class.
-	//
 	protected abstract E abstractGetIdentityElement();
 
 }

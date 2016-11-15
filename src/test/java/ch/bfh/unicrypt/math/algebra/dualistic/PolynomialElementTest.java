@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
-import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import java.math.BigInteger;
@@ -84,7 +84,7 @@ public class PolynomialElementTest {
 		map.put(0, z.getElement(1));
 		map.put(1001, z.getElement(48));
 		p = ring0.getElement(Polynomial.getInstance(map, z.getZeroElement(), z.getOneElement()));
-		assertEquals(BigInteger.valueOf(3).pow(1001).multiply(BigInteger.valueOf(48)).add(BigInteger.ONE), p.evaluate(z.getElement(3)).getValue());
+		assertEquals(BigInteger.valueOf(3).pow(1001).multiply(BigInteger.valueOf(48)).add(MathUtil.ONE), p.evaluate(z.getElement(3)).getValue());
 
 		PolynomialElement p2 = ring2.getElement(Tuple.getInstance(zmod2.getElement(0), zmod2.getElement(1), zmod2.getElement(1), zmod2.getElement(1)));
 		assertEquals(zmod2.getZeroElement(), p2.evaluate(zmod2.getElement(0)));

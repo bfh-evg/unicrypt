@@ -44,7 +44,8 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.DoubleDiscreteLogProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
@@ -55,8 +56,6 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
-import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -156,7 +155,8 @@ public class DoubleDiscreteLogProofSystemTest {
 	@Test
 	public void testDoubleDiscreteLogProofSystem3() {
 
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
+		final RandomByteSequence randomByteSequence = DeterministicRandomByteSequence.getInstance();
+
 		final CyclicGroup G_p = GStarModPrime.getInstance(O1, P1);
 		final ZModPrime Z_p = (ZModPrime) G_p.getZModOrder();
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
@@ -188,22 +188,22 @@ public class DoubleDiscreteLogProofSystemTest {
 		Pair publicInput = Pair.getInstance(C, D);
 
 		Tuple secretInputInvalid = Tuple.getInstance(x, r, s, Tuple.getInstance(Z_q.getElement(10), m2));
-		Triple proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
+		Triple proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomByteSequence);
 		boolean verify = ddlps.verify(proofInvalid, publicInput);
 		assertFalse(verify);
 
 		secretInputInvalid = Tuple.getInstance(x, r, s, Tuple.getInstance(m1, Z_q.getElement(12)));
-		proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
+		proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomByteSequence);
 		verify = ddlps.verify(proofInvalid, publicInput);
 		assertFalse(verify);
 
 		secretInputInvalid = Tuple.getInstance(x, r, Z_q.getElement(5), Tuple.getInstance(m1, m2));
-		proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
+		proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomByteSequence);
 		verify = ddlps.verify(proofInvalid, publicInput);
 		assertFalse(verify);
 
 		secretInputInvalid = Tuple.getInstance(x, Z_p.getElement(5), s, Tuple.getInstance(m1, m2));
-		proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
+		proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomByteSequence);
 		verify = ddlps.verify(proofInvalid, publicInput);
 		assertFalse(verify);
 	}

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2016 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,26 +41,24 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a hash function, which maps an arbitrarily long input element into an element of
- * a given co-domain. The mapping itself is defined by some cryptographic hash function such as SHA-256. For complex
- * input elements, there are two options: one in which the individual elements are first recursively paired with
- * {@link MathUtil#elegantPair(java.math.BigInteger[])}, and one in which the hashing itself is done recursively. The
- * co-domain is always an instance of {@link ZPlusMod}. Its order corresponds to the size of the cryptographic hash
- * function's output space (a power of 2).
+ * a given co-domain. The mapping itself is defined by some cryptographic hash function such as SHA-256. The co-domain
+ * is always an instance of {@link FixedByteArraySet}.
  * <p>
  * @see Element#getHashValue()
- * @see Element#getRecursiveHashValue()
+ * @see Element#getHashValue(ConvertMethod, HashMethod)
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -102,7 +100,7 @@ public class HashFunction
 	 * This constructor generates a default SHA-256 hash function. The order of the co-domain is 2^256.
 	 * <p>
 	 * @param domain
-	 * @return
+	 * @return Returns an instance of this class
 	 */
 	public static HashFunction getInstance(Set domain) {
 		return HashFunction.getInstance(domain, ConvertMethod.getInstance(), HashMethod.getInstance());
@@ -112,15 +110,16 @@ public class HashFunction
 	 * This constructor generates a default hash function for a given hash algorithm name. The co-domain is chosen
 	 * accordingly.
 	 * <p>
+	 * @param <V>
 	 * @param domain
 	 * @param convertMethod
 	 * @param hashMethod    The name of the hash algorithm
-	 * @return
-	 * @throws IllegalArgumentException if {@code algorithmName} is null or an unknown hash algorithm name
+	 * @return Returns an instance of this class
 	 */
-	public static <V> HashFunction getInstance(Set domain, ConvertMethod<V> convertMethod, final HashMethod<V> hashMethod) {
+	public static <V> HashFunction getInstance(Set domain, ConvertMethod<V> convertMethod,
+		   final HashMethod<V> hashMethod) {
 		if (domain == null || convertMethod == null || hashMethod == null) {
-			throw new IllegalArgumentException();
+			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, domain, convertMethod, hashMethod);
 		}
 		FixedByteArraySet set = FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getByteLength());
 		return new HashFunction(domain, set, convertMethod, hashMethod);
