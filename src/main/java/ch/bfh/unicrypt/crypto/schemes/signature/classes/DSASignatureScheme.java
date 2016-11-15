@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.crypto.keygenerator.classes.DiscreteLogarithmKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSignatureScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
@@ -124,10 +126,7 @@ public class DSASignatureScheme<MS extends Set>
 
 	@Override
 	protected Function abstractGetVerificationFunction() {
-		ZMod zMod = this.cyclicGroup.getZModOrder();
-		ProductSet inputSpace
-			   = ProductSet.getInstance(this.getVerificationKeySpace(), this.messageSpace, this.signatureSpace);
-		return null;
+		throw new UniCryptRuntimeException(ErrorCode.NOT_YET_IMPLEMENTED, this);
 	}
 
 	public static <MS extends Set> DSASignatureScheme getInstance(MS messageSpace, CyclicGroup cyclicGroup) {
