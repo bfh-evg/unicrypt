@@ -62,9 +62,9 @@ import java.math.BigInteger;
  * Euler totient function. The order m=|G_m| is the product of all given prime factors of phi(n). If all prime factors
  * of phi(n) are given, which implies m=phi(n), then G_m is the parent group Z*_n.
  * <p>
- * @see "Handbook of Applied Cryptography, Fact 2.132"
- * @see "Handbook of Applied Cryptography, Definition 2.100"
- * @see "Handbook of Applied Cryptography, Definition 2.166"
+ * @see Handbook of Applied Cryptography, Fact 2.132
+ * @see Handbook of Applied Cryptography, Definition 2.100
+ * @see Handbook of Applied Cryptography, Definition 2.166
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig

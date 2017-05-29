@@ -64,7 +64,9 @@ public interface MultiplicativeMonoid<V>
 	 * @return The identity element of this monoid
 	 * @see Monoid#getIdentityElement()
 	 */
-	public MultiplicativeElement<V> getOneElement();
+	default public MultiplicativeElement<V> getOneElement() {
+		return this.getIdentityElement();
+	}
 
 	/**
 	 * This method is a synonym for {@link Monoid#isIdentityElement(Element)}. Returns {@code true} if the given element
@@ -74,7 +76,9 @@ public interface MultiplicativeMonoid<V>
 	 * @return {@code true} if the given element is the identity element, {@code false} otherwise
 	 * @see Monoid#isIdentityElement(Element)
 	 */
-	public boolean isOneElement(Element element);
+	default public boolean isOneElement(Element element) {
+		return this.isIdentityElement(element);
+	}
 
 	@Override
 	public MultiplicativeElement<V> getIdentityElement();

@@ -75,7 +75,9 @@ public interface MultiplicativeSemiGroup<V>
 	 * @return The result of multiplying the two input elements
 	 * @see SemiGroup#apply(Element, Element)
 	 */
-	public MultiplicativeElement<V> multiply(Element element1, Element element2);
+	default public MultiplicativeElement<V> multiply(Element element1, Element element2) {
+		return this.apply(element1, element2);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#apply(Element...)}. It multiplies the input elements, which are
@@ -85,7 +87,9 @@ public interface MultiplicativeSemiGroup<V>
 	 * @return The result of multiplying the input elements
 	 * @see SemiGroup#apply(Element...)
 	 */
-	public MultiplicativeElement<V> multiply(Element... elements);
+	default public MultiplicativeElement<V> multiply(Element... elements) {
+		return this.apply(elements);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#apply(ImmutableArray)}. It multiplies the input elements, which are
@@ -95,7 +99,9 @@ public interface MultiplicativeSemiGroup<V>
 	 * @return The result of multiplying the input elements
 	 * @see SemiGroup#apply(ImmutableArray)
 	 */
-	public MultiplicativeElement<V> multiply(ImmutableArray<Element> elements);
+	default public MultiplicativeElement<V> multiply(ImmutableArray<Element> elements) {
+		return this.apply(elements);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#apply(Sequence)}. It multiplies the input elements, which are given
@@ -105,7 +111,9 @@ public interface MultiplicativeSemiGroup<V>
 	 * @return The result of multiplying the input elements
 	 * @see SemiGroup#apply(Sequence)
 	 */
-	public MultiplicativeElement<V> multiply(Sequence<Element> elements);
+	default public MultiplicativeElement<V> multiply(Sequence<Element> elements) {
+		return this.apply(elements);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#selfApply(Element, long)}. It raises the given element to the power
@@ -116,7 +124,9 @@ public interface MultiplicativeSemiGroup<V>
 	 * @return The input element raised to the power of the exponent
 	 * @see SemiGroup#selfApply(Element, long)
 	 */
-	public MultiplicativeElement<V> power(Element element, long exponent);
+	default public MultiplicativeElement<V> power(Element element, long exponent) {
+		return this.selfApply(element, exponent);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#selfApply(Element, BigInteger)}. It raises the given element to the
@@ -127,7 +137,9 @@ public interface MultiplicativeSemiGroup<V>
 	 * @return The input element raised to the power of the exponent
 	 * @see SemiGroup#selfApply(Element, BigInteger)
 	 */
-	public MultiplicativeElement<V> power(Element element, BigInteger exponent);
+	default public MultiplicativeElement<V> power(Element element, BigInteger exponent) {
+		return this.selfApply(element, exponent);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#selfApply(Element, Element)} and the same as
@@ -140,7 +152,9 @@ public interface MultiplicativeSemiGroup<V>
 	 * @return The input element raised to the power of the exponent
 	 * @see SemiGroup#selfApply(Element, Element)
 	 */
-	public MultiplicativeElement<V> power(Element element, Element<BigInteger> exponent);
+	default public MultiplicativeElement<V> power(Element element, Element<BigInteger> exponent) {
+		return this.selfApply(element, exponent);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#selfApply(Element)}. It computes the square of the given input
@@ -150,7 +164,9 @@ public interface MultiplicativeSemiGroup<V>
 	 * @return The square of the input element
 	 * @see SemiGroup#selfApply(Element)
 	 */
-	public MultiplicativeElement<V> square(Element element);
+	default public MultiplicativeElement<V> square(Element element) {
+		return this.selfApply(element);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#multiSelfApply(Element[], BigInteger[])}. It computes the
@@ -162,7 +178,9 @@ public interface MultiplicativeSemiGroup<V>
 	 * @return The resulting 'product-of-powers'
 	 * @see SemiGroup#multiSelfApply(Element[], BigInteger[])
 	 */
-	public MultiplicativeElement<V> productOfPowers(Element[] elements, BigInteger[] exponents);
+	default public MultiplicativeElement<V> productOfPowers(Element[] elements, BigInteger[] exponents) {
+		return this.multiSelfApply(elements, exponents);
+	}
 
 	@Override
 	public <W> MultiplicativeElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;

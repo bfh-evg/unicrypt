@@ -65,89 +65,88 @@ public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElemen
 		super(valueClass);
 	}
 
-	@Override
-	public final E multiply(final Element element1, final Element element2) {
-		return this.apply(element1, element2);
-	}
-
-	@Override
-	public final E multiply(final Element... elements) {
-		return this.apply(elements);
-	}
-
-	@Override
-	public final E multiply(final ImmutableArray<Element> elements) {
-		return this.apply(elements);
-	}
-
-	@Override
-	public final E multiply(final Sequence<Element> elements) {
-		return this.apply(elements);
-	}
-
-	@Override
-	public final E power(final Element element, final long exponent) {
-		return this.selfApply(element, exponent);
-	}
-
-	@Override
-	public final E power(final Element element, final BigInteger exponent) {
-		return this.selfApply(element, exponent);
-	}
-
-	@Override
-	public final E power(final Element element, final Element<BigInteger> exponent) {
-		return this.selfApply(element, exponent);
-	}
-
-	@Override
-	public final E square(Element element) {
-		return this.selfApply(element);
-	}
-
-	@Override
-	public final E productOfPowers(Element[] elements, BigInteger[] exponents) {
-		return this.multiSelfApply(elements, exponents);
-	}
-
-	@Override
-	public final E getOneElement() {
-		return this.getIdentityElement();
-	}
-
-	@Override
-	public final boolean isOneElement(Element element) {
-		return this.isIdentityElement(element);
-	}
-
-	@Override
-	public final E oneOver(final Element element) {
-		return this.invert(element);
-	}
-
-	@Override
-	public final E divide(final Element element1, final Element element2) {
-		return this.applyInverse(element1, element2);
-	}
-
-	@Override
-	public final E nthRoot(Element element, long n) {
-		return this.invertSelfApply(element, n);
-	}
-
-	@Override
-	public final E nthRoot(Element element, BigInteger n) {
-		return this.invertSelfApply(element, n);
-	}
-
-	@Override
-	public final E nthRoot(Element element, Element<BigInteger> n) {
-		return this.invertSelfApply(element, n);
-	}
-
-	@Override
-	public final E squareRoot(Element element) {
-		return this.invertSelfApply(element);
-	}
-
+//	@Override
+//	public final E multiply(final Element element1, final Element element2) {
+//		return this.apply(element1, element2);
+//	}
+//
+//	@Override
+//	public final E multiply(final Element... elements) {
+//		return this.apply(elements);
+//	}
+//
+//	@Override
+//	public final E multiply(final ImmutableArray<Element> elements) {
+//		return this.apply(elements);
+//	}
+//
+//	@Override
+//	public final E multiply(final Sequence<Element> elements) {
+//		return this.apply(elements);
+//	}
+//
+//	@Override
+//	public final E power(final Element element, final long exponent) {
+//		return this.selfApply(element, exponent);
+//	}
+//
+//	@Override
+//	public final E power(final Element element, final BigInteger exponent) {
+//		return this.selfApply(element, exponent);
+//	}
+//
+//	@Override
+//	public final E power(final Element element, final Element<BigInteger> exponent) {
+//		return this.selfApply(element, exponent);
+//	}
+//
+//	@Override
+//	public final E square(Element element) {
+//		return this.selfApply(element);
+//	}
+//
+//	@Override
+//	public final E productOfPowers(Element[] elements, BigInteger[] exponents) {
+//		return this.multiSelfApply(elements, exponents);
+//	}
+//
+//	@Override
+//	public final E getOneElement() {
+//		return this.getIdentityElement();
+//	}
+//
+//	@Override
+//	public final boolean isOneElement(Element element) {
+//		return this.isIdentityElement(element);
+//	}
+//
+//	@Override
+//	public final E oneOver(final Element element) {
+//		return this.invert(element);
+//	}
+//
+//	@Override
+//	public final E divide(final Element element1, final Element element2) {
+//		return this.applyInverse(element1, element2);
+//	}
+//
+//	@Override
+//	public final E nthRoot(Element element, long n) {
+//		return this.invertSelfApply(element, n);
+//	}
+//
+//	@Override
+//	public final E nthRoot(Element element, BigInteger n) {
+//		return this.invertSelfApply(element, n);
+//	}
+//
+//	@Override
+//	public final E nthRoot(Element element, Element<BigInteger> n) {
+//		return this.invertSelfApply(element, n);
+//	}
+//
+//	@Override
+//	public final E squareRoot(Element element) {
+//		return this.invertSelfApply(element);
+//	}
 }
