@@ -63,7 +63,9 @@ public interface AdditiveMonoid<V>
 	 * @return The identity element of this monoid
 	 * @see Monoid#getIdentityElement()
 	 */
-	public AdditiveElement<V> getZeroElement();
+	default public AdditiveElement<V> getZeroElement() {
+		return this.getIdentityElement();
+	}
 
 	/**
 	 * This method is a synonym for {@link Monoid#isIdentityElement(Element)}. Returns {@code true} if the given element
@@ -73,7 +75,9 @@ public interface AdditiveMonoid<V>
 	 * @return {@code true} if this given element is the identity element, {@code false} otherwise
 	 * @see Monoid#isIdentityElement(Element)
 	 */
-	public boolean isZeroElement(Element element);
+	default public boolean isZeroElement(Element element) {
+		return this.isIdentityElement(element);
+	}
 
 	@Override
 	public AdditiveElement<V> getIdentityElement();

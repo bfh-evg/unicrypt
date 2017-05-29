@@ -64,7 +64,9 @@ public interface AdditiveElement<V>
 	 * @return The sum of the two elements
 	 * @see Element#apply(Element)
 	 */
-	public AdditiveElement<V> add(Element element);
+	default public AdditiveElement<V> add(Element element) {
+		return this.apply(element);
+	}
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply(long)}. It multiplies this element by some factor. This is
@@ -74,7 +76,9 @@ public interface AdditiveElement<V>
 	 * @return The element multiplied by the factor
 	 * @see Element#selfApply(long)
 	 */
-	public AdditiveElement<V> times(long factor);
+	default public AdditiveElement<V> times(long factor) {
+		return this.selfApply(factor);
+	}
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply(long)}. It multiplies this element by some factor.
@@ -83,7 +87,9 @@ public interface AdditiveElement<V>
 	 * @return The element multiplied by the factor
 	 * @see Element#selfApply(long)
 	 */
-	public AdditiveElement<V> times(BigInteger factor);
+	default public AdditiveElement<V> times(BigInteger factor) {
+		return this.selfApply(factor);
+	}
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply(Element)} and the same as
@@ -95,7 +101,9 @@ public interface AdditiveElement<V>
 	 * @return The element multiplied by the factor
 	 * @see Element#selfApply(Element)
 	 */
-	public AdditiveElement<V> times(Element<BigInteger> factor);
+	default public AdditiveElement<V> times(Element<BigInteger> factor) {
+		return this.selfApply(factor);
+	}
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply()}. It multiplies this element by 2.
@@ -103,7 +111,9 @@ public interface AdditiveElement<V>
 	 * @return The element multiplied by 2
 	 * @see Element#selfApply()
 	 */
-	public AdditiveElement<V> timesTwo();
+	default public AdditiveElement<V> timesTwo() {
+		return this.selfApply();
+	}
 
 	/**
 	 * This method is a synonym for {@link Element#isIdentity()}. Returns {@code true} if the element is the identity
@@ -112,7 +122,9 @@ public interface AdditiveElement<V>
 	 * @return {@code true} if the element is the identity element, {@code false} otherwise
 	 * @see Element#isIdentity()
 	 */
-	public boolean isZero();
+	default public boolean isZero() {
+		return this.isIdentity();
+	}
 
 	/**
 	 * This method is a synonym for {@link Element#invert()}. It computes the additive inverse of the given element.
@@ -121,7 +133,9 @@ public interface AdditiveElement<V>
 	 * @return The additive inverse of the element
 	 * @see Element#invert()
 	 */
-	public AdditiveElement<V> negate();
+	default public AdditiveElement<V> negate() {
+		return this.invert();
+	}
 
 	/**
 	 * This method is a synonym for {@link Element#applyInverse(Element)}. It subtracts the given element from the this
@@ -131,13 +145,21 @@ public interface AdditiveElement<V>
 	 * @return The given element subtracted from this element
 	 * @see Element#applyInverse(Element)
 	 */
-	public AdditiveElement<V> subtract(Element element);
+	default public AdditiveElement<V> subtract(Element element) {
+		return this.applyInverse(element);
+	}
 
-	public AdditiveElement<V> divide(long divisor);
+	default public AdditiveElement<V> divide(long divisor) {
+		return this.invertSelfApply(divisor);
+	}
 
-	public AdditiveElement<V> divide(BigInteger divisor);
+	default public AdditiveElement<V> divide(BigInteger divisor) {
+		return this.invertSelfApply(divisor);
+	}
 
-	public AdditiveElement<V> halve();
+	default public AdditiveElement<V> halve() {
+		return this.invertSelfApply();
+	}
 
 	@Override
 	public AdditiveSemiGroup<V> getSet();

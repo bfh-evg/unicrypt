@@ -66,7 +66,9 @@ public interface AdditiveGroup<V>
 	 * @return The additive inverse of the given element
 	 * @see Group#invert(Element)
 	 */
-	public AdditiveElement<V> negate(Element element);
+	default public AdditiveElement<V> negate(Element element) {
+		return this.invert(element);
+	}
 
 	/**
 	 * This method is a synonym for {@link Group#applyInverse(Element, Element)}. It subtracts the second element from
@@ -77,13 +79,21 @@ public interface AdditiveGroup<V>
 	 * @return The second element subtracted from the first element
 	 * @see Group#applyInverse(Element, Element)
 	 */
-	public AdditiveElement<V> subtract(Element element1, Element element2);
+	default public AdditiveElement<V> subtract(Element element1, Element element2) {
+		return this.applyInverse(element1, element2);
+	}
 
-	public AdditiveElement<V> divide(Element element, long divisor);
+	default public AdditiveElement<V> divide(Element element, long divisor) {
+		return this.invertSelfApply(element, divisor);
+	}
 
-	public AdditiveElement<V> divide(Element element, BigInteger divisor);
+	default public AdditiveElement<V> divide(Element element, BigInteger divisor) {
+		return this.invertSelfApply(element, divisor);
+	}
 
-	public AdditiveElement<V> halve(Element element);
+	default public AdditiveElement<V> halve(Element element) {
+		return this.invertSelfApply(element);
+	}
 
 	@Override
 	public AdditiveElement<V> invert(Element element);

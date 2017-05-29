@@ -76,7 +76,9 @@ public interface AdditiveSemiGroup<V>
 	 * @return The sum of the two input elements
 	 * @see SemiGroup#apply(Element, Element)
 	 */
-	public AdditiveElement<V> add(Element element1, Element element2);
+	default public AdditiveElement<V> add(Element element1, Element element2) {
+		return this.apply(element1, element2);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#apply(Element...)}. It computes the sum of the input elements,
@@ -86,7 +88,9 @@ public interface AdditiveSemiGroup<V>
 	 * @return The sum of the input elements
 	 * @see SemiGroup#apply(Element...)
 	 */
-	public AdditiveElement<V> add(Element... elements);
+	default public AdditiveElement<V> add(Element... elements) {
+		return this.apply(elements);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#apply(ImmutableArray)}. It computes the sum of the input elements,
@@ -96,7 +100,9 @@ public interface AdditiveSemiGroup<V>
 	 * @return The sum of the input elements
 	 * @see SemiGroup#apply(ImmutableArray)
 	 */
-	public AdditiveElement<V> add(ImmutableArray<Element> elements);
+	default public AdditiveElement<V> add(ImmutableArray<Element> elements) {
+		return this.apply(elements);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#apply(Sequence)}. It computes the sum of the input elements, which
@@ -106,7 +112,9 @@ public interface AdditiveSemiGroup<V>
 	 * @return The sum of the input elements
 	 * @see SemiGroup#apply(Sequence)
 	 */
-	public AdditiveElement<V> add(Sequence<Element> elements);
+	default public AdditiveElement<V> add(Sequence<Element> elements) {
+		return this.apply(elements);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#selfApply(Element, long)}. It multiplies the given element by some
@@ -117,7 +125,9 @@ public interface AdditiveSemiGroup<V>
 	 * @return The input element multiplied by the factor
 	 * @see SemiGroup#selfApply(Element, long)
 	 */
-	public AdditiveElement<V> times(Element element, long factor);
+	default public AdditiveElement<V> times(Element element, long factor) {
+		return this.selfApply(element, factor);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#selfApply(Element, BigInteger)}. It multiplies the given element by
@@ -128,7 +138,9 @@ public interface AdditiveSemiGroup<V>
 	 * @return The input element multiplied by the factor
 	 * @see SemiGroup#selfApply(Element, BigInteger)
 	 */
-	public AdditiveElement<V> times(Element element, BigInteger factor);
+	default public AdditiveElement<V> times(Element element, BigInteger factor) {
+		return this.selfApply(element, factor);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#selfApply(Element, Element)} and the same as
@@ -141,7 +153,9 @@ public interface AdditiveSemiGroup<V>
 	 * @return The input element multiplied with the factor
 	 * @see SemiGroup#selfApply(Element, Element)
 	 */
-	public AdditiveElement<V> times(Element element, Element<BigInteger> factor);
+	default public AdditiveElement<V> times(Element element, Element<BigInteger> factor) {
+		return this.selfApply(element, factor);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#selfApply(Element)}. It doubles the given input element.
@@ -150,7 +164,9 @@ public interface AdditiveSemiGroup<V>
 	 * @return The given input element multiplied by 2
 	 * @see SemiGroup#selfApply(Element)
 	 */
-	public AdditiveElement<V> timesTwo(Element element);
+	default public AdditiveElement<V> timesTwo(Element element) {
+		return this.selfApply(element);
+	}
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#multiSelfApply(Element[], BigInteger[])}. It computes the
@@ -162,7 +178,9 @@ public interface AdditiveSemiGroup<V>
 	 * @return The resulting 'sum-of-factors'
 	 * @see SemiGroup#multiSelfApply(Element[], BigInteger[])
 	 */
-	public AdditiveElement<V> sumOfProducts(Element[] elements, BigInteger[] factors);
+	default public AdditiveElement<V> sumOfProducts(Element[] elements, BigInteger[] factors) {
+		return this.multiSelfApply(elements, factors);
+	}
 
 	@Override
 	public <W> AdditiveElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;

@@ -96,51 +96,50 @@ public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElem
 		return this.abstractGetRandomElement(length, randomByteSequence);
 	}
 
-	@Override
-	public final E concatenate(final Element element1, final Element element2) {
-		return this.apply(element1, element2);
-	}
-
-	@Override
-	public final E concatenate(final Element... elements) {
-		return this.apply(elements);
-	}
-
-	@Override
-	public final E concatenate(final ImmutableArray<Element> elements) {
-		return this.apply(elements);
-	}
-
-	@Override
-	public final E concatenate(final Sequence<Element> elements) {
-		return this.apply(elements);
-	}
-
-	@Override
-	public final E selfConcatenate(final Element element, final BigInteger amount) {
-		return this.selfApply(element, amount);
-	}
-
-	@Override
-	public final E selfConcatenate(final Element element, final Element<BigInteger> amount) {
-		return this.selfApply(element, amount);
-	}
-
-	@Override
-	public final E selfConcatenate(final Element element, final long amount) {
-		return this.selfApply(element, amount);
-	}
-
-	@Override
-	public final E selfConcatenate(Element element) {
-		return this.selfApply(element);
-	}
-
-	@Override
-	public final E multiSelfConcatenate(Element[] elements, BigInteger[] amounts) {
-		return this.multiSelfApply(elements, amounts);
-	}
-
+//	@Override
+//	public final E concatenate(final Element element1, final Element element2) {
+//		return this.apply(element1, element2);
+//	}
+//
+//	@Override
+//	public final E concatenate(final Element... elements) {
+//		return this.apply(elements);
+//	}
+//
+//	@Override
+//	public final E concatenate(final ImmutableArray<Element> elements) {
+//		return this.apply(elements);
+//	}
+//
+//	@Override
+//	public final E concatenate(final Sequence<Element> elements) {
+//		return this.apply(elements);
+//	}
+//
+//	@Override
+//	public final E selfConcatenate(final Element element, final BigInteger amount) {
+//		return this.selfApply(element, amount);
+//	}
+//
+//	@Override
+//	public final E selfConcatenate(final Element element, final Element<BigInteger> amount) {
+//		return this.selfApply(element, amount);
+//	}
+//
+//	@Override
+//	public final E selfConcatenate(final Element element, final long amount) {
+//		return this.selfApply(element, amount);
+//	}
+//
+//	@Override
+//	public final E selfConcatenate(Element element) {
+//		return this.selfApply(element);
+//	}
+//
+//	@Override
+//	public final E multiSelfConcatenate(Element[] elements, BigInteger[] amounts) {
+//		return this.multiSelfApply(elements, amounts);
+//	}
 	protected abstract E abstractGetRandomElement(int length, RandomByteSequence randomByteSequence);
 
 }
