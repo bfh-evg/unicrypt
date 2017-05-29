@@ -52,8 +52,9 @@ import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +72,8 @@ import java.util.Map;
  * @version 2.0
  */
 public class ZStarMod
-	   extends AbstractMultiplicativeGroup<ZStarModElement, BigInteger> {
+	   extends AbstractGroup<ZStarModElement, BigInteger>
+	   implements MultiplicativeGroup<BigInteger> {
 
 	private static final long serialVersionUID = 1L;
 
