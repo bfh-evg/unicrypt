@@ -51,9 +51,8 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
+import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
 import java.math.BigInteger;
 
 /**
@@ -72,8 +71,7 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class GStarMod
-	   extends AbstractCyclicGroup<GStarModElement, BigInteger>
-	   implements MultiplicativeCyclicGroup<BigInteger> {
+	   extends AbstractMultiplicativeCyclicGroup<GStarModElement, BigInteger> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -83,8 +81,7 @@ public class GStarMod
 	private ZStarMod superGroup;
 
 	protected GStarMod(SpecialFactorization modulusFactorization, Factorization orderFactorization) {
-		super(BigInteger.class
-		);
+		super(BigInteger.class);
 		this.modulus = modulusFactorization.getValue();
 		this.modulusFactorization = modulusFactorization;
 		this.orderFactorization = orderFactorization;

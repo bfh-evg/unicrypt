@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import java.math.BigInteger;
 
@@ -50,9 +50,8 @@ import java.math.BigInteger;
  * @author R. Haenni
  */
 public class GStarModElement
-	   extends AbstractElement<GStarMod, GStarModElement, BigInteger>
+	   extends AbstractMultiplicativeElement<GStarMod, GStarModElement, BigInteger>
 	   implements MultiplicativeElement<BigInteger> {
-
 	private static final long serialVersionUID = 1L;
 
 	protected GStarModElement(final GStarMod gStarMod, final BigInteger value) {

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import java.math.BigInteger;
 
@@ -50,9 +50,8 @@ import java.math.BigInteger;
  * @author R. Haenni
  */
 public class ZStarModElement
-	   extends AbstractElement<ZStarMod, ZStarModElement, BigInteger>
+	   extends AbstractMultiplicativeElement<ZStarMod, ZStarModElement, BigInteger>
 	   implements MultiplicativeElement<BigInteger> {
-
 	private static final long serialVersionUID = 1L;
 
 	protected ZStarModElement(final ZStarMod zStarMod, final BigInteger value) {
