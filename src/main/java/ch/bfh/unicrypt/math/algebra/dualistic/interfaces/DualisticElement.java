@@ -41,8 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
-import ch.bfh.unicrypt.ErrorCode;
-import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
@@ -100,140 +98,66 @@ public interface DualisticElement<V>
 	public DualisticElement<V> invert();
 
 	@Override
-	default public DualisticElement<V> add(Element element) {
-		return this.apply(element);
-	}
+	public DualisticElement<V> add(Element element);
 
 	@Override
-	default public DualisticElement<V> times(long factor) {
-		return this.selfApply(factor);
-	}
+	public DualisticElement<V> times(long factor);
 
 	@Override
-	default public DualisticElement<V> times(BigInteger factor) {
-		return this.selfApply(factor);
-	}
+	public DualisticElement<V> times(BigInteger factor);
 
 	@Override
-	default public DualisticElement<V> times(Element<BigInteger> factor) {
-		return this.selfApply(factor);
-	}
+	public DualisticElement<V> times(Element<BigInteger> factor);
 
 	@Override
-	default public DualisticElement<V> timesTwo() {
-		return this.selfApply();
-	}
+	public DualisticElement<V> timesTwo();
 
 	@Override
-	default public DualisticElement<V> negate() {
-		return this.invert();
-	}
+	public DualisticElement<V> divide(long divisor);
 
 	@Override
-	default public DualisticElement<V> subtract(Element element) {
-		return this.applyInverse(element);
-	}
+	public DualisticElement<V> divide(BigInteger divisor);
 
 	@Override
-	default public DualisticElement<V> divide(long divisor) {
-		return this.invertSelfApply(divisor);
-	}
+	public DualisticElement<V> halve();
 
 	@Override
-	default public DualisticElement<V> divide(BigInteger divisor) {
-		return this.invertSelfApply(divisor);
-	}
+	public DualisticElement<V> negate();
 
 	@Override
-	default public DualisticElement<V> halve() {
-		return this.invertSelfApply();
-	}
+	public DualisticElement<V> subtract(Element element);
 
 	@Override
-	default public DualisticElement<V> multiply(Element element) {
-		return this.getSet().multiply(this, element);
-	}
+	public DualisticElement<V> multiply(Element element);
 
 	@Override
-	default public DualisticElement<V> power(long exponent) {
-		return this.getSet().power(this, exponent);
-	}
+	public DualisticElement<V> power(long exponent);
 
 	@Override
-	default public DualisticElement<V> power(BigInteger exponent) {
-		return this.getSet().power(this, exponent);
-	}
+	public DualisticElement<V> power(BigInteger exponent);
 
 	@Override
-	default public DualisticElement<V> power(Element<BigInteger> exponent) {
-		return this.getSet().power(this, exponent);
-	}
+	public DualisticElement<V> power(Element<BigInteger> exponent);
 
 	@Override
-	default public DualisticElement<V> square() {
-		return this.getSet().square(this);
-	}
+	public DualisticElement<V> square();
 
 	@Override
-	default public boolean isOne() {
-		return this.getSet().isOneElement(this);
-	}
+	public DualisticElement<V> nthRoot(long n);
 
 	@Override
-	default public DualisticElement<V> oneOver() {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return field.oneOver(this);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
-	}
+	public DualisticElement<V> nthRoot(BigInteger n);
 
 	@Override
-	default public DualisticElement<V> divide(Element element) {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return field.divide(this, element);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, element);
-
-	}
+	public DualisticElement<V> nthRoot(Element<BigInteger> n);
 
 	@Override
-	default public DualisticElement<V> nthRoot(long n) {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return field.nthRoot(this, n);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, n);
-
-	}
+	public DualisticElement<V> squareRoot();
 
 	@Override
-	default public DualisticElement<V> nthRoot(BigInteger n) {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return field.nthRoot(this, n);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, n);
-
-	}
+	public DualisticElement<V> oneOver();
 
 	@Override
-	default public DualisticElement<V> nthRoot(Element<BigInteger> n) {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return field.nthRoot(this, n);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this, n);
-	}
-
-	@Override
-	default public DualisticElement<V> squareRoot() {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return field.squareRoot(this);
-		}
-		throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
-	}
+	public DualisticElement<V> divide(Element element);
 
 }

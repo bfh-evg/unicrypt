@@ -154,54 +154,34 @@ public interface SemiRing<V>
 	public DualisticElement<V> getIdentityElement();
 
 	@Override
-	default public DualisticElement<V> add(Element element1, Element element2) {
-		return this.apply(element1, element2);
-	}
+	public DualisticElement<V> add(Element element1, Element element2);
 
 	@Override
-	default public DualisticElement<V> add(Element... elements) {
-		return this.apply(elements);
-	}
+	public DualisticElement<V> add(Element... elements);
 
 	@Override
-	default public DualisticElement<V> add(ImmutableArray<Element> elements) {
-		return this.apply(elements);
-	}
+	public DualisticElement<V> add(ImmutableArray<Element> elements);
 
 	@Override
-	default public DualisticElement<V> add(Sequence<Element> elements) {
-		return this.apply(elements);
-	}
+	public DualisticElement<V> add(Sequence<Element> elements);
 
 	@Override
-	default public DualisticElement<V> times(Element element, long factor) {
-		return this.selfApply(element, factor);
-	}
+	public DualisticElement<V> times(Element element, long factor);
 
 	@Override
-	default public DualisticElement<V> times(Element element, BigInteger factor) {
-		return this.selfApply(element, factor);
-	}
+	public DualisticElement<V> times(Element element, BigInteger factor);
 
 	@Override
-	default public DualisticElement<V> times(Element element, Element<BigInteger> factor) {
-		return this.selfApply(element, factor);
-	}
+	public DualisticElement<V> times(Element element, Element<BigInteger> factor);
 
 	@Override
-	default public DualisticElement<V> timesTwo(Element element) {
-		return this.selfApply(element);
-	}
+	public DualisticElement<V> timesTwo(Element element);
 
 	@Override
-	default public DualisticElement<V> sumOfProducts(Element[] elements, BigInteger[] factors) {
-		return this.multiSelfApply(elements, factors);
-	}
+	public DualisticElement<V> sumOfProducts(Element[] elements, BigInteger[] factors);
 
 	@Override
-	default public DualisticElement<V> getZeroElement() {
-		return this.getIdentityElement();
-	}
+	public DualisticElement<V> getZeroElement();
 
 	@Override
 	public DualisticElement<V> multiply(Element element1, Element element2);

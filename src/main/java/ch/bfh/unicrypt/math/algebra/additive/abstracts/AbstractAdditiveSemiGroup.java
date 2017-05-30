@@ -39,44 +39,77 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
+package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- * This interface represents the mathematical concept of a ring. A ring is a semiring where the set together with
- * addition forms a commutative group. Therefore, every element of the ring has an additive inverse.
+ * This abstract class provides a basis implementation for objects of type {@link AdditiveSemiGroup}.
  * <p>
- * The ring interface is therefore implemented as a specialization of {@link SemiRing} and {@link AdditiveGroup}. No
- * functionality is added. Some return types are updated.
- * <p>
- * @param <V> The generic type of the values representing the elements of a ring
+ * @param <E> The generic type of the elements of this semigroup
+ * @param <V> The generic type of the values stored in the elements of this semigroup
  * <p>
  * @author R. Haenni
- * <p>
- * @see SemiRing
- * @see AdditiveGroup
- * @see DualisticElement
- * @see "Handbook of Applied Cryptography, Definition 2.175"
  */
-public interface Ring<V>
-	   extends SemiRing<V>, AdditiveGroup<V> {
+public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V>
+	   extends AbstractSemiGroup<E, V>
+	   implements AdditiveSemiGroup<V> {
+
+	private static final long serialVersionUID = 1L;
+
+	protected AbstractAdditiveSemiGroup(Class<?> valueClass) {
+		super(valueClass);
+	}
 
 	@Override
-	public DualisticElement<V> negate(Element element);
+	public final E add(final Element element1, final Element element2) {
+		return this.apply(element1, element2);
+	}
 
 	@Override
-	public DualisticElement<V> subtract(Element element1, Element element2);
+	public final E add(final Element... elements) {
+		return this.apply(elements);
+	}
 
 	@Override
-	public DualisticElement<V> divide(Element element, long divisor);
+	public final E add(final ImmutableArray<Element> elements) {
+		return this.apply(elements);
+	}
 
 	@Override
-	public DualisticElement<V> divide(Element element, BigInteger divisor);
+	public final E add(final Sequence<Element> elements) {
+		return this.apply(elements);
+	}
 
 	@Override
-	public DualisticElement<V> halve(Element element);
+	public final E times(final Element element, final BigInteger factor) {
+		return this.selfApply(element, factor);
+	}
+
+	@Override
+	public final E times(final Element element, final Element<BigInteger> factor) {
+		return this.selfApply(element, factor);
+	}
+
+	@Override
+	public final E times(final Element element, final long factor) {
+		return this.selfApply(element, factor);
+	}
+
+	@Override
+	public final E timesTwo(Element element) {
+		return this.selfApply(element);
+	}
+
+	@Override
+	public final E sumOfProducts(Element[] elements, BigInteger[] factors) {
+		return this.multiSelfApply(elements, factors);
+	}
 
 }

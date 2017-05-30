@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 
 /**
@@ -60,7 +59,7 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
  * @author R. Haenni
  */
 public class AbstractECElement<V, DE extends DualisticElement<V>, EE extends ECElement<V, DE>>
-	   extends AbstractElement<EC<V, DE>, EE, Point<DE>>
+	   extends AbstractAdditiveElement<EC<V, DE>, EE, Point<DE>>
 	   implements ECElement<V, DE> {
 
 	private static final long serialVersionUID = 1L;

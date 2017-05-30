@@ -39,44 +39,87 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
+package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- * This interface represents the mathematical concept of a ring. A ring is a semiring where the set together with
- * addition forms a commutative group. Therefore, every element of the ring has an additive inverse.
+ * This abstract class provides a basis implementation for objects of type {@link AdditiveElement}.
  * <p>
- * The ring interface is therefore implemented as a specialization of {@link SemiRing} and {@link AdditiveGroup}. No
- * functionality is added. Some return types are updated.
- * <p>
- * @param <V> The generic type of the values representing the elements of a ring
+ * @param <S> The generic type of the {@link AdditiveSemiGroup} of this element
+ * @param <E> The generic type of this element
+ * @param <V> The generic type of the value stored in this element
  * <p>
  * @author R. Haenni
- * <p>
- * @see SemiRing
- * @see AdditiveGroup
- * @see DualisticElement
- * @see "Handbook of Applied Cryptography, Definition 2.175"
  */
-public interface Ring<V>
-	   extends SemiRing<V>, AdditiveGroup<V> {
+public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E extends AdditiveElement<V>, V>
+	   extends AbstractElement<S, E, V>
+	   implements AdditiveElement<V> {
+
+	private static final long serialVersionUID = 1L;
+
+	protected AbstractAdditiveElement(final AbstractSet<E, V> semiGroup, final V value) {
+		super(semiGroup, value);
+	}
 
 	@Override
-	public DualisticElement<V> negate(Element element);
+	public final E add(final Element element) {
+		return this.apply(element);
+	}
 
 	@Override
-	public DualisticElement<V> subtract(Element element1, Element element2);
+	public final E times(final Element<BigInteger> factor) {
+		return this.selfApply(factor);
+	}
 
 	@Override
-	public DualisticElement<V> divide(Element element, long divisor);
+	public final E times(final long factor) {
+		return this.selfApply(factor);
+	}
 
 	@Override
-	public DualisticElement<V> divide(Element element, BigInteger divisor);
+	public final E times(final BigInteger factor) {
+		return this.selfApply(factor);
+	}
 
 	@Override
-	public DualisticElement<V> halve(Element element);
+	public final E timesTwo() {
+		return this.selfApply();
+	}
+
+	@Override
+	public boolean isZero() {
+		return this.isIdentity();
+	}
+
+	@Override
+	public final E negate() {
+		return this.invert();
+	}
+
+	@Override
+	public final E subtract(final Element element) {
+		return this.applyInverse(element);
+	}
+
+	@Override
+	public final E divide(long divisor) {
+		return this.invertSelfApply(divisor);
+	}
+
+	@Override
+	public final E divide(BigInteger divisor) {
+		return this.invertSelfApply(divisor);
+	}
+
+	@Override
+	public final E halve() {
+		return this.invertSelfApply();
+	}
 
 }

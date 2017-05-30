@@ -121,7 +121,7 @@ public class ZModPrime
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
 		if (((ZModElement) element).isZero()) {
-			return this.getIdentityElement();
+			return this.getZeroElement();
 		}
 		if (!this.isFinite() || !this.hasKnownOrder()) {
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);

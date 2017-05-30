@@ -43,10 +43,10 @@ package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
@@ -61,7 +61,7 @@ import java.math.BigInteger;
  * @author R. Haenni
  */
 public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends DualisticElement<V>, V>
-	   extends AbstractElement<S, E, V>
+	   extends AbstractAdditiveElement<S, E, V>
 	   implements DualisticElement<V> {
 
 	private static final long serialVersionUID = 1L;
