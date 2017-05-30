@@ -63,9 +63,7 @@ public interface MultiplicativeElement<V>
 	 * @return The result of multiplying the two elements
 	 * @see Element#apply(Element)
 	 */
-	default public MultiplicativeElement<V> multiply(Element element) {
-		return this.apply(element);
-	}
+	public MultiplicativeElement<V> multiply(Element element);
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply(long)}. It raises the element to the power of the given
@@ -75,9 +73,7 @@ public interface MultiplicativeElement<V>
 	 * @return The element raised to the power of the exponent
 	 * @see Element#selfApply(long)
 	 */
-	default public MultiplicativeElement<V> power(long exponent) {
-		return this.selfApply(exponent);
-	}
+	public MultiplicativeElement<V> power(long exponent);
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply(BigInteger)}. It raises the element to the power of the
@@ -87,9 +83,7 @@ public interface MultiplicativeElement<V>
 	 * @return The element raised to the power of the exponent
 	 * @see Element#selfApply(BigInteger)
 	 */
-	default public MultiplicativeElement<V> power(BigInteger exponent) {
-		return this.selfApply(exponent);
-	}
+	public MultiplicativeElement<V> power(BigInteger exponent);
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply(Element)} and the same as
@@ -101,9 +95,7 @@ public interface MultiplicativeElement<V>
 	 * @return The element raised to the power of the exponent
 	 * @see Element#selfApply(Element)
 	 */
-	default public MultiplicativeElement<V> power(Element<BigInteger> exponent) {
-		return this.selfApply(exponent);
-	}
+	public MultiplicativeElement<V> power(Element<BigInteger> exponent);
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply()}. It computes the square of this element.
@@ -111,9 +103,7 @@ public interface MultiplicativeElement<V>
 	 * @return The square of this element
 	 * @see Element#selfApply()
 	 */
-	default public MultiplicativeElement<V> square() {
-		return this.selfApply();
-	}
+	public MultiplicativeElement<V> square();
 
 	/**
 	 * This method is a synonym for {@link Element#isIdentity()}. Returns {@code true} if the element is the identity
@@ -122,9 +112,7 @@ public interface MultiplicativeElement<V>
 	 * @return {@code true} if the element is the identity element, {@code false} otherwise
 	 * @see Element#isIdentity()
 	 */
-	default public boolean isOne() {
-		return this.isIdentity();
-	}
+	public boolean isOne();
 
 	/**
 	 * This method is a synonym for {@link Element#invert()}. It computes the multiplicative inverse of the element.
@@ -133,9 +121,7 @@ public interface MultiplicativeElement<V>
 	 * @return The multiplicative inverse of the element
 	 * @see Element#invert()
 	 */
-	default public MultiplicativeElement<V> oneOver() {
-		return this.invert();
-	}
+	public MultiplicativeElement<V> oneOver();
 
 	/**
 	 * This method is a synonym for {@link Element#applyInverse(Element)}. It divides this element over the given
@@ -145,25 +131,15 @@ public interface MultiplicativeElement<V>
 	 * @return This element divided over the given element
 	 * @see Element#applyInverse(Element)
 	 */
-	default public MultiplicativeElement<V> divide(Element element) {
-		return this.applyInverse(element);
-	}
+	public MultiplicativeElement<V> divide(Element element);
 
-	default public MultiplicativeElement<V> nthRoot(long amount) {
-		return this.invertSelfApply(amount);
-	}
+	public MultiplicativeElement<V> nthRoot(long n);
 
-	default public MultiplicativeElement<V> nthRoot(BigInteger amount) {
-		return this.invertSelfApply(amount);
-	}
+	public MultiplicativeElement<V> nthRoot(BigInteger n);
 
-	default public MultiplicativeElement<V> nthRoot(Element<BigInteger> amount) {
-		return this.invertSelfApply(amount);
-	}
+	public MultiplicativeElement<V> nthRoot(Element<BigInteger> n);
 
-	default public MultiplicativeElement<V> squareRoot() {
-		return this.invertSelfApply();
-	}
+	public MultiplicativeElement<V> squareRoot();
 
 	@Override
 	public MultiplicativeSemiGroup<V> getSet();

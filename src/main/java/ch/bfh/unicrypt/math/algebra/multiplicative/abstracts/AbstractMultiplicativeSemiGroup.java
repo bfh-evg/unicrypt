@@ -67,47 +67,49 @@ public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeEl
 		super(valueClass);
 	}
 
-//	@Override
-//	public final E multiply(final Element element1, final Element element2) {
-//		return this.apply(element1, element2);
-//	}
-//	@Override
-//	public final E multiply(final Element... elements) {
-//		return this.apply(elements);
-//	}
-//
-//	@Override
-//	public final E multiply(final ImmutableArray<Element> elements) {
-//		return this.apply(elements);
-//	}
-//
-//	@Override
-//	public final E multiply(final Sequence<Element> elements) {
-//		return this.apply(elements);
-//	}
-//
-//	@Override
-//	public final E power(final Element element, final long exponent) {
-//		return this.selfApply(element, exponent);
-//	}
-//
-//	@Override
-//	public final E power(final Element element, final BigInteger exponent) {
-//		return this.selfApply(element, exponent);
-//	}
-//
-//	@Override
-//	public final E power(final Element element, final Element<BigInteger> exponent) {
-//		return this.selfApply(element, exponent);
-//	}
-//
-//	@Override
-//	public final E square(Element element) {
-//		return this.selfApply(element);
-//	}
-//
-//	@Override
-//	public final E productOfPowers(Element[] elements, BigInteger[] exponents) {
-//		return this.multiSelfApply(elements, exponents);
-//	}
+	@Override
+	public final E multiply(final Element element1, final Element element2) {
+		return this.apply(element1, element2);
+	}
+
+	@Override
+	public final E multiply(final Element... elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E multiply(final ImmutableArray<Element> elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E multiply(final Sequence<Element> elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E power(final Element element, final long exponent) {
+		return this.selfApply(element, exponent);
+	}
+
+	@Override
+	public final E power(final Element element, final BigInteger exponent) {
+		return this.selfApply(element, exponent);
+	}
+
+	@Override
+	public final E power(final Element element, final Element<BigInteger> exponent) {
+		return this.selfApply(element, exponent);
+	}
+
+	@Override
+	public final E square(Element element) {
+		return this.selfApply(element);
+	}
+
+	@Override
+	public final E productOfPowers(Element[] elements, BigInteger[] exponents) {
+		return this.multiSelfApply(elements, exponents);
+	}
+
 }

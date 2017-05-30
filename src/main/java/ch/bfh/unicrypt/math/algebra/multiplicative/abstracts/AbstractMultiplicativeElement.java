@@ -67,63 +67,64 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
 		super(semiGroup, value);
 	}
 
-//	@Override
-//	public final E multiply(final Element exponent) {
-//		return this.apply(exponent);
-//	}
-//
-//	@Override
-//	public final E power(final long exponent) {
-//		return this.selfApply(exponent);
-//	}
-//
-//	@Override
-//	public final E power(final Element<BigInteger> exponent) {
-//		return this.selfApply(exponent);
-//	}
-//
-//	@Override
-//	public final E power(final BigInteger exponent) {
-//		return this.selfApply(exponent);
-//	}
-//
-//	@Override
-//	public final E square() {
-//		return this.selfApply();
-//	}
-//
-//	@Override
-//	public boolean isOne() {
-//		return this.isIdentity();
-//	}
-//
-//	@Override
-//	public final E oneOver() {
-//		return this.invert();
-//	}
-//
-//	@Override
-//	public final E divide(final Element element) {
-//		return this.applyInverse(element);
-//	}
-//
-//	@Override
-//	public final E nthRoot(long amount) {
-//		return this.invertSelfApply(amount);
-//	}
-//
-//	@Override
-//	public final E nthRoot(BigInteger amount) {
-//		return this.invertSelfApply(amount);
-//	}
-//
-//	@Override
-//	public final E nthRoot(Element<BigInteger> amount) {
-//		return this.invertSelfApply(amount);
-//	}
-//
-//	@Override
-//	public final E squareRoot() {
-//		return this.invertSelfApply();
-//	}
+	@Override
+	public final E multiply(final Element exponent) {
+		return this.apply(exponent);
+	}
+
+	@Override
+	public final E power(final long exponent) {
+		return this.selfApply(exponent);
+	}
+
+	@Override
+	public final E power(final Element<BigInteger> exponent) {
+		return this.selfApply(exponent);
+	}
+
+	@Override
+	public final E power(final BigInteger exponent) {
+		return this.selfApply(exponent);
+	}
+
+	@Override
+	public final E square() {
+		return this.selfApply();
+	}
+
+	@Override
+	public boolean isOne() {
+		return this.isIdentity();
+	}
+
+	@Override
+	public final E oneOver() {
+		return this.invert();
+	}
+
+	@Override
+	public final E divide(final Element element) {
+		return this.applyInverse(element);
+	}
+
+	@Override
+	public final E nthRoot(long amount) {
+		return this.invertSelfApply(amount);
+	}
+
+	@Override
+	public final E nthRoot(BigInteger amount) {
+		return this.invertSelfApply(amount);
+	}
+
+	@Override
+	public final E nthRoot(Element<BigInteger> amount) {
+		return this.invertSelfApply(amount);
+	}
+
+	@Override
+	public final E squareRoot() {
+		return this.invertSelfApply();
+	}
+
 }

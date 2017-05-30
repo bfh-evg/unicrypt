@@ -66,9 +66,7 @@ public interface MultiplicativeGroup<V>
 	 * @return The multiplicative inverse of the given element
 	 * @see Group#invert(Element)
 	 */
-	default public MultiplicativeElement<V> oneOver(Element element) {
-		return this.invert(element);
-	}
+	public MultiplicativeElement<V> oneOver(Element element);
 
 	/**
 	 * This method is a synonym for {@link Group#applyInverse(Element, Element)}. It computes the division of the first
@@ -79,9 +77,7 @@ public interface MultiplicativeGroup<V>
 	 * @return The first element divided over the second element
 	 * @see Group#applyInverse(Element, Element)
 	 */
-	default public MultiplicativeElement<V> divide(Element element1, Element element2) {
-		return this.applyInverse(element1, element2);
-	}
+	public MultiplicativeElement<V> divide(Element element1, Element element2);
 
 	/**
 	 * This method is a synonym for {@link Group#invertSelfApply(Element, long)}. It computes the nth root of the given
@@ -93,9 +89,7 @@ public interface MultiplicativeGroup<V>
 	 * @return The nth root of the input element
 	 * @see Group#invertSelfApply(Element, long)
 	 */
-	default public MultiplicativeElement<V> nthRoot(Element element, long n) {
-		return this.invertSelfApply(element, n);
-	}
+	public MultiplicativeElement<V> nthRoot(Element element, long n);
 
 	/**
 	 * This method is a synonym for {@link Group#invertSelfApply(Element, BigInteger)}. It computes the nth root of the
@@ -107,9 +101,7 @@ public interface MultiplicativeGroup<V>
 	 * @return The nth root of the input element
 	 * @see Group#invertSelfApply(Element, BigInteger)
 	 */
-	default public MultiplicativeElement<V> nthRoot(Element element, BigInteger n) {
-		return this.invertSelfApply(element, n);
-	}
+	public MultiplicativeElement<V> nthRoot(Element element, BigInteger n);
 
 	/**
 	 * This method is a synonym for {@link Group#invertSelfApply(Element, Element)} and the same as
@@ -122,9 +114,7 @@ public interface MultiplicativeGroup<V>
 	 * @return The nth root of the input element
 	 * @see Group#invertSelfApply(Element, Element)
 	 */
-	default public MultiplicativeElement<V> nthRoot(Element element, Element<BigInteger> n) {
-		return this.invertSelfApply(element, n);
-	}
+	public MultiplicativeElement<V> nthRoot(Element element, Element<BigInteger> n);
 
 	/**
 	 * This method is a synonym for {@link Group#invertSelfApply(Element)} and the same as
@@ -135,9 +125,7 @@ public interface MultiplicativeGroup<V>
 	 * @return The square root of the input element
 	 * @see Group#invertSelfApply(Element)
 	 */
-	default public MultiplicativeElement<V> squareRoot(Element element) {
-		return this.invertSelfApply(element);
-	}
+	public MultiplicativeElement<V> squareRoot(Element element);
 
 	@Override
 	public MultiplicativeElement<V> invert(Element element);

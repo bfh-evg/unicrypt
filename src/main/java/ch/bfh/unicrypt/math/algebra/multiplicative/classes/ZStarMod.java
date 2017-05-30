@@ -62,7 +62,7 @@ import java.util.Map;
  * This class implements the group of integers Z*_n with the operation of multiplication modulo n. Its identity element
  * is 1. Every integer in Z*_n is relatively prime to n. The smallest such group is Z*_2 = {1}.
  * <p>
- * @see Handbook of Applied Cryptography, Definition 2.124
+ * @see "Handbook of Applied Cryptography, Definition 2.124"
  * @see <a href="http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n">Multiplicative group of
  * integers modulo n</a>
  * <p>

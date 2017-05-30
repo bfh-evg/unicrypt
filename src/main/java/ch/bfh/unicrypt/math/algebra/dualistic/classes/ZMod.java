@@ -62,7 +62,7 @@ import java.util.Map;
  * element is 0. Every integer in Z_n that is relatively prime to n is a generator of Z_n. The smallest such group is
  * Z_1 = {0}.
  * <p>
- * @see Handbook of Applied Cryptography, Definition 2.113
+ * @see "Handbook of Applied Cryptography, Definition 2.113"
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
