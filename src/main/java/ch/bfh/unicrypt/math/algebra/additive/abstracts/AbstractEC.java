@@ -56,6 +56,7 @@ import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import java.math.BigInteger;
@@ -73,7 +74,7 @@ import java.math.BigInteger;
  * @author R. Haenni
  */
 public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends DualisticElement<V>, EE extends ECElement<V, DE>>
-	   extends AbstractAdditiveCyclicGroup<EE, Point<DE>>
+	   extends AbstractCyclicGroup<EE, Point<DE>>
 	   implements EC<V, DE> {
 
 	private static final long serialVersionUID = 1L;

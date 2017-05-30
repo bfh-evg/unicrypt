@@ -65,18 +65,43 @@ public interface Ring<V>
 	   extends SemiRing<V>, AdditiveGroup<V> {
 
 	@Override
-	public DualisticElement<V> negate(Element element);
+	public DualisticElement<V> invert(Element element);
+	
+	@Override
+	public DualisticElement<V> applyInverse(Element element1, Element element2);
 
 	@Override
-	public DualisticElement<V> subtract(Element element1, Element element2);
+	public DualisticElement<V> invertSelfApply(Element element, long amount);
 
 	@Override
-	public DualisticElement<V> divide(Element element, long divisor);
+	public DualisticElement<V> invertSelfApply(Element element, BigInteger amount);
 
 	@Override
-	public DualisticElement<V> divide(Element element, BigInteger divisor);
+	public DualisticElement<V> invertSelfApply(Element element, Element<BigInteger> amount);
 
 	@Override
-	public DualisticElement<V> halve(Element element);
+	public DualisticElement<V> invertSelfApply(Element element);
+
+	@Override
+	default public DualisticElement<V> negate(Element element) {
+		return this.invert(element);
+	}
+
+	@Override
+	default public DualisticElement<V> subtract(Element element1, Element element2) {
+		return this.applyInverse(element1, element2);
+	}
+
+	default public DualisticElement<V> divide(Element element, long divisor) {
+		return this.invertSelfApply(element, divisor);
+	}
+
+	default public DualisticElement<V> divide(Element element, BigInteger divisor) {
+		return this.invertSelfApply(element, divisor);
+	}
+
+	default public DualisticElement<V> halve(Element element) {
+		return this.invertSelfApply(element);
+	}
 
 }

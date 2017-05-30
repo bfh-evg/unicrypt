@@ -48,9 +48,9 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Operator;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
@@ -63,7 +63,7 @@ import java.math.BigInteger;
  * @author R. Haenni
  */
 public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
-	   extends AbstractAdditiveMonoid<E, V>
+	   extends AbstractMonoid<E, V>
 	   implements SemiRing<V> {
 
 	private static final long serialVersionUID = 1L;
