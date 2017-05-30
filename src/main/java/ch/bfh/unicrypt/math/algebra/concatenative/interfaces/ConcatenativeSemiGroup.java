@@ -105,9 +105,7 @@ public interface ConcatenativeSemiGroup<V>
 	 * @return The concatenation of the two input elements
 	 * @see SemiGroup#apply(Element, Element)
 	 */
-	default public ConcatenativeElement<V> concatenate(Element element1, Element element2) {
-		return this.apply(element1, element2);
-	}
+	public ConcatenativeElement<V> concatenate(Element element1, Element element2);
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#apply(Element...)}. It concatenates the input elements in the given
@@ -117,9 +115,7 @@ public interface ConcatenativeSemiGroup<V>
 	 * @return The concatenation of the input elements
 	 * @see SemiGroup#apply(Element...)
 	 */
-	default public ConcatenativeElement<V> concatenate(Element... elements) {
-		return this.apply(elements);
-	}
+	public ConcatenativeElement<V> concatenate(Element... elements);
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#apply(ImmutableArray)}. It concatenates the input elements in the
@@ -129,9 +125,7 @@ public interface ConcatenativeSemiGroup<V>
 	 * @return The concatenation of the input elements
 	 * @see SemiGroup#apply(ImmutableArray)
 	 */
-	default public ConcatenativeElement<V> concatenate(ImmutableArray<Element> elements) {
-		return this.apply(elements);
-	}
+	public ConcatenativeElement<V> concatenate(ImmutableArray<Element> elements);
 
 	/**
 	 * This method is a synonym for {@link SemiGroup#apply(Sequence)}. It concatenates the input elements in the given
@@ -141,9 +135,7 @@ public interface ConcatenativeSemiGroup<V>
 	 * @return The concatenation of the input elements
 	 * @see SemiGroup#apply(Sequence)
 	 */
-	default public ConcatenativeElement<V> concatenate(Sequence<Element> elements) {
-		return this.apply(elements);
-	}
+	public ConcatenativeElement<V> concatenate(Sequence<Element> elements);
 
 	/**
 	 * Applies the concatenation operation repeatedly to {@code amount} many instances of a given input element. This is
@@ -153,9 +145,7 @@ public interface ConcatenativeSemiGroup<V>
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying concatenation multiple times to the input element
 	 */
-	default public ConcatenativeElement<V> selfConcatenate(Element element, long amount) {
-		return this.selfApply(element, amount);
-	}
+	public ConcatenativeElement<V> selfConcatenate(Element element, long amount);
 
 	/**
 	 * Applies the concatenation operation repeatedly to {@code amount} many instances of a given input element.
@@ -164,9 +154,7 @@ public interface ConcatenativeSemiGroup<V>
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying concatenation multiple times to the input element
 	 */
-	default public ConcatenativeElement<V> selfConcatenate(Element element, BigInteger amount) {
-		return this.selfApply(element, amount);
-	}
+	public ConcatenativeElement<V> selfConcatenate(Element element, BigInteger amount);
 
 	/**
 	 * Same as {@link ConcatenativeSemiGroup#selfConcatenate(Element, BigInteger)}, except that the amount is given as
@@ -177,9 +165,7 @@ public interface ConcatenativeSemiGroup<V>
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying concatenation multiple times to the input element
 	 */
-	default public ConcatenativeElement<V> selfConcatenate(Element element, Element<BigInteger> amount) {
-		return this.selfApply(element, amount);
-	}
+	public ConcatenativeElement<V> selfConcatenate(Element element, Element<BigInteger> amount);
 
 	/**
 	 * Applies the concatenation operation to two instances of a given element. This is equivalent to
@@ -188,9 +174,7 @@ public interface ConcatenativeSemiGroup<V>
 	 * @param element The given input element
 	 * @return The result of applying the concatenation operation to two instances of the input element
 	 */
-	default public ConcatenativeElement<V> selfConcatenate(Element element) {
-		return this.selfApply(element);
-	}
+	public ConcatenativeElement<V> selfConcatenate(Element element);
 
 	/**
 	 * Applies the concatenation operation sequentially to the results of computing
@@ -201,9 +185,7 @@ public interface ConcatenativeSemiGroup<V>
 	 * @param amounts  Corresponding amounts
 	 * @return The result of this operation
 	 */
-	default public ConcatenativeElement<V> multiSelfConcatenate(Element[] elements, BigInteger[] amounts) {
-		return this.multiSelfApply(elements, amounts);
-	}
+	public ConcatenativeElement<V> multiSelfConcatenate(Element[] elements, BigInteger[] amounts);
 
 	@Override
 	public <W> ConcatenativeElement<V> getElementFrom(W value, Converter<V, W> converter) throws UniCryptException;

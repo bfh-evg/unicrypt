@@ -63,9 +63,7 @@ public interface ConcatenativeMonoid<V>
 	 * <p>
 	 * @return The empty element
 	 */
-	default public ConcatenativeElement<V> getEmptyElement() {
-		return this.getIdentityElement();
-	}
+	public ConcatenativeElement<V> getEmptyElement();
 
 	/**
 	 * Checks if a given element is the empty element.
@@ -73,9 +71,7 @@ public interface ConcatenativeMonoid<V>
 	 * @param element The given element
 	 * @return {@code true} if {@code element} is the empty element, {@code false} otherwise
 	 */
-	default public boolean isEmptyElement(Element element) {
-		return this.isIdentityElement(element);
-	}
+	public boolean isEmptyElement(Element element);
 
 	@Override
 	public ConcatenativeElement<V> getIdentityElement();

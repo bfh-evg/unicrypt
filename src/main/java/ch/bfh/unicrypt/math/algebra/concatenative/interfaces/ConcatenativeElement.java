@@ -70,9 +70,7 @@ public interface ConcatenativeElement<V>
 	 * @return The concatenation of the two elements
 	 * @see Element#apply(Element)
 	 */
-	default public ConcatenativeElement<V> concatenate(Element element) {
-		return this.apply(element);
-	}
+	public ConcatenativeElement<V> concatenate(Element element);
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply(long)}. It applies the concatenation operation multiple
@@ -82,9 +80,7 @@ public interface ConcatenativeElement<V>
 	 * @return The result of applying concatenation multiple times to this element
 	 * @see Element#selfApply(long)
 	 */
-	default public ConcatenativeElement<V> selfConcatenate(long amount) {
-		return this.selfApply(amount);
-	}
+	public ConcatenativeElement<V> selfConcatenate(long amount);
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply(BigInteger)}. It applies the concatenation operation
@@ -93,9 +89,7 @@ public interface ConcatenativeElement<V>
 	 * @param amount The given amount
 	 * @return The result of applying concatenation multiple times to this element
 	 */
-	default public ConcatenativeElement<V> selfConcatenate(BigInteger amount) {
-		return this.selfApply(amount);
-	}
+	public ConcatenativeElement<V> selfConcatenate(BigInteger amount);
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply(Element)} and the same as
@@ -106,9 +100,7 @@ public interface ConcatenativeElement<V>
 	 * @param amount The given amount
 	 * @return The result of applying concatenation multiple times to this element
 	 */
-	default public ConcatenativeElement<V> selfConcatenate(Element<BigInteger> amount) {
-		return this.selfApply(amount);
-	}
+	public ConcatenativeElement<V> selfConcatenate(Element<BigInteger> amount);
 
 	/**
 	 * This method is a synonym for {@link Element#selfApply()}. It concatenates this element with itself.
@@ -116,9 +108,7 @@ public interface ConcatenativeElement<V>
 	 * @return The concatenated with itself
 	 * @see Element#selfApply()
 	 */
-	default public ConcatenativeElement<V> selfConcatenate() {
-		return this.selfApply();
-	}
+	public ConcatenativeElement<V> selfConcatenate();
 
 	/**
 	 * This method is a synonym for {@link Element#isIdentity()}. Returns {@code true} if the element is the empty
@@ -127,9 +117,7 @@ public interface ConcatenativeElement<V>
 	 * @return {@code true} if this element is the empty element, {@code false} otherwise
 	 * @see Element#isIdentity()
 	 */
-	default public boolean isEmptyElement() {
-		return this.isIdentity();
-	}
+	public boolean isEmptyElement();
 
 	@Override
 	public ConcatenativeSemiGroup<V> getSet();
