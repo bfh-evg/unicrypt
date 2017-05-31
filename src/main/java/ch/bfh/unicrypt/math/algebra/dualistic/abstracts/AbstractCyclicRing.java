@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
@@ -134,14 +133,8 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 	@Override
 	protected Sequence<E> defaultGetElements() {
 		final AbstractCyclicRing<E, V> ring = this;
-		return Sequence.getInstance(this.getDefaultGenerator(), new Mapping<E, E>() {
-
-								 @Override
-								 public E apply(E element) {
-									 return ring.apply(ring.getDefaultGenerator(), element);
-								 }
-
-							 }).limit(element -> ring.getIdentityElement().equals(element));
+		return Sequence.getInstance(this.getDefaultGenerator(), element -> ring.apply(ring.getDefaultGenerator(), element))
+			   .limit(element -> ring.getIdentityElement().equals(element));
 	}
 
 	protected abstract E abstractGetDefaultGenerator();

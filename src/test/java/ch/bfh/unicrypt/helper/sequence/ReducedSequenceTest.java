@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Operator;
+import java.util.function.BinaryOperator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Test;
@@ -59,21 +59,10 @@ public class ReducedSequenceTest {
 		Sequence<Integer> sequence2 = Sequence.getInstance(1);
 		Sequence<Integer> sequence3 = Sequence.getInstance(1, 2, 3, 4);
 
-		Operator<Integer> plus = new Operator<Integer>() {
+		BinaryOperator<Integer> plus = (value1, value2) -> value1 + value2;
 
-			@Override
-			public Integer apply(Integer value1, Integer value2) {
-				return value1 + value2;
-			}
-		};
+		BinaryOperator<Integer> times = (value1, value2) -> value1 * value2;;
 
-		Operator<Integer> times = new Operator<Integer>() {
-
-			@Override
-			public Integer apply(Integer value1, Integer value2) {
-				return value1 * value2;
-			}
-		};
 		try {
 			sequence1.reduce(plus);
 			fail();

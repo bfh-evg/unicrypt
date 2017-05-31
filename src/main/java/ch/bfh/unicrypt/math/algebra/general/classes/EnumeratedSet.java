@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
@@ -106,15 +105,8 @@ public class EnumeratedSet<V>
 
 	@Override
 	protected Sequence<EnumeratedSetElement<V>> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomIntegerSequence(this.getOrder().intValue() - 1).map(
-			   new Mapping<Integer, EnumeratedSetElement<V>>() {
-
-			@Override
-			public EnumeratedSetElement<V> apply(Integer index) {
-				return abstractGetElement(valueMap.get(index));
-			}
-
-		});
+		return randomByteSequence.getRandomIntegerSequence(this.getOrder().intValue() - 1)
+			   .map(index -> abstractGetElement(valueMap.get(index)));
 	}
 
 	@Override

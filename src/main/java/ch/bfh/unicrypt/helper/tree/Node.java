@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.tree;
 
 import ch.bfh.unicrypt.helper.sequence.MultiSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import java.util.Iterator;
 
 /**
@@ -88,14 +87,7 @@ public class Node<V>
 
 	@Override
 	public Sequence<V> getSequence() {
-		return MultiSequence.getInstance(this.children.map(new Mapping<Tree<V>, Sequence<V>>() {
-
-			@Override
-			public Sequence<V> apply(Tree<V> child) {
-				return child.getSequence();
-			}
-
-		})).flatten();
+		return MultiSequence.getInstance(this.children.map(child -> child.getSequence())).flatten();
 	}
 
 	@Override

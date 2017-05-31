@@ -50,7 +50,6 @@ import ch.bfh.unicrypt.helper.factorization.SpecialFactorization;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
 import java.math.BigInteger;
@@ -169,14 +168,8 @@ public class GStarMod
 
 	@Override
 	protected Sequence<GStarModElement> abstractGetRandomElements(final RandomByteSequence randomByteSequence) {
-		return this.getZStarMod().abstractGetRandomElements(randomByteSequence).map(
-			   new Mapping<ZStarModElement, GStarModElement>() {
-
-			@Override
-			public GStarModElement apply(ZStarModElement element) {
-				return abstractGetElement(element.power(getCoFactor()).getValue());
-			}
-		});
+		return this.getZStarMod().abstractGetRandomElements(randomByteSequence)
+			   .map(element -> abstractGetElement(element.power(getCoFactor()).getValue()));
 	}
 
 	@Override

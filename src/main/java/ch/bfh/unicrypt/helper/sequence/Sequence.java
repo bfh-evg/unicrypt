@@ -47,11 +47,11 @@ import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.helper.sequence.functions.Operator;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -271,14 +271,14 @@ public abstract class Sequence<V>
 	}
 
 	/**
-	 * Applies an associative operation to all values in the sequence. If the sequence contains a single value, the
+	 * Applies an associative operator to all values in the sequence. If the sequence contains a single value, the
 	 * single value is returned. If the sequence is empty or infinite, an exception is thrown.
 	 * <p>
-	 * @param operation The associative operation
-	 * @return The result of applying the operation to all values
+	 * @param operator The associative operator
+	 * @return The result of applying the operator to all values
 	 */
-	public final V reduce(Operator<V> operation) {
-		if (operation == null) {
+	public final V reduce(BinaryOperator<V> operator) {
+		if (operator == null) {
 			throw new IllegalArgumentException();
 		}
 		if (this.isEmpty() || this.isInfinite()) {
@@ -287,22 +287,22 @@ public abstract class Sequence<V>
 		Iterator<V> iterator = this.iterator();
 		V result = iterator.next();
 		while (iterator.hasNext()) {
-			result = operation.apply(result, iterator.next());
+			result = operator.apply(result, iterator.next());
 		}
 		return result;
 	}
 
 	/**
-	 * Applies an associative operation to all values in the sequence. If the sequence contains a single value, the
+	 * Applies an associative operator to all values in the sequence. If the sequence contains a single value, the
 	 * single value is returned. If the sequence is empty, the given identity value is returned. If the sequence is
 	 * infinite, an exception is thrown.
 	 * <p>
-	 * @param operation The associative operation
+	 * @param operator The associative operator
 	 * @param identity  The identity value
-	 * @return The result of applying the operation to all values
+	 * @return The result of applying the operator to all values
 	 */
-	public final V reduce(Operator<V> operation, V identity) {
-		if (operation == null || identity == null) {
+	public final V reduce(BinaryOperator<V> operator, V identity) {
+		if (operator == null || identity == null) {
 			throw new IllegalArgumentException();
 		}
 		if (this.isInfinite()) {
@@ -311,7 +311,7 @@ public abstract class Sequence<V>
 		Iterator<V> iterator = this.iterator();
 		V result = identity;
 		while (iterator.hasNext()) {
-			result = operation.apply(result, iterator.next());
+			result = operator.apply(result, iterator.next());
 		}
 		return result;
 	}
@@ -323,7 +323,7 @@ public abstract class Sequence<V>
 	 * @param mapping The given mapping
 	 * @return The new sequence
 	 */
-	public final <W> Sequence<W> map(final Mapping<? super V, ? extends W> mapping) {
+	public final <W> Sequence<W> map(final Function<? super V, ? extends W> mapping) {
 		if (mapping == null) {
 			throw new IllegalArgumentException();
 		}
@@ -715,7 +715,7 @@ public abstract class Sequence<V>
 	 * @param mapping    The mapping applied repeatedly to the starting value
 	 * @return The new sequence
 	 */
-	public static <V> Sequence<V> getInstance(final V startValue, final Mapping<V, V> mapping) {
+	public static <V> Sequence<V> getInstance(final V startValue, final Function<V, V> mapping) {
 		if (startValue == null || mapping == null) {
 			throw new IllegalArgumentException();
 		}

@@ -49,7 +49,6 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -167,15 +166,7 @@ public class ZMod
 
 	@Override
 	protected Sequence<ZModElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomBigIntegerSequence(this.modulus.subtract(MathUtil.ONE)).map(
-			   new Mapping<BigInteger, ZModElement>() {
-
-			@Override
-			public ZModElement apply(BigInteger value) {
-				return abstractGetElement(value);
-			}
-
-		});
+		return randomByteSequence.getRandomBigIntegerSequence(this.modulus.subtract(MathUtil.ONE)).map(value -> abstractGetElement(value));
 	}
 
 	@Override

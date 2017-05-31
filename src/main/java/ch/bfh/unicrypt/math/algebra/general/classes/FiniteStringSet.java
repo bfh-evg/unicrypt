@@ -51,7 +51,6 @@ import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
@@ -125,19 +124,14 @@ public class FiniteStringSet
 
 	@Override
 	protected Sequence<FiniteStringElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE)).map(
-			   new Mapping<BigInteger, FiniteStringElement>() {
-
-			@Override
-			public FiniteStringElement apply(BigInteger value) {
-				try {
-					return getElementFrom(value);
-				} catch (UniCryptException exception) {
-					throw new UniCryptRuntimeException(ErrorCode.IMPOSSIBLE_STATE, exception, this, value);
-				}
-			}
-
-		});
+		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE))
+			   .map(value -> {
+				   try {
+					   return getElementFrom(value);
+				   } catch (UniCryptException exception) {
+					   throw new UniCryptRuntimeException(ErrorCode.IMPOSSIBLE_STATE, exception, this, value);
+				   }
+			   });
 	}
 
 	@Override

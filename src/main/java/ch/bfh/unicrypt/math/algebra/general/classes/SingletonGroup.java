@@ -48,7 +48,6 @@ import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
@@ -109,14 +108,7 @@ public class SingletonGroup
 
 	@Override
 	protected Sequence<SingletonElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return Sequence.getInstance(this.element, new Mapping<SingletonElement, SingletonElement>() {
-
-								 @Override
-								 public SingletonElement apply(SingletonElement value) {
-									 return value;
-								 }
-
-							 });
+		return Sequence.getInstance(this.element, value -> value);
 	}
 
 	@Override

@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import java.math.BigInteger;
 import org.junit.Assert;
 import org.junit.Test;
@@ -58,13 +57,7 @@ public class MappedSequenceTest {
 
 		BigIntegerSequence sequence = BigIntegerSequence.getInstance(0, 10);
 
-		Sequence<BigInteger> newSequence = sequence.map(new Mapping<BigInteger, BigInteger>() {
-
-			@Override
-			public BigInteger apply(BigInteger value) {
-				return value.add(MathUtil.ONE);
-			}
-		});
+		Sequence<BigInteger> newSequence = sequence.map(value -> value.add(MathUtil.ONE));
 
 		int i = 1;
 		for (BigInteger value : newSequence) {
@@ -86,13 +79,7 @@ public class MappedSequenceTest {
 
 		Sequence<Integer> sequence = Sequence.getInstance(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
 
-		Sequence<Integer> newSequence = sequence.map(new Mapping<Integer, Integer>() {
-
-			@Override
-			public Integer apply(Integer value) {
-				return value + 1;
-			}
-		});
+		Sequence<Integer> newSequence = sequence.map(value -> value + 1);
 
 		Integer i = 1;
 		for (Integer value : newSequence) {

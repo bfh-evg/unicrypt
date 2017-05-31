@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import java.util.function.Predicate;
 import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
@@ -57,14 +56,7 @@ public class SequenceTest {
 	@Test
 	public void testIteration() {
 
-		Sequence<Integer> seq = Sequence.getInstance(2, new Mapping<Integer, Integer>() {
-
-			@Override
-			public Integer apply(Integer value) {
-				return 2 + value;
-			}
-
-		});
+		Sequence<Integer> seq = Sequence.getInstance(2, value -> value + 2);
 		SequenceIterator<Integer> iterator = seq.iterator();
 		Assert.assertEquals(2, (int) iterator.next());
 		Assert.assertEquals(4, (int) iterator.next());

@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.helper.factorization;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -168,14 +167,8 @@ public class SafePrime
 		}
 		return new SafePrime(randomByteSequence.getRandomBigIntegerSequence(bitLength - 1)
 			   .filter(value -> MathUtil.isPrime(value))
-			   .map(new Mapping<BigInteger, BigInteger>() {
-
-			@Override
-			public BigInteger apply(BigInteger value) {
-				return value.shiftLeft(1).add(MathUtil.ONE);
-			}
-
-		}).find(value -> value.mod(BigInteger.valueOf(12)).equals(BigInteger.valueOf(11)) && MathUtil.isPrime(value)));
+			   .map(value -> value.shiftLeft(1).add(MathUtil.ONE))
+			   .find(value -> value.mod(BigInteger.valueOf(12)).equals(BigInteger.valueOf(11)) && MathUtil.isPrime(value)));
 	}
 
 }

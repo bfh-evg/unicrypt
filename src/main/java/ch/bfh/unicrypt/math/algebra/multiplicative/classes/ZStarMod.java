@@ -50,13 +50,11 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Predicate;
 
 /**
  * This class implements the group of integers Z*_n with the operation of multiplication modulo n. Its identity element
@@ -161,14 +159,7 @@ public class ZStarMod
 		return randomByteSequence
 			   .getRandomBigIntegerSequence(MathUtil.ONE, this.getModulus().subtract(MathUtil.ONE))
 			   .filter(value -> abstractContains(value))
-			   .map(new Mapping<BigInteger, ZStarModElement>() {
-
-				   @Override
-				   public ZStarModElement apply(BigInteger value) {
-					   return abstractGetElement(value);
-				   }
-
-			   });
+			   .map(value -> abstractGetElement(value));
 	}
 
 	@Override

@@ -58,7 +58,6 @@ import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.MultiSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
@@ -69,6 +68,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 import java.util.Iterator;
+import java.util.function.Function;
 
 /**
  *
@@ -552,21 +552,16 @@ public class ProductSet
 
 	@Override
 	protected Sequence<Tuple> defaultGetElements() {
-		return MultiSequence.getInstance(this.getSequence().map(new Mapping<Set, Sequence<Element>>() {
+		return MultiSequence.getInstance(this.getSequence()
+			   .map(set -> set.getElements()))
+			   .join().map(new Function<DenseArray<Element>, Tuple>() {
 
-			@Override
-			public Sequence<Element> apply(Set set) {
-				return set.getElements();
-			}
+				   @Override
+				   public Tuple apply(DenseArray<Element> value) {
+					   return Tuple.getInstance(value);
+				   }
 
-		})).join().map(new Mapping<DenseArray<Element>, Tuple>() {
-
-			@Override
-			public Tuple apply(DenseArray<Element> value) {
-				return Tuple.getInstance(value);
-			}
-
-		});
+			   });
 	}
 
 	@Override

@@ -48,7 +48,6 @@ import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
@@ -141,14 +140,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 	@Override
 	protected Sequence<E> defaultGetElements() {
 		final AbstractCyclicGroup<E, V> group = this;
-		return Sequence.getInstance(this.getDefaultGenerator(), new Mapping<E, E>() {
-
-								 @Override
-								 public E apply(E element) {
-									 return group.apply(group.getDefaultGenerator(), element);
-								 }
-
-							 }).limit(element -> group.getIdentityElement().equals(element));
+		return Sequence.getInstance(this.getDefaultGenerator(), element -> group.apply(group.getDefaultGenerator(), element)).limit(element -> group.getIdentityElement().equals(element));
 	}
 
 	// we return true by default, because we assume that most cyclic groups will be of prime order
