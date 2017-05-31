@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Operator;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
@@ -85,7 +84,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 		if (elements == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		return this.defaultApply(Sequence.getInstance(elements).filter(Predicate.NOT_NULL));
+		return this.defaultApply(Sequence.getInstance(elements).filter(Sequence.NOT_NULL));
 	}
 
 	@Override
@@ -102,7 +101,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 		if (elements == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		return this.defaultApply(elements.filter(Predicate.NOT_NULL));
+		return this.defaultApply(elements.filter(Sequence.NOT_NULL));
 	}
 
 	@Override

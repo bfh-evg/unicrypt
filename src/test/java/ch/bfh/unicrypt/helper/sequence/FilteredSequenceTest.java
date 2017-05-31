@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import java.util.function.Predicate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -60,23 +60,9 @@ public class FilteredSequenceTest {
 
 		Sequence<Integer> seq = IntegerSequence.getInstance(1, 10);
 
-		Predicate<Integer> primePredicate = new Predicate<Integer>() {
+		Predicate<Integer> primePredicate = value -> MathUtil.isPrime(value);
 
-			@Override
-			public boolean test(Integer value) {
-				return MathUtil.isPrime(value);
-			}
-
-		};
-
-		Predicate<Integer> oddPredicate = new Predicate<Integer>() {
-
-			@Override
-			public boolean test(Integer value) {
-				return value % 2 == 1;
-			}
-
-		};
+		Predicate<Integer> oddPredicate = value -> value % 2 == 1;
 
 		{
 			Sequence<Integer> filteredSeq = seq.filter(primePredicate);

@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.helper.array.classes;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.util.Collection;
 
 /**
@@ -116,7 +115,7 @@ public class DenseArray<V>
 		if (values == null || values.isInfinite()) {
 			throw new IllegalArgumentException();
 		}
-		values = values.filter(Predicate.NOT_NULL).limit(Integer.MAX_VALUE);
+		values = values.filter(Sequence.NOT_NULL).limit(Integer.MAX_VALUE);
 		Object[] array = new Object[values.getLength().intValue()];
 		int i = 0;
 		for (V value : values) {

@@ -48,7 +48,6 @@ import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
 import java.math.BigInteger;
@@ -118,14 +117,7 @@ public class ZStarModPrime
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
 	protected Sequence<ZStarModElement> defaultGetRandomGenerators(RandomByteSequence randomByteSequence) {
-		return this.abstractGetRandomElements(randomByteSequence).filter(new Predicate<ZStarModElement>() {
-
-			@Override
-			public boolean test(ZStarModElement value) {
-				return isGenerator(value);
-			}
-
-		});
+		return this.abstractGetRandomElements(randomByteSequence).filter(value -> isGenerator(value));
 	}
 
 	@Override

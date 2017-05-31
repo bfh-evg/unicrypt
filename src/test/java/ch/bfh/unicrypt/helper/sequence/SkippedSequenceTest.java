@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -90,13 +89,7 @@ public class SkippedSequenceTest {
 		Assert.assertEquals(9, (int) sequence.skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).get());
 
 		// unknown length
-		Sequence<Integer> seq2 = sequence.filter(new Predicate<Integer>() {
-
-			@Override
-			public boolean test(Integer value) {
-				return true;
-			}
-		});
+		Sequence<Integer> seq2 = sequence.filter(value -> true);
 		Assert.assertEquals(10, seq2.getLength().intValue());
 		Assert.assertEquals(1, seq2.skip(9).getLength().intValue());
 		Assert.assertEquals(MathUtil.ZERO, seq2.skip(10).getLength());

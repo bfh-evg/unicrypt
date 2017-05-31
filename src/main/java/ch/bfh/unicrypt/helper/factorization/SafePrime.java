@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -167,27 +166,16 @@ public class SafePrime
 				return new SafePrime(MathUtil.SEVEN);
 			}
 		}
-		return new SafePrime(randomByteSequence.getRandomBigIntegerSequence(bitLength - 1).filter(new Predicate<BigInteger>() {
-
-			@Override
-			public boolean test(BigInteger value) {
-				return MathUtil.isPrime(value);
-			}
-
-		}).map(new Mapping<BigInteger, BigInteger>() {
+		return new SafePrime(randomByteSequence.getRandomBigIntegerSequence(bitLength - 1)
+			   .filter(value -> MathUtil.isPrime(value))
+			   .map(new Mapping<BigInteger, BigInteger>() {
 
 			@Override
 			public BigInteger apply(BigInteger value) {
 				return value.shiftLeft(1).add(MathUtil.ONE);
 			}
 
-		}).find(new Predicate<BigInteger>() {
-
-			@Override
-			public boolean test(BigInteger value) {
-				return value.mod(BigInteger.valueOf(12)).equals(BigInteger.valueOf(11)) && MathUtil.isPrime(value);
-			}
-		}));
+		}).find(value -> value.mod(BigInteger.valueOf(12)).equals(BigInteger.valueOf(11)) && MathUtil.isPrime(value)));
 	}
 
 }

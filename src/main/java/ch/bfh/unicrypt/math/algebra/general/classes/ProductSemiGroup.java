@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Operator;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -240,7 +239,7 @@ public class ProductSemiGroup
 
 	protected Tuple defaultApply(final Sequence<Element> elements) {
 		final ProductSemiGroup semiGroup = this;
-		return (Tuple) elements.filter(Predicate.NOT_NULL).reduce(new Operator<Element>() {
+		return (Tuple) elements.filter(Sequence.NOT_NULL).reduce(new Operator<Element>() {
 
 			@Override
 			public Element apply(Element element1, Element element2) {

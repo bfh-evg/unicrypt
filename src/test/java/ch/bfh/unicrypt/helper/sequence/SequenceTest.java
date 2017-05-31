@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
+import java.util.function.Predicate;
 import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -75,13 +75,7 @@ public class SequenceTest {
 
 	@Test
 	public void testCountFindGetMatch() {
-		Predicate<Integer> pred = new Predicate<Integer>() {
-
-			@Override
-			public boolean test(Integer value) {
-				return value > 10 && value < 15;
-			}
-		};
+		Predicate<Integer> pred = value -> value > 10 && value < 15;
 		Sequence<Integer> seq = IntegerSequence.getInstance(1, 20);
 
 		Assert.assertEquals(4, seq.count(pred));

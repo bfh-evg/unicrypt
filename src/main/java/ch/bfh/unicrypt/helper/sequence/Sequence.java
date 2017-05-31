@@ -49,10 +49,10 @@ import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.functions.Operator;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 /**
  * This interface represents the concept of an iterable sequence of values similar to streams in Java 8. No means are
@@ -67,6 +67,11 @@ import java.util.Iterator;
 public abstract class Sequence<V>
 	   extends UniCrypt
 	   implements Iterable<V> {
+	
+	/**
+	 * A predicate that checks that the value is not null.
+	 */
+	public static final Predicate<Object> NOT_NULL = value -> value != null;
 
 	/**
 	 * A constant value representing an infinite sequence length.

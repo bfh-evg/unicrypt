@@ -42,9 +42,9 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import org.junit.Test;
@@ -82,14 +82,7 @@ public class SequenceIteratorTest {
 	@Test
 	public void testFind() {
 		SequenceIterator<Integer> iterator = SequenceIterator.getInstance(values.iterator());
-		Predicate<Integer> pred = new Predicate<Integer>() {
-
-			@Override
-			public boolean test(Integer value) {
-				return value % 2 == 0;
-			}
-
-		};
+		Predicate<Integer> pred = value -> value % 2 == 0;
 		assertEquals(2, (int) iterator.find(pred));
 		assertEquals(4, (int) iterator.find(pred));
 		assertEquals(6, (int) iterator.find(pred));

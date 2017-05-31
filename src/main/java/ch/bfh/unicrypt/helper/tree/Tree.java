@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.tree;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
@@ -116,7 +115,7 @@ public abstract class Tree<V>
 		if (children == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Node<>(children.filter(Predicate.NOT_NULL));
+		return new Node<>(children.filter(Sequence.NOT_NULL));
 	}
 
 	/**

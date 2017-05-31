@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.math.BigInteger;
 
 /**
@@ -223,14 +222,7 @@ public abstract class RandomByteSequence
 				return new BigInteger(1, bytes).add(minValue);
 			}
 
-		}).filter(new Predicate<BigInteger>() {
-
-			@Override
-			public boolean test(BigInteger value) {
-				return value.compareTo(maxValue) <= 0;
-			}
-
-		});
+		}).filter(value -> value.compareTo(maxValue) <= 0);
 	}
 
 	@Override

@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.helper.map.Map2D;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
 import java.math.BigInteger;
 
@@ -235,13 +234,7 @@ public class Prime
 		if (bitLength < 2 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Prime(randomByteSequence.getRandomBigIntegerSequence(bitLength).find(new Predicate<BigInteger>() {
-
-			@Override
-			public boolean test(BigInteger value) {
-				return MathUtil.isPrime(value);
-			}
-		}));
+		return new Prime(randomByteSequence.getRandomBigIntegerSequence(bitLength).find(value -> MathUtil.isPrime(value)));
 	}
 
 }

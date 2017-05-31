@@ -61,7 +61,6 @@ import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.BigIntegerSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -545,7 +544,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 				}
 			}
 
-		}).filter(Predicate.NOT_NULL);
+		}).filter(Sequence.NOT_NULL);
 		if (set.isFinite()) {
 			return sequence.limit(set.getOrderLowerBound());
 		}

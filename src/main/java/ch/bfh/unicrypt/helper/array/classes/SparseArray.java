@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -197,7 +196,7 @@ public class SparseArray<V>
 		}
 		Map<Integer, V> map = new HashMap<>();
 		int i = 0;
-		for (V value : values.filter(Predicate.NOT_NULL)) {
+		for (V value : values.filter(Sequence.NOT_NULL)) {
 			if (!value.equals(defaultValue)) {
 				map.put(i, value);
 			}

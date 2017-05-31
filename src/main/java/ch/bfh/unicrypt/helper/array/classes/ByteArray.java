@@ -52,7 +52,6 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.util.Arrays;
 
 /**
@@ -193,7 +192,7 @@ public class ByteArray
 		if (bytes == null || bytes.isInfinite()) {
 			throw new IllegalArgumentException();
 		}
-		bytes = bytes.filter(Predicate.NOT_NULL);
+		bytes = bytes.filter(Sequence.NOT_NULL);
 		byte[] array = new byte[bytes.getLength().intValue()];
 		int i = 0;
 		for (Byte b : bytes) {
