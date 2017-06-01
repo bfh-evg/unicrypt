@@ -44,8 +44,8 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.cache.Cache;
-import ch.bfh.unicrypt.helper.factorization.Prime;
-import ch.bfh.unicrypt.helper.factorization.PrimePair;
+import ch.bfh.unicrypt.helper.prime.Prime;
+import ch.bfh.unicrypt.helper.prime.PrimePair;
 import java.math.BigInteger;
 
 /**

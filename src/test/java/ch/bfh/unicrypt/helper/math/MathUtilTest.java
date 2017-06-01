@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.math;
 
-import ch.bfh.unicrypt.helper.factorization.Factorization;
+import ch.bfh.unicrypt.helper.prime.Factorization;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;

@@ -39,10 +39,10 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.map;
+package ch.bfh.unicrypt.helper.cache;
 
 import ch.bfh.unicrypt.helper.cache.Cache2D;
-import ch.bfh.unicrypt.helper.factorization.Prime;
+import ch.bfh.unicrypt.helper.prime.Prime;
 import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
