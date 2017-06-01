@@ -43,14 +43,13 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.cache.Cache;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -61,7 +60,7 @@ public class ZModPrime
 	   implements PrimeField<BigInteger> {
 
 	private static final long serialVersionUID = 1L;
-	private static final Map<BigInteger, ZModPrime> INSTANCES = new HashMap<>();
+	private static final Cache<BigInteger, ZModPrime> CACHE = new Cache<>(Cache.SIZE_S);
 
 	protected ZModPrime(Prime prime) {
 		super(prime.getValue());
@@ -170,10 +169,10 @@ public class ZModPrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		ZModPrime instance = ZModPrime.INSTANCES.get(modulus);
+		ZModPrime instance = ZModPrime.CACHE.get(modulus);
 		if (instance == null) {
 			instance = new ZModPrime(Prime.getInstance(modulus));
-			ZModPrime.INSTANCES.put(modulus, instance);
+			ZModPrime.CACHE.put(modulus, instance);
 		}
 		return instance;
 	}
@@ -182,16 +181,16 @@ public class ZModPrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		ZModPrime instance = ZModPrime.INSTANCES.get(modulus.getValue());
+		ZModPrime instance = ZModPrime.CACHE.get(modulus.getValue());
 		if (instance == null) {
 			instance = new ZModPrime(modulus);
-			ZModPrime.INSTANCES.put(modulus.getValue(), instance);
+			ZModPrime.CACHE.put(modulus.getValue(), instance);
 		}
 		return instance;
 	}
 
 	public static ZModPrime getFirstInstance(int bitLength) {
-		return ZModPrime.getInstance(Prime.getFirstInstance(bitLength));
+		return ZModPrime.getInstance(Prime.getSmallestInstance(bitLength));
 	}
 
 }

@@ -43,12 +43,11 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.cache.Cache;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.factorization.SafePrime;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -58,7 +57,7 @@ public class GStarModSafePrime
 	   extends GStarModPrime {
 
 	private static final long serialVersionUID = 1L;
-	private final static Map<BigInteger, GStarModSafePrime> INSTANCES = new HashMap<>();
+	private final static Cache<BigInteger, GStarModSafePrime> CACHE = new Cache<>(Cache.SIZE_S);
 
 	protected GStarModSafePrime(SafePrime modulus) {
 		super(modulus, Prime.getInstance(modulus.getValue().subtract(MathUtil.ONE).divide(MathUtil.TWO)));
@@ -84,10 +83,10 @@ public class GStarModSafePrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		GStarModSafePrime instance = GStarModSafePrime.INSTANCES.get(modulus);
+		GStarModSafePrime instance = GStarModSafePrime.CACHE.get(modulus);
 		if (instance == null) {
 			instance = new GStarModSafePrime(SafePrime.getInstance(modulus));
-			GStarModSafePrime.INSTANCES.put(modulus, instance);
+			GStarModSafePrime.CACHE.put(modulus, instance);
 		}
 		return instance;
 	}
@@ -96,16 +95,16 @@ public class GStarModSafePrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		GStarModSafePrime instance = GStarModSafePrime.INSTANCES.get(modulus.getValue());
+		GStarModSafePrime instance = GStarModSafePrime.CACHE.get(modulus.getValue());
 		if (instance == null) {
 			instance = new GStarModSafePrime(modulus);
-			GStarModSafePrime.INSTANCES.put(modulus.getValue(), instance);
+			GStarModSafePrime.CACHE.put(modulus.getValue(), instance);
 		}
 		return instance;
 	}
 
 	public static GStarModSafePrime getFirstInstance(final int bitLength) {
-		return GStarModSafePrime.getInstance(SafePrime.getFirstInstance(bitLength));
+		return GStarModSafePrime.getInstance(SafePrime.getSmallestInstance(bitLength));
 	}
 
 }

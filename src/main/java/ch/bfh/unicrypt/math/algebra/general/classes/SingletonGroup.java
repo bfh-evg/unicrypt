@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.cache.Cache;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
@@ -51,8 +52,6 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author R. Haenni
@@ -148,16 +147,16 @@ public class SingletonGroup
 		return hash;
 	}
 
-	private static final Map<BigInteger, SingletonGroup> INSTANCES = new HashMap<>();
+	private static final Cache<BigInteger, SingletonGroup> CACHE = new Cache<>(Cache.SIZE_M);
 
 	public static SingletonGroup getInstance(final BigInteger value) {
 		if (value == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		SingletonGroup instance = SingletonGroup.INSTANCES.get(value);
+		SingletonGroup instance = SingletonGroup.CACHE.get(value);
 		if (instance == null) {
 			instance = new SingletonGroup(value);
-			SingletonGroup.INSTANCES.put(value, instance);
+			SingletonGroup.CACHE.put(value, instance);
 		}
 		return instance;
 	}

@@ -43,12 +43,11 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.cache.Cache;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.factorization.PrimePair;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrimePair;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -57,7 +56,7 @@ import java.util.Map;
 public class ZModPrimePair
 	   extends ZMod {
 
-	private static final Map<BigInteger, ZModPrimePair> INSTANCES = new HashMap<>();
+	private static final Cache<BigInteger, ZModPrimePair> CACHE = new Cache<>(Cache.SIZE_S);
 
 	private final PrimePair primePair;
 
@@ -89,10 +88,10 @@ public class ZModPrimePair
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, prime1, prime2);
 		}
 		BigInteger value = prime1.multiply(prime2);
-		ZModPrimePair instance = ZModPrimePair.INSTANCES.get(value);
+		ZModPrimePair instance = ZModPrimePair.CACHE.get(value);
 		if (instance == null) {
 			instance = new ZModPrimePair(PrimePair.getInstance(prime1, prime2));
-			ZModPrimePair.INSTANCES.put(value, instance);
+			ZModPrimePair.CACHE.put(value, instance);
 		}
 		return instance;
 	}
@@ -105,10 +104,10 @@ public class ZModPrimePair
 		if (primePair == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		ZModPrimePair instance = ZModPrimePair.INSTANCES.get(primePair.getValue());
+		ZModPrimePair instance = ZModPrimePair.CACHE.get(primePair.getValue());
 		if (instance == null) {
 			instance = new ZModPrimePair(primePair);
-			ZModPrimePair.INSTANCES.put(primePair.getValue(), instance);
+			ZModPrimePair.CACHE.put(primePair.getValue(), instance);
 		}
 		return instance;
 	}

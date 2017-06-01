@@ -43,13 +43,11 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.cache.Cache;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -73,16 +71,16 @@ public class FixedByteArraySet
 		return randomByteSequence.group(this.getLength()).map(value -> abstractGetElement(value));
 	}
 
-	private static final Map<Integer, FixedByteArraySet> INSTANCES = new HashMap<>();
+	private static final Cache<Integer, FixedByteArraySet> CACHE = new Cache<>(Cache.SIZE_M);
 
 	public static FixedByteArraySet getInstance(final int length) {
 		if (length < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, length);
 		}
-		FixedByteArraySet instance = FixedByteArraySet.INSTANCES.get(Integer.valueOf(length));
+		FixedByteArraySet instance = FixedByteArraySet.CACHE.get(Integer.valueOf(length));
 		if (instance == null) {
 			instance = new FixedByteArraySet(length);
-			FixedByteArraySet.INSTANCES.put(length, instance);
+			FixedByteArraySet.CACHE.put(length, instance);
 		}
 		return instance;
 	}

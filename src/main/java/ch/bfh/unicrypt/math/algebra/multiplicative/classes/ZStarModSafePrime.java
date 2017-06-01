@@ -43,12 +43,11 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.cache.Cache;
 import ch.bfh.unicrypt.helper.factorization.SafePrime;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -57,7 +56,7 @@ import java.util.Map;
 public class ZStarModSafePrime
 	   extends ZStarModPrime {
 
-	private final static Map<BigInteger, ZStarModSafePrime> INSTANCES = new HashMap<>();
+	private final static Cache<BigInteger, ZStarModSafePrime> CACHE = new Cache<>(Cache.SIZE_S);
 	private ZStarModElement defaultGenerator;
 
 	private ZStarModSafePrime(SafePrime modulus) {
@@ -96,10 +95,10 @@ public class ZStarModSafePrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		ZStarModSafePrime instance = ZStarModSafePrime.INSTANCES.get(modulus);
+		ZStarModSafePrime instance = ZStarModSafePrime.CACHE.get(modulus);
 		if (instance == null) {
 			instance = new ZStarModSafePrime(SafePrime.getInstance(modulus));
-			ZStarModSafePrime.INSTANCES.put(modulus, instance);
+			ZStarModSafePrime.CACHE.put(modulus, instance);
 		}
 		return instance;
 	}
@@ -108,16 +107,16 @@ public class ZStarModSafePrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		ZStarModSafePrime instance = ZStarModSafePrime.INSTANCES.get(modulus.getValue());
+		ZStarModSafePrime instance = ZStarModSafePrime.CACHE.get(modulus.getValue());
 		if (instance == null) {
 			instance = new ZStarModSafePrime(modulus);
-			ZStarModSafePrime.INSTANCES.put(modulus.getValue(), instance);
+			ZStarModSafePrime.CACHE.put(modulus.getValue(), instance);
 		}
 		return instance;
 	}
 
 	public static ZStarModSafePrime getFirstInstance(int bitLength) {
-		return ZStarModSafePrime.getInstance(SafePrime.getFirstInstance(bitLength));
+		return ZStarModSafePrime.getInstance(SafePrime.getSmallestInstance(bitLength));
 	}
 
 }
