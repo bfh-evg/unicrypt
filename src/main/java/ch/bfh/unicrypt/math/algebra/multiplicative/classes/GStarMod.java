@@ -140,7 +140,7 @@ public class GStarMod
 
 	@Override
 	protected GStarModElement defaultSelfApplyAlgorithm(final GStarModElement element, final BigInteger posExponent) {
-		return this.abstractGetElement(element.getValue().modPow(posExponent, this.modulus));
+		return this.abstractGetElement(MathUtil.modExp(element.getValue(), posExponent, this.modulus));
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class GStarMod
 		return value.signum() > 0
 			   && value.compareTo(this.modulus) < 0
 			   && MathUtil.areRelativelyPrime(value, this.modulus)
-			   && value.modPow(this.getOrder(), this.modulus).equals(MathUtil.ONE);
+			   && MathUtil.modExp(value, this.getOrder(), this.modulus).equals(MathUtil.ONE);
 	}
 
 	@Override
@@ -189,7 +189,7 @@ public class GStarMod
 
 	@Override
 	protected GStarModElement abstractInvert(final GStarModElement element) {
-		return this.abstractGetElement(element.getValue().modInverse(this.modulus));
+		return this.abstractGetElement(MathUtil.modInv(element.getValue(), this.modulus));
 	}
 
 	@Override
@@ -201,7 +201,7 @@ public class GStarMod
 			do {
 				alpha = alpha.add(MathUtil.ONE);
 			} while (!MathUtil.areRelativelyPrime(alpha, this.getModulus()));
-			element = this.abstractGetElement(alpha.modPow(this.getCoFactor(), this.modulus));
+			element = this.abstractGetElement(MathUtil.modExp(alpha, this.getCoFactor(), this.modulus));
 		} while (!this.isGenerator(element)); // this test could be skipped for a prime order
 		return element;
 	}

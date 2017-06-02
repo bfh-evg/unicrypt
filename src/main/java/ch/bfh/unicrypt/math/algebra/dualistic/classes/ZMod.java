@@ -109,7 +109,7 @@ public class ZMod
 
 	@Override
 	protected ZModElement defaultPowerAlgorithm(ZModElement element, BigInteger exponent) {
-		return this.abstractGetElement(element.getValue().modPow(exponent, this.modulus));
+		return this.abstractGetElement(MathUtil.modExp(element.getValue(), exponent, this.modulus));
 	}
 
 	@Override

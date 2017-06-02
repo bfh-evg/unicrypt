@@ -127,7 +127,7 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		boolean positive = n.signum() > 0;
-		n = n.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		n = MathUtil.modInv(n.abs().mod(this.getOrder()), this.getOrder());
 		E result = this.defaultPowerAlgorithm((E) element, n);
 		if (positive) {
 			return result;

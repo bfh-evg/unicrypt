@@ -333,7 +333,7 @@ public class MathUtilTest {
 	}
 
 	@Test
-	public void testHasSqrtModPrime() {
+	public void testIsQuadraticResidue() {
 		for (BigInteger p : new BigInteger[]{TWO, THREE, FIVE, SEVEN, BigInteger.valueOf(97)}) {
 			Set squares = new HashSet<>();
 			for (int i = 1; i < p.intValue(); i++) {
@@ -342,7 +342,7 @@ public class MathUtilTest {
 			}
 			for (int i = 1; i < p.intValue(); i++) {
 				BigInteger bi = BigInteger.valueOf(i);
-				Assert.assertEquals(squares.contains(bi), MathUtil.hasSqrtModPrime(bi, p));
+				Assert.assertEquals(squares.contains(bi), MathUtil.isQuadraticResidue(bi, p));
 			}
 		}
 	}

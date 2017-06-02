@@ -78,7 +78,7 @@ public class GStarModPrime
 	protected boolean abstractContains(final BigInteger value) {
 		return value.signum() > 0
 			   && value.compareTo(this.modulus) < 0
-			   && value.modPow(this.getOrder(), this.modulus).equals(MathUtil.ONE);
+			   && MathUtil.modExp(value, this.getOrder(), this.modulus).equals(MathUtil.ONE);
 	}
 
 	public static GStarModPrime getInstance(final long modulus, long order) {

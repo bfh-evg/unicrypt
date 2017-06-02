@@ -166,6 +166,11 @@ Redistributions of files must retain the above copyright notice.
 			<version>0.7.7.201606060606</version>
 			<scope>test</scope>
 		</dependency>
+	 <dependency>
+	  <groupId>com.squareup.jnagmp</groupId>
+	  <artifactId>jnagmp</artifactId>
+	  <version>2.0.0</version>
+	 </dependency>
 	</dependencies>
 
 	<properties>

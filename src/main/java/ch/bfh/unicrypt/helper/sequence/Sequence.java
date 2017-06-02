@@ -618,7 +618,7 @@ public abstract class Sequence<V>
 	/**
 	 * Returns a new finite sequence consisting of the values contained in the input array. Using this method requires
 	 * some care, since the input array is not checked for {@code null} values. If necessary, a filter using
-	 * {@link Predicate#NOT_NULL} can be applied to the resulting sequence to eliminate {@code null} values. The
+	 * {@link Sequence#NOT_NULL} can be applied to the resulting sequence to eliminate {@code null} values. The
 	 * resulting sequence is also not safe against modifications in the input array.
 	 * <p>
 	 * @param <V>    The type of the new sequence
@@ -654,7 +654,7 @@ public abstract class Sequence<V>
 	/**
 	 * Returns a new finite sequence consisting of the values contained in the given collection. Using this method
 	 * requires some care, since the collection is not checked for {@code null} values. If necessary, a filter using
-	 * {@link Predicate#NOT_NULL} can be applied to the resulting sequence to eliminate {@code null} values. The
+	 * {@link Sequence#NOT_NULL} can be applied to the resulting sequence to eliminate {@code null} values. The
 	 * resulting sequence is also not safe against modifications in the given collection.
 	 * <p>
 	 * @param <V>    The type of the new sequence

@@ -202,7 +202,7 @@ public class ECZModPrime
 		// Test8a
 		if (!isTest) {
 			for (BigInteger i : BigIntegerSequence.getInstance(1, 99)) {
-				if (modulus.modPow(i, subGroupOrder).equals(MathUtil.ONE)) {
+				if (MathUtil.modExp(modulus, i, subGroupOrder).equals(MathUtil.ONE)) {
 					throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, i, subGroupOrder);
 				}
 			}

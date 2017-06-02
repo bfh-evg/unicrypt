@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.math;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.prime.Factorization;
+import com.squareup.jnagmp.Gmp;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -77,6 +78,59 @@ public final class MathUtil {
 			BIT_MASKS[i] = (byte) (1 << i);
 			BIT_MASKS_INV[i] = (byte) ~(1 << i);
 		}
+	}
+
+	/**
+	 * GMP wrapper method for computing modular exponentiations for base {@code b>=0}, exponent {@code e>=0}, and
+	 * modulus {@code m>0}.
+	 *
+	 * @param b The base
+	 * @param e The exponent
+	 * @param m The modulus
+	 * @return {@code b^e mod m}
+	 */
+	public static BigInteger modExp(BigInteger b, BigInteger e, BigInteger m) {
+		if (m.testBit(0)) {
+			return Gmp.modPowInsecure(b, e, m);
+		} else {
+			return Gmp.modPowSecure(b, e, m); // Gmp.modPowSecure requires modulus to be odd
+		}
+	}
+
+	/**
+	 * GMP wrapper method for computing modular inverses of a positive integer {@code x>0} and a positive modulus
+	 * {@code m>0}.
+	 *
+	 * @param x The value
+	 * @param m The modulus
+	 * @return {@code x^{.1} mod m}
+	 */
+	public static BigInteger modInv(BigInteger x, BigInteger m) {
+		return Gmp.modInverse(x, m);
+	}
+
+	/**
+	 * GMP wrapper method for computing the Legendre (Kronecker) symbol {@code (x/n)} of a non-negative integer
+	 * {@code x>=0} and a prime number {@code p>2}.
+	 * <p>
+	 * @param x The given integer
+	 * @param p The given odd prime number
+	 * @return The Legendre symbol {@code (x/n)}
+	 */
+	public static int legendreSymbol(BigInteger x, BigInteger p) {
+		return Gmp.kronecker(x, p);
+	}
+
+	/**
+	 * Checks if a given integer value {@code x} is a quadratic residue modulo a given prime number {@code p}, for
+	 * {@code 0<x<p}. In that case, {@code x} has corresponding square roots (modulo {@code p}).
+	 * <p>
+	 * @param x The integer value
+	 * @param p The prime number
+	 * @return {@code true} if {@code x} is a quadratic residue (modulo {@code p}), {@code false} otherwise
+	 */
+	public static boolean isQuadraticResidue(BigInteger x, BigInteger p) {
+		return MathUtil.legendreSymbol(x, p) == 1;
 	}
 
 	/**
@@ -531,7 +585,6 @@ public final class MathUtil {
 	 * the Tonelli-Shanks algorithm, for {@code 0<x<p}. It is assumed that such square roots exist, i.e., that {@code x}
 	 * is a quadratic residue (modulo {@code p}). For a sqaure root {@code r}, the second square root is {@code p-r}.
 	 * <p>
-	 * @see MathUtil#hasSqrtModPrime(java.math.BigInteger, java.math.BigInteger)
 	 * @param x The integer value
 	 * @param p The prime modulo
 	 * @return One of the two square roots of {@code x} (modulo {@code p})
@@ -543,13 +596,13 @@ public final class MathUtil {
 			return ONE;
 		}
 		if (p.mod(FOUR).equals(THREE)) {
-			return x.modPow(p.add(ONE).divide(FOUR), p);
+			return MathUtil.modExp(x, p.add(ONE).divide(FOUR), p);
 		}
 
 		// compute z, which must be a quadratic non-residue
 		BigInteger z = TWO;
 
-		while (hasSqrtModPrime(z, p)) {
+		while (isQuadraticResidue(z, p)) {
 			z = z.add(ONE);
 		}
 		BigInteger s = ONE;
@@ -561,39 +614,26 @@ public final class MathUtil {
 			s = s.add(ONE);
 		}
 
-		BigInteger c = z.modPow(q, p);
-		BigInteger r = x.modPow(q.add(ONE).divide(TWO), p);
-		BigInteger t = x.modPow(q, p);
+		BigInteger c = MathUtil.modExp(z, q, p);
+		BigInteger r = MathUtil.modExp(x, q.add(ONE).divide(TWO), p);
+		BigInteger t = MathUtil.modExp(x, q, p);
 		BigInteger m = s;
 
 		// loop until t=1
 		while (!t.equals(ONE)) {
 			BigInteger i = ZERO;
-			while (!ONE.equals(t.modPow(TWO.modPow(i, p), p))) {
+			while (!ONE.equals(MathUtil.modExp(t, MathUtil.modExp(TWO, i, p), p))) {
 				i = i.add(ONE);
 			}
 
-			BigInteger b = c.modPow(TWO.modPow(m.subtract(i).subtract(ONE), p), p);
+			BigInteger b = MathUtil.modExp(c, MathUtil.modExp(TWO, m.subtract(i).subtract(ONE), p), p);
 			r = r.multiply(b).mod(p);
 			t = t.multiply(b.pow(2)).mod(p);
-			c = b.modPow(TWO, p);
+			c = MathUtil.modExp(b, TWO, p);
 			m = i;
 		}
 
 		return r;
-	}
-
-	/**
-	 * Checks if a given integer value {@code x} is a quadratic residue modulo a given prime number {@code p}, for
-	 * {@code 0<x<p}. In that case, {@code x} has corresponding square roots (modulo {@code p}).
-	 * <p>
-	 * @param x The integer value
-	 * @param p The prime modulo
-	 * @return {@code true} if {@code x} is a quadratic residue (modulo {@code p}), {@code false} otherwise
-	 * @see MathUtil#sqrtModPrime(java.math.BigInteger, java.math.BigInteger)
-	 */
-	public static boolean hasSqrtModPrime(BigInteger x, BigInteger p) {
-		return x.modPow(p.subtract(ONE).divide(TWO), p).equals(ONE);
 	}
 
 	/**
@@ -805,42 +845,6 @@ public final class MathUtil {
 			return divideUp(x.negate(), y.negate());
 		}
 		return divide(x.add(y).subtract(ONE), y);
-	}
-
-	/**
-	 * Computes the Legendre symbol {@code (a/n)} of a non-negative integer {@code a>=0} and a prime number {@code p>2}.
-	 * <p>
-	 * @param a The given integer
-	 * @param p The given odd prime number
-	 * @return The Legendre symbol {@code (a/n)}
-	 */
-	public static int legendreSymbol(BigInteger a, BigInteger p) {
-
-		a = a.mod(p);
-
-		BigInteger t = MathUtil.ONE;
-		while (!a.equals(MathUtil.ZERO)) {
-			while (a.mod(MathUtil.TWO).equals(MathUtil.ZERO)) {
-				a = a.divide(MathUtil.TWO);
-
-				if (p.mod(MathUtil.EIGHT).equals(MathUtil.THREE) || p.mod(MathUtil.EIGHT).equals(MathUtil.FIVE)) {
-					t = t.negate();
-				}
-			}
-			BigInteger tmp = a;
-			a = p;
-			p = tmp;
-
-			if (a.mod(MathUtil.FOUR).equals(MathUtil.THREE) && p.mod(MathUtil.FOUR).equals(MathUtil.THREE)) {
-				t = t.negate();
-			}
-			a = a.mod(p);
-		}
-		if (p.equals(MathUtil.ONE)) {
-			return t.intValue();
-		} else {
-			return 0;
-		}
 	}
 
 }

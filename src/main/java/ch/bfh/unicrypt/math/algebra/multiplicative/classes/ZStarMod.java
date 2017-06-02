@@ -122,7 +122,7 @@ public class ZStarMod
 
 	@Override
 	protected ZStarModElement defaultSelfApplyAlgorithm(final ZStarModElement element, final BigInteger posExponent) {
-		return this.abstractGetElement(element.getValue().modPow(posExponent, this.modulus));
+		return this.abstractGetElement(MathUtil.modExp(element.getValue(), posExponent, this.modulus));
 	}
 
 	@Override
@@ -181,7 +181,7 @@ public class ZStarMod
 
 	@Override
 	public ZStarModElement abstractInvert(final ZStarModElement element) {
-		return this.abstractGetElement(element.getValue().modInverse(this.modulus));
+		return this.abstractGetElement(MathUtil.modInv(element.getValue(), this.modulus));
 	}
 
 	@Override

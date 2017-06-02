@@ -126,7 +126,7 @@ public class ZModPrime
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		boolean positive = n.signum() > 0;
-		n = n.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		n = MathUtil.modInv(n.abs().mod(this.getOrder()), this.getOrder());
 		ZModElement result = this.defaultPowerAlgorithm((ZModElement) element, n);
 		if (positive) {
 			return result;
@@ -148,7 +148,7 @@ public class ZModPrime
 		if (zModElement.isZero()) {
 			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this);
 		}
-		return this.abstractGetElement(zModElement.getValue().modInverse(this.modulus));
+		return this.abstractGetElement(MathUtil.modInv(zModElement.getValue(), this.modulus));
 	}
 
 	@Override

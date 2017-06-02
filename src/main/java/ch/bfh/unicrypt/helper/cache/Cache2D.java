@@ -55,7 +55,7 @@ public class Cache2D<K1, K2, V>
 
 	/**
 	 * Returns a new medium-sized instance of this class, an initially empty 2-dimensional cache of size
-	 * {@link Cache.SIZE_M}.
+	 * {@link Cache#SIZE_M}.
 	 */
 	public Cache2D() {
 		super();

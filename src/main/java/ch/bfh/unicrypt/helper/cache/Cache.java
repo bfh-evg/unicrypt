@@ -74,7 +74,7 @@ public class Cache<K, V>
 	private final Map<K, V> map;
 
 	/**
-	 * Returns a new medium-sized instance of this class, an initially empty cache of size {@link Cache.SIZE_M}.
+	 * Returns a new medium-sized instance of this class, an initially empty cache of size {@link Cache#SIZE_M}.
 	 */
 	public Cache() {
 		this(SIZE_M);

@@ -72,7 +72,7 @@ public class GStarModSafePrime
 	protected boolean abstractContains(final BigInteger value) {
 		return value.signum() > 0
 			   && value.compareTo(this.modulus) < 0
-			   && MathUtil.legendreSymbol(value, this.modulus) == 1;
+			   && MathUtil.isQuadraticResidue(value, this.modulus);
 	}
 
 	public static GStarModSafePrime getInstance(final long modulus) {
