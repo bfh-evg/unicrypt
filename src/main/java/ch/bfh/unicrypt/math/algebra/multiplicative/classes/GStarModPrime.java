@@ -45,8 +45,8 @@ import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.cache.Cache;
 import ch.bfh.unicrypt.helper.cache.Cache2D;
-import ch.bfh.unicrypt.helper.prime.Prime;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.prime.Prime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import java.math.BigInteger;
 

@@ -87,7 +87,7 @@ public class FiatShamirChallengeGenerator
 	}
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace) {
-		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null);
+		return FiatShamirChallengeGenerator.getInstance(challengeSpace, null);
 	}
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId) {
@@ -100,7 +100,7 @@ public class FiatShamirChallengeGenerator
 
 	public static <V> FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, ConvertMethod<V> convertMethod,
 		   HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter) {
-		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null, convertMethod,
+		return FiatShamirChallengeGenerator.getInstance(challengeSpace, null, convertMethod,
 														hashMethod, converter);
 
 	}

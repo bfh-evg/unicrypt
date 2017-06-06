@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.converter.biginteger;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.PermutationToBigInteger;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import org.junit.Assert;
 import static org.junit.Assert.fail;

@@ -254,13 +254,7 @@ public class SparseArray<V>
 
 	@Override
 	protected V abstractGetValueAt(int index) {
-		V result = this.map.get(index);
-		if (result == null) {
-			return this.defaultValue;
-		}
-		return result;
-		// Simplification for Java 8: replace everything by
-		// return this.map.getOrDefault(this.rangeOffset + index, this.defaultValue);
+		return this.map.getOrDefault(index, this.defaultValue);
 	}
 
 	@Override

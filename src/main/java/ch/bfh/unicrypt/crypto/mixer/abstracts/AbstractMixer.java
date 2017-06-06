@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.mixer.abstracts;
 
 import ch.bfh.unicrypt.crypto.mixer.interfaces.Mixer;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
@@ -78,7 +79,7 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 
 	@Override
 	public final R getRandomizationSpace() {
-		return (R) ((ProductSet) this.getShuffleFunction().getDomain()).getAt(1);
+		return (R) ((ImmutableArray<Set>) this.getShuffleFunction().getDomain()).getAt(1);
 	}
 
 	@Override

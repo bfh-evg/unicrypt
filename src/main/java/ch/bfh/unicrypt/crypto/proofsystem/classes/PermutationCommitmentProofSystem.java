@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracl
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.RandomOracle;
@@ -62,7 +63,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
@@ -97,7 +98,7 @@ public class PermutationCommitmentProofSystem
 		this.kr = kr;
 		this.independentGenerators = independentGenerators;
 
-		this.ke = ((ZMod) ((ProductSet) this.eValuesGenerator.getChallengeSpace()).getFirst()).getModulus()
+		this.ke = ((ZMod) ((ImmutableArray<Set>) this.eValuesGenerator.getChallengeSpace()).getFirst()).getModulus()
 			   .subtract(MathUtil.ONE).bitLength();
 		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getModulus().subtract(MathUtil.ONE).bitLength();
 	}
@@ -245,7 +246,7 @@ public class PermutationCommitmentProofSystem
 		final Element commitment = f.apply(randomElement);                              // [3n+3]
 		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
 		final Element response = randomElement.apply(Tuple.getInstance(v, w, rV, d, ePrimeV).selfApply(challenge));
-		Triple preimageProof = (Triple) Triple.getInstance(commitment, challenge, response);
+		Triple preimageProof = Triple.getInstance(commitment, challenge, response);
 		//                                                                                -------
 		return Tuple.getInstance(eV, cV).append(preimageProof);                                     // [5n+3]
 	}
@@ -302,7 +303,7 @@ public class PermutationCommitmentProofSystem
 		if (!t1.getSet().isGroup() || t1.getArity() < 1) {
 			throw new IllegalArgumentException();
 		}
-		Element innerProduct = ((Group) t1.getSet().getAt(0)).getIdentityElement();
+		Element innerProduct = ((Monoid) t1.getSet().getAt(0)).getIdentityElement();
 		for (int i = 0; i < t1.getArity(); i++) {
 			innerProduct = innerProduct.apply(t1.getAt(i).selfApply(t2.getAt(i)));
 		}
@@ -439,7 +440,7 @@ public class PermutationCommitmentProofSystem
 		}
 		int size = independentGenerators.getArity() - 1;
 		return getInstance(
-			   createNonInteractiveSigmaChallengeGenerator(kc, (Element) null),
+			   createNonInteractiveSigmaChallengeGenerator(kc, null),
 			   createNonInteractiveEValuesGenerator(ke, size),
 			   independentGenerators,
 			   kr);
@@ -466,7 +467,7 @@ public class PermutationCommitmentProofSystem
 		if (!cs.isProduct()
 			   || ((ProductSet) cs).getArity() != size
 			   || ((ProductSet) cs).getFirst().getOrder().compareTo(cyclicGroup.getOrder()) > 0
-			   || !((ProductSet) cs).isUniform()) {
+			   || !((ImmutableArray<Set>) cs).isUniform()) {
 			throw new IllegalArgumentException();
 		}
 
@@ -479,7 +480,7 @@ public class PermutationCommitmentProofSystem
 
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace) {
-		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, (Element) null, RandomOracle.getInstance());
+		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, null, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator

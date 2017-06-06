@@ -41,8 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.cache;
 
-import ch.bfh.unicrypt.helper.cache.Cache;
-import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;

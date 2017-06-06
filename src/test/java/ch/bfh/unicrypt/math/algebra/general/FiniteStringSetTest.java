@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringSet;
 import ch.bfh.unicrypt.helper.math.Alphabet;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringSet;
 import org.junit.Test;
 
 /**

@@ -53,9 +53,9 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ApplyInverseFunction;
@@ -197,7 +197,7 @@ public class InequalityOfPreimagesProofSystem
 
 		Triple preimageProof = preimageProofGenerator.generate(
 			   Tuple.getInstance(x.selfApply(r), r),
-			   Tuple.getInstance(c, ((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement()),
+			   Tuple.getInstance(c, ((Monoid) this.getFirstFunction().getCoDomain()).getIdentityElement()),
 			   randomByteSequence);
 
 		return Pair.getInstance(preimageProof, c);
@@ -211,11 +211,11 @@ public class InequalityOfPreimagesProofSystem
 		boolean v = preimageProofGenerator.verify(
 			   this.getPreimageProof(proof),
 			   Tuple.getInstance(this.getProofCommitment(proof),
-								 ((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement()));
+								 ((Monoid) this.getFirstFunction().getCoDomain()).getIdentityElement()));
 
 		// 2. Check C != 1
 		boolean c = !this.getProofCommitment(proof).isEquivalent(
-			   ((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement());
+			   ((Monoid) this.getFirstFunction().getCoDomain()).getIdentityElement());
 
 		return v && c;
 	}
@@ -261,8 +261,7 @@ public class InequalityOfPreimagesProofSystem
 	public static RandomOracleSigmaChallengeGenerator
 		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
 				  final RandomOracle randomOracle) {
-		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
-																					   (Element) null, randomOracle);
+		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, null, randomOracle);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator

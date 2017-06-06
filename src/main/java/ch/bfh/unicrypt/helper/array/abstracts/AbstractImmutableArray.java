@@ -41,15 +41,14 @@
  */
 package ch.bfh.unicrypt.helper.array.abstracts;
 
-import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.IntegerSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.lang.reflect.Array;
 import java.util.Iterator;
-import java.util.function.Predicate;
 
 /**
  * This abstract class serves as a base implementation of the {@link ImmutableArray} interface.

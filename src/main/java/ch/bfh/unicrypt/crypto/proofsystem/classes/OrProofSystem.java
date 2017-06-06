@@ -195,7 +195,7 @@ public class OrProofSystem
 			responses[i] = s;
 			// Calculate commitment based on the the public value and the random challenge and response
 			// t = f(s)/(y^c)
-			commitments[i] = f.apply(s).apply(((Tuple) publicInput).getAt(i).selfApply(c).invert());
+			commitments[i] = f.apply(s).apply(publicInput.getAt(i).selfApply(c).invert());
 		}
 
 		// Create the proof of the known secret (normal preimage-proof, but with a special challange)

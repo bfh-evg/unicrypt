@@ -88,7 +88,7 @@ public class RandomOracleSigmaChallengeGenerator
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(ZMod challengeSpace, RandomOracle randomOracle) {
-		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, (Element) null, randomOracle);
+		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, null, randomOracle);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(ZMod challengeSpace, Element proverId,
@@ -112,7 +112,7 @@ public class RandomOracleSigmaChallengeGenerator
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(ZMod challengeSpace, RandomOracle randomOracle,
 		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
-		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, (Element) null, randomOracle,
+		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, null, randomOracle,
 															   convertMethod, aggregator);
 	}
 
@@ -134,7 +134,7 @@ public class RandomOracleSigmaChallengeGenerator
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(Function function, RandomOracle randomOracle) {
-		return RandomOracleSigmaChallengeGenerator.getInstance(function, (Element) null, randomOracle);
+		return RandomOracleSigmaChallengeGenerator.getInstance(function, null, randomOracle);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(Function function, Element proverId,
@@ -157,7 +157,7 @@ public class RandomOracleSigmaChallengeGenerator
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(Function function, RandomOracle randomOracle,
 		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
-		return RandomOracleSigmaChallengeGenerator.getInstance(function, (Element) null, randomOracle, convertMethod,
+		return RandomOracleSigmaChallengeGenerator.getInstance(function, null, randomOracle, convertMethod,
 															   aggregator);
 
 	}

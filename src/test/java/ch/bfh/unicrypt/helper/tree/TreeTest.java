@@ -43,8 +43,8 @@ package ch.bfh.unicrypt.helper.tree;
 
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import java.math.BigInteger;
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  *

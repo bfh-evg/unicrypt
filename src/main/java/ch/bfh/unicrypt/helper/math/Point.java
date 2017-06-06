@@ -86,7 +86,7 @@ public class Point<T>
 	 * @return The point of infinity
 	 */
 	public static <T> Point<T> getInstance() {
-		return new Point<>((T) null, (T) null);
+		return new Point<>(null, null);
 	}
 
 	/**

@@ -1,17 +1,14 @@
 package ch.bfh.unicrypt.crypto.encoder;
 
-import static org.junit.Assert.*;
-
-import java.math.BigInteger;
-
-import org.junit.Test;
-
 import ch.bfh.unicrypt.crypto.encoder.classes.ZModToBinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
+import java.math.BigInteger;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class ZModToBinaryPolyomialEncoderTest {
 

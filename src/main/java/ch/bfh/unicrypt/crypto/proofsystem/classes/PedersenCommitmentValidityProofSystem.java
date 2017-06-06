@@ -105,7 +105,7 @@ public class PedersenCommitmentValidityProofSystem
 
 	public static PedersenCommitmentValidityProofSystem getInstance(final PedersenCommitmentScheme pedersenCS,
 		   final Subset messages) {
-		return PedersenCommitmentValidityProofSystem.getInstance(pedersenCS, messages, (Element) null);
+		return PedersenCommitmentValidityProofSystem.getInstance(pedersenCS, messages, null);
 	}
 
 	public static PedersenCommitmentValidityProofSystem getInstance(final PedersenCommitmentScheme pedersenCS,
@@ -151,8 +151,7 @@ public class PedersenCommitmentValidityProofSystem
 		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
 				  final RandomOracle randomOracle) {
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																							numberOfMessages,
-																							(Element) null,
+																							numberOfMessages, null,
 																							randomOracle);
 	}
 

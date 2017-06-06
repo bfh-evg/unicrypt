@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem;
 
+import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PolynomialEvaluationProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.UniCryptException;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;

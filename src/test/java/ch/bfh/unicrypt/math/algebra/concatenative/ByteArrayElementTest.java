@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative;
 
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import org.junit.Assert;
 import org.junit.Test;
 

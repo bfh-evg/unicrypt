@@ -43,8 +43,6 @@ package ch.bfh.unicrypt.helper.hash;
 
 import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.tree.Leaf;
-import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import org.junit.Assert;
 import org.junit.Test;

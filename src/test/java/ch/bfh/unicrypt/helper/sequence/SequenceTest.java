@@ -58,10 +58,10 @@ public class SequenceTest {
 
 		Sequence<Integer> seq = Sequence.getInstance(2, value -> value + 2);
 		SequenceIterator<Integer> iterator = seq.iterator();
-		Assert.assertEquals(2, (int) iterator.next());
-		Assert.assertEquals(4, (int) iterator.next());
-		Assert.assertEquals(6, (int) iterator.next());
-		Assert.assertEquals(8, (int) iterator.next());
+		Assert.assertEquals(2, (long) iterator.next());
+		Assert.assertEquals(4, (long) iterator.next());
+		Assert.assertEquals(6, (long) iterator.next());
+		Assert.assertEquals(8, (long) iterator.next());
 		Assert.assertTrue(seq.isInfinite());
 	}
 
@@ -72,12 +72,12 @@ public class SequenceTest {
 
 		Assert.assertEquals(4, seq.count(pred));
 
-		Assert.assertEquals(11, (int) seq.find(pred));
-		Assert.assertEquals(14, (int) seq.find(pred, 3));
+		Assert.assertEquals(11, (long) seq.find(pred));
+		Assert.assertEquals(14, (long) seq.find(pred, 3));
 		Assert.assertEquals(null, seq.find(pred, 5));
 
-		Assert.assertEquals(1, (int) seq.get());
-		Assert.assertEquals(4, (int) seq.get(3));
+		Assert.assertEquals(1, (long) seq.get());
+		Assert.assertEquals(4, (long) seq.get(3));
 		Assert.assertEquals(null, seq.find(pred, 25));
 
 		assertFalse(seq.matchAll(pred));

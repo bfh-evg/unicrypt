@@ -151,7 +151,7 @@ public class ElGamalEncryptionValidityProofSystem
 	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
 		   final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final RandomOracle randomOracle) {
 		return ElGamalEncryptionValidityProofSystem
-			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, (Element) null, randomOracle);
+			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, null, randomOracle);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(

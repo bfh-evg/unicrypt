@@ -95,7 +95,7 @@ public class FiatShamirSigmaChallengeGenerator
 	}
 
 	public static FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace) {
-		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, (Element) null);
+		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, null);
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class FiatShamirSigmaChallengeGenerator
 
 	public static <V> FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace, ConvertMethod<V> convertMethod,
 		   HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter) {
-		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, (Element) null, convertMethod, hashMethod,
+		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, null, convertMethod, hashMethod,
 															 converter);
 	}
 

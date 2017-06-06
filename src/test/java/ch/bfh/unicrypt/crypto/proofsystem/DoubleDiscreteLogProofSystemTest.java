@@ -44,18 +44,21 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.DoubleDiscreteLogProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.math.BigInteger;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -134,7 +137,7 @@ public class DoubleDiscreteLogProofSystemTest {
 
 		Tuple m = gpcs.getMessageSpace().getRandomElement();
 
-		Element x = Z_p.getElement(((ProductFunction) ((CompositeFunction) gpcs.getCommitmentFunction()).getAt(0)).getAt(0).apply(m).convertToBigInteger());
+		Element x = Z_p.getElement(((AbstractCompoundFunction<ProductFunction, ProductSet, Tuple, ProductSet, Tuple>) ((ImmutableArray<Function>) gpcs.getCommitmentFunction()).getAt(0)).getAt(0).apply(m).convertToBigInteger());
 
 		Element r = Z_p.getRandomElement();
 		Element s = Z_q.getRandomElement();

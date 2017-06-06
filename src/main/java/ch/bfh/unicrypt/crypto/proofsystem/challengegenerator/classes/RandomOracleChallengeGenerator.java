@@ -90,7 +90,7 @@ public class RandomOracleChallengeGenerator<CS extends Set, CE extends Element>
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, RandomOracle randomOracle) {
-		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null, randomOracle);
+		return RandomOracleChallengeGenerator.getInstance(challengeSpace, null, randomOracle);
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId,
@@ -113,7 +113,7 @@ public class RandomOracleChallengeGenerator<CS extends Set, CE extends Element>
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, RandomOracle randomOracle,
 		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
-		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null, randomOracle,
+		return RandomOracleChallengeGenerator.getInstance(challengeSpace, null, randomOracle,
 														  convertMethod, aggregator);
 	}
 

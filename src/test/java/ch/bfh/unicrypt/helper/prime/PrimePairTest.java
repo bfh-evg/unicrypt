@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.prime;
 
-import ch.bfh.unicrypt.helper.prime.PrimePair;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;

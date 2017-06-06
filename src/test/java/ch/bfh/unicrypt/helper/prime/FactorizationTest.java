@@ -41,10 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.prime;
 
-import ch.bfh.unicrypt.helper.prime.Prime;
-import ch.bfh.unicrypt.helper.prime.PrimePair;
-import ch.bfh.unicrypt.helper.prime.SpecialFactorization;
-import ch.bfh.unicrypt.helper.prime.Factorization;
 import java.math.BigInteger;
 import org.junit.Assert;
 import static org.junit.Assert.fail;

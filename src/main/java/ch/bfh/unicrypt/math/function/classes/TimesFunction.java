@@ -79,7 +79,7 @@ public class TimesFunction
 	@Override
 	protected AdditiveElement abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
 		AdditiveElement element1 = (AdditiveElement) element.getFirst();
-		Element<BigInteger> element2 = (Element<BigInteger>) element.getSecond();
+		Element<BigInteger> element2 = element.getSecond();
 		return element1.times(element2.getValue());
 	}
 

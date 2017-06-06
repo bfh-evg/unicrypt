@@ -81,6 +81,17 @@ public final class MathUtil {
 	}
 
 	/**
+	 * GMP wrapper method for computing the greatest common divisor (gcd) of two integers {@code x} and {@code y}.
+	 *
+	 * @param x First integer
+	 * @param y Second integer
+	 * @return Greatest common divisor of {@code x} and {@code y}
+	 */
+	public static BigInteger gcd(BigInteger x, BigInteger y) {
+			return Gmp.gcd(x, y);
+	}
+
+	/**
 	 * GMP wrapper method for computing modular exponentiations for base {@code b>=0}, exponent {@code e>=0}, and
 	 * modulus {@code m>0}.
 	 *
@@ -91,9 +102,9 @@ public final class MathUtil {
 	 */
 	public static BigInteger modExp(BigInteger b, BigInteger e, BigInteger m) {
 		if (m.testBit(0)) {
-			return Gmp.modPowInsecure(b, e, m);
+			return Gmp.modPowSecure(b, e, m);
 		} else {
-			return Gmp.modPowSecure(b, e, m); // Gmp.modPowSecure requires modulus to be odd
+			return Gmp.modPowInsecure(b, e, m); // Gmp.modPowSecure requires modulus to be odd
 		}
 	}
 
@@ -245,7 +256,7 @@ public final class MathUtil {
 	 * @return {@code true} if the input values are relatively prime, {@code false} otherwise
 	 */
 	public static boolean areRelativelyPrime(BigInteger value1, BigInteger value2) {
-		return value1.gcd(value2).equals(ONE);
+		return MathUtil.gcd(value1,value2).equals(ONE);
 	}
 
 	/**

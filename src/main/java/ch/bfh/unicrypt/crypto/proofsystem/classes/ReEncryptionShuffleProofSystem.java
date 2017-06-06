@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaCha
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
@@ -183,7 +184,7 @@ public class ReEncryptionShuffleProofSystem
 		final Element commitment = f.apply(randomElement);                        // [3N+3]
 		final Element challenge = this.getSigmaChallengeGenerator().generate(publicInput, commitment);
 		final Element response = randomElement.apply(Tuple.getInstance(r, w, ePrimeV).selfApply(challenge));
-		Triple preimageProof = (Triple) Triple.getInstance(commitment, challenge, response);
+		Triple preimageProof = Triple.getInstance(commitment, challenge, response);
 		//                                                                          --------
 		return Tuple.getInstance(eV).append(preimageProof);                      // [3N+3]
 	}
@@ -364,7 +365,7 @@ public class ReEncryptionShuffleProofSystem
 		if (!cs.isProduct()
 			   || ((ProductSet) cs).getArity() != size
 			   || ((ProductSet) cs).getFirst().getOrder().compareTo(cyclicGroup.getOrder()) > 0
-			   || !((ProductSet) cs).isUniform()) {
+			   || !((ImmutableArray<Set>) cs).isUniform()) {
 			throw new IllegalArgumentException();
 		}
 

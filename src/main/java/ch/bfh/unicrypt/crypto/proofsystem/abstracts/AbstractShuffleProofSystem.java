@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracl
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -54,7 +55,8 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
  * This class is an abstract base implementation for shuffle proof systems according to Wikström (@see Wik09, TW10). It
@@ -131,7 +133,7 @@ public abstract class AbstractShuffleProofSystem
 		this.kr = kr;
 		this.independentGenerators = independentGenerators;
 
-		this.ke = ((ZMod) ((ProductSet) this.eValuesGenerator.getChallengeSpace()).getFirst()).getModulus()
+		this.ke = ((ZMod) ((ImmutableArray<Set>) this.eValuesGenerator.getChallengeSpace()).getFirst()).getModulus()
 			   .subtract(MathUtil.ONE).bitLength();
 		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getModulus().subtract(MathUtil.ONE).bitLength();
 	}
@@ -223,7 +225,7 @@ public abstract class AbstractShuffleProofSystem
 		if (!t1.getSet().isGroup() || t1.getArity() < 1) {
 			throw new IllegalArgumentException();
 		}
-		Element innerProduct = ((Group) t1.getSet().getAt(0)).getIdentityElement();
+		Element innerProduct = ((Monoid) t1.getSet().getAt(0)).getIdentityElement();
 		for (int i = 0; i < t1.getArity(); i++) {
 			innerProduct = innerProduct.apply(t1.getAt(i).selfApply(t2.getAt(i)));
 		}
@@ -268,7 +270,7 @@ public abstract class AbstractShuffleProofSystem
 
 	public static RandomOracleSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(
 		   final ZMod challengeSpace) {
-		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, (Element) null, RandomOracle.getInstance());
+		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, null, RandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(

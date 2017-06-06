@@ -41,9 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.cache;
 
-import ch.bfh.unicrypt.helper.cache.Cache2D;
-import ch.bfh.unicrypt.helper.prime.Prime;
-import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;

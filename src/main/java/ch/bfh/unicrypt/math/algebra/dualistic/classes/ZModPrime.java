@@ -44,8 +44,9 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.cache.Cache;
-import ch.bfh.unicrypt.helper.prime.Prime;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.prime.Prime;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
@@ -119,7 +120,7 @@ public class ZModPrime
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
-		if (((ZModElement) element).isZero()) {
+		if (((AdditiveElement<BigInteger>) element).isZero()) {
 			return this.getZeroElement();
 		}
 		if (!this.isFinite() || !this.hasKnownOrder()) {

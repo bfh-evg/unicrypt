@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 
 /**

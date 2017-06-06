@@ -79,7 +79,7 @@ public class PowerFunction
 	@Override
 	protected MultiplicativeElement abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
 		MultiplicativeElement element1 = (MultiplicativeElement) element.getFirst();
-		Element<BigInteger> element2 = (Element<BigInteger>) element.getSecond();
+		Element<BigInteger> element2 = element.getSecond();
 		return element1.power(element2.getValue());
 	}
 

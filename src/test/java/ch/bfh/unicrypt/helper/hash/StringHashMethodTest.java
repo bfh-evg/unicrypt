@@ -46,8 +46,6 @@ import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
-import ch.bfh.unicrypt.helper.tree.Leaf;
-import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import org.junit.Assert;
 import org.junit.Test;

@@ -68,24 +68,24 @@ public class ReducedSequenceTest {
 			fail();
 		} catch (Exception e) {
 		}
-		assertEquals(1, (int) sequence2.reduce(plus));
-		assertEquals(10, (int) sequence3.reduce(plus));
+		assertEquals(1, (long) sequence2.reduce(plus));
+		assertEquals(10, (long) sequence3.reduce(plus));
 
-		assertEquals(0, (int) sequence1.reduce(plus, 0));
-		assertEquals(1, (int) sequence2.reduce(plus, 0));
-		assertEquals(10, (int) sequence3.reduce(plus, 0));
+		assertEquals(0, (long) sequence1.reduce(plus, 0));
+		assertEquals(1, (long) sequence2.reduce(plus, 0));
+		assertEquals(10, (long) sequence3.reduce(plus, 0));
 
 		try {
 			sequence1.reduce(plus);
 			fail();
 		} catch (Exception e) {
 		}
-		assertEquals(1, (int) sequence2.reduce(times));
-		assertEquals(24, (int) sequence3.reduce(times));
+		assertEquals(1, (long) sequence2.reduce(times));
+		assertEquals(24, (long) sequence3.reduce(times));
 
-		assertEquals(1, (int) sequence1.reduce(times, 1));
-		assertEquals(1, (int) sequence2.reduce(times, 1));
-		assertEquals(24, (int) sequence3.reduce(times, 1));
+		assertEquals(1, (long) sequence1.reduce(times, 1));
+		assertEquals(1, (long) sequence2.reduce(times, 1));
+		assertEquals(24, (long) sequence3.reduce(times, 1));
 	}
 
 }

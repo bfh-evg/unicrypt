@@ -49,6 +49,7 @@ import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
@@ -220,7 +221,7 @@ public class PolynomialField
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
-		if (((ZModElement) element).isZero()) {
+		if (((AdditiveElement<BigInteger>) element).isZero()) {
 			return this.getZeroElement();
 		}
 		if (!this.isFinite() || !this.hasKnownOrder()) {
@@ -245,7 +246,7 @@ public class PolynomialField
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
-		if (((PolynomialElement) element).isZero()) {
+		if (((AdditiveElement<Polynomial<? extends DualisticElement<BigInteger>>>) element).isZero()) {
 			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this, element);
 		}
 		// see extended Euclidean algorithm for polynomials (Algorithm 2.226)
