@@ -56,12 +56,12 @@ public class SafePrimeTest {
 
 	@Test
 	public void testPrecomputedPrimes() {
-		for (int bits : new int[]{128, 160, 192, 224, 256, 384, 512, 768, 1024, 2048, 3072}) {
+		for (int bits : new int[]{128, 160, 192, 224, 256, 384, 512, 768, 1024, 2048, 3072, 4096}) {
 
 			Prime prime = SafePrime.getSmallestInstance(bits);
 			assertEquals(bits, prime.getValue().bitLength());
 			assertTrue(MathUtil.isSafePrime(prime.getValue()));
-			
+
 			prime = SafePrime.getLargestInstance(bits);
 			assertEquals(bits, prime.getValue().bitLength());
 			assertTrue(MathUtil.isSafePrime(prime.getValue()));
@@ -193,4 +193,5 @@ public class SafePrimeTest {
 		p = SafePrime.getLargestInstance(7);
 		assertEquals(107, p.getValue().intValue());
 	}
+
 }
