@@ -79,6 +79,24 @@ public abstract class Tree<V>
 	}
 
 	/**
+	 * Creates a new node from a given array of values (its children) of type {@code V}.
+	 * <p>
+	 * @param <V>    The generic type of the tree
+	 * @param values The given array of values
+	 * @return The new node
+	 */
+	public static <V> Node<V> getInstance(V... values) {
+		if (values == null) {
+			throw new IllegalArgumentException();
+		}
+		Leaf<V>[] leafs = new Leaf[values.length];
+		for (int i = 0; i < values.length; i++) {
+			leafs[i] = getInstance(values[i]);
+		}
+		return getInstance(leafs);
+	}
+
+	/**
 	 * Creates a new node from a single sub-tree (its child) of type {@code V}.
 	 * <p>
 	 * @param <V>   The generic type of the tree
