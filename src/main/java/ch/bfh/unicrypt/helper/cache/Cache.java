@@ -70,7 +70,7 @@ public class Cache<K, V>
 	private static final int INITIAL_CAPACITY = 16;
 	private static final float LOAD_FACTOR = 0.75F;
 
-	// internal linked hash map 
+	// internal linked hash map
 	private final Map<K, V> map;
 
 	/**
@@ -95,9 +95,10 @@ public class Cache<K, V>
 
 		});
 	}
-	
+
 	/**
 	 * Returns the number of entries in the cache.
+	 *
 	 * @return The number of entries
 	 */
 	public int getSize() {
@@ -106,7 +107,7 @@ public class Cache<K, V>
 
 	/**
 	 * Returns the value associated to the given key in the cache. Return {@code null} if the key does not exist.
-	 * 
+	 *
 	 * @param key The key whose associated value is to be returned
 	 * @return The value associated to the key, or {@code null} the key does not exist
 	 */
@@ -118,13 +119,13 @@ public class Cache<K, V>
 	}
 
 	/**
-	 * Adds a new entry to the cache. If the key already exists, an exception is thrown.
-	 * 
-	 * @param key The key with which the value is to be associated
+	 * Adds a new entry to the cache. If the key already exists, the value is replaced.
+	 *
+	 * @param key   The key with which the value is to be associated
 	 * @param value The value to be associated with the key
 	 */
 	public void put(K key, V value) {
-		if (key == null || value == null || this.map.containsKey(key)) {
+		if (key == null || value == null) {
 			throw new IllegalArgumentException();
 		}
 		this.map.put(key, value);

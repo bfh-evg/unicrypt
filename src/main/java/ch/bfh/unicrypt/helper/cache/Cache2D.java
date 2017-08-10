@@ -71,8 +71,9 @@ public class Cache2D<K1, K2, V>
 	}
 
 	/**
-	 * Returns the value associated to the given pair of keys in the cache. Return {@code null} if the key pair does not exist.
-	 * 
+	 * Returns the value associated to the given pair of keys in the cache. Return {@code null} if the key pair does not
+	 * exist.
+	 *
 	 * @param key1 The first key whose associated value is to be returned
 	 * @param key2 The second key whose associated value is to be returned
 	 * @return The value associated to the pair of keys, or {@code null} the keys do not exist
@@ -86,10 +87,10 @@ public class Cache2D<K1, K2, V>
 	}
 
 	/**
-	 * Adds a new entry to the cache. If the pair of keys already exists, an exception is thrown.
-	 * 
-	 * @param key1 The first key with which the value is to be associated
-	 * @param key2 The second key with which the value is to be associated
+	 * Adds a new entry to the cache. If the pair of keys already exists, the value is replaced.
+	 *
+	 * @param key1  The first key with which the value is to be associated
+	 * @param key2  The second key with which the value is to be associated
 	 * @param value The value to be associated with the key
 	 */
 	public void put(K1 key1, K2 key2, V value) {
