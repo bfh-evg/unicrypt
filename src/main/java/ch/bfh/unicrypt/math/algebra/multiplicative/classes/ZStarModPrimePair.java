@@ -83,7 +83,7 @@ public class ZStarModPrimePair
 		return new ZStarModPrimePair(PrimePair.getInstance(prime1, prime2));
 	}
 
-	public static ZStarModPrimePair getInstance(final PrimePair primePair) {
+	public static ZStarModPrimePair getInstance(PrimePair primePair) {
 		if (primePair == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}

@@ -69,17 +69,17 @@ public class GStarModSafePrime
 	}
 
 	@Override
-	protected boolean abstractContains(final BigInteger value) {
+	protected boolean abstractContains(BigInteger value) {
 		return value.signum() > 0
 			   && value.compareTo(this.modulus) < 0
 			   && MathUtil.isQuadraticResidue(value, this.modulus);
 	}
 
-	public static GStarModSafePrime getInstance(final long modulus) {
+	public static GStarModSafePrime getInstance(long modulus) {
 		return GStarModSafePrime.getInstance(BigInteger.valueOf(modulus));
 	}
 
-	public static GStarModSafePrime getInstance(final BigInteger modulus) {
+	public static GStarModSafePrime getInstance(BigInteger modulus) {
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
@@ -91,7 +91,7 @@ public class GStarModSafePrime
 		return instance;
 	}
 
-	public static GStarModSafePrime getInstance(final SafePrime modulus) {
+	public static GStarModSafePrime getInstance(SafePrime modulus) {
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
@@ -101,10 +101,6 @@ public class GStarModSafePrime
 			GStarModSafePrime.CACHE.put(modulus.getValue(), instance);
 		}
 		return instance;
-	}
-
-	public static GStarModSafePrime getFirstInstance(final int bitLength) {
-		return GStarModSafePrime.getInstance(SafePrime.getSmallestInstance(bitLength));
 	}
 
 }

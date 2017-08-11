@@ -81,11 +81,11 @@ public class GStarModPrime
 			   && MathUtil.modExp(value, this.getOrder(), this.modulus).equals(MathUtil.ONE);
 	}
 
-	public static GStarModPrime getInstance(final long modulus, long order) {
+	public static GStarModPrime getInstance(long modulus, long order) {
 		return GStarModPrime.getInstance(BigInteger.valueOf(modulus), BigInteger.valueOf(order));
 	}
 
-	public static GStarModPrime getInstance(final BigInteger modulus, BigInteger order) {
+	public static GStarModPrime getInstance(BigInteger modulus, BigInteger order) {
 		if (modulus == null || order == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, modulus, order);
 		}
@@ -113,12 +113,6 @@ public class GStarModPrime
 			GStarModPrime.CACHE.put(modulus.getValue(), order.getValue(), instance);
 		}
 		return instance;
-	}
-
-	public static GStarModPrime getFirstInstance(final int bitLength1, final int bitLength2) {
-		Prime orderFactor = Prime.getSmallestInstance(bitLength2);
-		Prime prime = Prime.getSmallestInstance(bitLength1, orderFactor.getValue());
-		return GStarModPrime.getInstance(prime, prime.getOrderFactor());
 	}
 
 }

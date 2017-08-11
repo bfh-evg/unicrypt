@@ -152,8 +152,4 @@ public class ZStarModPrime
 		return instance;
 	}
 
-	public static ZStarModPrime getFirstInstance(int bitLength) {
-		return ZStarModPrime.getInstance(Prime.getSmallestInstance(bitLength));
-	}
-
 }
