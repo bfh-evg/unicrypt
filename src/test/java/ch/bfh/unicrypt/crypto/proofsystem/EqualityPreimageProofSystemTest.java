@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofsystem;
 
 import ch.bfh.unicrypt.UniCryptRuntimeException;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.EqualityPreimageProofSystem;
 import ch.bfh.unicrypt.helper.math.Alphabet;
@@ -123,7 +123,7 @@ public class EqualityPreimageProofSystemTest {
 		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
+		SigmaChallengeGenerator scg = FiatShamirSigmaChallengeGenerator.getInstance(
 			   ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		EqualityPreimageProofSystem pg = EqualityPreimageProofSystem.getInstance(scg, f1, f2);
@@ -146,7 +146,7 @@ public class EqualityPreimageProofSystemTest {
 		Function f2 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
 		Function f3 = GeneratorFunction.getInstance(this.G_q2.getElement(4));
 		ProductFunction f = ProductFunction.getInstance(f1, f2, f3);
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = FiatShamirSigmaChallengeGenerator.getInstance(f, this.proverId);
 		EqualityPreimageProofSystem pg = EqualityPreimageProofSystem.getInstance(scg, f1, f2, f3);
 	}
 

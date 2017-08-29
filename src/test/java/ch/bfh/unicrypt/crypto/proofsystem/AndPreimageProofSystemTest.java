@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofsystem;
 
 import ch.bfh.unicrypt.UniCryptRuntimeException;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.AndPreimageProofSystem;
 import ch.bfh.unicrypt.helper.math.Alphabet;
@@ -85,7 +85,7 @@ public class AndPreimageProofSystemTest {
 		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
 		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = FiatShamirSigmaChallengeGenerator.getInstance(f, this.proverId);
 		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg, f1, f2);
 		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
 
@@ -113,7 +113,7 @@ public class AndPreimageProofSystemTest {
 		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
 		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = FiatShamirSigmaChallengeGenerator.getInstance(f, this.proverId);
 		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg, f1, f2);
 		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
 
@@ -139,7 +139,7 @@ public class AndPreimageProofSystemTest {
 		// Proof generator
 		Function f1 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, 3);
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = FiatShamirSigmaChallengeGenerator.getInstance(f, this.proverId);
 		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg, f1, 3);
 
 		// Valid proof
@@ -166,7 +166,7 @@ public class AndPreimageProofSystemTest {
 		// Proof generator
 		Function f1 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1);
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = FiatShamirSigmaChallengeGenerator.getInstance(f, this.proverId);
 		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg, f1, 1);
 
 		Element privateInput = Tuple.getInstance(Z_q.getElement(2));
@@ -181,14 +181,14 @@ public class AndPreimageProofSystemTest {
 	@Test(expected = UniCryptRuntimeException.class)
 	public void testPreimageAndProof_Exception() {
 		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f1, this.proverId);
+		SigmaChallengeGenerator scg = FiatShamirSigmaChallengeGenerator.getInstance(f1, this.proverId);
 		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg);
 	}
 
 	@Test(expected = UniCryptRuntimeException.class)
 	public void testPreimageAndProof_ExceptionWithArity() {
 		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f1, this.proverId);
+		SigmaChallengeGenerator scg = FiatShamirSigmaChallengeGenerator.getInstance(f1, this.proverId);
 		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg, f1, 0);
 	}
 

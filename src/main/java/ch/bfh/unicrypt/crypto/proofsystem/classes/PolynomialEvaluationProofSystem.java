@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
@@ -94,7 +94,7 @@ public class PolynomialEvaluationProofSystem
 			throw new IllegalArgumentException();
 		}
 		SigmaChallengeGenerator challengeGenerator
-			   = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+			   = FiatShamirSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 

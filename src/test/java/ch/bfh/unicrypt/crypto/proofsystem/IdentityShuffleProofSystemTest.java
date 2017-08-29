@@ -48,7 +48,6 @@ import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentSc
 import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.math.Permutation;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
-import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -80,7 +79,6 @@ public class IdentityShuffleProofSystemTest {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = RandomOracle.getInstance();
 		final DeterministicRandomByteSequence deterministicRandomByteSequence = DeterministicRandomByteSequence.getInstance();
 		final RandomByteSequence randomByteSequence = HybridRandomByteSequence.getInstance();
 
@@ -104,7 +102,7 @@ public class IdentityShuffleProofSystemTest {
 
 		// Identity Shuffle Proof Generator
 		SigmaChallengeGenerator scg = IdentityShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(4, null);
-		ChallengeGenerator ecg = IdentityShuffleProofSystem.createNonInteractiveEValuesGenerator(4, size, ro);
+		ChallengeGenerator ecg = IdentityShuffleProofSystem.createNonInteractiveEValuesGenerator(4, size);
 		IdentityShuffleProofSystem spg = IdentityShuffleProofSystem.getInstance(scg, ecg, size, G_q, 2, deterministicRandomByteSequence);
 
 		// Proof and verify

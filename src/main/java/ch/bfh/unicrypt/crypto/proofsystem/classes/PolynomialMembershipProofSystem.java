@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.crypto.proofsystem.classes;
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SetMembershipProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
@@ -105,7 +105,7 @@ public class PolynomialMembershipProofSystem
 	public static final PolynomialMembershipProofSystem getInstance(final Subset members,
 		   final PedersenCommitmentScheme pedersenCS) {
 		SigmaChallengeGenerator challengeGenerator
-			   = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+			   = FiatShamirSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialMembershipProofSystem.getInstance(challengeGenerator, members, pedersenCS);
 	}
 
@@ -129,7 +129,7 @@ public class PolynomialMembershipProofSystem
 	public static final PolynomialMembershipProofSystem getInstance(final PolynomialElement polynomial,
 		   final PedersenCommitmentScheme pedersenCS) {
 		SigmaChallengeGenerator challengeGenerator
-			   = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+			   = FiatShamirSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialMembershipProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 

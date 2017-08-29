@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
@@ -104,7 +104,7 @@ public class DoubleDiscreteLogProofSystem
 			throw new IllegalArgumentException();
 		}
 		SigmaChallengeGenerator challengeGenerator
-			   = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+			   = FiatShamirSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return DoubleDiscreteLogProofSystem.getInstance(challengeGenerator, pedersenCS, generalizedPedersenCS, k);
 	}
 

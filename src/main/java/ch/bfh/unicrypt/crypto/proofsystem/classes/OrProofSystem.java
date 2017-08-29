@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -86,7 +86,7 @@ public class OrProofSystem
 
 	public static OrProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
 		SigmaChallengeGenerator challengeGenerator
-			   = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+			   = FiatShamirSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return OrProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 

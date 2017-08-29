@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.crypto.proofsystem.classes.PermutationCommitmentProofSyst
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.helper.math.Permutation;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
-import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -101,7 +100,6 @@ public class PermutationCommitmentProofSystemTest {
 	public void testPermutationCommitemntProofGenerator2() {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
-		final RandomOracle ro = RandomOracle.getInstance();
 		final DeterministicRandomByteSequence rbs = DeterministicRandomByteSequence.getInstance();
 
 		final int size = 20;
@@ -116,7 +114,7 @@ public class PermutationCommitmentProofSystemTest {
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofSystem.createNonInteractiveSigmaChallengeGenerator(60, null);
-		ChallengeGenerator ecg = PermutationCommitmentProofSystem.createNonInteractiveEValuesGenerator(60, size, ro);
+		ChallengeGenerator ecg = PermutationCommitmentProofSystem.createNonInteractiveEValuesGenerator(60, size);
 		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(scg, ecg, G_q, size, 20, rbs);
 
 		// Proof and verify

@@ -52,6 +52,11 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
+/**
+ * This class provides a non-interactive challenge generator using the Fiat-Shamir heuristic.
+ *
+ * @author P. Locher
+ */
 public class FiatShamirChallengeGenerator
 	   extends AbstractNonInteractiveChallengeGenerator<ZMod, ZModElement> {
 
@@ -106,8 +111,7 @@ public class FiatShamirChallengeGenerator
 	}
 
 	public static <V> FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId,
-		   ConvertMethod<V> convertMethod, HashMethod<V> hashMethod,
-		   Converter<ByteArray, BigInteger> converter) {
+		   ConvertMethod<V> convertMethod, HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter) {
 		if (challengeSpace == null || convertMethod == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();
 		}

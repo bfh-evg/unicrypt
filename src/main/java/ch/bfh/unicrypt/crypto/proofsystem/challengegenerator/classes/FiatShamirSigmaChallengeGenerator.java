@@ -50,15 +50,13 @@ import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.math.BigInteger;
 
 /**
- * This class provides a Fiat-Shamir SigmaChallengeGenerator
- * <p>
- * Instead of using the RandomOracle as other implementation of the SigmaChallengeGenerator, this class uses a hash
- * function to compute the challenge.
- * <p>
- * @author Philémon von Bergen &lt;philemon.vonbergen@bfh.ch&gt;
+ * This class provides a non-interactive sigma challenge generator using the Fiat-Shamir heuristic.
+ *
+ * @author P. Locher
  */
 public class FiatShamirSigmaChallengeGenerator
 	   extends AbstractNonInteractiveSigmaChallengeGenerator {
@@ -157,6 +155,33 @@ public class FiatShamirSigmaChallengeGenerator
 		if (challengeSpace == null || convertMethod == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
+		return new FiatShamirSigmaChallengeGenerator(challengeSpace, proverId, convertMethod, hashMethod, converter);
+	}
+
+	public static FiatShamirSigmaChallengeGenerator getInstance(Function function) {
+		return FiatShamirSigmaChallengeGenerator.getInstance(function, null);
+	}
+
+	public static FiatShamirSigmaChallengeGenerator getInstance(Function function, Element proverId) {
+		ConvertMethod<ByteArray> convertMethod = ConvertMethod.getInstance();
+		HashMethod<ByteArray> hashMethod = HashMethod.getInstance();
+		int hashLength = hashMethod.getHashAlgorithm().getByteLength();
+		Converter<ByteArray, BigInteger> converter = ByteArrayToBigInteger.getInstance(hashLength);
+		return FiatShamirSigmaChallengeGenerator.getInstance(function, proverId, convertMethod, hashMethod, converter);
+	}
+
+	public static <V> FiatShamirSigmaChallengeGenerator getInstance(Function function, ConvertMethod<V> convertMethod,
+		   HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter) {
+		return FiatShamirSigmaChallengeGenerator.getInstance(function, null, convertMethod, hashMethod, converter);
+
+	}
+
+	public static <V> FiatShamirSigmaChallengeGenerator getInstance(Function function, Element proverId,
+		   ConvertMethod<V> convertMethod, HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter) {
+		if (function == null || !function.getCoDomain().isSemiGroup() || convertMethod == null || hashMethod == null || converter == null) {
+			throw new IllegalArgumentException();
+		}
+		ZMod challengeSpace = ZMod.getInstance(function.getDomain().getMinimalOrder());
 		return new FiatShamirSigmaChallengeGenerator(challengeSpace, proverId, convertMethod, hashMethod, converter);
 	}
 

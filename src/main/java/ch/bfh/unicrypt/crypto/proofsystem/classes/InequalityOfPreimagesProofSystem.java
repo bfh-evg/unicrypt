@@ -42,11 +42,15 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SigmaProofSystem;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
-import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -64,6 +68,7 @@ import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.math.BigInteger;
 
 //
 // @see [cs03] Camenisch, J. & Shoup, V., 2003. Practical verifiable encryption and decryption of discrete logarithms.
@@ -244,36 +249,32 @@ public class InequalityOfPreimagesProofSystem
 			   ApplyInverseFunction.getInstance((Group) f.getCoDomain()));
 	}
 
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction) {
+	public static FiatShamirSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction,
+		   final Function secondFunction) {
+		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, (Element) null);
+	}
+
+	public static FiatShamirSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction,
+		   final Function secondFunction, final Element proverId) {
+
+		ConvertMethod<ByteArray> convertMethod = ConvertMethod.getInstance();
+		HashMethod<ByteArray> hashMethod = HashMethod.getInstance();
+		int hashLength = hashMethod.getHashAlgorithm().getByteLength();
+		Converter<ByteArray, BigInteger> converter = ByteArrayToBigInteger.getInstance(hashLength);
 		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
-																					   RandomOracle.getInstance());
+																					   proverId, convertMethod, hashMethod, converter);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator
+	public static <V> FiatShamirSigmaChallengeGenerator
 		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
-				  final Element proverId) {
-		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
-																					   proverId,
-																					   RandomOracle.getInstance());
-	}
-
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
-				  final RandomOracle randomOracle) {
-		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, null, randomOracle);
-	}
-
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
-				  final Element proverId, final RandomOracle randomOracle) {
-		if (firstFunction == null || secondFunction == null || randomOracle == null
+				  final Element proverId, final ConvertMethod<V> convertMethod, final HashMethod<V> hashMethod, final Converter<ByteArray, BigInteger> converter) {
+		if (firstFunction == null || secondFunction == null || convertMethod == null || hashMethod == null || converter == null
 			   || !firstFunction.getCoDomain().isSemiGroup() || !secondFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
 		}
 		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(),
 														  secondFunction.getDomain()).getMinimalOrder());
-		return RandomOracleSigmaChallengeGenerator.getInstance(cs, proverId, randomOracle);
+		return FiatShamirSigmaChallengeGenerator.getInstance(cs, proverId, convertMethod, hashMethod, converter);
 
 	}
 
