@@ -552,7 +552,7 @@ public class ProductSet
 
 	@Override
 	protected Sequence<Tuple> defaultGetElements() {
-		return MultiSequence.getInstance(this.getSequence()
+		return MultiSequence.<Element>getInstance(this.getSequence()
 			   .map(set -> set.getElements()))
 			   .join().map(new Function<DenseArray<Element>, Tuple>() {
 
