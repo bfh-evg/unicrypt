@@ -88,7 +88,7 @@ public final class MathUtil {
 	 * @return Greatest common divisor of {@code x} and {@code y}
 	 */
 	public static BigInteger gcd(BigInteger x, BigInteger y) {
-			return Gmp.gcd(x, y);
+		return Gmp.gcd(x, y);
 	}
 
 	/**
@@ -256,7 +256,10 @@ public final class MathUtil {
 	 * @return {@code true} if the input values are relatively prime, {@code false} otherwise
 	 */
 	public static boolean areRelativelyPrime(BigInteger value1, BigInteger value2) {
-		return MathUtil.gcd(value1,value2).equals(ONE);
+		if (value1.signum() != 1 || value2.signum() != 1) {
+			return false;
+		}
+		return MathUtil.gcd(value1, value2).equals(ONE);
 	}
 
 	/**

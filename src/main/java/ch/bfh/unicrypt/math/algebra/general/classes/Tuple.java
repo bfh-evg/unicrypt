@@ -303,7 +303,6 @@ public class Tuple
 	 * This is a static factory method to construct a composed element without the need of constructing the
 	 * corresponding product or power group beforehand. The input elements are given as an array.
 	 * <p>
-	 * <p/>
 	 * @param elements The array of input elements
 	 * @return The corresponding tuple element
 	 */
