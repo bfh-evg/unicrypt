@@ -42,10 +42,9 @@
 package ch.bfh.unicrypt.helper.random;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
-import ch.bfh.unicrypt.helper.random.RandomByteSequenceIterator;
 import ch.bfh.unicrypt.helper.random.hybrid.HMAC_DRBG;
 import ch.bfh.unicrypt.helper.random.nondeterministic.NonDeterministicRandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 import org.junit.Assert;
 import org.junit.Test;
 

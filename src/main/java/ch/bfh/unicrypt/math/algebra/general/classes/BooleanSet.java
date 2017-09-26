@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
@@ -114,14 +113,7 @@ public class BooleanSet
 
 	@Override
 	protected Sequence<BooleanElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomBitSequence().map(new Mapping<Boolean, BooleanElement>() {
-
-			@Override
-			public BooleanElement apply(Boolean value) {
-				return abstractGetElement(value);
-			}
-
-		});
+		return randomByteSequence.getRandomBitSequence().map(value -> abstractGetElement(value));
 	}
 
 	@Override

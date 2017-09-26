@@ -42,9 +42,9 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import org.junit.Test;
@@ -70,11 +70,11 @@ public class SequenceIteratorTest {
 	public void testSkip() {
 		SequenceIterator<Integer> iterator = SequenceIterator.getInstance(values.iterator());
 		iterator.skip(2);
-		assertEquals(3, (int) iterator.next());
+		assertEquals(3, (long) iterator.next());
 		iterator.skip(0);
-		assertEquals(4, (int) iterator.next());
+		assertEquals(4, (long) iterator.next());
 		iterator.skip(4);
-		assertEquals(9, (int) iterator.next());
+		assertEquals(9, (long) iterator.next());
 		iterator.skip(4);
 		assertFalse(iterator.hasNext());
 	}
@@ -82,35 +82,28 @@ public class SequenceIteratorTest {
 	@Test
 	public void testFind() {
 		SequenceIterator<Integer> iterator = SequenceIterator.getInstance(values.iterator());
-		Predicate<Integer> pred = new Predicate<Integer>() {
-
-			@Override
-			public boolean test(Integer value) {
-				return value % 2 == 0;
-			}
-
-		};
-		assertEquals(2, (int) iterator.find(pred));
-		assertEquals(4, (int) iterator.find(pred));
-		assertEquals(6, (int) iterator.find(pred));
-		assertEquals(8, (int) iterator.find(pred));
-		assertEquals(10, (int) iterator.find(pred));
+		Predicate<Integer> pred = value -> value % 2 == 0;
+		assertEquals(2, (long) iterator.find(pred));
+		assertEquals(4, (long) iterator.find(pred));
+		assertEquals(6, (long) iterator.find(pred));
+		assertEquals(8, (long) iterator.find(pred));
+		assertEquals(10, (long) iterator.find(pred));
 		assertEquals(null, iterator.find(pred));
 	}
 
 	@Test
 	public void testNext() {
 		SequenceIterator<Integer> iterator = SequenceIterator.getInstance(values.iterator());
-		assertEquals(1, (int) iterator.next());
-		assertEquals(2, (int) iterator.next());
-		assertEquals(3, (int) iterator.next());
-		assertEquals(4, (int) iterator.next());
-		assertEquals(5, (int) iterator.next());
-		assertEquals(6, (int) iterator.next());
-		assertEquals(7, (int) iterator.next());
-		assertEquals(8, (int) iterator.next());
-		assertEquals(9, (int) iterator.next());
-		assertEquals(10, (int) iterator.next());
+		assertEquals(1, (long) iterator.next());
+		assertEquals(2, (long) iterator.next());
+		assertEquals(3, (long) iterator.next());
+		assertEquals(4, (long) iterator.next());
+		assertEquals(5, (long) iterator.next());
+		assertEquals(6, (long) iterator.next());
+		assertEquals(7, (long) iterator.next());
+		assertEquals(8, (long) iterator.next());
+		assertEquals(9, (long) iterator.next());
+		assertEquals(10, (long) iterator.next());
 		assertFalse(iterator.hasNext());
 	}
 

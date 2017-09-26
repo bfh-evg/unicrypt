@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.math.BigInteger;
+import java.util.function.Predicate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -133,13 +133,7 @@ public class LimitedSequenceTest {
 	public void generalTest2() {
 		Sequence<Integer> sequence = IntegerSequence.getInstance(1, 100);
 
-		Predicate<Integer> pred = new Predicate<Integer>() {
-
-			@Override
-			public boolean test(Integer value) {
-				return value > 10 && value < 15;
-			}
-		};
+		Predicate<Integer> pred = value -> value > 10 && value < 15;
 
 		assertEquals(11, sequence.limit(pred).getLength().intValue());
 		assertEquals(8, sequence.limit(8).limit(pred).getLength().intValue());

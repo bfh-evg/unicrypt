@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Operator;
+import java.util.function.BinaryOperator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Test;
@@ -59,44 +59,33 @@ public class ReducedSequenceTest {
 		Sequence<Integer> sequence2 = Sequence.getInstance(1);
 		Sequence<Integer> sequence3 = Sequence.getInstance(1, 2, 3, 4);
 
-		Operator<Integer> plus = new Operator<Integer>() {
+		BinaryOperator<Integer> plus = (value1, value2) -> value1 + value2;
 
-			@Override
-			public Integer apply(Integer value1, Integer value2) {
-				return value1 + value2;
-			}
-		};
-
-		Operator<Integer> times = new Operator<Integer>() {
-
-			@Override
-			public Integer apply(Integer value1, Integer value2) {
-				return value1 * value2;
-			}
-		};
-		try {
-			sequence1.reduce(plus);
-			fail();
-		} catch (Exception e) {
-		}
-		assertEquals(1, (int) sequence2.reduce(plus));
-		assertEquals(10, (int) sequence3.reduce(plus));
-
-		assertEquals(0, (int) sequence1.reduce(plus, 0));
-		assertEquals(1, (int) sequence2.reduce(plus, 0));
-		assertEquals(10, (int) sequence3.reduce(plus, 0));
+		BinaryOperator<Integer> times = (value1, value2) -> value1 * value2;;
 
 		try {
 			sequence1.reduce(plus);
 			fail();
 		} catch (Exception e) {
 		}
-		assertEquals(1, (int) sequence2.reduce(times));
-		assertEquals(24, (int) sequence3.reduce(times));
+		assertEquals(1, (long) sequence2.reduce(plus));
+		assertEquals(10, (long) sequence3.reduce(plus));
 
-		assertEquals(1, (int) sequence1.reduce(times, 1));
-		assertEquals(1, (int) sequence2.reduce(times, 1));
-		assertEquals(24, (int) sequence3.reduce(times, 1));
+		assertEquals(0, (long) sequence1.reduce(plus, 0));
+		assertEquals(1, (long) sequence2.reduce(plus, 0));
+		assertEquals(10, (long) sequence3.reduce(plus, 0));
+
+		try {
+			sequence1.reduce(plus);
+			fail();
+		} catch (Exception e) {
+		}
+		assertEquals(1, (long) sequence2.reduce(times));
+		assertEquals(24, (long) sequence3.reduce(times));
+
+		assertEquals(1, (long) sequence1.reduce(times, 1));
+		assertEquals(1, (long) sequence2.reduce(times, 1));
+		assertEquals(24, (long) sequence3.reduce(times, 1));
 	}
 
 }

@@ -112,7 +112,7 @@ public class ShuffleProofSystemTest {
 		// Shuffle Proof Generator
 		ElGamalEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
 		SigmaChallengeGenerator scg = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(4, null);
-		ChallengeGenerator ecg = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(4, size, ro);
+		ChallengeGenerator ecg = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(4, size);
 		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scg, ecg, size, encryptionScheme, encryptionPK, 2, deterministicRandomByteSequence);
 
 		// Proof and verify
@@ -197,7 +197,7 @@ public class ShuffleProofSystemTest {
 		// Shuffle Proof Generator
 		ElGamalEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
 		SigmaChallengeGenerator scg = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(80, null);
-		ChallengeGenerator ecg = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(80, size, ro);
+		ChallengeGenerator ecg = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(80, size);
 		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scg, ecg, size, encryptionScheme, encryptionPK, 20, deterministicRandomByteSequence);
 
 		// Proof and verify
@@ -261,13 +261,13 @@ public class ShuffleProofSystemTest {
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofSystem.createNonInteractiveSigmaChallengeGenerator(80, null);
-		ChallengeGenerator ecg = PermutationCommitmentProofSystem.createNonInteractiveEValuesGenerator(80, size, ro);
+		ChallengeGenerator ecg = PermutationCommitmentProofSystem.createNonInteractiveEValuesGenerator(80, size);
 		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(scg, ecg, G_q, size, 20, rbs);
 
 		// Shuffle Proof Generator
 		ElGamalEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
 		SigmaChallengeGenerator scgS = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(80, null);
-		ChallengeGenerator ecgS = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(80, size, ro);
+		ChallengeGenerator ecgS = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(80, size);
 		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scgS, ecgS, size, encryptionScheme, encryptionPK, 20, rbs);
 
 		// Proof

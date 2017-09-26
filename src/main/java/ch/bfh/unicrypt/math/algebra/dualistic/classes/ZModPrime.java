@@ -43,14 +43,14 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
-import ch.bfh.unicrypt.helper.factorization.Prime;
+import ch.bfh.unicrypt.helper.cache.Cache;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.prime.Prime;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -61,7 +61,7 @@ public class ZModPrime
 	   implements PrimeField<BigInteger> {
 
 	private static final long serialVersionUID = 1L;
-	private static final Map<BigInteger, ZModPrime> INSTANCES = new HashMap<>();
+	private static final Cache<BigInteger, ZModPrime> CACHE = new Cache<>(Cache.SIZE_S);
 
 	protected ZModPrime(Prime prime) {
 		super(prime.getValue());
@@ -120,14 +120,14 @@ public class ZModPrime
 		if (!this.contains(element)) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_ELEMENT, this, element);
 		}
-		if (((ZModElement) element).isZero()) {
+		if (((AdditiveElement<BigInteger>) element).isZero()) {
 			return this.getZeroElement();
 		}
 		if (!this.isFinite() || !this.hasKnownOrder()) {
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		boolean positive = n.signum() > 0;
-		n = n.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		n = MathUtil.modInv(n.abs().mod(this.getOrder()), this.getOrder());
 		ZModElement result = this.defaultPowerAlgorithm((ZModElement) element, n);
 		if (positive) {
 			return result;
@@ -149,7 +149,7 @@ public class ZModPrime
 		if (zModElement.isZero()) {
 			throw new UniCryptRuntimeException(ErrorCode.DIVISION_BY_ZERO, this);
 		}
-		return this.abstractGetElement(zModElement.getValue().modInverse(this.modulus));
+		return this.abstractGetElement(MathUtil.modInv(zModElement.getValue(), this.modulus));
 	}
 
 	@Override
@@ -170,10 +170,10 @@ public class ZModPrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		ZModPrime instance = ZModPrime.INSTANCES.get(modulus);
+		ZModPrime instance = ZModPrime.CACHE.get(modulus);
 		if (instance == null) {
 			instance = new ZModPrime(Prime.getInstance(modulus));
-			ZModPrime.INSTANCES.put(modulus, instance);
+			ZModPrime.CACHE.put(modulus, instance);
 		}
 		return instance;
 	}
@@ -182,16 +182,16 @@ public class ZModPrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		ZModPrime instance = ZModPrime.INSTANCES.get(modulus.getValue());
+		ZModPrime instance = ZModPrime.CACHE.get(modulus.getValue());
 		if (instance == null) {
 			instance = new ZModPrime(modulus);
-			ZModPrime.INSTANCES.put(modulus.getValue(), instance);
+			ZModPrime.CACHE.put(modulus.getValue(), instance);
 		}
 		return instance;
 	}
 
 	public static ZModPrime getFirstInstance(int bitLength) {
-		return ZModPrime.getInstance(Prime.getFirstInstance(bitLength));
+		return ZModPrime.getInstance(Prime.getSmallestInstance(bitLength));
 	}
 
 }

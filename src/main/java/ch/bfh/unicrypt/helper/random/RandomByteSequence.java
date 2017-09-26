@@ -44,8 +44,6 @@ package ch.bfh.unicrypt.helper.random;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.math.BigInteger;
 
 /**
@@ -113,14 +111,7 @@ public abstract class RandomByteSequence
 	 * @return The random bit sequence
 	 */
 	public Sequence<Boolean> getRandomBitSequence() {
-		return this.map(new Mapping<Byte, Boolean>() {
-
-			@Override
-			public Boolean apply(Byte value) {
-				return value < 0;
-			}
-
-		});
+		return this.map(value -> value < 0);
 	}
 
 	/**
@@ -153,15 +144,7 @@ public abstract class RandomByteSequence
 	 * @return The random integer sequence
 	 */
 	public Sequence<Integer> getRandomIntegerSequence(int minValue, int maxValue) {
-		return this.getRandomBigIntegerSequence(BigInteger.valueOf(minValue), BigInteger.valueOf(maxValue)).map(
-			   new Mapping<BigInteger, Integer>() {
-
-			@Override
-			public Integer apply(BigInteger value) {
-				return value.intValue();
-			}
-
-		});
+		return this.getRandomBigIntegerSequence(BigInteger.valueOf(minValue), BigInteger.valueOf(maxValue)).map(value -> value.intValue());
 	}
 
 	/**
@@ -207,30 +190,20 @@ public abstract class RandomByteSequence
 			throw new IllegalArgumentException();
 		}
 		final int bitLength = maxValue.subtract(minValue).bitLength();
-		return this.group(MathUtil.divideUp(bitLength, 8)).map(new Mapping<ByteArray, BigInteger>() {
-
-			@Override
-			public BigInteger apply(ByteArray byteArray) {
-				if (bitLength == 0) {
-					return minValue;
-				}
-				int shift = 8 - (bitLength % 8);
-				if (shift == 8) {
-					shift = 0;
-				}
-				byte[] bytes = byteArray.getBytes();
-				bytes[0] = MathUtil.shiftRight(MathUtil.shiftLeft(bytes[0], shift), shift);
-				return new BigInteger(1, bytes).add(minValue);
-			}
-
-		}).filter(new Predicate<BigInteger>() {
-
-			@Override
-			public boolean test(BigInteger value) {
-				return value.compareTo(maxValue) <= 0;
-			}
-
-		});
+		return this.group(MathUtil.divideUp(bitLength, 8))
+			   .map(byteArray -> {
+				   if (bitLength == 0) {
+					   return minValue;
+				   }
+				   int shift = 8 - (bitLength % 8);
+				   if (shift == 8) {
+					   shift = 0;
+				   }
+				   byte[] bytes = byteArray.getBytes();
+				   bytes[0] = MathUtil.shiftRight(MathUtil.shiftLeft(bytes[0], shift), shift);
+				   return new BigInteger(1, bytes).add(minValue);
+			   })
+			   .filter(value -> value.compareTo(maxValue) <= 0);
 	}
 
 	@Override

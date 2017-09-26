@@ -259,7 +259,7 @@ public class ECPolynomialField
 			}
 			// Test9a
 			for (BigInteger i : BigIntegerSequence.getInstance(1, 100 * degree - 1)) {
-				if (MathUtil.TWO.modPow(i, subGroupOrder).equals(MathUtil.ONE)) {
+				if (MathUtil.modExp(MathUtil.TWO, i, subGroupOrder).equals(MathUtil.ONE)) {
 					throw new UniCryptRuntimeException(ErrorCode.INVALID_ARGUMENT, i, subGroupOrder);
 				}
 			}

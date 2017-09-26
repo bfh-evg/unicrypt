@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.factorization;
+package ch.bfh.unicrypt.helper.prime;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
@@ -53,6 +53,20 @@ import org.junit.Test;
  * @author R. Haenni
  */
 public class SafePrimeTest {
+
+	@Test
+	public void testPrecomputedPrimes() {
+		for (int bits : new int[]{128, 160, 192, 224, 256, 384, 512, 768, 1024, 2048, 3072, 4096}) {
+
+			Prime prime = SafePrime.getSmallestInstance(bits);
+			assertEquals(bits, prime.getValue().bitLength());
+			assertTrue(MathUtil.isSafePrime(prime.getValue()));
+
+			prime = SafePrime.getLargestInstance(bits);
+			assertEquals(bits, prime.getValue().bitLength());
+			assertTrue(MathUtil.isSafePrime(prime.getValue()));
+		}
+	}
 
 	@Test
 	public void generalTest() {
@@ -123,32 +137,61 @@ public class SafePrimeTest {
 	}
 
 	@Test
-	public void testGetFirstInstance_int() {
+	public void testGetSmallelstInstance_int() {
 		try {
-			SafePrime p = SafePrime.getFirstInstance(1);
+			SafePrime p = SafePrime.getSmallestInstance(1);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
-			SafePrime p = SafePrime.getFirstInstance(2);
+			SafePrime p = SafePrime.getSmallestInstance(2);
 			fail();
 		} catch (Exception e) {
 		}
 		SafePrime p;
-		p = SafePrime.getFirstInstance(3);
+		p = SafePrime.getSmallestInstance(3);
 		assertEquals(5, p.getValue().intValue());
 
-		p = SafePrime.getFirstInstance(4);
+		p = SafePrime.getSmallestInstance(4);
 		assertEquals(11, p.getValue().intValue());
 
-		p = SafePrime.getFirstInstance(5);
+		p = SafePrime.getSmallestInstance(5);
 		assertEquals(23, p.getValue().intValue());
 
-		p = SafePrime.getFirstInstance(6);
+		p = SafePrime.getSmallestInstance(6);
 		assertEquals(47, p.getValue().intValue());
 
-		p = SafePrime.getFirstInstance(7);
+		p = SafePrime.getSmallestInstance(7);
 		assertEquals(83, p.getValue().intValue());
+	}
+
+	@Test
+	public void testGetLargestInstance_int() {
+		try {
+			SafePrime p = SafePrime.getLargestInstance(1);
+			fail();
+		} catch (Exception e) {
+		}
+		try {
+			SafePrime p = SafePrime.getLargestInstance(2);
+			fail();
+		} catch (Exception e) {
+		}
+		SafePrime p;
+		p = SafePrime.getLargestInstance(3);
+		assertEquals(7, p.getValue().intValue());
+
+		p = SafePrime.getLargestInstance(4);
+		assertEquals(11, p.getValue().intValue());
+
+		p = SafePrime.getLargestInstance(5);
+		assertEquals(23, p.getValue().intValue());
+
+		p = SafePrime.getLargestInstance(6);
+		assertEquals(59, p.getValue().intValue());
+
+		p = SafePrime.getLargestInstance(7);
+		assertEquals(107, p.getValue().intValue());
 	}
 
 }

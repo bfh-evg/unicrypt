@@ -52,7 +52,6 @@ import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -270,13 +269,7 @@ public class Tuple
 
 	@Override
 	protected final <W> Tree<W> defaultConvertTo(final ConvertMethod<W> convertMethod) {
-		Sequence<Tree<W>> trees = this.getSequence().map(new Mapping<Element, Tree<W>>() {
-
-			@Override
-			public Tree<W> apply(Element element) {
-				return element.convertTo(convertMethod);
-			}
-		});
+		Sequence<Tree<W>> trees = this.getSequence().map(element -> element.convertTo(convertMethod));
 		return Tree.getInstance(trees);
 	}
 
@@ -310,7 +303,6 @@ public class Tuple
 	 * This is a static factory method to construct a composed element without the need of constructing the
 	 * corresponding product or power group beforehand. The input elements are given as an array.
 	 * <p>
-	 * <p/>
 	 * @param elements The array of input elements
 	 * @return The corresponding tuple element
 	 */

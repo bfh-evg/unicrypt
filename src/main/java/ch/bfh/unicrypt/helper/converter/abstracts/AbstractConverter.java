@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.converter.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Node;
@@ -103,14 +102,7 @@ public abstract class AbstractConverter<V, W>
 		} else {
 			Node<V> node = (Node<V>) tree;
 			final Converter<V, W> converter = this;
-			Sequence<Tree<W>> children = node.getChildren().map(new Mapping<Tree<V>, Tree<W>>() {
-
-				@Override
-				public Tree<W> apply(Tree<V> value) {
-					return converter.convert(value);
-				}
-
-			});
+			Sequence<Tree<W>> children = node.getChildren().map(value -> converter.convert(value));
 			return Tree.getInstance(children);
 		}
 	}
@@ -123,14 +115,7 @@ public abstract class AbstractConverter<V, W>
 		} else {
 			Node<W> node = (Node<W>) tree;
 			final Converter<V, W> converter = this;
-			Sequence<Tree<V>> children = node.getChildren().map(new Mapping<Tree<W>, Tree<V>>() {
-
-				@Override
-				public Tree<V> apply(Tree<W> value) {
-					return converter.reconvert(value);
-				}
-
-			});
+			Sequence<Tree<V>> children = node.getChildren().map(value -> converter.reconvert(value));
 			return Tree.getInstance(children);
 		}
 	}

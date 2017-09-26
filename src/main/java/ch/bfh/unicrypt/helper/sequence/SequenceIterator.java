@@ -46,10 +46,10 @@ import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * This abstract class provides more powerful iterators with additional methods for retrieving multiple values, skipping

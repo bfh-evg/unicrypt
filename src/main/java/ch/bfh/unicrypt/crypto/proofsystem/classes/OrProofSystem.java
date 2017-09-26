@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -86,7 +86,7 @@ public class OrProofSystem
 
 	public static OrProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
 		SigmaChallengeGenerator challengeGenerator
-			   = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+			   = FiatShamirSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return OrProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
@@ -195,7 +195,7 @@ public class OrProofSystem
 			responses[i] = s;
 			// Calculate commitment based on the the public value and the random challenge and response
 			// t = f(s)/(y^c)
-			commitments[i] = f.apply(s).apply(((Tuple) publicInput).getAt(i).selfApply(c).invert());
+			commitments[i] = f.apply(s).apply(publicInput.getAt(i).selfApply(c).invert());
 		}
 
 		// Create the proof of the known secret (normal preimage-proof, but with a special challange)

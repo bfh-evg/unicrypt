@@ -47,8 +47,6 @@ import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
@@ -129,34 +127,14 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
 	protected Sequence<E> defaultGetRandomGenerators(RandomByteSequence randomByteSequence) {
-		return this.abstractGetRandomElements(randomByteSequence).filter(new Predicate<E>() {
-
-			@Override
-			public boolean test(E value) {
-				return isGenerator(value);
-			}
-
-		});
+		return this.abstractGetRandomElements(randomByteSequence).filter(value -> isGenerator(value));
 	}
 
 	@Override
 	protected Sequence<E> defaultGetElements() {
 		final AbstractCyclicRing<E, V> ring = this;
-		return Sequence.getInstance(this.getDefaultGenerator(), new Mapping<E, E>() {
-
-								 @Override
-								 public E apply(E element) {
-									 return ring.apply(ring.getDefaultGenerator(), element);
-								 }
-
-							 }).limit(new Predicate<E>() {
-
-			@Override
-			public boolean test(E element) {
-				return ring.getIdentityElement().equals(element);
-			}
-
-		});
+		return Sequence.getInstance(this.getDefaultGenerator(), element -> ring.apply(ring.getDefaultGenerator(), element))
+			   .limit(element -> ring.getIdentityElement().equals(element));
 	}
 
 	protected abstract E abstractGetDefaultGenerator();

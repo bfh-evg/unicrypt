@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractPreimageProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
@@ -76,7 +76,7 @@ public class EqualityPreimageProofSystem
 			throw new IllegalArgumentException("Domain and codomain of each proof function must be semi groups!");
 		}
 		SigmaChallengeGenerator challengeGenerator
-			   = RandomOracleSigmaChallengeGenerator.getInstance(
+			   = FiatShamirSigmaChallengeGenerator.getInstance(
 					  ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()), proverId);
 		return new EqualityPreimageProofSystem(challengeGenerator, proofFunction);
 	}

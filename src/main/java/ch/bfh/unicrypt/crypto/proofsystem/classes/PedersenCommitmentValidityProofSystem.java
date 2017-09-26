@@ -42,10 +42,14 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractValidityProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.helper.random.RandomOracle;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
@@ -58,6 +62,7 @@ import ch.bfh.unicrypt.math.function.classes.InvertFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.math.BigInteger;
 
 /**
  * This class implements the validity proof system for Pedersen commitments: ZKP[(m,r) : y=com(m,r) ∧ m ∈ M] where com
@@ -105,14 +110,14 @@ public class PedersenCommitmentValidityProofSystem
 
 	public static PedersenCommitmentValidityProofSystem getInstance(final PedersenCommitmentScheme pedersenCS,
 		   final Subset messages) {
-		return PedersenCommitmentValidityProofSystem.getInstance(pedersenCS, messages, (Element) null);
+		return PedersenCommitmentValidityProofSystem.getInstance(pedersenCS, messages, null);
 	}
 
 	public static PedersenCommitmentValidityProofSystem getInstance(final PedersenCommitmentScheme pedersenCS,
 		   final Subset messages, final Element proverId) {
 		SigmaChallengeGenerator challengeGenerator
 			   = PedersenCommitmentValidityProofSystem.
-					  createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);
+					  createNonInteractiveChallengeGenerator(pedersenCS, proverId);
 		return PedersenCommitmentValidityProofSystem.getInstance(challengeGenerator, pedersenCS, messages);
 	}
 
@@ -131,39 +136,30 @@ public class PedersenCommitmentValidityProofSystem
 		return new PedersenCommitmentValidityProofSystem(challengeGenerator, pedersenCS, messages);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS,
-				  final int numberOfMessages) {
+	public static FiatShamirSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
+		   final PedersenCommitmentScheme pedersenCS) {
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																							numberOfMessages,
-																							RandomOracle.getInstance());
+																							(Element) null);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
-				  final Element proverId) {
-		return PedersenCommitmentValidityProofSystem
-			   .createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, proverId,
-													   RandomOracle.getInstance());
-	}
-
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
-				  final RandomOracle randomOracle) {
+	public static FiatShamirSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
+		   final PedersenCommitmentScheme pedersenCS, final Element proverId) {
+		ConvertMethod<ByteArray> convertMethod = ConvertMethod.getInstance();
+		HashMethod<ByteArray> hashMethod = HashMethod.getInstance();
+		int hashLength = hashMethod.getHashAlgorithm().getByteLength();
+		Converter<ByteArray, BigInteger> converter = ByteArrayToBigInteger.getInstance(hashLength);
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																							numberOfMessages,
-																							(Element) null,
-																							randomOracle);
+																							proverId, convertMethod, hashMethod, converter);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
-				  final Element proverId, final RandomOracle randomOracle) {
-		if (pedersenCS == null || numberOfMessages < 1 || randomOracle == null) {
+	public static <V> FiatShamirSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
+		   final PedersenCommitmentScheme pedersenCS, final Element proverId,
+		   final ConvertMethod<V> convertMethod, final HashMethod<V> hashMethod, final Converter<ByteArray, BigInteger> converter) {
+		if (pedersenCS == null || convertMethod == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return RandomOracleSigmaChallengeGenerator.getInstance(ZMod.getInstance(pedersenCS.getCyclicGroup().getOrder()),
-															   proverId, randomOracle);
+		return FiatShamirSigmaChallengeGenerator.getInstance(ZMod.getInstance(pedersenCS.getCyclicGroup().getOrder()),
+															 proverId, convertMethod, hashMethod, converter);
 
 	}
 

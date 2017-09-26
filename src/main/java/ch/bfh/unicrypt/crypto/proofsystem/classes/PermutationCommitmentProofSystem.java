@@ -42,14 +42,21 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.MultiValuesNonInteractiveChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.NonInteractiveChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
-import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -62,12 +69,13 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
+import java.math.BigInteger;
 
 //
 // @see [TW10] Protocol 1: Permutation Matrix
@@ -97,7 +105,7 @@ public class PermutationCommitmentProofSystem
 		this.kr = kr;
 		this.independentGenerators = independentGenerators;
 
-		this.ke = ((ZMod) ((ProductSet) this.eValuesGenerator.getChallengeSpace()).getFirst()).getModulus()
+		this.ke = ((ZMod) ((ImmutableArray<Set>) this.eValuesGenerator.getChallengeSpace()).getFirst()).getModulus()
 			   .subtract(MathUtil.ONE).bitLength();
 		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getModulus().subtract(MathUtil.ONE).bitLength();
 	}
@@ -245,7 +253,7 @@ public class PermutationCommitmentProofSystem
 		final Element commitment = f.apply(randomElement);                              // [3n+3]
 		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
 		final Element response = randomElement.apply(Tuple.getInstance(v, w, rV, d, ePrimeV).selfApply(challenge));
-		Triple preimageProof = (Triple) Triple.getInstance(commitment, challenge, response);
+		Triple preimageProof = Triple.getInstance(commitment, challenge, response);
 		//                                                                                -------
 		return Tuple.getInstance(eV, cV).append(preimageProof);                                     // [5n+3]
 	}
@@ -302,7 +310,7 @@ public class PermutationCommitmentProofSystem
 		if (!t1.getSet().isGroup() || t1.getArity() < 1) {
 			throw new IllegalArgumentException();
 		}
-		Element innerProduct = ((Group) t1.getSet().getAt(0)).getIdentityElement();
+		Element innerProduct = ((Monoid) t1.getSet().getAt(0)).getIdentityElement();
 		for (int i = 0; i < t1.getArity(); i++) {
 			innerProduct = innerProduct.apply(t1.getAt(i).selfApply(t2.getAt(i)));
 		}
@@ -439,7 +447,7 @@ public class PermutationCommitmentProofSystem
 		}
 		int size = independentGenerators.getArity() - 1;
 		return getInstance(
-			   createNonInteractiveSigmaChallengeGenerator(kc, (Element) null),
+			   createNonInteractiveSigmaChallengeGenerator(kc, null),
 			   createNonInteractiveEValuesGenerator(ke, size),
 			   independentGenerators,
 			   kr);
@@ -466,7 +474,7 @@ public class PermutationCommitmentProofSystem
 		if (!cs.isProduct()
 			   || ((ProductSet) cs).getArity() != size
 			   || ((ProductSet) cs).getFirst().getOrder().compareTo(cyclicGroup.getOrder()) > 0
-			   || !((ProductSet) cs).isUniform()) {
+			   || !((ImmutableArray<Set>) cs).isUniform()) {
 			throw new IllegalArgumentException();
 		}
 
@@ -477,65 +485,76 @@ public class PermutationCommitmentProofSystem
 	// Service functions to create non-interactive Sigma- and Element-ChallengeGenerator
 	//
 
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace) {
-		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, (Element) null, RandomOracle.getInstance());
+	public static FiatShamirSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final int kc) {
+		return createNonInteractiveSigmaChallengeGenerator(kc, (Element) null);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveSigmaChallengeGenerator(final int kc, final Element proverId) {
-		return createNonInteractiveSigmaChallengeGenerator(kc, proverId,
-														   RandomOracle.getInstance());
-	}
-
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveSigmaChallengeGenerator(final int kc, final Element proverId,
-				  RandomOracle randomOracle) {
+	public static FiatShamirSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final int kc, final Element proverId) {
 		if (kc < 1) {
 			throw new IllegalArgumentException();
 		}
 		//[0,...,2^kc - 1] \subseteq Z
 		ZMod cs = ZMod.getInstance(MathUtil.powerOfTwo(kc));
-		return RandomOracleSigmaChallengeGenerator.getInstance(cs, proverId, randomOracle);
+		return createNonInteractiveSigmaChallengeGenerator(cs, proverId);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace, final Element proverId,
-				  RandomOracle randomOracle) {
-		if (challengeSpace == null) {
+	public static FiatShamirSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace) {
+		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, (Element) null);
+	}
+
+	public static FiatShamirSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace, Element proverId) {
+		ConvertMethod<ByteArray> convertMethod = ConvertMethod.getInstance();
+		HashMethod<ByteArray> hashMethod = HashMethod.getInstance();
+		int hashLength = hashMethod.getHashAlgorithm().getByteLength();
+		Converter<ByteArray, BigInteger> converter = ByteArrayToBigInteger.getInstance(hashLength);
+		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, proverId, convertMethod, hashMethod, converter);
+	}
+
+	public static <V> FiatShamirSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace, final Element proverId,
+		   final ConvertMethod<V> convertMethod, final HashMethod<V> hashMethod, final Converter<ByteArray, BigInteger> converter) {
+		if (challengeSpace == null || convertMethod == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, proverId, randomOracle);
+		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, proverId, convertMethod, hashMethod, converter);
 	}
 
-	public static RandomOracleChallengeGenerator
-		   createNonInteractiveEValuesGenerator(final int ke, final int size) {
-		return createNonInteractiveEValuesGenerator(ke, size, RandomOracle.getInstance());
+	public static NonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final int ke, final int size) {
+		return createNonInteractiveEValuesGenerator(ke, size, (Element) null);
 	}
 
-	public static RandomOracleChallengeGenerator
-		   createNonInteractiveEValuesGenerator(final int ke, final int size, RandomOracle randomOracle) {
-		if (size < 1 || ke < 1) {
+	public static NonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final int ke,
+		   final int size, final Element proverId) {
+		if (ke < 1) {
 			throw new IllegalArgumentException();
 		}
 		// [0,...,2^ke - 1]^N \subseteq Z^N
-		return createNonInteractiveEValuesGenerator(ZMod.getInstance(MathUtil.powerOfTwo(ke)), size, randomOracle);
+		return createNonInteractiveEValuesGenerator(ZMod.getInstance(MathUtil.powerOfTwo(ke)), size, proverId);
 	}
 
-	public static RandomOracleChallengeGenerator
-		   createNonInteractiveEValuesGenerator(final ZMod challengeSpace, final int size) {
-		return createNonInteractiveEValuesGenerator(challengeSpace, size, RandomOracle.getInstance());
+	public static NonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final ZMod challengeSpace,
+		   final int size) {
+		return createNonInteractiveEValuesGenerator(challengeSpace, size, (Element) null);
 	}
 
-	public static RandomOracleChallengeGenerator
-		   createNonInteractiveEValuesGenerator(final ZMod challengeSpace, final int size,
-				  RandomOracle randomOracle) {
-		if (challengeSpace == null || size < 1) {
+	public static NonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final ZMod challengeSpace,
+		   final int size, final Element proverId) {
+		ConvertMethod<ByteArray> convertMethod = ConvertMethod.getInstance();
+		HashMethod<ByteArray> hashMethod = HashMethod.getInstance();
+		int hashLength = hashMethod.getHashAlgorithm().getByteLength();
+		Converter<ByteArray, BigInteger> converter = ByteArrayToBigInteger.getInstance(hashLength);
+		Converter<BigInteger, ByteArray> indexConverter = BigIntegerToByteArray.getInstance();
+		return createNonInteractiveEValuesGenerator(challengeSpace, size, proverId, convertMethod, hashMethod, converter, indexConverter);
+	}
+
+	public static <V> NonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final ZMod eChallengeSpace,
+		   final int size, final Element proverId, final ConvertMethod<V> convertMethod,
+		   final HashMethod<V> hashMethod, final Converter<ByteArray, BigInteger> converter, final Converter<BigInteger, ByteArray> indexConverter) {
+
+		if (size < 1 || eChallengeSpace == null || convertMethod == null || hashMethod == null || converter == null || indexConverter == null) {
 			throw new IllegalArgumentException();
 		}
 
-		ProductGroup cs = ProductGroup.getInstance(challengeSpace, size);
-		return RandomOracleChallengeGenerator.getInstance(cs, randomOracle);
+		return MultiValuesNonInteractiveChallengeGenerator.getInstance(eChallengeSpace, size, proverId, convertMethod, hashMethod, converter, indexConverter);
 	}
 
 }

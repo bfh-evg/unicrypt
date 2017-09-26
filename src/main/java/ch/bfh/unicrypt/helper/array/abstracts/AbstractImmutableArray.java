@@ -41,13 +41,12 @@
  */
 package ch.bfh.unicrypt.helper.array.abstracts;
 
-import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.IntegerSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 
@@ -125,7 +124,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	protected Sequence<Integer> defaultGetIndices(final V value) {
-		return this.getAllIndices().filter(this.equalityTest(value));
+		return this.getAllIndices().filter(index -> abstractGetAt(index).equals(value));
 	}
 
 	@Override
@@ -137,7 +136,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	protected Sequence<Integer> defaultGetIndicesExcept(final V value) {
-		return this.getAllIndices().filter(this.equalityTest(value).not());
+		return this.getAllIndices().filter(index -> !abstractGetAt(index).equals(value));
 	}
 
 	@Override
@@ -145,22 +144,12 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
-		return (int) this.getAllIndices().count(this.equalityTest(value));
+		return (int) this.getAllIndices().count(index -> abstractGetAt(index).equals(value));
 	}
 
 	@Override
 	public final int countExcept(V value) {
 		return this.getLength() - this.count(value);
-	}
-
-	private Predicate<Integer> equalityTest(final V value) {
-		return new Predicate<Integer>() {
-
-			@Override
-			public boolean test(Integer index) {
-				return abstractGetAt(index).equals(value);
-			}
-		};
 	}
 
 	@Override

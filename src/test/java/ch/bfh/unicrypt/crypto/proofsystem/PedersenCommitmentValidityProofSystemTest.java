@@ -82,7 +82,7 @@ public class PedersenCommitmentValidityProofSystemTest {
 		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElement(4), G_q.getElement(2));
 		Subset messages = Subset.getInstance(Z_q, new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)});
 
-		SigmaChallengeGenerator scg = PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);
+		SigmaChallengeGenerator scg = PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS, proverId);
 		PedersenCommitmentValidityProofSystem pg = PedersenCommitmentValidityProofSystem.getInstance(scg, pedersenCS, messages);
 
 		Element publicInput = G_q.getElement(128);   // 4^2*2^3 = 128
@@ -110,7 +110,7 @@ public class PedersenCommitmentValidityProofSystemTest {
 		ZModElement message3 = Z_q.getElement(5);
 		Subset messages = Subset.getInstance(Z_q, message0, message1, message2, message3);
 
-		SigmaChallengeGenerator scg = PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);
+		SigmaChallengeGenerator scg = PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS, proverId);
 		PedersenCommitmentValidityProofSystem pg = PedersenCommitmentValidityProofSystem.getInstance(scg, pedersenCS, messages);
 
 		int index = 3;
@@ -135,7 +135,7 @@ public class PedersenCommitmentValidityProofSystemTest {
 			PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElement(4), G_q.getElement(2));
 			Subset messages = Subset.getInstance(Z_q, new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)});
 
-			SigmaChallengeGenerator scg = PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);
+			SigmaChallengeGenerator scg = PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS, proverId);
 			PedersenCommitmentValidityProofSystem pg = PedersenCommitmentValidityProofSystem.getInstance(scg, pedersenCS, messages);
 
 			Element publicInput = G_q.getElement(128);   // 4^2*2^3 = 128

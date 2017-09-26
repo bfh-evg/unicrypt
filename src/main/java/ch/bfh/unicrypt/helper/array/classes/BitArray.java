@@ -48,7 +48,6 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 
 /**
  * This class is provides an implementation for immutable arrays of type {@code boolean}/{@code Boolean}. For maximal
@@ -163,7 +162,7 @@ public class BitArray
 		if (bits == null || bits.isInfinite()) {
 			throw new IllegalArgumentException();
 		}
-		bits = bits.filter(Predicate.NOT_NULL);
+		bits = bits.filter(Sequence.NOT_NULL);
 		int bitLength = bits.getLength().intValue();
 		int byteLength = MathUtil.divideUp(bitLength, Byte.SIZE);
 		byte[] bytes = new byte[byteLength];

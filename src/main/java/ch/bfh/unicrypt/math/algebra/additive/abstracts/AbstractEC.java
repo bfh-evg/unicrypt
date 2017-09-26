@@ -50,7 +50,6 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -241,15 +240,8 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, DE extends Dualist
 
 	@Override
 	protected Sequence<EE> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE)).map(
-			   new Mapping<BigInteger, EE>() {
-
-			@Override
-			public EE apply(BigInteger value) {
-				return selfApply(getDefaultGenerator(), value);
-			}
-
-		});
+		return randomByteSequence.getRandomBigIntegerSequence(this.getOrder().subtract(MathUtil.ONE))
+			   .map(value -> selfApply(getDefaultGenerator(), value));
 	}
 
 	@Override

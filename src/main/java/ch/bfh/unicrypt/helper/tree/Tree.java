@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.tree;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
@@ -77,6 +76,24 @@ public abstract class Tree<V>
 			throw new IllegalArgumentException();
 		}
 		return new Leaf<>(value);
+	}
+
+	/**
+	 * Creates a new node from a given array of values (its children) of type {@code V}.
+	 * <p>
+	 * @param <V>    The generic type of the tree
+	 * @param values The given array of values
+	 * @return The new node
+	 */
+	public static <V> Node<V> getInstance(V... values) {
+		if (values == null) {
+			throw new IllegalArgumentException();
+		}
+		Leaf<V>[] leafs = new Leaf[values.length];
+		for (int i = 0; i < values.length; i++) {
+			leafs[i] = getInstance(values[i]);
+		}
+		return getInstance(leafs);
 	}
 
 	/**
@@ -116,7 +133,7 @@ public abstract class Tree<V>
 		if (children == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Node<>(children.filter(Predicate.NOT_NULL));
+		return new Node<>(children.filter(Sequence.NOT_NULL));
 	}
 
 	/**

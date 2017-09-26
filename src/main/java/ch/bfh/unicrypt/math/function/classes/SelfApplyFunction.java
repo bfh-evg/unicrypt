@@ -79,7 +79,7 @@ public class SelfApplyFunction
 	@Override
 	protected Element abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
 		Element element1 = element.getFirst();
-		Element<BigInteger> element2 = (Element<BigInteger>) element.getSecond();
+		Element<BigInteger> element2 = element.getSecond();
 		return element1.selfApply(element2.getValue());
 	}
 

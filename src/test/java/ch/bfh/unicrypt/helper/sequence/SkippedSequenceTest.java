@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -60,17 +59,17 @@ public class SkippedSequenceTest {
 		Assert.assertFalse(sequence.skip(0).isEmpty());
 		Assert.assertEquals(10, sequence.skip(0).getLength().intValue());
 		Assert.assertEquals(10, sequence.skip(0).getLength().intValue());
-		Assert.assertEquals(1, (int) sequence.skip(0).get());
+		Assert.assertEquals(1, (long) sequence.skip(0).get());
 
 		Assert.assertFalse(sequence.skip(1).isEmpty());
 		Assert.assertEquals(9, sequence.skip(1).getLength().intValue());
 		Assert.assertEquals(9, sequence.skip(1).getLength().intValue());
-		Assert.assertEquals(2, (int) sequence.skip(1).get());
+		Assert.assertEquals(2, (long) sequence.skip(1).get());
 
 		Assert.assertFalse(sequence.skip(9).isEmpty());
 		Assert.assertEquals(1, sequence.skip(9).getLength().intValue());
 		Assert.assertEquals(1, sequence.skip(9).getLength().intValue());
-		Assert.assertEquals(10, (int) sequence.skip(9).get());
+		Assert.assertEquals(10, (long) sequence.skip(9).get());
 
 		Assert.assertTrue(sequence.skip(10).isEmpty());
 		Assert.assertEquals(0, sequence.skip(10).getLength().intValue());
@@ -84,19 +83,13 @@ public class SkippedSequenceTest {
 
 		Assert.assertEquals(5, sequence.skip(2).skip(3).getLength().intValue());
 		Assert.assertEquals(5, sequence.skip(2).skip(3).getLength().intValue());
-		Assert.assertEquals(6, (int) sequence.skip(2).skip(3).get());
+		Assert.assertEquals(6, (long) sequence.skip(2).skip(3).get());
 
 		Assert.assertEquals(2, sequence.skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).getLength().intValue());
-		Assert.assertEquals(9, (int) sequence.skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).get());
+		Assert.assertEquals(9, (long) sequence.skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).get());
 
 		// unknown length
-		Sequence<Integer> seq2 = sequence.filter(new Predicate<Integer>() {
-
-			@Override
-			public boolean test(Integer value) {
-				return true;
-			}
-		});
+		Sequence<Integer> seq2 = sequence.filter(value -> true);
 		Assert.assertEquals(10, seq2.getLength().intValue());
 		Assert.assertEquals(1, seq2.skip(9).getLength().intValue());
 		Assert.assertEquals(MathUtil.ZERO, seq2.skip(10).getLength());

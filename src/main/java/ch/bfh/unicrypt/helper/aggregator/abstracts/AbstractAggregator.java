@@ -43,11 +43,11 @@ package ch.bfh.unicrypt.helper.aggregator.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
+import java.util.function.Function;
 
 /**
  * This abstract class serves as a base implementation for the {@link Aggregator} interface.
@@ -60,26 +60,12 @@ public abstract class AbstractAggregator<V>
 	   extends UniCrypt
 	   implements Aggregator<V> {
 
-	private final Mapping<Tree<V>, V> mapping1;
-	private final Mapping<V, Tree<V>> mapping2;
+	private final Function<Tree<V>, V> mapping1;
+	private final Function<V, Tree<V>> mapping2;
 
 	protected AbstractAggregator() {
-		this.mapping1 = new Mapping<Tree<V>, V>() {
-
-			@Override
-			public V apply(Tree<V> tree) {
-				return aggregate(tree);
-			}
-
-		};
-		this.mapping2 = new Mapping<V, Tree<V>>() {
-
-			@Override
-			public Tree<V> apply(V value) {
-				return disaggregate(value);
-			}
-
-		};
+		this.mapping1 = tree -> aggregate(tree);
+		this.mapping2 = value -> disaggregate(value);
 	}
 
 	@Override

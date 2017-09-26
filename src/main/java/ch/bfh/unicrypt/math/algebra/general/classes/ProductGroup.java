@@ -201,7 +201,7 @@ public class ProductGroup
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		boolean positiveAmount = amount.signum() > 0;
-		amount = amount.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		amount = MathUtil.modInv(amount.abs().mod(this.getOrder()), this.getOrder());
 		Tuple result = this.defaultSelfApply((Tuple) element, amount);
 		if (positiveAmount) {
 			return result;

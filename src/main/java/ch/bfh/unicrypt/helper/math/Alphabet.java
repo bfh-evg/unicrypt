@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.math;
 
-import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -144,7 +144,7 @@ public class Alphabet
 	 */
 	public int getSize() {
 		if (this.characters == null) {
-			return (int) this.maxChar - (int) this.minChar + 1;
+			return this.maxChar - this.minChar + 1;
 		}
 		return this.characters.length();
 	}
@@ -207,7 +207,7 @@ public class Alphabet
 			throw new IllegalArgumentException();
 		}
 		if (this.characters == null) {
-			return (int) character - (int) this.minChar;
+			return character - this.minChar;
 		}
 		return this.characters.lastIndexOf(character);
 	}

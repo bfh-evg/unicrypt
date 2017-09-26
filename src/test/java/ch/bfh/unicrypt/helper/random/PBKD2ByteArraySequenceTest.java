@@ -45,8 +45,8 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
-import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 import ch.bfh.unicrypt.helper.random.password.PBKDF2;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -46,8 +46,6 @@ import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Operator;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
@@ -88,7 +86,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 		if (elements == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		return this.defaultMultiply(Sequence.getInstance(elements).filter(Predicate.NOT_NULL));
+		return this.defaultMultiply(Sequence.getInstance(elements).filter(Sequence.NOT_NULL));
 	}
 
 	@Override
@@ -105,7 +103,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 		if (elements == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, this);
 		}
-		return this.defaultMultiply(elements.filter(Predicate.NOT_NULL));
+		return this.defaultMultiply(elements.filter(Sequence.NOT_NULL));
 	}
 
 	@Override
@@ -163,13 +161,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 
 	protected E defaultMultiply(final Sequence<Element> elements) {
 		final SemiRing<V> semiGroup = this;
-		return (E) elements.reduce(new Operator<Element>() {
-
-			@Override
-			public Element apply(Element element1, Element element2) {
-				return semiGroup.multiply(element1, element2);
-			}
-		}, this.getOneElement());
+		return (E) elements.reduce((element1, element2) -> semiGroup.multiply(element1, element2), this.getOneElement());
 	}
 
 	// this method is overridden in AbstractField

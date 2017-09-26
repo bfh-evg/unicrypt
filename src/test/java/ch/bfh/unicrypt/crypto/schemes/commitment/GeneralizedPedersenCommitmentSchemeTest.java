@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.commitment;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.random.RandomOracle;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;

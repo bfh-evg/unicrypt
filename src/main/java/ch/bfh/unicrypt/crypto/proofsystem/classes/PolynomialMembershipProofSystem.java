@@ -41,18 +41,19 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
+import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SetMembershipProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.ErrorCode;
-import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -89,7 +90,7 @@ public class PolynomialMembershipProofSystem
 		}
 
 		PolynomialElement polynomial
-			   = PolynomialSemiRing.getInstance((ZModPrime) members.getSuperset())
+			   = PolynomialSemiRing.getInstance((SemiRing) members.getSuperset())
 					  .getElementByRoots(Tuple.getInstance(roots));
 		this.pepsi = PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
@@ -104,7 +105,7 @@ public class PolynomialMembershipProofSystem
 	public static final PolynomialMembershipProofSystem getInstance(final Subset members,
 		   final PedersenCommitmentScheme pedersenCS) {
 		SigmaChallengeGenerator challengeGenerator
-			   = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+			   = FiatShamirSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialMembershipProofSystem.getInstance(challengeGenerator, members, pedersenCS);
 	}
 
@@ -128,7 +129,7 @@ public class PolynomialMembershipProofSystem
 	public static final PolynomialMembershipProofSystem getInstance(final PolynomialElement polynomial,
 		   final PedersenCommitmentScheme pedersenCS) {
 		SigmaChallengeGenerator challengeGenerator
-			   = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+			   = FiatShamirSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialMembershipProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 

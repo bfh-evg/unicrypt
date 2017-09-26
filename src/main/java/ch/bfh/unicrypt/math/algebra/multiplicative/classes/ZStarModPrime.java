@@ -43,17 +43,15 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
-import ch.bfh.unicrypt.helper.factorization.Prime;
+import ch.bfh.unicrypt.helper.cache.Cache;
+import ch.bfh.unicrypt.helper.prime.Prime;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.deterministic.DeterministicRandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Inherits from ZStarMod but not from AbstractCyclicGroup. Therefore, the additional methods from AbstractCyclicGroup
@@ -66,7 +64,7 @@ public class ZStarModPrime
 	   implements MultiplicativeCyclicGroup<BigInteger> {
 
 	private static final long serialVersionUID = 1L;
-	private final static Map<BigInteger, ZStarModPrime> INSTANCES = new HashMap<>();
+	private final static Cache<BigInteger, ZStarModPrime> CACHE = new Cache<>(Cache.SIZE_S);
 
 	protected ZStarModPrime(Prime modulus) {
 		super(modulus);
@@ -118,14 +116,7 @@ public class ZStarModPrime
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
 	protected Sequence<ZStarModElement> defaultGetRandomGenerators(RandomByteSequence randomByteSequence) {
-		return this.abstractGetRandomElements(randomByteSequence).filter(new Predicate<ZStarModElement>() {
-
-			@Override
-			public boolean test(ZStarModElement value) {
-				return isGenerator(value);
-			}
-
-		});
+		return this.abstractGetRandomElements(randomByteSequence).filter(value -> isGenerator(value));
 	}
 
 	@Override
@@ -141,10 +132,10 @@ public class ZStarModPrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		ZStarModPrime instance = ZStarModPrime.INSTANCES.get(modulus);
+		ZStarModPrime instance = ZStarModPrime.CACHE.get(modulus);
 		if (instance == null) {
 			instance = new ZStarModPrime(Prime.getInstance(modulus));
-			ZStarModPrime.INSTANCES.put(modulus, instance);
+			ZStarModPrime.CACHE.put(modulus, instance);
 		}
 		return instance;
 	}
@@ -153,16 +144,12 @@ public class ZStarModPrime
 		if (modulus == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		ZStarModPrime instance = ZStarModPrime.INSTANCES.get(modulus.getValue());
+		ZStarModPrime instance = ZStarModPrime.CACHE.get(modulus.getValue());
 		if (instance == null) {
 			instance = new ZStarModPrime(modulus);
-			ZStarModPrime.INSTANCES.put(modulus.getValue(), instance);
+			ZStarModPrime.CACHE.put(modulus.getValue(), instance);
 		}
 		return instance;
-	}
-
-	public static ZStarModPrime getFirstInstance(int bitLength) {
-		return ZStarModPrime.getInstance(Prime.getFirstInstance(bitLength));
 	}
 
 }

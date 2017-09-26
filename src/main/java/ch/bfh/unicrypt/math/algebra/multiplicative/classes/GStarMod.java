@@ -43,14 +43,19 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.factorization.Factorization;
-import ch.bfh.unicrypt.helper.factorization.SpecialFactorization;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.prime.Factorization;
+import ch.bfh.unicrypt.helper.prime.SpecialFactorization;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
 import java.math.BigInteger;
@@ -139,9 +144,52 @@ public class GStarMod
 		return this.getZStarMod().getOrder().divide(this.getOrder());
 	}
 
+	/**
+	 * Derives and returns a sequence of independent generators. The implementation follows the NIST standard FIPS PUB
+	 * 186-4 (Appendix A.2.3)
+	 * <p>
+	 * @see "NIST FIPS PUB 186-4, Appendix A.2.3"
+	 * @param domainParameterSeed The domain parameter seed which is concatenated to the hash input.
+	 * @return A sequence of independent generators.
+	 */
+	public final Sequence<GStarModElement> getIndependentGenerators(String domainParameterSeed) {
+		HashMethod<ByteArray> hm = HashMethod.<ByteArray>getInstance();
+		return getIndependentGenerators(domainParameterSeed,
+										StringToByteArray.getInstance(),
+										BigIntegerToByteArray.getInstance(),
+										hm,
+										ByteArrayToBigInteger.getInstance(hm.getHashAlgorithm().getByteLength()));
+	}
+
+	/**
+	 * Derives and returns a sequence of independent generators. The implementation follows the NIST standard FIPS PUB
+	 * 186-4 (Appendix A.2.3)
+	 * <p>
+	 * @see "NIST FIPS PUB 186-4, Appendix A.2.3"
+	 * @param domainParameterSeed The domain parameter seed which is concatenated to the hash input.
+	 * @param stringConverter     The converter used to convert strings to byte arrays.
+	 * @param indexCountConverter The converter used to convert the index and count (integer values) to byte arrays.
+	 * @param hashMethod          The hash method.
+	 * @param converter           The converter used to convert the output of the hash function to a big integer.
+	 * @return A sequence of independent generators.
+	 */
+	public final Sequence<GStarModElement> getIndependentGenerators(String domainParameterSeed, Converter<String, ByteArray> stringConverter, Converter<BigInteger, ByteArray> indexCountConverter, HashMethod<ByteArray> hashMethod, Converter<ByteArray, BigInteger> converter) {
+		return Sequence.getInstance(1, index -> index + 1).map(index -> {
+			int count = 0;
+			BigInteger g;
+			do {
+				count++;
+				Tree<ByteArray> u = Tree.getInstance(stringConverter.convert(domainParameterSeed), stringConverter.convert("ggen"), indexCountConverter.convert(BigInteger.valueOf(index)), indexCountConverter.convert(BigInteger.valueOf(count)));
+				ByteArray w = hashMethod.getHashValue(u);
+				g = MathUtil.modExp(converter.convert(w), this.getCoFactor(), this.getModulus());
+			} while (g.compareTo(MathUtil.ONE) <= 0);
+			return this.abstractGetElement(g);
+		});
+	}
+
 	@Override
 	protected GStarModElement defaultSelfApplyAlgorithm(final GStarModElement element, final BigInteger posExponent) {
-		return this.abstractGetElement(element.getValue().modPow(posExponent, this.modulus));
+		return this.abstractGetElement(MathUtil.modExp(element.getValue(), posExponent, this.modulus));
 	}
 
 	@Override
@@ -154,7 +202,7 @@ public class GStarMod
 		return value.signum() > 0
 			   && value.compareTo(this.modulus) < 0
 			   && MathUtil.areRelativelyPrime(value, this.modulus)
-			   && value.modPow(this.getOrder(), this.modulus).equals(MathUtil.ONE);
+			   && MathUtil.modExp(value, this.getOrder(), this.modulus).equals(MathUtil.ONE);
 	}
 
 	@Override
@@ -169,14 +217,8 @@ public class GStarMod
 
 	@Override
 	protected Sequence<GStarModElement> abstractGetRandomElements(final RandomByteSequence randomByteSequence) {
-		return this.getZStarMod().abstractGetRandomElements(randomByteSequence).map(
-			   new Mapping<ZStarModElement, GStarModElement>() {
-
-			@Override
-			public GStarModElement apply(ZStarModElement element) {
-				return abstractGetElement(element.power(getCoFactor()).getValue());
-			}
-		});
+		return this.getZStarMod().abstractGetRandomElements(randomByteSequence)
+			   .map(element -> abstractGetElement(element.power(getCoFactor()).getValue()));
 	}
 
 	@Override
@@ -196,7 +238,7 @@ public class GStarMod
 
 	@Override
 	protected GStarModElement abstractInvert(final GStarModElement element) {
-		return this.abstractGetElement(element.getValue().modInverse(this.modulus));
+		return this.abstractGetElement(MathUtil.modInv(element.getValue(), this.modulus));
 	}
 
 	@Override
@@ -208,7 +250,7 @@ public class GStarMod
 			do {
 				alpha = alpha.add(MathUtil.ONE);
 			} while (!MathUtil.areRelativelyPrime(alpha, this.getModulus()));
-			element = this.abstractGetElement(alpha.modPow(this.getCoFactor(), this.modulus));
+			element = this.abstractGetElement(MathUtil.modExp(alpha, this.getCoFactor(), this.modulus));
 		} while (!this.isGenerator(element)); // this test could be skipped for a prime order
 		return element;
 	}

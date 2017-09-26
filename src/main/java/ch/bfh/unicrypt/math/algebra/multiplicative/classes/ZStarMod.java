@@ -43,20 +43,17 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.cache.Cache;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.factorization.Factorization;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.prime.Factorization;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class implements the group of integers Z*_n with the operation of multiplication modulo n. Its identity element
@@ -76,8 +73,8 @@ public class ZStarMod
 	private static final long serialVersionUID = 1L;
 
 	// here we use two maps to store groups of unknown and known order separately
-	private static final Map<BigInteger, ZStarMod> instances1 = new HashMap<>();
-	private static final Map<BigInteger, ZStarMod> instances2 = new HashMap<>();
+	private static final Cache<BigInteger, ZStarMod> CACHE1 = new Cache<>(Cache.SIZE_S);
+	private static final Cache<BigInteger, ZStarMod> CACHE2 = new Cache<>(Cache.SIZE_S);
 
 	protected final BigInteger modulus;
 	private final Factorization modulusFactorization;
@@ -125,7 +122,7 @@ public class ZStarMod
 
 	@Override
 	protected ZStarModElement defaultSelfApplyAlgorithm(final ZStarModElement element, final BigInteger posExponent) {
-		return this.abstractGetElement(element.getValue().modPow(posExponent, this.modulus));
+		return this.abstractGetElement(MathUtil.modExp(element.getValue(), posExponent, this.modulus));
 	}
 
 	@Override
@@ -160,22 +157,8 @@ public class ZStarMod
 	protected Sequence<ZStarModElement> abstractGetRandomElements(final RandomByteSequence randomByteSequence) {
 		return randomByteSequence
 			   .getRandomBigIntegerSequence(MathUtil.ONE, this.getModulus().subtract(MathUtil.ONE))
-			   .filter(new Predicate<BigInteger>() {
-
-				   @Override
-				   public boolean test(BigInteger value) {
-					   return abstractContains(value);
-				   }
-
-			   })
-			   .map(new Mapping<BigInteger, ZStarModElement>() {
-
-				   @Override
-				   public ZStarModElement apply(BigInteger value) {
-					   return abstractGetElement(value);
-				   }
-
-			   });
+			   .filter(value -> abstractContains(value))
+			   .map(value -> abstractGetElement(value));
 	}
 
 	@Override
@@ -198,7 +181,7 @@ public class ZStarMod
 
 	@Override
 	public ZStarModElement abstractInvert(final ZStarModElement element) {
-		return this.abstractGetElement(element.getValue().modInverse(this.modulus));
+		return this.abstractGetElement(MathUtil.modInv(element.getValue(), this.modulus));
 	}
 
 	@Override
@@ -232,10 +215,10 @@ public class ZStarMod
 		if (modulus.compareTo(MathUtil.ONE) <= 0) {
 			throw new UniCryptRuntimeException(ErrorCode.SET_CONSTRUCTION_FAILURE, modulus);
 		}
-		ZStarMod instance = ZStarMod.instances1.get(modulus);
+		ZStarMod instance = ZStarMod.CACHE1.get(modulus);
 		if (instance == null) {
 			instance = new ZStarMod(modulus);
-			ZStarMod.instances1.put(modulus, instance);
+			ZStarMod.CACHE1.put(modulus, instance);
 		}
 		return instance;
 	}
@@ -254,10 +237,10 @@ public class ZStarMod
 		if (modulusFactorization.getValue().compareTo(MathUtil.ONE) <= 0) {
 			throw new UniCryptRuntimeException(ErrorCode.SET_CONSTRUCTION_FAILURE, modulusFactorization);
 		}
-		ZStarMod instance = ZStarMod.instances2.get(modulusFactorization.getValue());
+		ZStarMod instance = ZStarMod.CACHE2.get(modulusFactorization.getValue());
 		if (instance == null) {
 			instance = new ZStarMod(modulusFactorization);
-			ZStarMod.instances2.put(modulusFactorization.getValue(), instance);
+			ZStarMod.CACHE2.put(modulusFactorization.getValue(), instance);
 		}
 		return instance;
 	}

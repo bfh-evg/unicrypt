@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.math;
 
-import ch.bfh.unicrypt.helper.math.Point;
 import org.junit.Assert;
 import org.junit.Test;
 

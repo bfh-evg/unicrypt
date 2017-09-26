@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.math;
 
-import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.ErrorCode;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import java.math.BigInteger;
 import java.util.Arrays;

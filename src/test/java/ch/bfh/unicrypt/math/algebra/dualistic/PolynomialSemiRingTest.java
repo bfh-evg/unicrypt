@@ -162,7 +162,7 @@ public class PolynomialSemiRingTest {
 												  z.getIdentityElement(), z.getOneElement());
 		PolynomialElement e1 = ring0.getElement(poly1);
 		PolynomialElement e2 = ring0.getElement(poly2);
-		PolynomialElement e3 = (PolynomialElement) e1.apply(e2);
+		PolynomialElement e3 = e1.apply(e2);
 
 		assertEquals(5, e3.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(7, e3.getValue().getCoefficient(1).getValue().intValue());
@@ -175,7 +175,7 @@ public class PolynomialSemiRingTest {
 									   zmod7.getIdentityElement(), zmod7.getOneElement());
 		PolynomialElement e4 = ring7.getElement(poly1);
 		PolynomialElement e5 = ring7.getElement(poly2);
-		PolynomialElement e6 = (PolynomialElement) e4.apply(e5);
+		PolynomialElement e6 = e4.apply(e5);
 
 		assertEquals(2, e6.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(0, e6.getValue().getCoefficient(1).getValue().intValue());
@@ -188,7 +188,7 @@ public class PolynomialSemiRingTest {
 									   zmod2.getIdentityElement(), zmod2.getOneElement());
 		e4 = ring2.getElement(poly1);
 		e5 = ring2.getElement(poly2);
-		e6 = (PolynomialElement) e4.apply(e5);
+		e6 = e4.apply(e5);
 
 		assertEquals(0, e6.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(1, e6.getValue().getCoefficient(1).getValue().intValue());
@@ -205,7 +205,7 @@ public class PolynomialSemiRingTest {
 												  z.getIdentityElement(), z.getOneElement());
 		PolynomialElement e1 = ring0.getElement(poly1);
 		PolynomialElement e2 = ring0.getElement(poly2);
-		PolynomialElement e3 = (PolynomialElement) e1.multiply(e2);
+		PolynomialElement e3 = e1.multiply(e2);
 
 		assertEquals(4, e3.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(7, e3.getValue().getCoefficient(1).getValue().intValue());
@@ -220,7 +220,7 @@ public class PolynomialSemiRingTest {
 									   zmod7.getIdentityElement(), zmod7.getOneElement());
 		PolynomialElement e4 = ring7.getElement(poly1);
 		PolynomialElement e5 = ring7.getElement(poly2);
-		PolynomialElement e6 = (PolynomialElement) e4.multiply(e5);
+		PolynomialElement e6 = e4.multiply(e5);
 
 		assertEquals(4, e6.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(0, e6.getValue().getCoefficient(1).getValue().intValue());
@@ -235,7 +235,7 @@ public class PolynomialSemiRingTest {
 									   zmod2.getIdentityElement(), zmod2.getOneElement());
 		e4 = ring2.getElement(poly1);
 		e5 = ring2.getElement(poly2);
-		e6 = (PolynomialElement) e4.multiply(e5);
+		e6 = e4.multiply(e5);
 
 		assertEquals(0, e6.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(0, e6.getValue().getCoefficient(1).getValue().intValue());
@@ -251,7 +251,7 @@ public class PolynomialSemiRingTest {
 									   zmod2.getIdentityElement(), zmod2.getOneElement());
 		e4 = ring2.getElement(poly1);
 		e5 = ring2.getElement(poly2);
-		e6 = (PolynomialElement) e4.multiply(e5);
+		e6 = e4.multiply(e5);
 
 		assertEquals(0, e6.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(0, e6.getValue().getCoefficient(1).getValue().intValue());

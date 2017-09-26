@@ -42,10 +42,13 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractValidityProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
-import ch.bfh.unicrypt.helper.random.RandomOracle;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -59,6 +62,7 @@ import ch.bfh.unicrypt.math.function.classes.InvertFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.math.BigInteger;
 
 /**
  * This class implements the validity proof system for ElGamal encryptions: ZKP[(m,r) : y=enc(m,r) ∧ m ∈ M] where enc
@@ -135,33 +139,33 @@ public class ElGamalEncryptionValidityProofSystem
 		return new ElGamalEncryptionValidityProofSystem(challengeGenerator, elGamalES, publicKey, plaintexts);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
+	public static FiatShamirSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
 		   final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts) {
 		return ElGamalEncryptionValidityProofSystem
-			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, RandomOracle.getInstance());
+			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, null);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
+	public static FiatShamirSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
 		   final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverId) {
-		return ElGamalEncryptionValidityProofSystem
-			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, proverId,
-													   RandomOracle.getInstance());
+		return FiatShamirSigmaChallengeGenerator.getInstance(ZMod.getInstance(elGamalES.getCyclicGroup()
+			   .getOrder()), proverId);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
-		   final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final RandomOracle randomOracle) {
+	public static <V> FiatShamirSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
+		   final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final ConvertMethod<V> convertMethod,
+		   final HashMethod<V> hashMethod, final Converter<ByteArray, BigInteger> converter) {
 		return ElGamalEncryptionValidityProofSystem
-			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, (Element) null, randomOracle);
+			   .createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, null, convertMethod, hashMethod, converter);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
+	public static <V> FiatShamirSigmaChallengeGenerator createNonInteractiveChallengeGenerator(
 		   final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverId,
-		   final RandomOracle randomOracle) {
-		if (elGamalES == null || numberOfPlaintexts < 1 || randomOracle == null) {
+		   final ConvertMethod<V> convertMethod, final HashMethod<V> hashMethod, final Converter<ByteArray, BigInteger> converter) {
+		if (elGamalES == null || numberOfPlaintexts < 1 || convertMethod == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return RandomOracleSigmaChallengeGenerator.getInstance(ZMod.getInstance(elGamalES.getCyclicGroup()
-			   .getOrder()), proverId, randomOracle);
+		return FiatShamirSigmaChallengeGenerator.getInstance(ZMod.getInstance(elGamalES.getCyclicGroup()
+			   .getOrder()), proverId, convertMethod, hashMethod, converter);
 	}
 
 }

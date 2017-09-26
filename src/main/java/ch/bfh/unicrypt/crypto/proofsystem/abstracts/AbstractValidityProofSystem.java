@@ -168,7 +168,7 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 	}
 
 	public Pair createPrivateInput(Element secret, int index) {
-		return (Pair) this.getOrProofGenerator().createPrivateInput(secret, index);
+		return this.getOrProofGenerator().createPrivateInput(secret, index);
 	}
 
 	public Pair createPrivateInput(Element secret, Element member) {
@@ -184,7 +184,7 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 		if (index == -1) {
 			throw new IllegalArgumentException();
 		}
-		return (Pair) this.getOrProofGenerator().createPrivateInput(secret, index);
+		return this.getOrProofGenerator().createPrivateInput(secret, index);
 	}
 
 	private Tuple createProofImages(PUE publicInput) {

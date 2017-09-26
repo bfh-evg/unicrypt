@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.factorization;
+package ch.bfh.unicrypt.helper.prime;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
@@ -53,6 +53,20 @@ import org.junit.Test;
  * @author R. Haenni
  */
 public class PrimeTest {
+
+	@Test
+	public void testPrecomputedPrimes() {
+		for (int bits : new int[]{128, 160, 192, 224, 256, 384, 512, 768, 1024, 2048, 3072, 4096}) {
+
+			Prime prime = Prime.getSmallestInstance(bits);
+			assertEquals(bits, prime.getValue().bitLength());
+			assertTrue(MathUtil.isPrime(prime.getValue()));
+			
+			prime = Prime.getLargestInstance(bits);
+			assertEquals(bits, prime.getValue().bitLength());
+			assertTrue(MathUtil.isPrime(prime.getValue()));
+		}
+	}
 
 	@Test
 	public void generalTest() {
@@ -118,70 +132,90 @@ public class PrimeTest {
 	}
 
 	@Test
-	public void testGetNextInstance_int() {
+	public void testGetSmallestInstance_int() {
 		try {
-			Prime.getFirstInstance(1);
+			Prime.getSmallestInstance(1);
 			fail();
 		} catch (Exception e) {
 		}
-		assertEquals(2, Prime.getFirstInstance(2).getValue().intValue());
-		assertEquals(5, Prime.getFirstInstance(3).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(4).getValue().intValue());
-		assertEquals(17, Prime.getFirstInstance(5).getValue().intValue());
-		assertEquals(37, Prime.getFirstInstance(6).getValue().intValue());
-		assertEquals(67, Prime.getFirstInstance(7).getValue().intValue());
+		assertEquals(2, Prime.getSmallestInstance(2).getValue().intValue());
+		assertEquals(5, Prime.getSmallestInstance(3).getValue().intValue());
+		assertEquals(11, Prime.getSmallestInstance(4).getValue().intValue());
+		assertEquals(17, Prime.getSmallestInstance(5).getValue().intValue());
+		assertEquals(37, Prime.getSmallestInstance(6).getValue().intValue());
+		assertEquals(67, Prime.getSmallestInstance(7).getValue().intValue());
 	}
 
 	@Test
-	public void testGetNextInstance_int_int() {
+	public void testGetSmallestInstance_int_BigInteger() {
 		try {
-			Prime.getFirstInstance(1, 1);
+			Prime.getSmallestInstance(1, MathUtil.TWO);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
-			Prime.getFirstInstance(2, 1);
+			Prime.getSmallestInstance(2, MathUtil.ONE);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
-			Prime.getFirstInstance(1, 2);
+			Prime.getSmallestInstance(2, MathUtil.THREE);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
-			Prime.getFirstInstance(3, 3);
-			fail();
-		} catch (Exception e) {
-		}
-		assertEquals(3, Prime.getFirstInstance(2, 2).getValue().intValue());
-		assertEquals(5, Prime.getFirstInstance(3, 2).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(4, 2).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(4, 3).getValue().intValue());
-		assertEquals(17, Prime.getFirstInstance(5, 2).getValue().intValue());
-		assertEquals(31, Prime.getFirstInstance(5, 3).getValue().intValue());
-		assertEquals(23, Prime.getFirstInstance(5, 4).getValue().intValue());
-		assertEquals(37, Prime.getFirstInstance(6, 2).getValue().intValue());
-		assertEquals(41, Prime.getFirstInstance(6, 3).getValue().intValue());
-		try {
-			Prime.getFirstInstance(6, 4);
+			Prime.getSmallestInstance(3, MathUtil.FIVE);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
-			Prime.getFirstInstance(6, 5);
+			Prime.getSmallestInstance(4, MathUtil.SEVEN);
 			fail();
 		} catch (Exception e) {
 		}
-		assertEquals(67, Prime.getFirstInstance(7, 2).getValue().intValue());
-		assertEquals(71, Prime.getFirstInstance(7, 3).getValue().intValue());
-		assertEquals(67, Prime.getFirstInstance(7, 4).getValue().intValue());
-		assertEquals(103, Prime.getFirstInstance(7, 5).getValue().intValue());
+		assertEquals(3, Prime.getSmallestInstance(2, MathUtil.TWO).getValue().intValue());
+		assertEquals(5, Prime.getSmallestInstance(3, MathUtil.TWO).getValue().intValue());
+		assertEquals(7, Prime.getSmallestInstance(3, MathUtil.THREE).getValue().intValue());
+		assertEquals(11, Prime.getSmallestInstance(4, MathUtil.TWO).getValue().intValue());
+		assertEquals(13, Prime.getSmallestInstance(4, MathUtil.THREE).getValue().intValue());
+		assertEquals(11, Prime.getSmallestInstance(4, MathUtil.FIVE).getValue().intValue());
+		assertEquals(17, Prime.getSmallestInstance(5, MathUtil.TWO).getValue().intValue());
+		assertEquals(31, Prime.getSmallestInstance(5, MathUtil.FIVE).getValue().intValue());
+		assertEquals(23, Prime.getSmallestInstance(5, BigInteger.valueOf(11)).getValue().intValue());
+		assertEquals(37, Prime.getSmallestInstance(6, MathUtil.TWO).getValue().intValue());
+		assertEquals(41, Prime.getSmallestInstance(6, MathUtil.FIVE).getValue().intValue());
 		try {
-			Prime.getFirstInstance(7, 6);
+			Prime.getSmallestInstance(6, BigInteger.valueOf(11));
+			fail();
+		} catch (Exception e) {
+		}
+		try {
+			Prime.getSmallestInstance(6, BigInteger.valueOf(17));
+			fail();
+		} catch (Exception e) {
+		}
+		assertEquals(67, Prime.getSmallestInstance(7, MathUtil.TWO).getValue().intValue());
+		assertEquals(71, Prime.getSmallestInstance(7, MathUtil.FIVE).getValue().intValue());
+		assertEquals(67, Prime.getSmallestInstance(7, BigInteger.valueOf(11)).getValue().intValue());
+		assertEquals(103, Prime.getSmallestInstance(7, BigInteger.valueOf(17)).getValue().intValue());
+		try {
+			Prime.getSmallestInstance(7, BigInteger.valueOf(37));
 			fail();
 		} catch (Exception e) {
 		}
 	}
 
-}
+	@Test
+	public void testGetLargestInstance_int() {
+		try {
+			Prime.getSmallestInstance(1);
+			fail();
+		} catch (Exception e) {
+		}
+		assertEquals(3, Prime.getLargestInstance(2).getValue().intValue());
+		assertEquals(7, Prime.getLargestInstance(3).getValue().intValue());
+		assertEquals(13, Prime.getLargestInstance(4).getValue().intValue());
+		assertEquals(31, Prime.getLargestInstance(5).getValue().intValue());
+		assertEquals(61, Prime.getLargestInstance(6).getValue().intValue());
+		assertEquals(127, Prime.getLargestInstance(7).getValue().intValue());
+	}}

@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.cache.Cache;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
@@ -52,8 +53,6 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -63,7 +62,7 @@ public class ByteArrayMonoid
 	   extends AbstractConcatenativeMonoid<ByteArrayElement, ByteArray> {
 
 	private static final long serialVersionUID = 1L;
-	private static final Map<Integer, ByteArrayMonoid> INSTANCES = new HashMap<>();
+	private static final Cache<Integer, ByteArrayMonoid> CACHE = new Cache<>(Cache.SIZE_S);
 
 	private ByteArrayMonoid(int blockLength) {
 		super(ByteArray.class, blockLength);
@@ -147,10 +146,10 @@ public class ByteArrayMonoid
 		if (blockLength < 1) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_LENGTH, blockLength);
 		}
-		ByteArrayMonoid instance = ByteArrayMonoid.INSTANCES.get(Integer.valueOf(blockLength));
+		ByteArrayMonoid instance = ByteArrayMonoid.CACHE.get(Integer.valueOf(blockLength));
 		if (instance == null) {
 			instance = new ByteArrayMonoid(blockLength);
-			ByteArrayMonoid.INSTANCES.put(blockLength, instance);
+			ByteArrayMonoid.CACHE.put(blockLength, instance);
 		}
 		return instance;
 	}

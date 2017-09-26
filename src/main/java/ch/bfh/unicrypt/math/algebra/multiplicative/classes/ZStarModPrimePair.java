@@ -43,11 +43,10 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
-import ch.bfh.unicrypt.helper.factorization.Prime;
-import ch.bfh.unicrypt.helper.factorization.PrimePair;
+import ch.bfh.unicrypt.helper.cache.Cache;
+import ch.bfh.unicrypt.helper.prime.Prime;
+import ch.bfh.unicrypt.helper.prime.PrimePair;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -56,7 +55,7 @@ import java.util.Map;
 public class ZStarModPrimePair
 	   extends ZStarMod {
 
-	private final static Map<BigInteger, ZStarModPrimePair> INSTANCES = new HashMap<>();
+	private final static Cache<BigInteger, ZStarModPrimePair> CACHE = new Cache<>(Cache.SIZE_S);
 	private static final long serialVersionUID = 1L;
 
 	protected ZStarModPrimePair(PrimePair primePair) {
@@ -72,10 +71,10 @@ public class ZStarModPrimePair
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER, prime1, prime2);
 		}
 		BigInteger value = prime1.multiply(prime2);
-		ZStarModPrimePair instance = ZStarModPrimePair.INSTANCES.get(value);
+		ZStarModPrimePair instance = ZStarModPrimePair.CACHE.get(value);
 		if (instance == null) {
 			instance = new ZStarModPrimePair(PrimePair.getInstance(prime1, prime2));
-			ZStarModPrimePair.INSTANCES.put(value, instance);
+			ZStarModPrimePair.CACHE.put(value, instance);
 		}
 		return instance;
 	}
@@ -84,14 +83,14 @@ public class ZStarModPrimePair
 		return new ZStarModPrimePair(PrimePair.getInstance(prime1, prime2));
 	}
 
-	public static ZStarModPrimePair getInstance(final PrimePair primePair) {
+	public static ZStarModPrimePair getInstance(PrimePair primePair) {
 		if (primePair == null) {
 			throw new UniCryptRuntimeException(ErrorCode.NULL_POINTER);
 		}
-		ZStarModPrimePair instance = ZStarModPrimePair.INSTANCES.get(primePair.getValue());
+		ZStarModPrimePair instance = ZStarModPrimePair.CACHE.get(primePair.getValue());
 		if (instance == null) {
 			instance = new ZStarModPrimePair(primePair);
-			ZStarModPrimePair.INSTANCES.put(primePair.getValue(), instance);
+			ZStarModPrimePair.CACHE.put(primePair.getValue(), instance);
 		}
 		return instance;
 	}

@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.math.BigInteger;
 import java.util.Iterator;
 
@@ -254,7 +253,7 @@ public class MultiSequence<V>
 	 * @return The new {@link MultiSequence} instance
 	 */
 	public static <V> MultiSequence<V> getInstance(Sequence<Sequence<V>> sequences) {
-		return new MultiSequence<>(sequences.filter(Predicate.NOT_NULL));
+		return new MultiSequence<>(sequences.filter(Sequence.NOT_NULL));
 	}
 
 }

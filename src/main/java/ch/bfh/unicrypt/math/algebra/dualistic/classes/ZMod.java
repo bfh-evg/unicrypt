@@ -43,19 +43,17 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.cache.Cache;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class implements the {@link Ring} Z_n = {0,...,n-1} with the operation of addition modulo n. Its identity
@@ -72,7 +70,7 @@ public class ZMod
 	   extends AbstractCyclicRing<ZModElement, BigInteger> {
 
 	private static final long serialVersionUID = 1L;
-	private static final Map<BigInteger, ZMod> INSTANCES = new HashMap<>();
+	private static final Cache<BigInteger, ZMod> CACHE = new Cache<>(Cache.SIZE_S);
 
 	protected final BigInteger modulus;
 
@@ -111,7 +109,7 @@ public class ZMod
 
 	@Override
 	protected ZModElement defaultPowerAlgorithm(ZModElement element, BigInteger exponent) {
-		return this.abstractGetElement(element.getValue().modPow(exponent, this.modulus));
+		return this.abstractGetElement(MathUtil.modExp(element.getValue(), exponent, this.modulus));
 	}
 
 	@Override
@@ -167,15 +165,7 @@ public class ZMod
 
 	@Override
 	protected Sequence<ZModElement> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomBigIntegerSequence(this.modulus.subtract(MathUtil.ONE)).map(
-			   new Mapping<BigInteger, ZModElement>() {
-
-			@Override
-			public ZModElement apply(BigInteger value) {
-				return abstractGetElement(value);
-			}
-
-		});
+		return randomByteSequence.getRandomBigIntegerSequence(this.modulus.subtract(MathUtil.ONE)).map(value -> abstractGetElement(value));
 	}
 
 	@Override
@@ -220,10 +210,10 @@ public class ZMod
 		if (modulus.compareTo(MathUtil.ONE) < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.SET_CONSTRUCTION_FAILURE, modulus);
 		}
-		ZMod instance = ZMod.INSTANCES.get(modulus);
+		ZMod instance = ZMod.CACHE.get(modulus);
 		if (instance == null) {
 			instance = new ZMod(modulus);
-			ZMod.INSTANCES.put(modulus, instance);
+			ZMod.CACHE.put(modulus, instance);
 		}
 		return instance;
 	}

@@ -108,7 +108,7 @@ public abstract class AbstractRing<E extends DualisticElement<V>, V>
 			throw new UniCryptRuntimeException(ErrorCode.UNSUPPORTED_OPERATION, this);
 		}
 		boolean positiveAmount = amount.signum() > 0;
-		amount = amount.abs().mod(this.getOrder()).modInverse(this.getOrder());
+		amount = MathUtil.modInv(amount.abs().mod(this.getOrder()), this.getOrder());
 		E result = this.defaultSelfApplyAlgorithm((E) element, amount);
 		if (positiveAmount) {
 			return result;

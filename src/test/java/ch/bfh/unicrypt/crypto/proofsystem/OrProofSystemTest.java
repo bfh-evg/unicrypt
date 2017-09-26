@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem;
 
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.FiatShamirSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.OrProofSystem;
 import ch.bfh.unicrypt.helper.math.Alphabet;
@@ -99,7 +99,7 @@ public class OrProofSystemTest {
 		Function f5 = this.getPedersonCommitmentFunction();
 
 		Function[] functions = new Function[]{f1, f2, f3, f4, f5};
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(ProductFunction.getInstance(functions), this.proverId);
+		SigmaChallengeGenerator scg = FiatShamirSigmaChallengeGenerator.getInstance(ProductFunction.getInstance(functions), this.proverId);
 		OrProofSystem pg = OrProofSystem.getInstance(scg, functions);
 
 		// Default

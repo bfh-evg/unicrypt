@@ -43,10 +43,8 @@ package ch.bfh.unicrypt.crypto.schemes.encryption;
 
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.RSAEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**

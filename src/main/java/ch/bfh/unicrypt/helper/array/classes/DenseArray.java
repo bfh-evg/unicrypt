@@ -44,8 +44,9 @@ package ch.bfh.unicrypt.helper.array.classes;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is a default implementation of the {@link ImmutableArray} interface. It is optimized for arrays for which
@@ -116,13 +117,11 @@ public class DenseArray<V>
 		if (values == null || values.isInfinite()) {
 			throw new IllegalArgumentException();
 		}
-		values = values.filter(Predicate.NOT_NULL).limit(Integer.MAX_VALUE);
-		Object[] array = new Object[values.getLength().intValue()];
-		int i = 0;
-		for (V value : values) {
-			array[i++] = value;
+		List<V> list = new LinkedList<>();
+		for (V value : values.filter(Sequence.NOT_NULL).limit(Integer.MAX_VALUE)) {
+			list.add(value);
 		}
-		return new DenseArray<>(array);
+		return new DenseArray<>(list.toArray());
 	}
 
 	/**

@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.UniCryptRuntimeException;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -125,22 +124,17 @@ public class Subset
 
 	@Override
 	protected Sequence<Element<Object>> abstractGetRandomElements(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomIntegerSequence(this.elementSet.size() - 1).map(
-			   new Mapping<Integer, Element<Object>>() {
-
-			@Override
-			public Element<Object> apply(Integer index) {
-				int i = 0;
-				for (Element<Object> element : getElements()) {
-					if (i == index) {
-						return element;
-					}
-					i++;
-				}
-				throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
-			}
-
-		});
+		return randomByteSequence.getRandomIntegerSequence(this.elementSet.size() - 1)
+			   .map(index -> {
+				   int i = 0;
+				   for (Element<Object> element : getElements()) {
+					   if (i == index) {
+						   return element;
+					   }
+					   i++;
+				   }
+				   throw new UniCryptRuntimeException(ErrorCode.INVALID_INDEX, this, index);
+			   });
 	}
 
 	@Override

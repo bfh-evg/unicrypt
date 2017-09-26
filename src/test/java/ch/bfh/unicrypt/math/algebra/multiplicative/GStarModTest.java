@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (c) 2017 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,43 +39,28 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.map;
+package ch.bfh.unicrypt.math.algebra.multiplicative;
 
-import static org.junit.Assert.assertEquals;
+import ch.bfh.unicrypt.helper.prime.Prime;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  *
- * @author R. Haenni
+ * @author P. Locher
  */
-public class HashMap2DTest {
+public class GStarModTest {
 
 	@Test
-	public void generalTest() {
-
-		Map2D<Integer, String, Double> map = HashMap2D.getInstance();
-		map.put(1, "one", 1.0);
-		map.put(1, "two", 2.0);
-		map.put(2, "one", 2.0);
-		map.put(2, "two", 4.0);
-		map.put(3, "two", 6.0);
-		map.put(3, "three", 9.0);
-		map.put(3, "null", null);
-		map.put(3, null, 0.0);
-		map.put(null, "", 0.0);
-		map.put(null, null, 0.0);
-		assertEquals((Double) 1.0, map.get(1, "one"));
-		assertEquals((Double) 2.0, map.get(1, "two"));
-		assertEquals((Double) 2.0, map.get(2, "one"));
-		assertEquals((Double) 4.0, map.get(2, "two"));
-		assertEquals((Double) 6.0, map.get(3, "two"));
-		assertEquals((Double) 9.0, map.get(3, "three"));
-		assertEquals(null, map.get(4, "two"));
-		assertEquals(null, map.get(3, "four"));
-		assertEquals(null, map.get(3, "null"));
-		assertEquals((Double) 0.0, map.get(3, null));
-		assertEquals((Double) 0.0, map.get(null, ""));
-		assertEquals((Double) 0.0, map.get(null, null));
+	public void testGenerateIndependentGenerators() {
+		GStarMod group = GStarMod.getInstance(Prime.getInstance(23), Prime.getInstance(11));
+		Sequence<GStarModElement> generators = group.getIndependentGenerators("test");
+		generators.limit(10).forEach(g -> {
+			Assert.assertTrue(group.isGenerator(g));
+		});
 	}
 
 }

@@ -114,7 +114,7 @@ public abstract class AbstractGroup<E extends Element<V>, V>
 		if (!MathUtil.areRelativelyPrime(amount, this.getOrder())) {
 			throw new UniCryptRuntimeException(ErrorCode.INVALID_AMOUNT, this, amount);
 		}
-		E result = this.defaultSelfApplyAlgorithm((E) element, amount.modInverse(this.getOrder()));
+		E result = this.defaultSelfApplyAlgorithm((E) element, MathUtil.modInv(amount, this.getOrder()));
 		if (positiveAmount) {
 			return result;
 		}

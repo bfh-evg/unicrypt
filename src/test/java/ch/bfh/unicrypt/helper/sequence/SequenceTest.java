@@ -41,8 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
+import java.util.function.Predicate;
 import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -57,41 +56,28 @@ public class SequenceTest {
 	@Test
 	public void testIteration() {
 
-		Sequence<Integer> seq = Sequence.getInstance(2, new Mapping<Integer, Integer>() {
-
-			@Override
-			public Integer apply(Integer value) {
-				return 2 + value;
-			}
-
-		});
+		Sequence<Integer> seq = Sequence.getInstance(2, value -> value + 2);
 		SequenceIterator<Integer> iterator = seq.iterator();
-		Assert.assertEquals(2, (int) iterator.next());
-		Assert.assertEquals(4, (int) iterator.next());
-		Assert.assertEquals(6, (int) iterator.next());
-		Assert.assertEquals(8, (int) iterator.next());
+		Assert.assertEquals(2, (long) iterator.next());
+		Assert.assertEquals(4, (long) iterator.next());
+		Assert.assertEquals(6, (long) iterator.next());
+		Assert.assertEquals(8, (long) iterator.next());
 		Assert.assertTrue(seq.isInfinite());
 	}
 
 	@Test
 	public void testCountFindGetMatch() {
-		Predicate<Integer> pred = new Predicate<Integer>() {
-
-			@Override
-			public boolean test(Integer value) {
-				return value > 10 && value < 15;
-			}
-		};
+		Predicate<Integer> pred = value -> value > 10 && value < 15;
 		Sequence<Integer> seq = IntegerSequence.getInstance(1, 20);
 
 		Assert.assertEquals(4, seq.count(pred));
 
-		Assert.assertEquals(11, (int) seq.find(pred));
-		Assert.assertEquals(14, (int) seq.find(pred, 3));
+		Assert.assertEquals(11, (long) seq.find(pred));
+		Assert.assertEquals(14, (long) seq.find(pred, 3));
 		Assert.assertEquals(null, seq.find(pred, 5));
 
-		Assert.assertEquals(1, (int) seq.get());
-		Assert.assertEquals(4, (int) seq.get(3));
+		Assert.assertEquals(1, (long) seq.get());
+		Assert.assertEquals(4, (long) seq.get(3));
 		Assert.assertEquals(null, seq.find(pred, 25));
 
 		assertFalse(seq.matchAll(pred));

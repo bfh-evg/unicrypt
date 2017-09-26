@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.ErrorCode;
 import ch.bfh.unicrypt.UniCryptRuntimeException;
+import ch.bfh.unicrypt.helper.cache.Cache;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.PermutationToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
@@ -54,8 +55,6 @@ import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * An instance of this class represents the group of permutations for a given size. The elements of the group are
@@ -189,7 +188,7 @@ public class PermutationGroup
 		return hash;
 	}
 
-	private static final Map<Integer, PermutationGroup> INSTANCES = new HashMap<>();
+	private static final Cache<Integer, PermutationGroup> CACHE = new Cache<>(Cache.SIZE_M);
 
 	/**
 	 * Returns a the unique instance of this class for a given non-negative permutation size.
@@ -201,10 +200,10 @@ public class PermutationGroup
 		if (size < 0) {
 			throw new UniCryptRuntimeException(ErrorCode.NEGATIVE_VALUE);
 		}
-		PermutationGroup instance = PermutationGroup.INSTANCES.get(size);
+		PermutationGroup instance = PermutationGroup.CACHE.get(size);
 		if (instance == null) {
 			instance = new PermutationGroup(size);
-			PermutationGroup.INSTANCES.put(size, instance);
+			PermutationGroup.CACHE.put(size, instance);
 		}
 		return instance;
 	}

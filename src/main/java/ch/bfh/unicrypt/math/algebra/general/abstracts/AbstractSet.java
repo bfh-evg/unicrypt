@@ -60,8 +60,6 @@ import ch.bfh.unicrypt.helper.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.random.hybrid.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.BigIntegerSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -534,18 +532,15 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	// some sets allow a more efficient itertation method than this one
 	protected Sequence<E> defaultGetElements() {
 		final AbstractSet<E, V> set = this;
-		Sequence<E> sequence = BigIntegerSequence.getInstance(MathUtil.ZERO).map(new Mapping<BigInteger, E>() {
-
-			@Override
-			public E apply(BigInteger value) {
-				try {
-					return set.getElementFrom(value);
-				} catch (UniCryptException exception) {
-					return null;
-				}
-			}
-
-		}).filter(Predicate.NOT_NULL);
+		Sequence<E> sequence = BigIntegerSequence.getInstance(MathUtil.ZERO)
+			   .map(value -> {
+				   try {
+					   return set.getElementFrom(value);
+				   } catch (UniCryptException exception) {
+					   return null;
+				   }
+			   })
+			   .filter(Sequence.NOT_NULL);
 		if (set.isFinite()) {
 			return sequence.limit(set.getOrderLowerBound());
 		}
