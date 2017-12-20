@@ -65,12 +65,12 @@ public class MultiValuesNonInteractiveChallengeGenerator
 
 	private final ZMod singleChallengeSpace;
 	private final int size;
-	private final ConvertMethod convertMethod;
+	private final ConvertMethod<ByteArray> convertMethod;
 	private final HashMethod hashMethod;
 	private final Converter<ByteArray, BigInteger> converter;
 	private final Converter<BigInteger, ByteArray> indexConverter;
 
-	protected MultiValuesNonInteractiveChallengeGenerator(ZMod singleChallengeSpace, int size, Element proverId, ConvertMethod convertMethod,
+	protected MultiValuesNonInteractiveChallengeGenerator(ZMod singleChallengeSpace, int size, Element proverId, ConvertMethod<ByteArray> convertMethod,
 		   HashMethod hashMethod, Converter<ByteArray, BigInteger> converter, Converter<BigInteger, ByteArray> indexConverter) {
 		super(ProductSet.getInstance(singleChallengeSpace, size), proverId);
 		this.singleChallengeSpace = singleChallengeSpace;
@@ -112,8 +112,8 @@ public class MultiValuesNonInteractiveChallengeGenerator
 		Element[] elements = new Element[size];
 		for (int i = 1; i <= size; i++) {
 			Tree<ByteArray> indexedInput = this.getProverId() == null
-				   ? Tree.getInstance(publicInput.getHashValue(this.convertMethod, this.hashMethod), this.indexConverter.convert(BigInteger.valueOf(i)))
-				   : Tree.getInstance(publicInput.getHashValue(this.convertMethod, this.hashMethod), this.indexConverter.convert(BigInteger.valueOf(i)), this.getProverId().getHashValue(this.convertMethod, this.hashMethod));
+				   ? Tree.getInstance(publicInput.convertTo(this.convertMethod), Tree.getInstance(this.indexConverter.convert(BigInteger.valueOf(i))))
+				   : Tree.getInstance(publicInput.convertTo(this.convertMethod), Tree.getInstance(this.indexConverter.convert(BigInteger.valueOf(i))), Tree.getInstance(this.getProverId().convertTo(this.convertMethod)));
 			ByteArray hashedInput = this.hashMethod.getHashValue(indexedInput);
 
 			elements[i - 1] = this.singleChallengeSpace.getElement(this.converter.convert(hashedInput).mod(this.singleChallengeSpace.getModulus()));
@@ -135,7 +135,7 @@ public class MultiValuesNonInteractiveChallengeGenerator
 		return MultiValuesNonInteractiveChallengeGenerator.getInstance(challengeSpace, size, proverId, convertMethod, hashMethod, converter, indexConverter);
 	}
 
-	public static <V> MultiValuesNonInteractiveChallengeGenerator getInstance(ZMod challengeSpace, int size, ConvertMethod<V> convertMethod,
+	public static <V> MultiValuesNonInteractiveChallengeGenerator getInstance(ZMod challengeSpace, int size, ConvertMethod<ByteArray> convertMethod,
 		   HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter, Converter<BigInteger, ByteArray> indexConverter) {
 		return MultiValuesNonInteractiveChallengeGenerator.getInstance(challengeSpace, size, null, convertMethod,
 																	   hashMethod, converter, indexConverter);
@@ -143,7 +143,7 @@ public class MultiValuesNonInteractiveChallengeGenerator
 	}
 
 	public static <V> MultiValuesNonInteractiveChallengeGenerator getInstance(ZMod challengeSpace, int size, Element proverId,
-		   ConvertMethod<V> convertMethod, HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter, Converter<BigInteger, ByteArray> indexConverter) {
+		   ConvertMethod<ByteArray> convertMethod, HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter, Converter<BigInteger, ByteArray> indexConverter) {
 		if (challengeSpace == null || size < 1 || convertMethod == null || hashMethod == null || converter == null || indexConverter == null) {
 			throw new IllegalArgumentException();
 		}

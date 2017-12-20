@@ -322,7 +322,7 @@ public abstract class AbstractShuffleProofSystem
 	}
 
 	public static <V> NonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final ZMod eChallengeSpace,
-		   final int size, final Element proverId, final ConvertMethod<V> convertMethod,
+		   final int size, final Element proverId, final ConvertMethod<ByteArray> convertMethod,
 		   final HashMethod<V> hashMethod, final Converter<ByteArray, BigInteger> converter, final Converter<BigInteger, ByteArray> indexConverter) {
 
 		if (size < 1 || eChallengeSpace == null || convertMethod == null || hashMethod == null || converter == null || indexConverter == null) {

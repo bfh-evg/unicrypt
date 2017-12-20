@@ -136,9 +136,12 @@ public class PermutationCommitmentProofSystem
 									  this.getResponseSpace());
 	}
 
-	// t: G_q^(N+3)
+	// t: (G_q, G_q, G_q^N, G_q)
 	public ProductGroup getCommitmentSpace() {
-		return ProductGroup.getInstance(this.cyclicGroup, this.size + 3);
+		return ProductGroup.getInstance(this.cyclicGroup,
+										this.cyclicGroup,
+										ProductGroup.getInstance(this.cyclicGroup, this.size),
+										this.cyclicGroup);
 	}
 
 	// c: [0,...,2^kc - 1]
@@ -271,15 +274,17 @@ public class PermutationCommitmentProofSystem
 		final Tuple gV = this.independentGenerators.extract(1, this.size);
 
 		// Compute image of preimage proof
-		final Element[] ps = new Element[this.size + 3];
+		final Element[] ps = new Element[4];
 		// - p_0 = c_pi^1/prod(g_i) = prod(c_pi_i)/prod(g_i)
 		ps[0] = this.cyclicGroup.apply(publicInput).applyInverse(this.cyclicGroup.apply(gV));
 		// - p_1 = c_pi^e                                                                     [N]
 		ps[1] = computeInnerProduct(publicInput, eV);
 		// - p_2...p_(N+2) = c_1 ... c_N
+		final Element[] pps = new Element[this.size];
 		for (int i = 0; i < this.size; i++) {
-			ps[i + 2] = cV.getAt(i);
+			pps[i] = cV.getAt(i);
 		}
+		ps[2] = Tuple.getInstance(pps);
 		// - p_(N+3) = c_N/h^(prod(e))                                                        [1]
 		// Make sure prod(e) is computet in Z_q
 		Element eProd = this.cyclicGroup.getZModOrder().getElement(eV.getAt(0).convertToBigInteger()
@@ -287,7 +292,7 @@ public class PermutationCommitmentProofSystem
 		for (int i = 1; i < this.size; i++) {
 			eProd = eProd.selfApply(eV.getAt(i));
 		}
-		ps[this.size + 2] = cV.getAt(this.size - 1).applyInverse(gV.getAt(0).selfApply(eProd));
+		ps[3] = cV.getAt(this.size - 1).applyInverse(gV.getAt(0).selfApply(eProd));
 		final Tuple pV = Tuple.getInstance(ps);
 
 		// Verify preimage proof
@@ -353,7 +358,7 @@ public class PermutationCommitmentProofSystem
 			final Tuple ePrimeV = (Tuple) element.getAt(4);
 
 			// Result array
-			final Element[] pV = new Element[this.size + 3];
+			final Element[] pV = new Element[4];
 
 			// COMPUTE...
 			// - Com(0, v)                          [1]
@@ -368,13 +373,15 @@ public class PermutationCommitmentProofSystem
 			pV[1] = this.gpcs.commit(Tuple.getInstance(ePrimeVs), w);
 
 			// - g^r_i * c_i-1^e'_i                [2n]
+			final Element[] ppV = new Element[this.size];
 			for (int i = 0; i < this.size; i++) {
 				Element c_i_1 = i == 0 ? this.h : this.cV.getAt(i - 1);
-				pV[i + 2] = g.selfApply(rV.getAt(i)).apply(c_i_1.selfApply(ePrimeV.getAt(i)));
+				ppV[i] = g.selfApply(rV.getAt(i)).apply(c_i_1.selfApply(ePrimeV.getAt(i)));
 			}
+			pV[2] = Tuple.getInstance(ppV);
 
 			// - Com(0, d)                          [1]
-			pV[this.size + 2] = this.gpcs.getRandomizationGenerator().selfApply(d);
+			pV[3] = this.gpcs.getRandomizationGenerator().selfApply(d);
 
 			//                                 ---------
 			//                                   [3n+3]
@@ -547,7 +554,7 @@ public class PermutationCommitmentProofSystem
 	}
 
 	public static <V> NonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final ZMod eChallengeSpace,
-		   final int size, final Element proverId, final ConvertMethod<V> convertMethod,
+		   final int size, final Element proverId, final ConvertMethod<ByteArray> convertMethod,
 		   final HashMethod<V> hashMethod, final Converter<ByteArray, BigInteger> converter, final Converter<BigInteger, ByteArray> indexConverter) {
 
 		if (size < 1 || eChallengeSpace == null || convertMethod == null || hashMethod == null || converter == null || indexConverter == null) {
