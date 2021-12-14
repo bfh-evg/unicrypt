@@ -2,3 +2,13 @@ target/
 
 .DS_Store
 /bin/
+
+.idea
+unicrypt.iml
+
+nb-configuration.xml
+nbactions.xml
+
+.classpath
+.project
+.settings/

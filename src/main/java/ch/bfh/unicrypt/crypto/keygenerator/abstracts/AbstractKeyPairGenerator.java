@@ -151,10 +151,6 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 																  randomByteSequence);
 	}
 
-	/**
-	 *
-	 * @return
-	 */
 	@Override
 	public final Function getPublicKeyGenerationFunction() {
 		if (this.publicKeyGenerationFunction == null) {

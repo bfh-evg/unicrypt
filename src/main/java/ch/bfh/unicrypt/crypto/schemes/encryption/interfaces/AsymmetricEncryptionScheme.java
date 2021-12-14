@@ -50,10 +50,6 @@ import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 public interface AsymmetricEncryptionScheme
        extends EncryptionScheme {
 
-  /**
-   *
-   * @return
-   */
   public KeyPairGenerator getKeyPairGenerator();
 
 }

@@ -239,35 +239,6 @@ Redistributions of files must retain the above copyright notice.
 				</executions>
 			</plugin>
 			<plugin>
-					<groupId>com.mycila</groupId>
-					<artifactId>license-maven-plugin</artifactId>
-					<version>3.0</version>
-					<configuration>
-							<header>etc/license-header.txt</header>
-							<headerDefinitions>
-									<headerDefinition>etc/filecomment.xml</headerDefinition>
-							</headerDefinitions>
-							<properties>
-									<license.owner>Berner Fachhochschule https://e-voting.bfh.ch</license.owner>
-									<license.years>2020</license.years>
-									<license.email>chvote@bfh.ch</license.email>
-							</properties>
-							<includes>
-									<include>src/*/java/**/*.java</include>
-									<include>src/*/groovy/**/*.groovy</include>
-							</includes>
-					</configuration>
-					<executions>
-							<execution>
-									<id>first</id>
-									<goals>
-											<goal>check</goal>
-									</goals>
-									<phase>process-sources</phase>
-							</execution>
-					</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.5.1</version>
